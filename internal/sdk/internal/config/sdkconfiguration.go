@@ -5,6 +5,7 @@ package config
 
 import (
 	"context"
+	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/globals"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/retry"
 	"net/http"
 	"time"
@@ -21,6 +22,7 @@ type SDKConfiguration struct {
 	ServerIndex int
 	ServerList  []string
 	UserAgent   string
+	Globals     globals.Globals
 	RetryConfig *retry.Config
 	Timeout     *time.Duration
 }

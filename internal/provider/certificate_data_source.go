@@ -58,6 +58,7 @@ func (r *CertificateDataSource) Schema(ctx context.Context, req datasource.Schem
 		Attributes: map[string]schema.Attribute{
 			"configuration": schema.StringAttribute{
 				Computed:    true,
+				Sensitive:   true,
 				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type.`,
 			},
 			"created_at": schema.StringAttribute{
@@ -114,18 +115,18 @@ func (r *CertificateDataSource) Configure(ctx context.Context, req datasource.Co
 		return
 	}
 
-	client, ok := req.ProviderData.(*sdk.GraviteeAm)
+	providerData, ok := req.ProviderData.(*AmProviderConfigureData)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected DataSource Configure Type",
-			fmt.Sprintf("Expected *sdk.GraviteeAm, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *AmProviderConfigureData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
 	}
 
-	r.client = client
+	r.client = providerData.SDKClient
 }
 
 func (r *CertificateDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {

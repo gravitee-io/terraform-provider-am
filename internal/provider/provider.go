@@ -32,11 +32,20 @@ type AmProvider struct {
 	version string
 }
 
+// AmProviderConfigureData describes provider configuration data passed to resources.
+type AmProviderConfigureData struct {
+	EnvironmentID  types.String `tfsdk:"environment_id"`
+	OrganizationID types.String `tfsdk:"organization_id"`
+	SDKClient      *sdk.GraviteeAm
+}
+
 // AmProviderModel describes the provider data model.
 type AmProviderModel struct {
-	BearerAuth  types.String `tfsdk:"bearer_auth"`
-	HTTPHeaders types.Map    `tfsdk:"http_headers"`
-	ServerURL   types.String `tfsdk:"server_url"`
+	BearerAuth     types.String `tfsdk:"bearer_auth"`
+	EnvironmentID  types.String `tfsdk:"environment_id"`
+	HTTPHeaders    types.Map    `tfsdk:"http_headers"`
+	OrganizationID types.String `tfsdk:"organization_id"`
+	ServerURL      types.String `tfsdk:"server_url"`
 }
 
 func (p *AmProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -52,9 +61,17 @@ func (p *AmProvider) Schema(ctx context.Context, req provider.SchemaRequest, res
 				Optional:            true,
 				Sensitive:           true,
 			},
+			"environment_id": schema.StringAttribute{
+				Description: `Identifier of the environment.`,
+				Optional:    true,
+			},
 			"http_headers": schema.MapAttribute{
 				Description: `HTTP headers to include in all requests`,
 				ElementType: types.StringType,
+				Optional:    true,
+			},
+			"organization_id": schema.StringAttribute{
+				Description: `Identifier of the organization that owns the environment.`,
 				Optional:    true,
 			},
 			"server_url": schema.StringAttribute{
@@ -127,12 +144,26 @@ func (p *AmProvider) Configure(ctx context.Context, req provider.ConfigureReques
 		sdk.WithClient(httpClient),
 	}
 
+	if !data.OrganizationID.IsUnknown() && !data.OrganizationID.IsNull() {
+		opts = append(opts, sdk.WithOrganizationID(data.OrganizationID.ValueString()))
+	}
+
+	if !data.EnvironmentID.IsUnknown() && !data.EnvironmentID.IsNull() {
+		opts = append(opts, sdk.WithEnvironmentID(data.EnvironmentID.ValueString()))
+	}
+
 	client := sdk.New(opts...)
-	resp.ActionData = client
-	resp.DataSourceData = client
-	resp.EphemeralResourceData = client
-	resp.ListResourceData = client
-	resp.ResourceData = client
+	configureData := &AmProviderConfigureData{
+		EnvironmentID:  data.EnvironmentID,
+		OrganizationID: data.OrganizationID,
+		SDKClient:      client,
+	}
+
+	resp.ActionData = configureData
+	resp.DataSourceData = configureData
+	resp.EphemeralResourceData = configureData
+	resp.ListResourceData = configureData
+	resp.ResourceData = configureData
 }
 
 func (p *AmProvider) Functions(_ context.Context) []func() function.Function {

@@ -9,6 +9,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/config"
+	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/globals"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/hooks"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/shared"
@@ -124,6 +125,20 @@ func WithSecuritySource(security func(context.Context) (shared.Security, error))
 	}
 }
 
+// WithOrganizationID allows setting the OrganizationID parameter for all supported operations
+func WithOrganizationID(organizationID string) SDKOption {
+	return func(sdk *GraviteeAm) {
+		sdk.sdkConfiguration.Globals.OrganizationID = &organizationID
+	}
+}
+
+// WithEnvironmentID allows setting the EnvironmentID parameter for all supported operations
+func WithEnvironmentID(environmentID string) SDKOption {
+	return func(sdk *GraviteeAm) {
+		sdk.sdkConfiguration.Globals.EnvironmentID = &environmentID
+	}
+}
+
 func WithRetryConfig(retryConfig retry.Config) SDKOption {
 	return func(sdk *GraviteeAm) {
 		sdk.sdkConfiguration.RetryConfig = &retryConfig
@@ -143,6 +158,7 @@ func New(opts ...SDKOption) *GraviteeAm {
 		SDKVersion: "0.0.1",
 		sdkConfiguration: config.SDKConfiguration{
 			UserAgent:  "speakeasy-sdk/terraform 0.0.1 2.887.0 4.12.0-alpha.5 github.com/gravitee-io/terraform-provider-am/internal/sdk",
+			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),

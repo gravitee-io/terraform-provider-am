@@ -62,6 +62,7 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 		Attributes: map[string]schema.Attribute{
 			"configuration": schema.StringAttribute{
 				Optional:    true,
+				Sensitive:   true,
 				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type.`,
 			},
 			"created_at": schema.StringAttribute{
@@ -143,18 +144,18 @@ func (r *IdentityProviderResource) Configure(ctx context.Context, req resource.C
 		return
 	}
 
-	client, ok := req.ProviderData.(*sdk.GraviteeAm)
+	providerData, ok := req.ProviderData.(*AmProviderConfigureData)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *sdk.GraviteeAm, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *AmProviderConfigureData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
 	}
 
-	r.client = client
+	r.client = providerData.SDKClient
 }
 
 func (r *IdentityProviderResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

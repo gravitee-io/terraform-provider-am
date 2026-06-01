@@ -65,12 +65,18 @@ func (r *IdentityProviderDataSourceModel) RefreshFromSharedAutomationIdentityPro
 func (r *IdentityProviderDataSourceModel) ToOperationsAutomationGetIdentityProviderRequest(ctx context.Context) (*operations.AutomationGetIdentityProviderRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID string
-	orgID = r.OrgID.ValueString()
-
-	var envID string
-	envID = r.EnvID.ValueString()
-
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
 	var domainKey string
 	domainKey = r.DomainKey.ValueString()
 
@@ -78,10 +84,10 @@ func (r *IdentityProviderDataSourceModel) ToOperationsAutomationGetIdentityProvi
 	key = r.Key.ValueString()
 
 	out := operations.AutomationGetIdentityProviderRequest{
-		OrgID:     orgID,
-		EnvID:     envID,
-		DomainKey: domainKey,
-		Key:       key,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		DomainKey:      domainKey,
+		Key:            key,
 	}
 
 	return &out, diags

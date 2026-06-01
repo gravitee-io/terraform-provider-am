@@ -28,22 +28,28 @@ func NewReporterDataSource() datasource.DataSource {
 type ReporterDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeAm
+
+	// Identifier of the environment.
+	EnvironmentID types.String `tfsdk:"environment_id"`
+
+	// Identifier of the organization that owns the environment.
+	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
 // ReporterDataSourceModel describes the data model.
 type ReporterDataSourceModel struct {
-	Configuration types.String `tfsdk:"configuration"`
-	CreatedAt     types.String `tfsdk:"created_at"`
-	DataType      types.String `tfsdk:"data_type"`
-	DomainKey     types.String `tfsdk:"domain_key"`
-	Enabled       types.Bool   `tfsdk:"enabled"`
-	EnvID         types.String `tfsdk:"env_id"`
-	Key           types.String `tfsdk:"key"`
-	Name          types.String `tfsdk:"name"`
-	OrgID         types.String `tfsdk:"org_id"`
-	System        types.Bool   `tfsdk:"system"`
-	Type          types.String `tfsdk:"type"`
-	UpdatedAt     types.String `tfsdk:"updated_at"`
+	Configuration  types.String `tfsdk:"configuration"`
+	CreatedAt      types.String `tfsdk:"created_at"`
+	DataType       types.String `tfsdk:"data_type"`
+	DomainKey      types.String `tfsdk:"domain_key"`
+	Enabled        types.Bool   `tfsdk:"enabled"`
+	EnvironmentID  types.String `tfsdk:"environment_id"`
+	Key            types.String `tfsdk:"key"`
+	Name           types.String `tfsdk:"name"`
+	OrganizationID types.String `tfsdk:"organization_id"`
+	System         types.Bool   `tfsdk:"system"`
+	Type           types.String `tfsdk:"type"`
+	UpdatedAt      types.String `tfsdk:"updated_at"`
 }
 
 // Metadata returns the data source type name.
@@ -78,9 +84,10 @@ func (r *ReporterDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Computed:    true,
 				Description: `Whether the reporter is enabled.`,
 			},
-			"env_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the environment the domain belongs to.`,
+			"environment_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"key": schema.StringAttribute{
 				Required:    true,
@@ -94,9 +101,10 @@ func (r *ReporterDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Computed:    true,
 				Description: `Human-readable name of the reporter.`,
 			},
-			"org_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+			"organization_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"system": schema.BoolAttribute{
 				Computed:    true,
@@ -131,6 +139,8 @@ func (r *ReporterDataSource) Configure(ctx context.Context, req datasource.Confi
 		return
 	}
 
+	r.EnvironmentID = providerData.EnvironmentID
+	r.OrganizationID = providerData.OrganizationID
 	r.client = providerData.SDKClient
 }
 
@@ -150,6 +160,14 @@ func (r *ReporterDataSource) Read(ctx context.Context, req datasource.ReadReques
 
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
 	}
 
 	request, requestDiags := data.ToOperationsAutomationGetReporterRequest(ctx)

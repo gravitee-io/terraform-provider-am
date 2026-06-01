@@ -28,21 +28,27 @@ func NewCertificateDataSource() datasource.DataSource {
 type CertificateDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeAm
+
+	// Identifier of the environment.
+	EnvironmentID types.String `tfsdk:"environment_id"`
+
+	// Identifier of the organization that owns the environment.
+	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
 // CertificateDataSourceModel describes the data model.
 type CertificateDataSourceModel struct {
-	Configuration types.String `tfsdk:"configuration"`
-	CreatedAt     types.String `tfsdk:"created_at"`
-	DomainKey     types.String `tfsdk:"domain_key"`
-	EnvID         types.String `tfsdk:"env_id"`
-	ExpiresAt     types.String `tfsdk:"expires_at"`
-	Key           types.String `tfsdk:"key"`
-	Name          types.String `tfsdk:"name"`
-	OrgID         types.String `tfsdk:"org_id"`
-	System        types.Bool   `tfsdk:"system"`
-	Type          types.String `tfsdk:"type"`
-	UpdatedAt     types.String `tfsdk:"updated_at"`
+	Configuration  types.String `tfsdk:"configuration"`
+	CreatedAt      types.String `tfsdk:"created_at"`
+	DomainKey      types.String `tfsdk:"domain_key"`
+	EnvironmentID  types.String `tfsdk:"environment_id"`
+	ExpiresAt      types.String `tfsdk:"expires_at"`
+	Key            types.String `tfsdk:"key"`
+	Name           types.String `tfsdk:"name"`
+	OrganizationID types.String `tfsdk:"organization_id"`
+	System         types.Bool   `tfsdk:"system"`
+	Type           types.String `tfsdk:"type"`
+	UpdatedAt      types.String `tfsdk:"updated_at"`
 }
 
 // Metadata returns the data source type name.
@@ -69,9 +75,10 @@ func (r *CertificateDataSource) Schema(ctx context.Context, req datasource.Schem
 				Required:    true,
 				Description: `Key of the domain: its stable, immutable Automation identifier within the environment.`,
 			},
-			"env_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the environment the domain belongs to.`,
+			"environment_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"expires_at": schema.StringAttribute{
 				Computed:    true,
@@ -89,9 +96,10 @@ func (r *CertificateDataSource) Schema(ctx context.Context, req datasource.Schem
 				Computed:    true,
 				Description: `Human-readable name of the certificate.`,
 			},
-			"org_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+			"organization_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"system": schema.BoolAttribute{
 				Computed:    true,
@@ -126,6 +134,8 @@ func (r *CertificateDataSource) Configure(ctx context.Context, req datasource.Co
 		return
 	}
 
+	r.EnvironmentID = providerData.EnvironmentID
+	r.OrganizationID = providerData.OrganizationID
 	r.client = providerData.SDKClient
 }
 
@@ -145,6 +155,14 @@ func (r *CertificateDataSource) Read(ctx context.Context, req datasource.ReadReq
 
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
 	}
 
 	request, requestDiags := data.ToOperationsAutomationGetCertificateRequest(ctx)

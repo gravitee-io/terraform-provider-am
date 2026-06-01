@@ -345,12 +345,18 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 func (r *DomainResourceModel) ToOperationsAutomationCreateOrUpdateDomainRequest(ctx context.Context) (*operations.AutomationCreateOrUpdateDomainRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID string
-	orgID = r.OrgID.ValueString()
-
-	var envID string
-	envID = r.EnvID.ValueString()
-
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
 	automationDomain, automationDomainDiags := r.ToSharedAutomationDomainInput(ctx)
 	diags.Append(automationDomainDiags...)
 
@@ -359,8 +365,8 @@ func (r *DomainResourceModel) ToOperationsAutomationCreateOrUpdateDomainRequest(
 	}
 
 	out := operations.AutomationCreateOrUpdateDomainRequest{
-		OrgID:            orgID,
-		EnvID:            envID,
+		OrganizationID:   organizationID,
+		EnvironmentID:    environmentID,
 		AutomationDomain: *automationDomain,
 	}
 
@@ -370,19 +376,25 @@ func (r *DomainResourceModel) ToOperationsAutomationCreateOrUpdateDomainRequest(
 func (r *DomainResourceModel) ToOperationsAutomationDeleteDomainRequest(ctx context.Context) (*operations.AutomationDeleteDomainRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID string
-	orgID = r.OrgID.ValueString()
-
-	var envID string
-	envID = r.EnvID.ValueString()
-
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
 	var key string
 	key = r.Key.ValueString()
 
 	out := operations.AutomationDeleteDomainRequest{
-		OrgID: orgID,
-		EnvID: envID,
-		Key:   key,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		Key:            key,
 	}
 
 	return &out, diags
@@ -391,19 +403,25 @@ func (r *DomainResourceModel) ToOperationsAutomationDeleteDomainRequest(ctx cont
 func (r *DomainResourceModel) ToOperationsAutomationGetDomainRequest(ctx context.Context) (*operations.AutomationGetDomainRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID string
-	orgID = r.OrgID.ValueString()
-
-	var envID string
-	envID = r.EnvID.ValueString()
-
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
 	var key string
 	key = r.Key.ValueString()
 
 	out := operations.AutomationGetDomainRequest{
-		OrgID: orgID,
-		EnvID: envID,
-		Key:   key,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		Key:            key,
 	}
 
 	return &out, diags

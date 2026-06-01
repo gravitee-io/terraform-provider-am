@@ -8,29 +8,50 @@ import (
 	"net/http"
 )
 
-type AutomationDeleteReporterRequest struct {
+type AutomationDeleteReporterGlobals struct {
 	// Identifier of the organization that owns the environment.
-	OrgID string `pathParam:"style=simple,explode=false,name=orgId"`
-	// Identifier of the environment the domain belongs to.
-	EnvID string `pathParam:"style=simple,explode=false,name=envId"`
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// Identifier of the environment.
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a *AutomationDeleteReporterGlobals) GetOrganizationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.OrganizationID
+}
+
+func (a *AutomationDeleteReporterGlobals) GetEnvironmentID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EnvironmentID
+}
+
+type AutomationDeleteReporterRequest struct {
+	// null
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// null
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
 	// Key of the reporter within the domain.
 	Key string `pathParam:"style=simple,explode=false,name=reporterKey"`
 }
 
-func (a *AutomationDeleteReporterRequest) GetOrgID() string {
+func (a *AutomationDeleteReporterRequest) GetOrganizationID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.OrgID
+	return a.OrganizationID
 }
 
-func (a *AutomationDeleteReporterRequest) GetEnvID() string {
+func (a *AutomationDeleteReporterRequest) GetEnvironmentID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.EnvID
+	return a.EnvironmentID
 }
 
 func (a *AutomationDeleteReporterRequest) GetDomainKey() string {

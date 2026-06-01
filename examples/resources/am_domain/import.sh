@@ -1,1 +1,1 @@
-terraform import am_domain.my_am_domain '{"env_id": "DEFAULT", "key": "customers", "org_id": "DEFAULT"}'
+terraform import am_domain.my_am_domain '{"environment_id": "...", "key": "customers", "organization_id": "..."}'

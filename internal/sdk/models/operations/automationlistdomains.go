@@ -8,25 +8,46 @@ import (
 	"net/http"
 )
 
-type AutomationListDomainsRequest struct {
+type AutomationListDomainsGlobals struct {
 	// Identifier of the organization that owns the environment.
-	OrgID string `pathParam:"style=simple,explode=false,name=orgId"`
-	// Identifier of the environment the domain belongs to.
-	EnvID string `pathParam:"style=simple,explode=false,name=envId"`
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// Identifier of the environment.
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
 }
 
-func (a *AutomationListDomainsRequest) GetOrgID() string {
+func (a *AutomationListDomainsGlobals) GetOrganizationID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.OrgID
+	return a.OrganizationID
 }
 
-func (a *AutomationListDomainsRequest) GetEnvID() string {
+func (a *AutomationListDomainsGlobals) GetEnvironmentID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.EnvID
+	return a.EnvironmentID
+}
+
+type AutomationListDomainsRequest struct {
+	// null
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// null
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a *AutomationListDomainsRequest) GetOrganizationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.OrganizationID
+}
+
+func (a *AutomationListDomainsRequest) GetEnvironmentID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EnvironmentID
 }
 
 type AutomationListDomainsResponse struct {

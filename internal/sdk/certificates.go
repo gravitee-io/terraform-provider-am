@@ -35,6 +35,11 @@ func newCertificates(rootSDK *GraviteeAm, sdkConfig config.SDKConfiguration, hoo
 // AutomationListCertificates - List a domain's certificates
 // Returns all certificates managed by the Automation API under the domain. Certificates created outside the Automation API are not returned.
 func (s *Certificates) AutomationListCertificates(ctx context.Context, request operations.AutomationListCertificatesRequest, opts ...operations.Option) (*operations.AutomationListCertificatesResponse, error) {
+	globals := operations.AutomationListCertificatesGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -53,7 +58,7 @@ func (s *Certificates) AutomationListCertificates(ctx context.Context, request o
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -257,6 +262,11 @@ func (s *Certificates) AutomationListCertificates(ctx context.Context, request o
 // AutomationCreateOrUpdateCertificate - Create or update a certificate
 // Idempotent create-or-update. Uses the key field in the body to identify the certificate within the domain. Re-applying an unchanged definition is a no-op. The system flag is immutable; changing it requires deleting and recreating the certificate.
 func (s *Certificates) AutomationCreateOrUpdateCertificate(ctx context.Context, request operations.AutomationCreateOrUpdateCertificateRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateCertificateResponse, error) {
+	globals := operations.AutomationCreateOrUpdateCertificateGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -275,7 +285,7 @@ func (s *Certificates) AutomationCreateOrUpdateCertificate(ctx context.Context, 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -488,6 +498,11 @@ func (s *Certificates) AutomationCreateOrUpdateCertificate(ctx context.Context, 
 // AutomationGetCertificate - Get a certificate
 // Retrieves a single Automation-managed certificate by its key.
 func (s *Certificates) AutomationGetCertificate(ctx context.Context, request operations.AutomationGetCertificateRequest, opts ...operations.Option) (*operations.AutomationGetCertificateResponse, error) {
+	globals := operations.AutomationGetCertificateGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -506,7 +521,7 @@ func (s *Certificates) AutomationGetCertificate(ctx context.Context, request ope
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -710,6 +725,11 @@ func (s *Certificates) AutomationGetCertificate(ctx context.Context, request ope
 // AutomationDeleteCertificate - Delete a certificate
 // Deletes an Automation-managed certificate by its key.
 func (s *Certificates) AutomationDeleteCertificate(ctx context.Context, request operations.AutomationDeleteCertificateRequest, opts ...operations.Option) (*operations.AutomationDeleteCertificateResponse, error) {
+	globals := operations.AutomationDeleteCertificateGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -728,7 +748,7 @@ func (s *Certificates) AutomationDeleteCertificate(ctx context.Context, request 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

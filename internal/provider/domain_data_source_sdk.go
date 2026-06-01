@@ -345,19 +345,25 @@ func (r *DomainDataSourceModel) RefreshFromSharedAutomationDomain(ctx context.Co
 func (r *DomainDataSourceModel) ToOperationsAutomationGetDomainRequest(ctx context.Context) (*operations.AutomationGetDomainRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID string
-	orgID = r.OrgID.ValueString()
-
-	var envID string
-	envID = r.EnvID.ValueString()
-
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
 	var key string
 	key = r.Key.ValueString()
 
 	out := operations.AutomationGetDomainRequest{
-		OrgID: orgID,
-		EnvID: envID,
-		Key:   key,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		Key:            key,
 	}
 
 	return &out, diags

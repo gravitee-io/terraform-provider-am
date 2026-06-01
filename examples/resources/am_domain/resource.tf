@@ -53,11 +53,11 @@ resource "am_domain" "my_domain" {
     enabled = false
     max_age = 86400
   }
-  data_plane_id = "default"
-  description   = "Customer-facing authentication domain"
-  enabled       = true
-  env_id        = "DEFAULT"
-  key           = "customers"
+  data_plane_id  = "default"
+  description    = "Customer-facing authentication domain"
+  enabled        = true
+  environment_id = "...my_environment_id..."
+  key            = "customers"
   login_settings = {
     certificate_based_auth_enabled        = false
     certificate_based_auth_url            = "...my_certificate_based_auth_url..."
@@ -112,7 +112,7 @@ resource "am_domain" "my_domain" {
       enable_plain_fapi  = false
     }
   }
-  org_id = "DEFAULT"
+  organization_id = "...my_organization_id..."
   password_settings = {
     exclude_passwords_in_dictionary       = true
     exclude_user_profile_info_in_password = true

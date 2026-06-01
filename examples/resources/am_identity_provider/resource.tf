@@ -4,7 +4,7 @@ resource "am_identity_provider" "my_identityprovider" {
   domain_whitelist = [
     "example.com",
   ]
-  env_id = "DEFAULT"
+  environment_id = "...my_environment_id..."
   group_mapper = {
     key = [
       # ...
@@ -14,8 +14,8 @@ resource "am_identity_provider" "my_identityprovider" {
   mappers = {
     key = "value"
   }
-  name   = "Corporate LDAP"
-  org_id = "DEFAULT"
+  name            = "Corporate LDAP"
+  organization_id = "...my_organization_id..."
   role_mapper = {
     key = [
       # ...

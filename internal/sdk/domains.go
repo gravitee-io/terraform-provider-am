@@ -35,6 +35,11 @@ func newDomains(rootSDK *GraviteeAm, sdkConfig config.SDKConfiguration, hooks *h
 // AutomationListDomains - List all domains
 // Returns all security domains within the specified environment.
 func (s *Domains) AutomationListDomains(ctx context.Context, request operations.AutomationListDomainsRequest, opts ...operations.Option) (*operations.AutomationListDomainsResponse, error) {
+	globals := operations.AutomationListDomainsGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -53,7 +58,7 @@ func (s *Domains) AutomationListDomains(ctx context.Context, request operations.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -270,6 +275,11 @@ func (s *Domains) AutomationListDomains(ctx context.Context, request operations.
 // AutomationCreateOrUpdateDomain - Create or update a domain
 // Idempotent create-or-update. Uses the key field in the body to identify the domain. On first apply the domain is created; subsequent applies update it. dataPlaneId is required at creation and immutable afterwards.
 func (s *Domains) AutomationCreateOrUpdateDomain(ctx context.Context, request operations.AutomationCreateOrUpdateDomainRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateDomainResponse, error) {
+	globals := operations.AutomationCreateOrUpdateDomainGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -288,7 +298,7 @@ func (s *Domains) AutomationCreateOrUpdateDomain(ctx context.Context, request op
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -499,6 +509,11 @@ func (s *Domains) AutomationCreateOrUpdateDomain(ctx context.Context, request op
 // AutomationGetDomain - Get a domain
 // Retrieves a single Automation-managed security domain by its key.
 func (s *Domains) AutomationGetDomain(ctx context.Context, request operations.AutomationGetDomainRequest, opts ...operations.Option) (*operations.AutomationGetDomainResponse, error) {
+	globals := operations.AutomationGetDomainGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -517,7 +532,7 @@ func (s *Domains) AutomationGetDomain(ctx context.Context, request operations.Au
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -721,6 +736,11 @@ func (s *Domains) AutomationGetDomain(ctx context.Context, request operations.Au
 // AutomationDeleteDomain - Delete a domain
 // Deletes an Automation-managed domain. Deletion cascades to the domain's sub-resources (certificates, identity providers, and reporters).
 func (s *Domains) AutomationDeleteDomain(ctx context.Context, request operations.AutomationDeleteDomainRequest, opts ...operations.Option) (*operations.AutomationDeleteDomainResponse, error) {
+	globals := operations.AutomationDeleteDomainGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -739,7 +759,7 @@ func (s *Domains) AutomationDeleteDomain(ctx context.Context, request operations
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -939,6 +959,11 @@ func (s *Domains) AutomationDeleteDomain(ctx context.Context, request operations
 // AutomationListCertificates - List a domain's certificates
 // Returns all certificates managed by the Automation API under the domain. Certificates created outside the Automation API are not returned.
 func (s *Domains) AutomationListCertificates(ctx context.Context, request operations.AutomationListCertificatesRequest, opts ...operations.Option) (*operations.AutomationListCertificatesResponse, error) {
+	globals := operations.AutomationListCertificatesGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -957,7 +982,7 @@ func (s *Domains) AutomationListCertificates(ctx context.Context, request operat
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1161,6 +1186,11 @@ func (s *Domains) AutomationListCertificates(ctx context.Context, request operat
 // AutomationCreateOrUpdateCertificate - Create or update a certificate
 // Idempotent create-or-update. Uses the key field in the body to identify the certificate within the domain. Re-applying an unchanged definition is a no-op. The system flag is immutable; changing it requires deleting and recreating the certificate.
 func (s *Domains) AutomationCreateOrUpdateCertificate(ctx context.Context, request operations.AutomationCreateOrUpdateCertificateRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateCertificateResponse, error) {
+	globals := operations.AutomationCreateOrUpdateCertificateGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -1179,7 +1209,7 @@ func (s *Domains) AutomationCreateOrUpdateCertificate(ctx context.Context, reque
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1392,6 +1422,11 @@ func (s *Domains) AutomationCreateOrUpdateCertificate(ctx context.Context, reque
 // AutomationGetCertificate - Get a certificate
 // Retrieves a single Automation-managed certificate by its key.
 func (s *Domains) AutomationGetCertificate(ctx context.Context, request operations.AutomationGetCertificateRequest, opts ...operations.Option) (*operations.AutomationGetCertificateResponse, error) {
+	globals := operations.AutomationGetCertificateGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -1410,7 +1445,7 @@ func (s *Domains) AutomationGetCertificate(ctx context.Context, request operatio
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1614,6 +1649,11 @@ func (s *Domains) AutomationGetCertificate(ctx context.Context, request operatio
 // AutomationDeleteCertificate - Delete a certificate
 // Deletes an Automation-managed certificate by its key.
 func (s *Domains) AutomationDeleteCertificate(ctx context.Context, request operations.AutomationDeleteCertificateRequest, opts ...operations.Option) (*operations.AutomationDeleteCertificateResponse, error) {
+	globals := operations.AutomationDeleteCertificateGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -1632,7 +1672,7 @@ func (s *Domains) AutomationDeleteCertificate(ctx context.Context, request opera
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1832,6 +1872,11 @@ func (s *Domains) AutomationDeleteCertificate(ctx context.Context, request opera
 // AutomationListIdentityProviders - List a domain's identity providers
 // Returns all identity providers managed by the Automation API under the domain. Identity providers created outside the Automation API are not returned.
 func (s *Domains) AutomationListIdentityProviders(ctx context.Context, request operations.AutomationListIdentityProvidersRequest, opts ...operations.Option) (*operations.AutomationListIdentityProvidersResponse, error) {
+	globals := operations.AutomationListIdentityProvidersGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -1850,7 +1895,7 @@ func (s *Domains) AutomationListIdentityProviders(ctx context.Context, request o
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2054,6 +2099,11 @@ func (s *Domains) AutomationListIdentityProviders(ctx context.Context, request o
 // AutomationCreateOrUpdateIdentityProvider - Create or update an identity provider
 // Idempotent create-or-update. Uses the key field in the body to identify the identity provider within the domain. On first apply the identity provider is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the identity provider.
 func (s *Domains) AutomationCreateOrUpdateIdentityProvider(ctx context.Context, request operations.AutomationCreateOrUpdateIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateIdentityProviderResponse, error) {
+	globals := operations.AutomationCreateOrUpdateIdentityProviderGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -2072,7 +2122,7 @@ func (s *Domains) AutomationCreateOrUpdateIdentityProvider(ctx context.Context, 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2285,6 +2335,11 @@ func (s *Domains) AutomationCreateOrUpdateIdentityProvider(ctx context.Context, 
 // AutomationGetIdentityProvider - Get an identity provider
 // Retrieves a single Automation-managed identity provider by its key.
 func (s *Domains) AutomationGetIdentityProvider(ctx context.Context, request operations.AutomationGetIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationGetIdentityProviderResponse, error) {
+	globals := operations.AutomationGetIdentityProviderGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -2303,7 +2358,7 @@ func (s *Domains) AutomationGetIdentityProvider(ctx context.Context, request ope
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers/{idpKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers/{idpKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2507,6 +2562,11 @@ func (s *Domains) AutomationGetIdentityProvider(ctx context.Context, request ope
 // AutomationDeleteIdentityProvider - Delete an identity provider
 // Deletes an Automation-managed identity provider by its key.
 func (s *Domains) AutomationDeleteIdentityProvider(ctx context.Context, request operations.AutomationDeleteIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationDeleteIdentityProviderResponse, error) {
+	globals := operations.AutomationDeleteIdentityProviderGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -2525,7 +2585,7 @@ func (s *Domains) AutomationDeleteIdentityProvider(ctx context.Context, request 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers/{idpKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers/{idpKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2725,6 +2785,11 @@ func (s *Domains) AutomationDeleteIdentityProvider(ctx context.Context, request 
 // AutomationListReporters - List a domain's reporters
 // Returns all reporters managed by the Automation API under the domain. Reporters created outside the Automation API are not returned.
 func (s *Domains) AutomationListReporters(ctx context.Context, request operations.AutomationListReportersRequest, opts ...operations.Option) (*operations.AutomationListReportersResponse, error) {
+	globals := operations.AutomationListReportersGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -2743,7 +2808,7 @@ func (s *Domains) AutomationListReporters(ctx context.Context, request operation
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2947,6 +3012,11 @@ func (s *Domains) AutomationListReporters(ctx context.Context, request operation
 // AutomationCreateOrUpdateReporter - Create or update a reporter
 // Idempotent create-or-update. Uses the key field in the body to identify the reporter within the domain. On first apply the reporter is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the reporter.
 func (s *Domains) AutomationCreateOrUpdateReporter(ctx context.Context, request operations.AutomationCreateOrUpdateReporterRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateReporterResponse, error) {
+	globals := operations.AutomationCreateOrUpdateReporterGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -2965,7 +3035,7 @@ func (s *Domains) AutomationCreateOrUpdateReporter(ctx context.Context, request 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -3178,6 +3248,11 @@ func (s *Domains) AutomationCreateOrUpdateReporter(ctx context.Context, request 
 // AutomationGetReporter - Get a reporter
 // Retrieves a single Automation-managed reporter by its key.
 func (s *Domains) AutomationGetReporter(ctx context.Context, request operations.AutomationGetReporterRequest, opts ...operations.Option) (*operations.AutomationGetReporterResponse, error) {
+	globals := operations.AutomationGetReporterGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -3196,7 +3271,7 @@ func (s *Domains) AutomationGetReporter(ctx context.Context, request operations.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -3400,6 +3475,11 @@ func (s *Domains) AutomationGetReporter(ctx context.Context, request operations.
 // AutomationDeleteReporter - Delete a reporter
 // Deletes an Automation-managed reporter by its key.
 func (s *Domains) AutomationDeleteReporter(ctx context.Context, request operations.AutomationDeleteReporterRequest, opts ...operations.Option) (*operations.AutomationDeleteReporterResponse, error) {
+	globals := operations.AutomationDeleteReporterGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -3418,7 +3498,7 @@ func (s *Domains) AutomationDeleteReporter(ctx context.Context, request operatio
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

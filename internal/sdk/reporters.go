@@ -35,6 +35,11 @@ func newReporters(rootSDK *GraviteeAm, sdkConfig config.SDKConfiguration, hooks 
 // AutomationListReporters - List a domain's reporters
 // Returns all reporters managed by the Automation API under the domain. Reporters created outside the Automation API are not returned.
 func (s *Reporters) AutomationListReporters(ctx context.Context, request operations.AutomationListReportersRequest, opts ...operations.Option) (*operations.AutomationListReportersResponse, error) {
+	globals := operations.AutomationListReportersGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -53,7 +58,7 @@ func (s *Reporters) AutomationListReporters(ctx context.Context, request operati
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -257,6 +262,11 @@ func (s *Reporters) AutomationListReporters(ctx context.Context, request operati
 // AutomationCreateOrUpdateReporter - Create or update a reporter
 // Idempotent create-or-update. Uses the key field in the body to identify the reporter within the domain. On first apply the reporter is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the reporter.
 func (s *Reporters) AutomationCreateOrUpdateReporter(ctx context.Context, request operations.AutomationCreateOrUpdateReporterRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateReporterResponse, error) {
+	globals := operations.AutomationCreateOrUpdateReporterGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -275,7 +285,7 @@ func (s *Reporters) AutomationCreateOrUpdateReporter(ctx context.Context, reques
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -488,6 +498,11 @@ func (s *Reporters) AutomationCreateOrUpdateReporter(ctx context.Context, reques
 // AutomationGetReporter - Get a reporter
 // Retrieves a single Automation-managed reporter by its key.
 func (s *Reporters) AutomationGetReporter(ctx context.Context, request operations.AutomationGetReporterRequest, opts ...operations.Option) (*operations.AutomationGetReporterResponse, error) {
+	globals := operations.AutomationGetReporterGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -506,7 +521,7 @@ func (s *Reporters) AutomationGetReporter(ctx context.Context, request operation
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -710,6 +725,11 @@ func (s *Reporters) AutomationGetReporter(ctx context.Context, request operation
 // AutomationDeleteReporter - Delete a reporter
 // Deletes an Automation-managed reporter by its key.
 func (s *Reporters) AutomationDeleteReporter(ctx context.Context, request operations.AutomationDeleteReporterRequest, opts ...operations.Option) (*operations.AutomationDeleteReporterResponse, error) {
+	globals := operations.AutomationDeleteReporterGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -728,7 +748,7 @@ func (s *Reporters) AutomationDeleteReporter(ctx context.Context, request operat
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

@@ -32,6 +32,12 @@ func NewIdentityProviderResource() resource.Resource {
 type IdentityProviderResource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeAm
+
+	// Identifier of the environment.
+	EnvironmentID types.String `tfsdk:"environment_id"`
+
+	// Identifier of the organization that owns the environment.
+	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
 // IdentityProviderResourceModel describes the resource data model.
@@ -40,12 +46,12 @@ type IdentityProviderResourceModel struct {
 	CreatedAt       types.String              `tfsdk:"created_at"`
 	DomainKey       types.String              `tfsdk:"domain_key"`
 	DomainWhitelist []types.String            `tfsdk:"domain_whitelist"`
-	EnvID           types.String              `tfsdk:"env_id"`
+	EnvironmentID   types.String              `tfsdk:"environment_id"`
 	GroupMapper     map[string][]types.String `tfsdk:"group_mapper"`
 	Key             types.String              `tfsdk:"key"`
 	Mappers         map[string]types.String   `tfsdk:"mappers"`
 	Name            types.String              `tfsdk:"name"`
-	OrgID           types.String              `tfsdk:"org_id"`
+	OrganizationID  types.String              `tfsdk:"organization_id"`
 	RoleMapper      map[string][]types.String `tfsdk:"role_mapper"`
 	System          types.Bool                `tfsdk:"system"`
 	Type            types.String              `tfsdk:"type"`
@@ -78,9 +84,10 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				ElementType: types.StringType,
 				Description: `Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected.`,
 			},
-			"env_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the environment the domain belongs to.`,
+			"environment_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"group_mapper": schema.MapAttribute{
 				Optional: true,
@@ -109,9 +116,10 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},
 			},
-			"org_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+			"organization_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"role_mapper": schema.MapAttribute{
 				Optional: true,
@@ -155,6 +163,8 @@ func (r *IdentityProviderResource) Configure(ctx context.Context, req resource.C
 		return
 	}
 
+	r.EnvironmentID = providerData.EnvironmentID
+	r.OrganizationID = providerData.OrganizationID
 	r.client = providerData.SDKClient
 }
 
@@ -174,6 +184,14 @@ func (r *IdentityProviderResource) Create(ctx context.Context, req resource.Crea
 
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
 	}
 
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateIdentityProviderRequest(ctx)
@@ -290,6 +308,14 @@ func (r *IdentityProviderResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
+	}
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateIdentityProviderRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -350,6 +376,14 @@ func (r *IdentityProviderResource) Delete(ctx context.Context, req resource.Dele
 		return
 	}
 
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
+	}
+
 	request, requestDiags := data.ToOperationsAutomationDeleteIdentityProviderRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -382,14 +416,14 @@ func (r *IdentityProviderResource) ImportState(ctx context.Context, req resource
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
-		DomainKey string `json:"domain_key"`
-		EnvID     string `json:"env_id"`
-		Key       string `json:"key"`
-		OrgID     string `json:"org_id"`
+		DomainKey      string  `json:"domain_key"`
+		EnvironmentID  *string `json:"environment_id"`
+		Key            string  `json:"key"`
+		OrganizationID *string `json:"organization_id"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"domain_key": "customers", "env_id": "DEFAULT", "key": "corporate-ldap", "org_id": "DEFAULT"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"domain_key": "customers", "environment_id": "...", "key": "corporate-ldap", "organization_id": "..."}': `+err.Error())
 		return
 	}
 
@@ -398,19 +432,29 @@ func (r *IdentityProviderResource) ImportState(ctx context.Context, req resource
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("domain_key"), data.DomainKey)...)
-	if len(data.EnvID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field env_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-		return
+	if data.EnvironmentID == nil {
+		if !r.EnvironmentID.IsUnknown() {
+			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
+		}
+		if data.EnvironmentID == nil {
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID.`)
+			return
+		}
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("env_id"), data.EnvID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
 	if len(data.Key) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field key is required but was not found in the json encoded ID. It's expected to be a value alike '"corporate-ldap"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("key"), data.Key)...)
-	if len(data.OrgID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field org_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-		return
+	if data.OrganizationID == nil {
+		if !r.OrganizationID.IsUnknown() {
+			data.OrganizationID = r.OrganizationID.ValueStringPointer()
+		}
+		if data.OrganizationID == nil {
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID.`)
+			return
+		}
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("org_id"), data.OrgID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)
 }

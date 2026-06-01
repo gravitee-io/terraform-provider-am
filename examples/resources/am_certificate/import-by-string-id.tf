@@ -1,9 +1,9 @@
 import {
   to = am_certificate.my_am_certificate
   id = jsonencode({
-    domain_key = "customers"
-    env_id     = "DEFAULT"
-    key        = "signing-cert"
-    org_id     = "DEFAULT"
+    domain_key      = "customers"
+    environment_id  = "..."
+    key             = "signing-cert"
+    organization_id = "..."
   })
 }

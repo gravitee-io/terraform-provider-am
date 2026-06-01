@@ -8,29 +8,50 @@ import (
 	"net/http"
 )
 
-type AutomationCreateOrUpdateIdentityProviderRequest struct {
+type AutomationCreateOrUpdateIdentityProviderGlobals struct {
 	// Identifier of the organization that owns the environment.
-	OrgID string `pathParam:"style=simple,explode=false,name=orgId"`
-	// Identifier of the environment the domain belongs to.
-	EnvID string `pathParam:"style=simple,explode=false,name=envId"`
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// Identifier of the environment.
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a *AutomationCreateOrUpdateIdentityProviderGlobals) GetOrganizationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.OrganizationID
+}
+
+func (a *AutomationCreateOrUpdateIdentityProviderGlobals) GetEnvironmentID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EnvironmentID
+}
+
+type AutomationCreateOrUpdateIdentityProviderRequest struct {
+	// null
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// null
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
 	// Desired state of the identity provider. For a system identity provider, supply only system: true and key.
 	AutomationIdentityProvider shared.AutomationIdentityProviderInput `request:"mediaType=application/json"`
 }
 
-func (a *AutomationCreateOrUpdateIdentityProviderRequest) GetOrgID() string {
+func (a *AutomationCreateOrUpdateIdentityProviderRequest) GetOrganizationID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.OrgID
+	return a.OrganizationID
 }
 
-func (a *AutomationCreateOrUpdateIdentityProviderRequest) GetEnvID() string {
+func (a *AutomationCreateOrUpdateIdentityProviderRequest) GetEnvironmentID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.EnvID
+	return a.EnvironmentID
 }
 
 func (a *AutomationCreateOrUpdateIdentityProviderRequest) GetDomainKey() string {

@@ -29,6 +29,12 @@ func NewDomainDataSource() datasource.DataSource {
 type DomainDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeAm
+
+	// Identifier of the environment.
+	EnvironmentID types.String `tfsdk:"environment_id"`
+
+	// Identifier of the organization that owns the environment.
+	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
 // DomainDataSourceModel describes the data model.
@@ -40,12 +46,12 @@ type DomainDataSourceModel struct {
 	DataPlaneID                          types.String                                  `tfsdk:"data_plane_id"`
 	Description                          types.String                                  `tfsdk:"description"`
 	Enabled                              types.Bool                                    `tfsdk:"enabled"`
-	EnvID                                types.String                                  `tfsdk:"env_id"`
+	EnvironmentID                        types.String                                  `tfsdk:"environment_id"`
 	Key                                  types.String                                  `tfsdk:"key"`
 	LoginSettings                        *tfTypes.LoginSettings                        `tfsdk:"login_settings"`
 	Name                                 types.String                                  `tfsdk:"name"`
 	Oidc                                 *tfTypes.AutomationOidcSettings               `tfsdk:"oidc"`
-	OrgID                                types.String                                  `tfsdk:"org_id"`
+	OrganizationID                       types.String                                  `tfsdk:"organization_id"`
 	PasswordSettings                     *tfTypes.PasswordSettings                     `tfsdk:"password_settings"`
 	Path                                 types.String                                  `tfsdk:"path"`
 	Saml                                 *tfTypes.AutomationSamlSettings               `tfsdk:"saml"`
@@ -252,9 +258,10 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:    true,
 				Description: `Whether the domain handles incoming authentication and authorization requests.`,
 			},
-			"env_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the environment the domain belongs to.`,
+			"environment_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"key": schema.StringAttribute{
 				Required:    true,
@@ -437,9 +444,10 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				},
 				Description: `OpenID Connect settings for the domain. CIMD (client identity metadata document) settings are not exposed by the Automation API and are reset on update.`,
 			},
-			"org_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+			"organization_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"password_settings": schema.SingleNestedAttribute{
 				Computed: true,
@@ -786,6 +794,8 @@ func (r *DomainDataSource) Configure(ctx context.Context, req datasource.Configu
 		return
 	}
 
+	r.EnvironmentID = providerData.EnvironmentID
+	r.OrganizationID = providerData.OrganizationID
 	r.client = providerData.SDKClient
 }
 
@@ -805,6 +815,14 @@ func (r *DomainDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
 	}
 
 	request, requestDiags := data.ToOperationsAutomationGetDomainRequest(ctx)

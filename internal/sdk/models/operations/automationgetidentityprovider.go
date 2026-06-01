@@ -8,29 +8,50 @@ import (
 	"net/http"
 )
 
-type AutomationGetIdentityProviderRequest struct {
+type AutomationGetIdentityProviderGlobals struct {
 	// Identifier of the organization that owns the environment.
-	OrgID string `pathParam:"style=simple,explode=false,name=orgId"`
-	// Identifier of the environment the domain belongs to.
-	EnvID string `pathParam:"style=simple,explode=false,name=envId"`
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// Identifier of the environment.
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a *AutomationGetIdentityProviderGlobals) GetOrganizationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.OrganizationID
+}
+
+func (a *AutomationGetIdentityProviderGlobals) GetEnvironmentID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EnvironmentID
+}
+
+type AutomationGetIdentityProviderRequest struct {
+	// null
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// null
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
 	// Key of the identity provider within the domain.
 	Key string `pathParam:"style=simple,explode=false,name=idpKey"`
 }
 
-func (a *AutomationGetIdentityProviderRequest) GetOrgID() string {
+func (a *AutomationGetIdentityProviderRequest) GetOrganizationID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.OrgID
+	return a.OrganizationID
 }
 
-func (a *AutomationGetIdentityProviderRequest) GetEnvID() string {
+func (a *AutomationGetIdentityProviderRequest) GetEnvironmentID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.EnvID
+	return a.EnvironmentID
 }
 
 func (a *AutomationGetIdentityProviderRequest) GetDomainKey() string {

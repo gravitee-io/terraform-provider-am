@@ -33,12 +33,18 @@ func (r *ReporterResourceModel) RefreshFromSharedAutomationReporter(ctx context.
 func (r *ReporterResourceModel) ToOperationsAutomationCreateOrUpdateReporterRequest(ctx context.Context) (*operations.AutomationCreateOrUpdateReporterRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID string
-	orgID = r.OrgID.ValueString()
-
-	var envID string
-	envID = r.EnvID.ValueString()
-
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
 	var domainKey string
 	domainKey = r.DomainKey.ValueString()
 
@@ -50,8 +56,8 @@ func (r *ReporterResourceModel) ToOperationsAutomationCreateOrUpdateReporterRequ
 	}
 
 	out := operations.AutomationCreateOrUpdateReporterRequest{
-		OrgID:              orgID,
-		EnvID:              envID,
+		OrganizationID:     organizationID,
+		EnvironmentID:      environmentID,
 		DomainKey:          domainKey,
 		AutomationReporter: *automationReporter,
 	}
@@ -62,12 +68,18 @@ func (r *ReporterResourceModel) ToOperationsAutomationCreateOrUpdateReporterRequ
 func (r *ReporterResourceModel) ToOperationsAutomationDeleteReporterRequest(ctx context.Context) (*operations.AutomationDeleteReporterRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID string
-	orgID = r.OrgID.ValueString()
-
-	var envID string
-	envID = r.EnvID.ValueString()
-
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
 	var domainKey string
 	domainKey = r.DomainKey.ValueString()
 
@@ -75,10 +87,10 @@ func (r *ReporterResourceModel) ToOperationsAutomationDeleteReporterRequest(ctx 
 	key = r.Key.ValueString()
 
 	out := operations.AutomationDeleteReporterRequest{
-		OrgID:     orgID,
-		EnvID:     envID,
-		DomainKey: domainKey,
-		Key:       key,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		DomainKey:      domainKey,
+		Key:            key,
 	}
 
 	return &out, diags
@@ -87,12 +99,18 @@ func (r *ReporterResourceModel) ToOperationsAutomationDeleteReporterRequest(ctx 
 func (r *ReporterResourceModel) ToOperationsAutomationGetReporterRequest(ctx context.Context) (*operations.AutomationGetReporterRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID string
-	orgID = r.OrgID.ValueString()
-
-	var envID string
-	envID = r.EnvID.ValueString()
-
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
 	var domainKey string
 	domainKey = r.DomainKey.ValueString()
 
@@ -100,10 +118,10 @@ func (r *ReporterResourceModel) ToOperationsAutomationGetReporterRequest(ctx con
 	key = r.Key.ValueString()
 
 	out := operations.AutomationGetReporterRequest{
-		OrgID:     orgID,
-		EnvID:     envID,
-		DomainKey: domainKey,
-		Key:       key,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		DomainKey:      domainKey,
+		Key:            key,
 	}
 
 	return &out, diags

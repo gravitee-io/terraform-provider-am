@@ -28,6 +28,12 @@ func NewIdentityProviderDataSource() datasource.DataSource {
 type IdentityProviderDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeAm
+
+	// Identifier of the environment.
+	EnvironmentID types.String `tfsdk:"environment_id"`
+
+	// Identifier of the organization that owns the environment.
+	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
 // IdentityProviderDataSourceModel describes the data model.
@@ -36,12 +42,12 @@ type IdentityProviderDataSourceModel struct {
 	CreatedAt       types.String              `tfsdk:"created_at"`
 	DomainKey       types.String              `tfsdk:"domain_key"`
 	DomainWhitelist []types.String            `tfsdk:"domain_whitelist"`
-	EnvID           types.String              `tfsdk:"env_id"`
+	EnvironmentID   types.String              `tfsdk:"environment_id"`
 	GroupMapper     map[string][]types.String `tfsdk:"group_mapper"`
 	Key             types.String              `tfsdk:"key"`
 	Mappers         map[string]types.String   `tfsdk:"mappers"`
 	Name            types.String              `tfsdk:"name"`
-	OrgID           types.String              `tfsdk:"org_id"`
+	OrganizationID  types.String              `tfsdk:"organization_id"`
 	RoleMapper      map[string][]types.String `tfsdk:"role_mapper"`
 	System          types.Bool                `tfsdk:"system"`
 	Type            types.String              `tfsdk:"type"`
@@ -77,9 +83,10 @@ func (r *IdentityProviderDataSource) Schema(ctx context.Context, req datasource.
 				ElementType: types.StringType,
 				Description: `Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected.`,
 			},
-			"env_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the environment the domain belongs to.`,
+			"environment_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"group_mapper": schema.MapAttribute{
 				Computed: true,
@@ -105,9 +112,10 @@ func (r *IdentityProviderDataSource) Schema(ctx context.Context, req datasource.
 				Computed:    true,
 				Description: `Human-readable name of the identity provider.`,
 			},
-			"org_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+			"organization_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"role_mapper": schema.MapAttribute{
 				Computed: true,
@@ -149,6 +157,8 @@ func (r *IdentityProviderDataSource) Configure(ctx context.Context, req datasour
 		return
 	}
 
+	r.EnvironmentID = providerData.EnvironmentID
+	r.OrganizationID = providerData.OrganizationID
 	r.client = providerData.SDKClient
 }
 
@@ -168,6 +178,14 @@ func (r *IdentityProviderDataSource) Read(ctx context.Context, req datasource.Re
 
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
 	}
 
 	request, requestDiags := data.ToOperationsAutomationGetIdentityProviderRequest(ctx)

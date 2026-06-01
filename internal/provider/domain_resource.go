@@ -37,6 +37,12 @@ func NewDomainResource() resource.Resource {
 type DomainResource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeAm
+
+	// Identifier of the environment.
+	EnvironmentID types.String `tfsdk:"environment_id"`
+
+	// Identifier of the organization that owns the environment.
+	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
 // DomainResourceModel describes the resource data model.
@@ -48,12 +54,12 @@ type DomainResourceModel struct {
 	DataPlaneID                          types.String                                  `tfsdk:"data_plane_id"`
 	Description                          types.String                                  `tfsdk:"description"`
 	Enabled                              types.Bool                                    `tfsdk:"enabled"`
-	EnvID                                types.String                                  `tfsdk:"env_id"`
+	EnvironmentID                        types.String                                  `tfsdk:"environment_id"`
 	Key                                  types.String                                  `tfsdk:"key"`
 	LoginSettings                        *tfTypes.LoginSettings                        `tfsdk:"login_settings"`
 	Name                                 types.String                                  `tfsdk:"name"`
 	Oidc                                 *tfTypes.AutomationOidcSettings               `tfsdk:"oidc"`
-	OrgID                                types.String                                  `tfsdk:"org_id"`
+	OrganizationID                       types.String                                  `tfsdk:"organization_id"`
 	PasswordSettings                     *tfTypes.PasswordSettings                     `tfsdk:"password_settings"`
 	Path                                 types.String                                  `tfsdk:"path"`
 	Saml                                 *tfTypes.AutomationSamlSettings               `tfsdk:"saml"`
@@ -313,9 +319,10 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Default:     booldefault.StaticBool(true),
 				Description: `Whether the domain handles incoming authentication and authorization requests. Default: true`,
 			},
-			"env_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the environment the domain belongs to.`,
+			"environment_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"key": schema.StringAttribute{
 				Required:    true,
@@ -546,9 +553,10 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 				Description: `OpenID Connect settings for the domain. CIMD (client identity metadata document) settings are not exposed by the Automation API and are reset on update.`,
 			},
-			"org_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+			"organization_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"password_settings": schema.SingleNestedAttribute{
 				Computed: true,
@@ -1001,6 +1009,8 @@ func (r *DomainResource) Configure(ctx context.Context, req resource.ConfigureRe
 		return
 	}
 
+	r.EnvironmentID = providerData.EnvironmentID
+	r.OrganizationID = providerData.OrganizationID
 	r.client = providerData.SDKClient
 }
 
@@ -1020,6 +1030,14 @@ func (r *DomainResource) Create(ctx context.Context, req resource.CreateRequest,
 
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
 	}
 
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateDomainRequest(ctx)
@@ -1136,6 +1154,14 @@ func (r *DomainResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
+	}
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1196,6 +1222,14 @@ func (r *DomainResource) Delete(ctx context.Context, req resource.DeleteRequest,
 		return
 	}
 
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
+	}
+
 	request, requestDiags := data.ToOperationsAutomationDeleteDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1228,29 +1262,39 @@ func (r *DomainResource) ImportState(ctx context.Context, req resource.ImportSta
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
-		EnvID string `json:"env_id"`
-		Key   string `json:"key"`
-		OrgID string `json:"org_id"`
+		EnvironmentID  *string `json:"environment_id"`
+		Key            string  `json:"key"`
+		OrganizationID *string `json:"organization_id"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"env_id": "DEFAULT", "key": "customers", "org_id": "DEFAULT"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"environment_id": "...", "key": "customers", "organization_id": "..."}': `+err.Error())
 		return
 	}
 
-	if len(data.EnvID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field env_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-		return
+	if data.EnvironmentID == nil {
+		if !r.EnvironmentID.IsUnknown() {
+			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
+		}
+		if data.EnvironmentID == nil {
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID.`)
+			return
+		}
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("env_id"), data.EnvID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
 	if len(data.Key) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field key is required but was not found in the json encoded ID. It's expected to be a value alike '"customers"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("key"), data.Key)...)
-	if len(data.OrgID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field org_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-		return
+	if data.OrganizationID == nil {
+		if !r.OrganizationID.IsUnknown() {
+			data.OrganizationID = r.OrganizationID.ValueStringPointer()
+		}
+		if data.OrganizationID == nil {
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID.`)
+			return
+		}
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("org_id"), data.OrgID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)
 }

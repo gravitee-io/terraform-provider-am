@@ -32,21 +32,27 @@ func NewCertificateResource() resource.Resource {
 type CertificateResource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeAm
+
+	// Identifier of the environment.
+	EnvironmentID types.String `tfsdk:"environment_id"`
+
+	// Identifier of the organization that owns the environment.
+	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
 // CertificateResourceModel describes the resource data model.
 type CertificateResourceModel struct {
-	Configuration types.String `tfsdk:"configuration"`
-	CreatedAt     types.String `tfsdk:"created_at"`
-	DomainKey     types.String `tfsdk:"domain_key"`
-	EnvID         types.String `tfsdk:"env_id"`
-	ExpiresAt     types.String `tfsdk:"expires_at"`
-	Key           types.String `tfsdk:"key"`
-	Name          types.String `tfsdk:"name"`
-	OrgID         types.String `tfsdk:"org_id"`
-	System        types.Bool   `tfsdk:"system"`
-	Type          types.String `tfsdk:"type"`
-	UpdatedAt     types.String `tfsdk:"updated_at"`
+	Configuration  types.String `tfsdk:"configuration"`
+	CreatedAt      types.String `tfsdk:"created_at"`
+	DomainKey      types.String `tfsdk:"domain_key"`
+	EnvironmentID  types.String `tfsdk:"environment_id"`
+	ExpiresAt      types.String `tfsdk:"expires_at"`
+	Key            types.String `tfsdk:"key"`
+	Name           types.String `tfsdk:"name"`
+	OrganizationID types.String `tfsdk:"organization_id"`
+	System         types.Bool   `tfsdk:"system"`
+	Type           types.String `tfsdk:"type"`
+	UpdatedAt      types.String `tfsdk:"updated_at"`
 }
 
 func (r *CertificateResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,9 +76,10 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 				Required:    true,
 				Description: `Key of the domain: its stable, immutable Automation identifier within the environment.`,
 			},
-			"env_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the environment the domain belongs to.`,
+			"environment_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"expires_at": schema.StringAttribute{
 				Computed:    true,
@@ -93,9 +100,10 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},
 			},
-			"org_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+			"organization_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"system": schema.BoolAttribute{
 				Computed:    true,
@@ -135,6 +143,8 @@ func (r *CertificateResource) Configure(ctx context.Context, req resource.Config
 		return
 	}
 
+	r.EnvironmentID = providerData.EnvironmentID
+	r.OrganizationID = providerData.OrganizationID
 	r.client = providerData.SDKClient
 }
 
@@ -154,6 +164,14 @@ func (r *CertificateResource) Create(ctx context.Context, req resource.CreateReq
 
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
 	}
 
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateCertificateRequest(ctx)
@@ -270,6 +288,14 @@ func (r *CertificateResource) Update(ctx context.Context, req resource.UpdateReq
 		return
 	}
 
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
+	}
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateCertificateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -330,6 +356,14 @@ func (r *CertificateResource) Delete(ctx context.Context, req resource.DeleteReq
 		return
 	}
 
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
+	}
+
 	request, requestDiags := data.ToOperationsAutomationDeleteCertificateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -362,14 +396,14 @@ func (r *CertificateResource) ImportState(ctx context.Context, req resource.Impo
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
-		DomainKey string `json:"domain_key"`
-		EnvID     string `json:"env_id"`
-		Key       string `json:"key"`
-		OrgID     string `json:"org_id"`
+		DomainKey      string  `json:"domain_key"`
+		EnvironmentID  *string `json:"environment_id"`
+		Key            string  `json:"key"`
+		OrganizationID *string `json:"organization_id"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"domain_key": "customers", "env_id": "DEFAULT", "key": "signing-cert", "org_id": "DEFAULT"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"domain_key": "customers", "environment_id": "...", "key": "signing-cert", "organization_id": "..."}': `+err.Error())
 		return
 	}
 
@@ -378,19 +412,29 @@ func (r *CertificateResource) ImportState(ctx context.Context, req resource.Impo
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("domain_key"), data.DomainKey)...)
-	if len(data.EnvID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field env_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-		return
+	if data.EnvironmentID == nil {
+		if !r.EnvironmentID.IsUnknown() {
+			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
+		}
+		if data.EnvironmentID == nil {
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID.`)
+			return
+		}
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("env_id"), data.EnvID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
 	if len(data.Key) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field key is required but was not found in the json encoded ID. It's expected to be a value alike '"signing-cert"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("key"), data.Key)...)
-	if len(data.OrgID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field org_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-		return
+	if data.OrganizationID == nil {
+		if !r.OrganizationID.IsUnknown() {
+			data.OrganizationID = r.OrganizationID.ValueStringPointer()
+		}
+		if data.OrganizationID == nil {
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID.`)
+			return
+		}
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("org_id"), data.OrgID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)
 }

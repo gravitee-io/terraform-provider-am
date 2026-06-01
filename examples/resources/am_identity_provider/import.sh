@@ -1,1 +1,1 @@
-terraform import am_identity_provider.my_am_identity_provider '{"domain_key": "customers", "env_id": "DEFAULT", "key": "corporate-ldap", "org_id": "DEFAULT"}'
+terraform import am_identity_provider.my_am_identity_provider '{"domain_key": "customers", "environment_id": "...", "key": "corporate-ldap", "organization_id": "..."}'

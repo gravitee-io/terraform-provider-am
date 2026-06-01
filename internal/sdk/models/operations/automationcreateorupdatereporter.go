@@ -8,29 +8,50 @@ import (
 	"net/http"
 )
 
-type AutomationCreateOrUpdateReporterRequest struct {
+type AutomationCreateOrUpdateReporterGlobals struct {
 	// Identifier of the organization that owns the environment.
-	OrgID string `pathParam:"style=simple,explode=false,name=orgId"`
-	// Identifier of the environment the domain belongs to.
-	EnvID string `pathParam:"style=simple,explode=false,name=envId"`
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// Identifier of the environment.
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a *AutomationCreateOrUpdateReporterGlobals) GetOrganizationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.OrganizationID
+}
+
+func (a *AutomationCreateOrUpdateReporterGlobals) GetEnvironmentID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EnvironmentID
+}
+
+type AutomationCreateOrUpdateReporterRequest struct {
+	// null
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// null
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
 	// Desired state of the reporter. For a system reporter, supply only system: true and key.
 	AutomationReporter shared.AutomationReporterInput `request:"mediaType=application/json"`
 }
 
-func (a *AutomationCreateOrUpdateReporterRequest) GetOrgID() string {
+func (a *AutomationCreateOrUpdateReporterRequest) GetOrganizationID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.OrgID
+	return a.OrganizationID
 }
 
-func (a *AutomationCreateOrUpdateReporterRequest) GetEnvID() string {
+func (a *AutomationCreateOrUpdateReporterRequest) GetEnvironmentID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.EnvID
+	return a.EnvironmentID
 }
 
 func (a *AutomationCreateOrUpdateReporterRequest) GetDomainKey() string {

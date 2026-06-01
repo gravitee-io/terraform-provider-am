@@ -32,22 +32,28 @@ func NewReporterResource() resource.Resource {
 type ReporterResource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeAm
+
+	// Identifier of the environment.
+	EnvironmentID types.String `tfsdk:"environment_id"`
+
+	// Identifier of the organization that owns the environment.
+	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
 // ReporterResourceModel describes the resource data model.
 type ReporterResourceModel struct {
-	Configuration types.String `tfsdk:"configuration"`
-	CreatedAt     types.String `tfsdk:"created_at"`
-	DataType      types.String `tfsdk:"data_type"`
-	DomainKey     types.String `tfsdk:"domain_key"`
-	Enabled       types.Bool   `tfsdk:"enabled"`
-	EnvID         types.String `tfsdk:"env_id"`
-	Key           types.String `tfsdk:"key"`
-	Name          types.String `tfsdk:"name"`
-	OrgID         types.String `tfsdk:"org_id"`
-	System        types.Bool   `tfsdk:"system"`
-	Type          types.String `tfsdk:"type"`
-	UpdatedAt     types.String `tfsdk:"updated_at"`
+	Configuration  types.String `tfsdk:"configuration"`
+	CreatedAt      types.String `tfsdk:"created_at"`
+	DataType       types.String `tfsdk:"data_type"`
+	DomainKey      types.String `tfsdk:"domain_key"`
+	Enabled        types.Bool   `tfsdk:"enabled"`
+	EnvironmentID  types.String `tfsdk:"environment_id"`
+	Key            types.String `tfsdk:"key"`
+	Name           types.String `tfsdk:"name"`
+	OrganizationID types.String `tfsdk:"organization_id"`
+	System         types.Bool   `tfsdk:"system"`
+	Type           types.String `tfsdk:"type"`
+	UpdatedAt      types.String `tfsdk:"updated_at"`
 }
 
 func (r *ReporterResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -81,9 +87,10 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				Default:     booldefault.StaticBool(true),
 				Description: `Whether the reporter is enabled. Default: true`,
 			},
-			"env_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the environment the domain belongs to.`,
+			"environment_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"key": schema.StringAttribute{
 				Required:    true,
@@ -100,9 +107,10 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},
 			},
-			"org_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+			"organization_id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `null`,
 			},
 			"system": schema.BoolAttribute{
 				Computed:    true,
@@ -139,6 +147,8 @@ func (r *ReporterResource) Configure(ctx context.Context, req resource.Configure
 		return
 	}
 
+	r.EnvironmentID = providerData.EnvironmentID
+	r.OrganizationID = providerData.OrganizationID
 	r.client = providerData.SDKClient
 }
 
@@ -158,6 +168,14 @@ func (r *ReporterResource) Create(ctx context.Context, req resource.CreateReques
 
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
 	}
 
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateReporterRequest(ctx)
@@ -274,6 +292,14 @@ func (r *ReporterResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
+	}
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateReporterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -334,6 +360,14 @@ func (r *ReporterResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
+		data.EnvironmentID = r.EnvironmentID
+	}
+
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
+		data.OrganizationID = r.OrganizationID
+	}
+
 	request, requestDiags := data.ToOperationsAutomationDeleteReporterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -366,14 +400,14 @@ func (r *ReporterResource) ImportState(ctx context.Context, req resource.ImportS
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
-		DomainKey string `json:"domain_key"`
-		EnvID     string `json:"env_id"`
-		Key       string `json:"key"`
-		OrgID     string `json:"org_id"`
+		DomainKey      string  `json:"domain_key"`
+		EnvironmentID  *string `json:"environment_id"`
+		Key            string  `json:"key"`
+		OrganizationID *string `json:"organization_id"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"domain_key": "customers", "env_id": "DEFAULT", "key": "audit-kafka", "org_id": "DEFAULT"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"domain_key": "customers", "environment_id": "...", "key": "audit-kafka", "organization_id": "..."}': `+err.Error())
 		return
 	}
 
@@ -382,19 +416,29 @@ func (r *ReporterResource) ImportState(ctx context.Context, req resource.ImportS
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("domain_key"), data.DomainKey)...)
-	if len(data.EnvID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field env_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-		return
+	if data.EnvironmentID == nil {
+		if !r.EnvironmentID.IsUnknown() {
+			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
+		}
+		if data.EnvironmentID == nil {
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID.`)
+			return
+		}
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("env_id"), data.EnvID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
 	if len(data.Key) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field key is required but was not found in the json encoded ID. It's expected to be a value alike '"audit-kafka"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("key"), data.Key)...)
-	if len(data.OrgID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field org_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-		return
+	if data.OrganizationID == nil {
+		if !r.OrganizationID.IsUnknown() {
+			data.OrganizationID = r.OrganizationID.ValueStringPointer()
+		}
+		if data.OrganizationID == nil {
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID.`)
+			return
+		}
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("org_id"), data.OrgID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)
 }

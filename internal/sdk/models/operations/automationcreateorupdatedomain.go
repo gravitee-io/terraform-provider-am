@@ -8,27 +8,48 @@ import (
 	"net/http"
 )
 
-type AutomationCreateOrUpdateDomainRequest struct {
+type AutomationCreateOrUpdateDomainGlobals struct {
 	// Identifier of the organization that owns the environment.
-	OrgID string `pathParam:"style=simple,explode=false,name=orgId"`
-	// Identifier of the environment the domain belongs to.
-	EnvID string `pathParam:"style=simple,explode=false,name=envId"`
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// Identifier of the environment.
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a *AutomationCreateOrUpdateDomainGlobals) GetOrganizationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.OrganizationID
+}
+
+func (a *AutomationCreateOrUpdateDomainGlobals) GetEnvironmentID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EnvironmentID
+}
+
+type AutomationCreateOrUpdateDomainRequest struct {
+	// null
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	// null
+	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
 	// Desired state of the domain.
 	AutomationDomain shared.AutomationDomainInput `request:"mediaType=application/json"`
 }
 
-func (a *AutomationCreateOrUpdateDomainRequest) GetOrgID() string {
+func (a *AutomationCreateOrUpdateDomainRequest) GetOrganizationID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.OrgID
+	return a.OrganizationID
 }
 
-func (a *AutomationCreateOrUpdateDomainRequest) GetEnvID() string {
+func (a *AutomationCreateOrUpdateDomainRequest) GetEnvironmentID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
-	return a.EnvID
+	return a.EnvironmentID
 }
 
 func (a *AutomationCreateOrUpdateDomainRequest) GetAutomationDomain() shared.AutomationDomainInput {

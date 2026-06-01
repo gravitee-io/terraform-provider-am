@@ -32,12 +32,18 @@ func (r *CertificateResourceModel) RefreshFromSharedAutomationCertificate(ctx co
 func (r *CertificateResourceModel) ToOperationsAutomationCreateOrUpdateCertificateRequest(ctx context.Context) (*operations.AutomationCreateOrUpdateCertificateRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID string
-	orgID = r.OrgID.ValueString()
-
-	var envID string
-	envID = r.EnvID.ValueString()
-
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
 	var domainKey string
 	domainKey = r.DomainKey.ValueString()
 
@@ -49,8 +55,8 @@ func (r *CertificateResourceModel) ToOperationsAutomationCreateOrUpdateCertifica
 	}
 
 	out := operations.AutomationCreateOrUpdateCertificateRequest{
-		OrgID:                 orgID,
-		EnvID:                 envID,
+		OrganizationID:        organizationID,
+		EnvironmentID:         environmentID,
 		DomainKey:             domainKey,
 		AutomationCertificate: *automationCertificate,
 	}
@@ -61,12 +67,18 @@ func (r *CertificateResourceModel) ToOperationsAutomationCreateOrUpdateCertifica
 func (r *CertificateResourceModel) ToOperationsAutomationDeleteCertificateRequest(ctx context.Context) (*operations.AutomationDeleteCertificateRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID string
-	orgID = r.OrgID.ValueString()
-
-	var envID string
-	envID = r.EnvID.ValueString()
-
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
 	var domainKey string
 	domainKey = r.DomainKey.ValueString()
 
@@ -74,10 +86,10 @@ func (r *CertificateResourceModel) ToOperationsAutomationDeleteCertificateReques
 	key = r.Key.ValueString()
 
 	out := operations.AutomationDeleteCertificateRequest{
-		OrgID:     orgID,
-		EnvID:     envID,
-		DomainKey: domainKey,
-		Key:       key,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		DomainKey:      domainKey,
+		Key:            key,
 	}
 
 	return &out, diags
@@ -86,12 +98,18 @@ func (r *CertificateResourceModel) ToOperationsAutomationDeleteCertificateReques
 func (r *CertificateResourceModel) ToOperationsAutomationGetCertificateRequest(ctx context.Context) (*operations.AutomationGetCertificateRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID string
-	orgID = r.OrgID.ValueString()
-
-	var envID string
-	envID = r.EnvID.ValueString()
-
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
 	var domainKey string
 	domainKey = r.DomainKey.ValueString()
 
@@ -99,10 +117,10 @@ func (r *CertificateResourceModel) ToOperationsAutomationGetCertificateRequest(c
 	key = r.Key.ValueString()
 
 	out := operations.AutomationGetCertificateRequest{
-		OrgID:     orgID,
-		EnvID:     envID,
-		DomainKey: domainKey,
-		Key:       key,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		DomainKey:      domainKey,
+		Key:            key,
 	}
 
 	return &out, diags

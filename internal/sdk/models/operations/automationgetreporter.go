@@ -16,7 +16,7 @@ type AutomationGetReporterRequest struct {
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
 	// Key of the reporter within the domain.
-	ReporterKey string `pathParam:"style=simple,explode=false,name=reporterKey"`
+	Key string `pathParam:"style=simple,explode=false,name=reporterKey"`
 }
 
 func (a *AutomationGetReporterRequest) GetOrgID() string {
@@ -40,11 +40,11 @@ func (a *AutomationGetReporterRequest) GetDomainKey() string {
 	return a.DomainKey
 }
 
-func (a *AutomationGetReporterRequest) GetReporterKey() string {
+func (a *AutomationGetReporterRequest) GetKey() string {
 	if a == nil {
 		return ""
 	}
-	return a.ReporterKey
+	return a.Key
 }
 
 type AutomationGetReporterResponse struct {

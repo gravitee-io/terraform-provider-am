@@ -16,7 +16,7 @@ type AutomationGetCertificateRequest struct {
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
 	// Key of the certificate within the domain.
-	CertKey string `pathParam:"style=simple,explode=false,name=certKey"`
+	Key string `pathParam:"style=simple,explode=false,name=certKey"`
 }
 
 func (a *AutomationGetCertificateRequest) GetOrgID() string {
@@ -40,11 +40,11 @@ func (a *AutomationGetCertificateRequest) GetDomainKey() string {
 	return a.DomainKey
 }
 
-func (a *AutomationGetCertificateRequest) GetCertKey() string {
+func (a *AutomationGetCertificateRequest) GetKey() string {
 	if a == nil {
 		return ""
 	}
-	return a.CertKey
+	return a.Key
 }
 
 type AutomationGetCertificateResponse struct {

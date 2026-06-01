@@ -14,7 +14,7 @@ type AutomationDeleteDomainRequest struct {
 	// Identifier of the environment the domain belongs to.
 	EnvID string `pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
-	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
+	Key string `pathParam:"style=simple,explode=false,name=domainKey"`
 }
 
 func (a *AutomationDeleteDomainRequest) GetOrgID() string {
@@ -31,11 +31,11 @@ func (a *AutomationDeleteDomainRequest) GetEnvID() string {
 	return a.EnvID
 }
 
-func (a *AutomationDeleteDomainRequest) GetDomainKey() string {
+func (a *AutomationDeleteDomainRequest) GetKey() string {
 	if a == nil {
 		return ""
 	}
-	return a.DomainKey
+	return a.Key
 }
 
 type AutomationDeleteDomainResponse struct {

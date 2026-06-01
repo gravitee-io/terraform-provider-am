@@ -62,15 +62,13 @@ func (p *AmProvider) Schema(ctx context.Context, req provider.SchemaRequest, res
 				Optional:    true,
 			},
 		},
-		MarkdownDescription: `Gravitee.io AM - Automation API: Declarative, idempotent management of Gravitee Access Management resources.` + "\n" +
+		MarkdownDescription: `Gravitee: Gravitee Access Management Terraform Provider (alpha)` + "\n" +
 			`` + "\n" +
-			`Each resource is identified by a stable, immutable ` + "`" + `key` + "`" + ` that you choose. Applying a resource with ` + "`" + `PUT` + "`" + ` creates it on first use and updates it on subsequent applies, so the same request can be replayed safely to converge on a desired state.` + "\n" +
-			`` + "\n" +
-			`The API only sees and manages resources it owns (those marked as managed by the Automation API). Resources created through the Management API or console are invisible to these endpoints and cannot be read, updated, or deleted here; conversely, resources created here are fully owned by the Automation API.` + "\n" +
-			`` + "\n" +
-			`Domains are the top-level resource; certificates, identity providers, and reporters are managed as sub-resources of a domain. Deleting a domain cascades to its Automation-managed sub-resources. Some sub-resources support a ` + "`" + `system` + "`" + ` flag identifying the domain's built-in default; the flag is immutable once set.` + "\n" +
-			`` + "\n" +
-			`This API complements the Management API, which remains the interactive, full-featured management surface.`,
+			`You can manage with Terraform the following:` + "\n" +
+			`* Domains` + "\n" +
+			`* Certificates` + "\n" +
+			`* Identity Providers` + "\n" +
+			`* Reporters`,
 	}
 }
 
@@ -146,11 +144,21 @@ func (p *AmProvider) Actions(_ context.Context) []func() action.Action {
 }
 
 func (p *AmProvider) Resources(ctx context.Context) []func() resource.Resource {
-	return []func() resource.Resource{}
+	return []func() resource.Resource{
+		NewCertificateResource,
+		NewDomainResource,
+		NewIdentityProviderResource,
+		NewReporterResource,
+	}
 }
 
 func (p *AmProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{}
+	return []func() datasource.DataSource{
+		NewCertificateDataSource,
+		NewDomainDataSource,
+		NewIdentityProviderDataSource,
+		NewReporterDataSource,
+	}
 }
 
 func (p *AmProvider) EphemeralResources(ctx context.Context) []func() ephemeral.EphemeralResource {

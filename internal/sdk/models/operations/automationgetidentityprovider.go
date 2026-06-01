@@ -16,7 +16,7 @@ type AutomationGetIdentityProviderRequest struct {
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
 	// Key of the identity provider within the domain.
-	IdpKey string `pathParam:"style=simple,explode=false,name=idpKey"`
+	Key string `pathParam:"style=simple,explode=false,name=idpKey"`
 }
 
 func (a *AutomationGetIdentityProviderRequest) GetOrgID() string {
@@ -40,11 +40,11 @@ func (a *AutomationGetIdentityProviderRequest) GetDomainKey() string {
 	return a.DomainKey
 }
 
-func (a *AutomationGetIdentityProviderRequest) GetIdpKey() string {
+func (a *AutomationGetIdentityProviderRequest) GetKey() string {
 	if a == nil {
 		return ""
 	}
-	return a.IdpKey
+	return a.Key
 }
 
 type AutomationGetIdentityProviderResponse struct {

@@ -48,15 +48,13 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// GraviteeAm - Gravitee.io AM - Automation API: Declarative, idempotent management of Gravitee Access Management resources.
+// GraviteeAm - Gravitee: Gravitee Access Management Terraform Provider (alpha)
 //
-// Each resource is identified by a stable, immutable `key` that you choose. Applying a resource with `PUT` creates it on first use and updates it on subsequent applies, so the same request can be replayed safely to converge on a desired state.
-//
-// The API only sees and manages resources it owns (those marked as managed by the Automation API). Resources created through the Management API or console are invisible to these endpoints and cannot be read, updated, or deleted here; conversely, resources created here are fully owned by the Automation API.
-//
-// Domains are the top-level resource; certificates, identity providers, and reporters are managed as sub-resources of a domain. Deleting a domain cascades to its Automation-managed sub-resources. Some sub-resources support a `system` flag identifying the domain's built-in default; the flag is immutable once set.
-//
-// This API complements the Management API, which remains the interactive, full-featured management surface.
+// You can manage with Terraform the following:
+// * Domains
+// * Certificates
+// * Identity Providers
+// * Reporters
 type GraviteeAm struct {
 	SDKVersion string
 	// Security domains: the top-level container for an authentication and authorization configuration. Create, read, update, and delete domains, and reach their sub-resources.

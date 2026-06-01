@@ -14,7 +14,7 @@ type AutomationGetDomainRequest struct {
 	// Identifier of the environment the domain belongs to.
 	EnvID string `pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
-	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
+	Key string `pathParam:"style=simple,explode=false,name=domainKey"`
 }
 
 func (a *AutomationGetDomainRequest) GetOrgID() string {
@@ -31,11 +31,11 @@ func (a *AutomationGetDomainRequest) GetEnvID() string {
 	return a.EnvID
 }
 
-func (a *AutomationGetDomainRequest) GetDomainKey() string {
+func (a *AutomationGetDomainRequest) GetKey() string {
 	if a == nil {
 		return ""
 	}
-	return a.DomainKey
+	return a.Key
 }
 
 type AutomationGetDomainResponse struct {

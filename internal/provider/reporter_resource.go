@@ -407,7 +407,7 @@ func (r *ReporterResource) ImportState(ctx context.Context, req resource.ImportS
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"domain_key": "customers", "environment_id": "...", "key": "audit-kafka", "organization_id": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"domain_key": "customers", "environment_id": "DEFAULT", "key": "audit-kafka", "organization_id": "DEFAULT"}': `+err.Error())
 		return
 	}
 
@@ -421,7 +421,7 @@ func (r *ReporterResource) ImportState(ctx context.Context, req resource.ImportS
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID.`)
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
 			return
 		}
 	}
@@ -436,7 +436,7 @@ func (r *ReporterResource) ImportState(ctx context.Context, req resource.ImportS
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID.`)
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
 			return
 		}
 	}

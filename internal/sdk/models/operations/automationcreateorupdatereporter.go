@@ -4,15 +4,27 @@
 package operations
 
 import (
+	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/shared"
 	"net/http"
 )
 
 type AutomationCreateOrUpdateReporterGlobals struct {
 	// Identifier of the organization that owns the environment.
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Identifier of the environment.
-	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a AutomationCreateOrUpdateReporterGlobals) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AutomationCreateOrUpdateReporterGlobals) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *AutomationCreateOrUpdateReporterGlobals) GetOrganizationID() *string {
@@ -31,13 +43,24 @@ func (a *AutomationCreateOrUpdateReporterGlobals) GetEnvironmentID() *string {
 
 type AutomationCreateOrUpdateReporterRequest struct {
 	// Identifier of the organization that owns the environment.
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Identifier of the environment.
-	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
 	// Desired state of the reporter. For a system reporter, supply only system: true and key.
 	AutomationReporter shared.AutomationReporterInput `request:"mediaType=application/json"`
+}
+
+func (a AutomationCreateOrUpdateReporterRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AutomationCreateOrUpdateReporterRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *AutomationCreateOrUpdateReporterRequest) GetOrganizationID() *string {

@@ -4,15 +4,27 @@
 package operations
 
 import (
+	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/shared"
 	"net/http"
 )
 
 type AutomationGetDomainGlobals struct {
 	// Identifier of the organization that owns the environment.
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Identifier of the environment.
-	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a AutomationGetDomainGlobals) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AutomationGetDomainGlobals) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *AutomationGetDomainGlobals) GetOrganizationID() *string {
@@ -31,11 +43,22 @@ func (a *AutomationGetDomainGlobals) GetEnvironmentID() *string {
 
 type AutomationGetDomainRequest struct {
 	// Identifier of the organization that owns the environment.
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Identifier of the environment.
-	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	Key string `pathParam:"style=simple,explode=false,name=domainKey"`
+}
+
+func (a AutomationGetDomainRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AutomationGetDomainRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *AutomationGetDomainRequest) GetOrganizationID() *string {

@@ -4,15 +4,27 @@
 package operations
 
 import (
+	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/shared"
 	"net/http"
 )
 
 type AutomationListIdentityProvidersGlobals struct {
 	// Identifier of the organization that owns the environment.
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Identifier of the environment.
-	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a AutomationListIdentityProvidersGlobals) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AutomationListIdentityProvidersGlobals) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *AutomationListIdentityProvidersGlobals) GetOrganizationID() *string {
@@ -31,11 +43,22 @@ func (a *AutomationListIdentityProvidersGlobals) GetEnvironmentID() *string {
 
 type AutomationListIdentityProvidersRequest struct {
 	// Identifier of the organization that owns the environment.
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Identifier of the environment.
-	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
+}
+
+func (a AutomationListIdentityProvidersRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AutomationListIdentityProvidersRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *AutomationListIdentityProvidersRequest) GetOrganizationID() *string {

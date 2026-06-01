@@ -4,15 +4,27 @@
 package operations
 
 import (
+	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/shared"
 	"net/http"
 )
 
 type AutomationCreateOrUpdateIdentityProviderGlobals struct {
 	// Identifier of the organization that owns the environment.
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Identifier of the environment.
-	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a AutomationCreateOrUpdateIdentityProviderGlobals) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AutomationCreateOrUpdateIdentityProviderGlobals) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *AutomationCreateOrUpdateIdentityProviderGlobals) GetOrganizationID() *string {
@@ -31,13 +43,24 @@ func (a *AutomationCreateOrUpdateIdentityProviderGlobals) GetEnvironmentID() *st
 
 type AutomationCreateOrUpdateIdentityProviderRequest struct {
 	// Identifier of the organization that owns the environment.
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Identifier of the environment.
-	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
 	// Desired state of the identity provider. For a system identity provider, supply only system: true and key.
 	AutomationIdentityProvider shared.AutomationIdentityProviderInput `request:"mediaType=application/json"`
+}
+
+func (a AutomationCreateOrUpdateIdentityProviderRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AutomationCreateOrUpdateIdentityProviderRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *AutomationCreateOrUpdateIdentityProviderRequest) GetOrganizationID() *string {

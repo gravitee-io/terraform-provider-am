@@ -4,15 +4,27 @@
 package operations
 
 import (
+	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/shared"
 	"net/http"
 )
 
 type AutomationListDomainsGlobals struct {
 	// Identifier of the organization that owns the environment.
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Identifier of the environment.
-	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a AutomationListDomainsGlobals) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AutomationListDomainsGlobals) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *AutomationListDomainsGlobals) GetOrganizationID() *string {
@@ -31,9 +43,20 @@ func (a *AutomationListDomainsGlobals) GetEnvironmentID() *string {
 
 type AutomationListDomainsRequest struct {
 	// Identifier of the organization that owns the environment.
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Identifier of the environment.
-	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (a AutomationListDomainsRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AutomationListDomainsRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *AutomationListDomainsRequest) GetOrganizationID() *string {

@@ -1,5 +1,5 @@
 data "am_domain" "my_domain" {
-  environment_id  = "...my_environment_id..."
+  environment_id  = "DEFAULT"
   key             = "customers"
-  organization_id = "...my_organization_id..."
+  organization_id = "DEFAULT"
 }

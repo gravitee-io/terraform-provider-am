@@ -56,7 +56,7 @@ resource "am_domain" "my_domain" {
   data_plane_id  = "default"
   description    = "Customer-facing authentication domain"
   enabled        = true
-  environment_id = "...my_environment_id..."
+  environment_id = "DEFAULT"
   key            = "customers"
   login_settings = {
     certificate_based_auth_enabled        = false
@@ -112,7 +112,7 @@ resource "am_domain" "my_domain" {
       enable_plain_fapi  = false
     }
   }
-  organization_id = "...my_organization_id..."
+  organization_id = "DEFAULT"
   password_settings = {
     exclude_passwords_in_dictionary       = true
     exclude_user_profile_info_in_password = true

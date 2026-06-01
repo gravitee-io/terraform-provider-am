@@ -108,6 +108,21 @@ func (p *AmProvider) Configure(ctx context.Context, req provider.ConfigureReques
 		serverUrl = "http://localhost:8093/management/automation"
 	}
 
+	if organizationIDEnvVar, ok := os.LookupEnv("AM_ORG_ID"); ok && data.OrganizationID.IsNull() {
+		data.OrganizationID = types.StringValue(organizationIDEnvVar)
+	}
+
+	if data.OrganizationID.IsNull() {
+		data.OrganizationID = types.StringValue(`DEFAULT`)
+	}
+
+	if environmentIDEnvVar, ok := os.LookupEnv("AM_ENV_ID"); ok && data.EnvironmentID.IsNull() {
+		data.EnvironmentID = types.StringValue(environmentIDEnvVar)
+	}
+
+	if data.EnvironmentID.IsNull() {
+		data.EnvironmentID = types.StringValue(`DEFAULT`)
+	}
 	security := shared.Security{}
 
 	if !data.BearerAuth.IsUnknown() {

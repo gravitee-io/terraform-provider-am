@@ -30,9 +30,9 @@ func (a *AutomationCreateOrUpdateDomainGlobals) GetEnvironmentID() *string {
 }
 
 type AutomationCreateOrUpdateDomainRequest struct {
-	// null
+	// Identifier of the organization that owns the environment.
 	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
-	// null
+	// Identifier of the environment.
 	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
 	// Desired state of the domain.
 	AutomationDomain shared.AutomationDomainInput `request:"mediaType=application/json"`

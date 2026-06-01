@@ -87,7 +87,7 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `null`,
+				Description: `Identifier of the environment.`,
 			},
 			"group_mapper": schema.MapAttribute{
 				Optional: true,
@@ -119,7 +119,7 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `null`,
+				Description: `Identifier of the organization that owns the environment.`,
 			},
 			"role_mapper": schema.MapAttribute{
 				Optional: true,

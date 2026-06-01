@@ -79,7 +79,7 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `null`,
+				Description: `Identifier of the environment.`,
 			},
 			"expires_at": schema.StringAttribute{
 				Computed:    true,
@@ -103,7 +103,7 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `null`,
+				Description: `Identifier of the organization that owns the environment.`,
 			},
 			"system": schema.BoolAttribute{
 				Computed:    true,

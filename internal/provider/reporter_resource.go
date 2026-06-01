@@ -90,7 +90,7 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `null`,
+				Description: `Identifier of the environment.`,
 			},
 			"key": schema.StringAttribute{
 				Required:    true,
@@ -110,7 +110,7 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `null`,
+				Description: `Identifier of the organization that owns the environment.`,
 			},
 			"system": schema.BoolAttribute{
 				Computed:    true,

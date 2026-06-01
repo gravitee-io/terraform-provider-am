@@ -261,7 +261,7 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `null`,
+				Description: `Identifier of the environment.`,
 			},
 			"key": schema.StringAttribute{
 				Required:    true,
@@ -447,7 +447,7 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `null`,
+				Description: `Identifier of the organization that owns the environment.`,
 			},
 			"password_settings": schema.SingleNestedAttribute{
 				Computed: true,

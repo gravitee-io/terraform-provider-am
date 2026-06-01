@@ -30,9 +30,9 @@ func (a *AutomationDeleteDomainGlobals) GetEnvironmentID() *string {
 }
 
 type AutomationDeleteDomainRequest struct {
-	// null
+	// Identifier of the organization that owns the environment.
 	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
-	// null
+	// Identifier of the environment.
 	EnvironmentID *string `pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	Key string `pathParam:"style=simple,explode=false,name=domainKey"`

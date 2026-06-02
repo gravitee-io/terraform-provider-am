@@ -54,10 +54,10 @@ resource "am_domain" "my_domain" {
     max_age = 86400
   }
   data_plane_id  = "default"
-  description    = "Customer-facing authentication domain"
+  description    = "An example authentication domain"
   enabled        = true
   environment_id = "DEFAULT"
-  key            = "customers"
+  key            = "example-domain"
   login_settings = {
     certificate_based_auth_enabled        = false
     certificate_based_auth_url            = "...my_certificate_based_auth_url..."
@@ -76,7 +76,7 @@ resource "am_domain" "my_domain" {
     remember_me_enabled                   = false
     reset_password_on_expiration          = true
   }
-  name = "Customers"
+  name = "Example domain"
   oidc = {
     ciba_settings = {
       auth_req_expiry        = 600
@@ -127,7 +127,7 @@ resource "am_domain" "my_domain" {
     old_passwords                         = 6
     password_history_enabled              = false
   }
-  path = "/customers"
+  path = "/example-domain"
   saml = {
     certificate = "signing-cert"
     enabled     = false

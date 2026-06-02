@@ -723,7 +723,7 @@ func (s *Certificates) AutomationGetCertificate(ctx context.Context, request ope
 }
 
 // AutomationDeleteCertificate - Delete a certificate
-// Deletes an Automation-managed certificate by its key.
+// Deletes an Automation-managed certificate by its key. Deleting a certificate that does not exist also returns 204.
 func (s *Certificates) AutomationDeleteCertificate(ctx context.Context, request operations.AutomationDeleteCertificateRequest, opts ...operations.Option) (*operations.AutomationDeleteCertificateResponse, error) {
 	globals := operations.AutomationDeleteCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,

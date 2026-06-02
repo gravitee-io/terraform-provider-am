@@ -723,7 +723,7 @@ func (s *Reporters) AutomationGetReporter(ctx context.Context, request operation
 }
 
 // AutomationDeleteReporter - Delete a reporter
-// Deletes an Automation-managed reporter by its key.
+// Deletes an Automation-managed reporter by its key. Deleting a reporter that does not exist also returns 204.
 func (s *Reporters) AutomationDeleteReporter(ctx context.Context, request operations.AutomationDeleteReporterRequest, opts ...operations.Option) (*operations.AutomationDeleteReporterResponse, error) {
 	globals := operations.AutomationDeleteReporterGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,

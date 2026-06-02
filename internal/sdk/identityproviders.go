@@ -723,7 +723,7 @@ func (s *IdentityProviders) AutomationGetIdentityProvider(ctx context.Context, r
 }
 
 // AutomationDeleteIdentityProvider - Delete an identity provider
-// Deletes an Automation-managed identity provider by its key.
+// Deletes an Automation-managed identity provider by its key. Deleting an identity provider that does not exist also returns 204.
 func (s *IdentityProviders) AutomationDeleteIdentityProvider(ctx context.Context, request operations.AutomationDeleteIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationDeleteIdentityProviderResponse, error) {
 	globals := operations.AutomationDeleteIdentityProviderGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,

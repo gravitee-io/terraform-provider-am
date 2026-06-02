@@ -734,7 +734,7 @@ func (s *Domains) AutomationGetDomain(ctx context.Context, request operations.Au
 }
 
 // AutomationDeleteDomain - Delete a domain
-// Deletes an Automation-managed domain. Deletion cascades to the domain's sub-resources (certificates, identity providers, and reporters).
+// Deletes an Automation-managed domain. Deletion cascades to the domain's sub-resources (certificates, identity providers, and reporters). Deleting a domain that does not exist also returns 204.
 func (s *Domains) AutomationDeleteDomain(ctx context.Context, request operations.AutomationDeleteDomainRequest, opts ...operations.Option) (*operations.AutomationDeleteDomainResponse, error) {
 	globals := operations.AutomationDeleteDomainGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -1647,7 +1647,7 @@ func (s *Domains) AutomationGetCertificate(ctx context.Context, request operatio
 }
 
 // AutomationDeleteCertificate - Delete a certificate
-// Deletes an Automation-managed certificate by its key.
+// Deletes an Automation-managed certificate by its key. Deleting a certificate that does not exist also returns 204.
 func (s *Domains) AutomationDeleteCertificate(ctx context.Context, request operations.AutomationDeleteCertificateRequest, opts ...operations.Option) (*operations.AutomationDeleteCertificateResponse, error) {
 	globals := operations.AutomationDeleteCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -2560,7 +2560,7 @@ func (s *Domains) AutomationGetIdentityProvider(ctx context.Context, request ope
 }
 
 // AutomationDeleteIdentityProvider - Delete an identity provider
-// Deletes an Automation-managed identity provider by its key.
+// Deletes an Automation-managed identity provider by its key. Deleting an identity provider that does not exist also returns 204.
 func (s *Domains) AutomationDeleteIdentityProvider(ctx context.Context, request operations.AutomationDeleteIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationDeleteIdentityProviderResponse, error) {
 	globals := operations.AutomationDeleteIdentityProviderGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -3473,7 +3473,7 @@ func (s *Domains) AutomationGetReporter(ctx context.Context, request operations.
 }
 
 // AutomationDeleteReporter - Delete a reporter
-// Deletes an Automation-managed reporter by its key.
+// Deletes an Automation-managed reporter by its key. Deleting a reporter that does not exist also returns 204.
 func (s *Domains) AutomationDeleteReporter(ctx context.Context, request operations.AutomationDeleteReporterRequest, opts ...operations.Option) (*operations.AutomationDeleteReporterResponse, error) {
 	globals := operations.AutomationDeleteReporterGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,

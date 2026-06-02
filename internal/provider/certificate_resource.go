@@ -403,12 +403,12 @@ func (r *CertificateResource) ImportState(ctx context.Context, req resource.Impo
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"domain_key": "customers", "environment_id": "DEFAULT", "key": "signing-cert", "organization_id": "DEFAULT"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"domain_key": "example-domain", "environment_id": "DEFAULT", "key": "signing-cert", "organization_id": "DEFAULT"}': `+err.Error())
 		return
 	}
 
 	if len(data.DomainKey) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field domain_key is required but was not found in the json encoded ID. It's expected to be a value alike '"customers"'`)
+		resp.Diagnostics.AddError("Missing required field", `The field domain_key is required but was not found in the json encoded ID. It's expected to be a value alike '"example-domain"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("domain_key"), data.DomainKey)...)

@@ -1268,7 +1268,7 @@ func (r *DomainResource) ImportState(ctx context.Context, req resource.ImportSta
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"environment_id": "DEFAULT", "key": "customers", "organization_id": "DEFAULT"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"environment_id": "DEFAULT", "key": "example-domain", "organization_id": "DEFAULT"}': `+err.Error())
 		return
 	}
 
@@ -1283,7 +1283,7 @@ func (r *DomainResource) ImportState(ctx context.Context, req resource.ImportSta
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
 	if len(data.Key) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field key is required but was not found in the json encoded ID. It's expected to be a value alike '"customers"'`)
+		resp.Diagnostics.AddError("Missing required field", `The field key is required but was not found in the json encoded ID. It's expected to be a value alike '"example-domain"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("key"), data.Key)...)

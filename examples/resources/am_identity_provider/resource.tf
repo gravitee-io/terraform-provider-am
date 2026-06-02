@@ -1,6 +1,6 @@
 resource "am_identity_provider" "my_identityprovider" {
   configuration = "{\"users\":[{\"username\":\"admin\",\"password\":\"...\"}]}"
-  domain_key    = "customers"
+  domain_key    = "example-domain"
   domain_whitelist = [
     "example.com",
   ]

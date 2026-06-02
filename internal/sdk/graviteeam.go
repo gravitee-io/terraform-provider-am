@@ -56,6 +56,8 @@ func Pointer[T any](v T) *T { return &v }
 // * Certificates
 // * Identity Providers
 // * Reporters
+//
+// Compatible with Gravitee Access Management 4.12.0.
 type GraviteeAm struct {
 	SDKVersion string
 	// Security domains: the top-level container for an authentication and authorization configuration. Create, read, update, and delete domains, and reach their sub-resources.

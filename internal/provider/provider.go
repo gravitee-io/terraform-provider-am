@@ -85,7 +85,9 @@ func (p *AmProvider) Schema(ctx context.Context, req provider.SchemaRequest, res
 			`* Domains` + "\n" +
 			`* Certificates` + "\n" +
 			`* Identity Providers` + "\n" +
-			`* Reporters`,
+			`* Reporters` + "\n" +
+			`` + "\n" +
+			`Compatible with Gravitee Access Management 4.12.0.`,
 	}
 }
 

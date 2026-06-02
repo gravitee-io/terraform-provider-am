@@ -57,7 +57,7 @@ func (p *AmProvider) Schema(ctx context.Context, req provider.SchemaRequest, res
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"bearer_auth": schema.StringAttribute{
-				MarkdownDescription: `Authentication uses a bearer token: a JWT, or an opaque user service-account access token. Every operation is additionally permission-gated against the target organization, environment, and resource; a caller lacking the required permission receives a 403 response. Configurable via environment variable ` + "`" + `AM_SA_TOKEN` + "`" + `.`,
+				MarkdownDescription: `Authentication uses a bearer token: a JWT, or an opaque user service-account access token. Every operation is additionally permission-gated against the target organization, environment, and resource; a caller lacking the required permission receives a 403 response.. Configurable via environment variable ` + "`" + `AM_SA_TOKEN` + "`" + `.`,
 				Optional:            true,
 				Sensitive:           true,
 			},

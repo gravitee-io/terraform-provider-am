@@ -5,17 +5,10 @@ package shared
 
 // Error response body returned for failed requests.
 type Error struct {
-	// Human-readable description of the error.
-	Message *string `json:"message,omitempty"`
 	// HTTP status code of the error response.
 	HTTPStatus *int `json:"http_status,omitempty"`
-}
-
-func (e *Error) GetMessage() *string {
-	if e == nil {
-		return nil
-	}
-	return e.Message
+	// Human-readable description of the error.
+	Message *string `json:"message,omitempty"`
 }
 
 func (e *Error) GetHTTPStatus() *int {
@@ -23,4 +16,11 @@ func (e *Error) GetHTTPStatus() *int {
 		return nil
 	}
 	return e.HTTPStatus
+}
+
+func (e *Error) GetMessage() *string {
+	if e == nil {
+		return nil
+	}
+	return e.Message
 }

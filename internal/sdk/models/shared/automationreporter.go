@@ -12,7 +12,7 @@ import (
 type AutomationReporter struct {
 	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type.
 	Configuration *string `json:"configuration,omitempty"`
-	// Creation timestamp (epoch milliseconds). Read-only.
+	// Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	// Category of data the reporter handles, derived from its type. Read-only.
 	DataType *string `json:"dataType,omitempty"`
@@ -24,9 +24,9 @@ type AutomationReporter struct {
 	Name *string `json:"name,omitempty"`
 	// Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, and configuration fields are ignored.
 	System *bool `default:"false" json:"system"`
-	// Reporter plugin type identifier (the reporter backend to use).
+	// Reporter plugin type identifier. Immutable after creation.
 	Type *string `json:"type,omitempty"`
-	// Last-update timestamp (epoch milliseconds). Read-only.
+	// Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 }
 

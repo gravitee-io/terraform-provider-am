@@ -23,7 +23,7 @@ type AutomationAccountSettings struct {
 	DeletePasswordlessDevicesAfterResetPassword *bool `default:"false" json:"deletePasswordlessDevicesAfterResetPassword"`
 	// Whether dynamic (self-service) user registration is enabled.
 	DynamicUserRegistration *bool `default:"false" json:"dynamicUserRegistration"`
-	// Whether account settings are inherited from the parent (the environment). When true, the other fields are ignored.
+	// Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains.
 	Inherited *bool `default:"true" json:"inherited"`
 	// Whether brute-force authentication attempts are detected and blocked.
 	LoginAttemptsDetectionEnabled *bool `default:"false" json:"loginAttemptsDetectionEnabled"`

@@ -19,7 +19,7 @@ type AutomationReporterInput struct {
 	Name *string `json:"name,omitempty"`
 	// Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, and configuration fields are ignored.
 	System *bool `default:"false" json:"system"`
-	// Reporter plugin type identifier (the reporter backend to use).
+	// Reporter plugin type identifier. Immutable after creation.
 	Type *string `json:"type,omitempty"`
 }
 

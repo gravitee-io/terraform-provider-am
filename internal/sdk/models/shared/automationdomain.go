@@ -16,7 +16,7 @@ type AutomationDomain struct {
 	CertificateSettings *AutomationCertificateSettings `json:"certificateSettings,omitempty"`
 	// Cross-Origin Resource Sharing configuration controlling which web origins may call the domain's endpoints from a browser.
 	CorsSettings *CorsSettings `json:"corsSettings,omitempty"`
-	// Creation timestamp (epoch milliseconds). Read-only.
+	// Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	// Identifier of the data plane this domain is connected to. Required at creation and immutable afterwards; included in the desired-state document but never re-applied on update.
 	DataPlaneID string `json:"dataPlaneId"`
@@ -50,7 +50,7 @@ type AutomationDomain struct {
 	TokenExchangeSettings *TokenExchangeSettings `json:"tokenExchangeSettings,omitempty"`
 	// Configuration of the domain's User-Managed Access (UMA 2.0) authorization features.
 	Uma *UMASettings `json:"uma,omitempty"`
-	// Last-update timestamp (epoch milliseconds). Read-only.
+	// Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	// Virtual hosts the domain is exposed on, overriding the default context path.
 	Vhosts []VirtualHost `json:"vhosts,omitempty"`

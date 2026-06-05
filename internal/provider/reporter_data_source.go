@@ -70,7 +70,7 @@ func (r *ReporterDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Creation timestamp (epoch milliseconds). Read-only.`,
+				Description: `Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 			"data_type": schema.StringAttribute{
 				Computed:    true,
@@ -112,11 +112,11 @@ func (r *ReporterDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,
-				Description: `Reporter plugin type identifier (the reporter backend to use).`,
+				Description: `Reporter plugin type identifier. Immutable after creation.`,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Last-update timestamp (epoch milliseconds). Read-only.`,
+				Description: `Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 		},
 	}

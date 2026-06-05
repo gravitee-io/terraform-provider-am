@@ -18,7 +18,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -128,7 +130,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(true),
-						Description: `Whether account settings are inherited from the parent (the environment). When true, the other fields are ignored. Default: true`,
+						Description: `Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains. Default: true`,
 					},
 					"login_attempts_detection_enabled": schema.BoolAttribute{
 						Computed:    true,
@@ -300,11 +302,14 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Creation timestamp (epoch milliseconds). Read-only.`,
+				Description: `Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 			"data_plane_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Identifier of the data plane this domain is connected to. Required at creation and immutable afterwards; included in the desired-state document but never re-applied on update.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the data plane this domain is connected to. Required at creation and immutable afterwards; included in the desired-state document but never re-applied on update. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},
@@ -874,7 +879,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Last-update timestamp (epoch milliseconds). Read-only.`,
+				Description: `Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 			"vhosts": schema.ListNestedAttribute{
 				Optional: true,

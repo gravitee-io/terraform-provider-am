@@ -25,7 +25,7 @@ type AutomationIdentityProviderInput struct {
 	RoleMapper map[string][]string `json:"roleMapper,omitempty"`
 	// Whether this is the domain's system identity provider. Immutable after creation. When true, only key is required; the identity provider is built from the domains.identities.default.* system settings and the name, type, and configuration fields are ignored.
 	System *bool `default:"false" json:"system"`
-	// Identity provider plugin type identifier (the provider to use).
+	// Identity provider plugin type identifier. Immutable after creation.
 	Type *string `json:"type,omitempty"`
 }
 

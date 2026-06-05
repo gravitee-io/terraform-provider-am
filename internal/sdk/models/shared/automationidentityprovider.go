@@ -12,7 +12,7 @@ import (
 type AutomationIdentityProvider struct {
 	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type.
 	Configuration *string `json:"configuration,omitempty"`
-	// Creation timestamp (epoch milliseconds). Read-only.
+	// Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	// Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected.
 	DomainWhitelist []string `json:"domainWhitelist,omitempty"`
@@ -28,9 +28,9 @@ type AutomationIdentityProvider struct {
 	RoleMapper map[string][]string `json:"roleMapper,omitempty"`
 	// Whether this is the domain's system identity provider. Immutable after creation. When true, only key is required; the identity provider is built from the domains.identities.default.* system settings and the name, type, and configuration fields are ignored.
 	System *bool `default:"false" json:"system"`
-	// Identity provider plugin type identifier (the provider to use).
+	// Identity provider plugin type identifier. Immutable after creation.
 	Type *string `json:"type,omitempty"`
-	// Last-update timestamp (epoch milliseconds). Read-only.
+	// Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 }
 

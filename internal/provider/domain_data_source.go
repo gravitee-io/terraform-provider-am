@@ -110,7 +110,7 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 					"inherited": schema.BoolAttribute{
 						Computed:    true,
-						Description: `Whether account settings are inherited from the parent (the environment). When true, the other fields are ignored.`,
+						Description: `Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains.`,
 					},
 					"login_attempts_detection_enabled": schema.BoolAttribute{
 						Computed:    true,
@@ -244,7 +244,7 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Creation timestamp (epoch milliseconds). Read-only.`,
+				Description: `Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 			"data_plane_id": schema.StringAttribute{
 				Computed:    true,
@@ -698,7 +698,7 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Last-update timestamp (epoch milliseconds). Read-only.`,
+				Description: `Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 			"vhosts": schema.ListNestedAttribute{
 				Computed: true,

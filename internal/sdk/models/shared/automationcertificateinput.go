@@ -17,7 +17,7 @@ type AutomationCertificateInput struct {
 	Name *string `json:"name,omitempty"`
 	// Whether this is the domain's system certificate. Immutable after creation. When true, only key is required; the certificate is built from the domains.certificates.default.* system settings and the name, type, and configuration fields are ignored.
 	System *bool `default:"false" json:"system"`
-	// Certificate plugin type identifier (the certificate provider to use).
+	// Certificate plugin type identifier. Immutable after creation.
 	Type *string `json:"type,omitempty"`
 }
 

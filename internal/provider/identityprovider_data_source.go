@@ -72,7 +72,7 @@ func (r *IdentityProviderDataSource) Schema(ctx context.Context, req datasource.
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Creation timestamp (epoch milliseconds). Read-only.`,
+				Description: `Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 			"domain_key": schema.StringAttribute{
 				Required:    true,
@@ -130,11 +130,11 @@ func (r *IdentityProviderDataSource) Schema(ctx context.Context, req datasource.
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,
-				Description: `Identity provider plugin type identifier (the provider to use).`,
+				Description: `Identity provider plugin type identifier. Immutable after creation.`,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Last-update timestamp (epoch milliseconds). Read-only.`,
+				Description: `Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 		},
 	}

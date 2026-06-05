@@ -12,9 +12,9 @@ import (
 type AutomationCertificate struct {
 	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type.
 	Configuration *string `json:"configuration,omitempty"`
-	// Creation timestamp (epoch milliseconds). Read-only.
+	// Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	// Expiry timestamp (epoch milliseconds), when known for the certificate type. Read-only.
+	// Expiry timestamp (ISO-8601 / RFC 3339, UTC), when known for the certificate type. Read-only.
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// Stable, immutable identifier for the certificate within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the certificate on create-or-update.
 	Key string `json:"key"`
@@ -22,9 +22,9 @@ type AutomationCertificate struct {
 	Name *string `json:"name,omitempty"`
 	// Whether this is the domain's system certificate. Immutable after creation. When true, only key is required; the certificate is built from the domains.certificates.default.* system settings and the name, type, and configuration fields are ignored.
 	System *bool `default:"false" json:"system"`
-	// Certificate plugin type identifier (the certificate provider to use).
+	// Certificate plugin type identifier. Immutable after creation.
 	Type *string `json:"type,omitempty"`
-	// Last-update timestamp (epoch milliseconds). Read-only.
+	// Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 }
 

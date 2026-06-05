@@ -69,7 +69,7 @@ func (r *CertificateDataSource) Schema(ctx context.Context, req datasource.Schem
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Creation timestamp (epoch milliseconds). Read-only.`,
+				Description: `Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 			"domain_key": schema.StringAttribute{
 				Required:    true,
@@ -82,7 +82,7 @@ func (r *CertificateDataSource) Schema(ctx context.Context, req datasource.Schem
 			},
 			"expires_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Expiry timestamp (epoch milliseconds), when known for the certificate type. Read-only.`,
+				Description: `Expiry timestamp (ISO-8601 / RFC 3339, UTC), when known for the certificate type. Read-only.`,
 			},
 			"key": schema.StringAttribute{
 				Required:    true,
@@ -107,11 +107,11 @@ func (r *CertificateDataSource) Schema(ctx context.Context, req datasource.Schem
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,
-				Description: `Certificate plugin type identifier (the certificate provider to use).`,
+				Description: `Certificate plugin type identifier. Immutable after creation.`,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Last-update timestamp (epoch milliseconds). Read-only.`,
+				Description: `Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 		},
 	}

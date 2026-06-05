@@ -14,6 +14,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -73,7 +76,7 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Creation timestamp (epoch milliseconds). Read-only.`,
+				Description: `Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 			"domain_key": schema.StringAttribute{
 				Required:    true,
@@ -129,18 +132,24 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Role mapper: assigns AM roles based on provider attribute values. Each entry maps a role to the user attribute expressions that grant it.`,
 			},
 			"system": schema.BoolAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     booldefault.StaticBool(false),
-				Description: `Whether this is the domain's system identity provider. Immutable after creation. When true, only key is required; the identity provider is built from the domains.identities.default.* system settings and the name, type, and configuration fields are ignored. Default: false`,
+				Computed: true,
+				Optional: true,
+				Default:  booldefault.StaticBool(false),
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Whether this is the domain's system identity provider. Immutable after creation. When true, only key is required; the identity provider is built from the domains.identities.default.* system settings and the name, type, and configuration fields are ignored. Default: false; Requires replacement if changed.`,
 			},
 			"type": schema.StringAttribute{
-				Optional:    true,
-				Description: `Identity provider plugin type identifier (the provider to use).`,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identity provider plugin type identifier. Immutable after creation. Requires replacement if changed.`,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
-				Description: `Last-update timestamp (epoch milliseconds). Read-only.`,
+				Description: `Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 		},
 	}

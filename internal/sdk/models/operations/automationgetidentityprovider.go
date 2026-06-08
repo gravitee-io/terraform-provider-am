@@ -48,8 +48,8 @@ type AutomationGetIdentityProviderRequest struct {
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
-	// Key of the identity provider within the domain.
-	Key string `pathParam:"style=simple,explode=false,name=idpKey"`
+	// Key of the identity within the domain.
+	IdentityKey string `pathParam:"style=simple,explode=false,name=identityKey"`
 }
 
 func (a AutomationGetIdentityProviderRequest) MarshalJSON() ([]byte, error) {
@@ -84,11 +84,11 @@ func (a *AutomationGetIdentityProviderRequest) GetDomainKey() string {
 	return a.DomainKey
 }
 
-func (a *AutomationGetIdentityProviderRequest) GetKey() string {
+func (a *AutomationGetIdentityProviderRequest) GetIdentityKey() string {
 	if a == nil {
 		return ""
 	}
-	return a.Key
+	return a.IdentityKey
 }
 
 type AutomationGetIdentityProviderResponse struct {

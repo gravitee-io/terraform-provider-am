@@ -1895,7 +1895,7 @@ func (s *Domains) AutomationListIdentityProviders(ctx context.Context, request o
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers", request, globals)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2122,7 +2122,7 @@ func (s *Domains) AutomationCreateOrUpdateIdentityProvider(ctx context.Context, 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers", request, globals)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2358,7 +2358,7 @@ func (s *Domains) AutomationDeleteIdentityProvider(ctx context.Context, request 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers/{idpKey}", request, globals)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities/{identityKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2547,8 +2547,6 @@ func (s *Domains) AutomationDeleteIdentityProvider(ctx context.Context, request 
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 404:
-		utils.DrainBody(httpRes)
 	}
 
 	return res, nil
@@ -2581,7 +2579,7 @@ func (s *Domains) AutomationGetIdentityProvider(ctx context.Context, request ope
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identity-providers/{idpKey}", request, globals)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities/{identityKey}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

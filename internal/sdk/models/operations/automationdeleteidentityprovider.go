@@ -49,7 +49,7 @@ type AutomationDeleteIdentityProviderRequest struct {
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
 	// Key of the identity within the domain.
-	IdentityKey string `pathParam:"style=simple,explode=false,name=identityKey"`
+	Key string `pathParam:"style=simple,explode=false,name=identityKey"`
 }
 
 func (a AutomationDeleteIdentityProviderRequest) MarshalJSON() ([]byte, error) {
@@ -84,11 +84,11 @@ func (a *AutomationDeleteIdentityProviderRequest) GetDomainKey() string {
 	return a.DomainKey
 }
 
-func (a *AutomationDeleteIdentityProviderRequest) GetIdentityKey() string {
+func (a *AutomationDeleteIdentityProviderRequest) GetKey() string {
 	if a == nil {
 		return ""
 	}
-	return a.IdentityKey
+	return a.Key
 }
 
 type AutomationDeleteIdentityProviderResponse struct {

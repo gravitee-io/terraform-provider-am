@@ -2547,6 +2547,8 @@ func (s *Domains) AutomationDeleteIdentityProvider(ctx context.Context, request 
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	}
 
 	return res, nil

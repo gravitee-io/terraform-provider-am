@@ -195,6 +195,7 @@ func (p *AmProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewCertificateResource,
 		NewDomainResource,
+		NewIdentityProviderResource,
 		NewReporterResource,
 	}
 }
@@ -203,6 +204,7 @@ func (p *AmProvider) DataSources(ctx context.Context) []func() datasource.DataSo
 	return []func() datasource.DataSource{
 		NewCertificateDataSource,
 		NewDomainDataSource,
+		NewIdentityProviderDataSource,
 		NewReporterDataSource,
 	}
 }

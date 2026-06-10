@@ -75,7 +75,7 @@ func (p *AmProvider) Schema(ctx context.Context, req provider.SchemaRequest, res
 				Optional:    true,
 			},
 			"server_url": schema.StringAttribute{
-				Description: `Server URL (defaults to http://localhost:8093/management/automation)`,
+				Description: `Server URL (defaults to http://localhost:8093/automation)`,
 				Optional:    true,
 			},
 		},
@@ -107,7 +107,7 @@ func (p *AmProvider) Configure(ctx context.Context, req provider.ConfigureReques
 	}
 
 	if serverUrl == "" {
-		serverUrl = "http://localhost:8093/management/automation"
+		serverUrl = "http://localhost:8093/automation"
 	}
 
 	if organizationIDEnvVar, ok := os.LookupEnv("AM_ORG_ID"); ok && data.OrganizationID.IsNull() {

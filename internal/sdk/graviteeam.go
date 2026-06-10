@@ -20,7 +20,7 @@ import (
 
 // ServerList contains the list of servers available to the SDK
 var ServerList = []string{
-	"http://localhost:8093/management/automation",
+	"http://localhost:8093/automation",
 }
 
 // HTTPClient provides an interface for supplying the SDK with a custom HTTP client

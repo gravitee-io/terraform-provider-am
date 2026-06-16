@@ -679,7 +679,7 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							},
 							"scope_handling": schema.StringAttribute{
 								Computed:    true,
-								Description: `How scopes are handled when issuing the exchanged token. downscoping restricts the issued token to a subset of the original scopes.`,
+								Description: `How scopes are handled when issuing the exchanged token. DOWNSCOPING restricts the issued token to a subset of the original scopes.`,
 							},
 						},
 						Description: `OAuth-specific token-exchange behavior, such as how scopes are handled, with optional inheritance from domain defaults.`,

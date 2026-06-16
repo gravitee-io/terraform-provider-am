@@ -847,12 +847,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"scope_handling": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     stringdefault.StaticString(`DOWNSCOPING`),
-								Description: `How scopes are handled when issuing the exchanged token. DOWNSCOPING restricts the issued token to a subset of the original scopes. Default: "DOWNSCOPING"; must be one of ["DOWNSCOPING", "PERMISSIVE"]`,
+								Default:     stringdefault.StaticString(`downscoping`),
+								Description: `How scopes are handled when issuing the exchanged token. downscoping restricts the issued token to a subset of the original scopes. Default: "downscoping"; must be one of ["downscoping", "permissive"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
-										"DOWNSCOPING",
-										"PERMISSIVE",
+										"downscoping",
+										"permissive",
 									),
 								},
 							},

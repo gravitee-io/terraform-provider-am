@@ -187,7 +187,7 @@ resource "am_domain" "my_domain" {
     max_delegation_depth = 25
     token_exchange_o_auth_settings = {
       inherited      = true
-      scope_handling = "DOWNSCOPING"
+      scope_handling = "downscoping"
     }
     trusted_issuers = [
       {

@@ -785,11 +785,9 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						Computed:    true,
 						Description: `Preferred authenticator attachment. PLATFORM selects authenticators bound to the device (such as a fingerprint reader); CROSS_PLATFORM selects roaming authenticators (such as a security key).`,
 					},
-					"certificates": schema.MapNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{},
-						},
+					"certificates": schema.MapAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
 						Description: `Trusted device-attestation X.509 certificates, keyed by name.`,
 					},
 					"enforce_authenticator_integrity": schema.BoolAttribute{

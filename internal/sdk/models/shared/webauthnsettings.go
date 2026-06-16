@@ -66,10 +66,6 @@ func (e *AuthenticatorAttachment) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// Certificates - Trusted device-attestation X.509 certificates, keyed by name.
-type Certificates struct {
-}
-
 // UserVerification - Relying-party requirement regarding user verification during a ceremony. REQUIRED enforces verification, PREFERRED requests it when available, and DISCOURAGED avoids it.
 type UserVerification string
 
@@ -107,7 +103,7 @@ type WebAuthnSettings struct {
 	// Preferred authenticator attachment. PLATFORM selects authenticators bound to the device (such as a fingerprint reader); CROSS_PLATFORM selects roaming authenticators (such as a security key).
 	AuthenticatorAttachment *AuthenticatorAttachment `json:"authenticatorAttachment,omitempty"`
 	// Trusted device-attestation X.509 certificates, keyed by name.
-	Certificates map[string]Certificates `json:"certificates,omitempty"`
+	Certificates map[string]string `json:"certificates,omitempty"`
 	// Whether to periodically re-verify that registered authenticators remain valid against the FIDO2 Metadata Service.
 	EnforceAuthenticatorIntegrity *bool `default:"false" json:"enforceAuthenticatorIntegrity"`
 	// Maximum elapsed time, in seconds, since an authenticator was last verified before it is re-checked on the next passwordless login.
@@ -151,7 +147,7 @@ func (w *WebAuthnSettings) GetAuthenticatorAttachment() *AuthenticatorAttachment
 	return w.AuthenticatorAttachment
 }
 
-func (w *WebAuthnSettings) GetCertificates() map[string]Certificates {
+func (w *WebAuthnSettings) GetCertificates() map[string]string {
 	if w == nil {
 		return nil
 	}

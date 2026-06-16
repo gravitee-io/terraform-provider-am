@@ -10,7 +10,7 @@ import (
 type WebAuthnSettings struct {
 	AttestationConveyancePreference     types.String            `tfsdk:"attestation_conveyance_preference"`
 	AuthenticatorAttachment             types.String            `tfsdk:"authenticator_attachment"`
-	Certificates                        map[string]Certificates `tfsdk:"certificates"`
+	Certificates                        map[string]types.String `tfsdk:"certificates"`
 	EnforceAuthenticatorIntegrity       types.Bool              `tfsdk:"enforce_authenticator_integrity"`
 	EnforceAuthenticatorIntegrityMaxAge types.Int32             `tfsdk:"enforce_authenticator_integrity_max_age"`
 	ForceRegistration                   types.Bool              `tfsdk:"force_registration"`

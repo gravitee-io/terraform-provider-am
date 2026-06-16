@@ -338,11 +338,9 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 				r.WebAuthnSettings.AuthenticatorAttachment = types.StringNull()
 			}
 			if len(resp.WebAuthnSettings.Certificates) > 0 {
-				r.WebAuthnSettings.Certificates = make(map[string]tfTypes.Certificates, len(resp.WebAuthnSettings.Certificates))
-				for certificatesKey, _ := range resp.WebAuthnSettings.Certificates {
-					var certificatesResult tfTypes.Certificates
-
-					r.WebAuthnSettings.Certificates[certificatesKey] = certificatesResult
+				r.WebAuthnSettings.Certificates = make(map[string]types.String, len(resp.WebAuthnSettings.Certificates))
+				for key1, value1 := range resp.WebAuthnSettings.Certificates {
+					r.WebAuthnSettings.Certificates[key1] = types.StringValue(value1)
 				}
 			}
 			r.WebAuthnSettings.EnforceAuthenticatorIntegrity = types.BoolPointerValue(resp.WebAuthnSettings.EnforceAuthenticatorIntegrity)
@@ -1463,9 +1461,11 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		} else {
 			authenticatorAttachment = nil
 		}
-		certificates := make(map[string]shared.Certificates)
+		certificates := make(map[string]string)
 		for certificatesKey := range r.WebAuthnSettings.Certificates {
-			certificatesInst := shared.Certificates{}
+			var certificatesInst string
+			certificatesInst = r.WebAuthnSettings.Certificates[certificatesKey].ValueString()
+
 			certificates[certificatesKey] = certificatesInst
 		}
 		enforceAuthenticatorIntegrity := new(bool)

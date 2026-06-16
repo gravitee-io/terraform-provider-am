@@ -1000,14 +1000,9 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							),
 						},
 					},
-					"certificates": schema.MapNestedAttribute{
-						Optional: true,
-						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
-							Attributes: map[string]schema.Attribute{},
-						},
+					"certificates": schema.MapAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
 						Description: `Trusted device-attestation X.509 certificates, keyed by name.`,
 					},
 					"enforce_authenticator_integrity": schema.BoolAttribute{

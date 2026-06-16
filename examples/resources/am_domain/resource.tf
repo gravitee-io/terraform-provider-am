@@ -223,9 +223,7 @@ resource "am_domain" "my_domain" {
     attestation_conveyance_preference = "NONE"
     authenticator_attachment          = "CROSS_PLATFORM"
     certificates = {
-      key = {
-        # ...
-      }
+      key = "value"
     }
     enforce_authenticator_integrity         = false
     enforce_authenticator_integrity_max_age = 10

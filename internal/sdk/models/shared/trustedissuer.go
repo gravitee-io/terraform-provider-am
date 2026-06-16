@@ -13,8 +13,8 @@ import (
 type KeyResolutionMethod string
 
 const (
-	KeyResolutionMethodJwksURL KeyResolutionMethod = "JWKS_URL"
-	KeyResolutionMethodPem     KeyResolutionMethod = "PEM"
+	KeyResolutionMethodJwksURL KeyResolutionMethod = "jwks_url"
+	KeyResolutionMethodPem     KeyResolutionMethod = "pem"
 )
 
 func (e KeyResolutionMethod) ToPointer() *KeyResolutionMethod {
@@ -26,9 +26,9 @@ func (e *KeyResolutionMethod) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
-	case "JWKS_URL":
+	case "jwks_url":
 		fallthrough
-	case "PEM":
+	case "pem":
 		*e = KeyResolutionMethod(v)
 		return nil
 	default:

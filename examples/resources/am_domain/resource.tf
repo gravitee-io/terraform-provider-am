@@ -187,14 +187,14 @@ resource "am_domain" "my_domain" {
     max_delegation_depth = 25
     token_exchange_o_auth_settings = {
       inherited      = true
-      scope_handling = "DOWNSCOPING"
+      scope_handling = "downscoping"
     }
     trusted_issuers = [
       {
         certificate           = "...my_certificate..."
         issuer                = "https://issuer.example.com"
         jwks_uri              = "https://issuer.example.com/.well-known/jwks.json"
-        key_resolution_method = "PEM"
+        key_resolution_method = "pem"
         scope_mappings = {
           key = "value"
         }
@@ -220,8 +220,8 @@ resource "am_domain" "my_domain" {
     }
   ]
   web_authn_settings = {
-    attestation_conveyance_preference = "NONE"
-    authenticator_attachment          = "CROSS_PLATFORM"
+    attestation_conveyance_preference = "none"
+    authenticator_attachment          = "cross_platform"
     certificates = {
       key = "value"
     }
@@ -232,6 +232,6 @@ resource "am_domain" "my_domain" {
     relying_party_id                        = "auth.example.com"
     relying_party_name                      = "Example Inc."
     require_resident_key                    = false
-    user_verification                       = "PREFERRED"
+    user_verification                       = "preferred"
   }
 }

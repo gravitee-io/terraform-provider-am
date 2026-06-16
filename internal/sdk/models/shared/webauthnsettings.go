@@ -13,9 +13,9 @@ import (
 type AttestationConveyancePreference string
 
 const (
-	AttestationConveyancePreferenceNone     AttestationConveyancePreference = "NONE"
-	AttestationConveyancePreferenceIndirect AttestationConveyancePreference = "INDIRECT"
-	AttestationConveyancePreferenceDirect   AttestationConveyancePreference = "DIRECT"
+	AttestationConveyancePreferenceNone     AttestationConveyancePreference = "none"
+	AttestationConveyancePreferenceIndirect AttestationConveyancePreference = "indirect"
+	AttestationConveyancePreferenceDirect   AttestationConveyancePreference = "direct"
 )
 
 func (e AttestationConveyancePreference) ToPointer() *AttestationConveyancePreference {
@@ -27,11 +27,11 @@ func (e *AttestationConveyancePreference) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
-	case "NONE":
+	case "none":
 		fallthrough
-	case "INDIRECT":
+	case "indirect":
 		fallthrough
-	case "DIRECT":
+	case "direct":
 		*e = AttestationConveyancePreference(v)
 		return nil
 	default:
@@ -43,8 +43,8 @@ func (e *AttestationConveyancePreference) UnmarshalJSON(data []byte) error {
 type AuthenticatorAttachment string
 
 const (
-	AuthenticatorAttachmentCrossPlatform AuthenticatorAttachment = "CROSS_PLATFORM"
-	AuthenticatorAttachmentPlatform      AuthenticatorAttachment = "PLATFORM"
+	AuthenticatorAttachmentCrossPlatform AuthenticatorAttachment = "cross_platform"
+	AuthenticatorAttachmentPlatform      AuthenticatorAttachment = "platform"
 )
 
 func (e AuthenticatorAttachment) ToPointer() *AuthenticatorAttachment {
@@ -56,9 +56,9 @@ func (e *AuthenticatorAttachment) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
-	case "CROSS_PLATFORM":
+	case "cross_platform":
 		fallthrough
-	case "PLATFORM":
+	case "platform":
 		*e = AuthenticatorAttachment(v)
 		return nil
 	default:
@@ -70,9 +70,9 @@ func (e *AuthenticatorAttachment) UnmarshalJSON(data []byte) error {
 type UserVerification string
 
 const (
-	UserVerificationRequired    UserVerification = "REQUIRED"
-	UserVerificationPreferred   UserVerification = "PREFERRED"
-	UserVerificationDiscouraged UserVerification = "DISCOURAGED"
+	UserVerificationRequired    UserVerification = "required"
+	UserVerificationPreferred   UserVerification = "preferred"
+	UserVerificationDiscouraged UserVerification = "discouraged"
 )
 
 func (e UserVerification) ToPointer() *UserVerification {
@@ -84,11 +84,11 @@ func (e *UserVerification) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
-	case "REQUIRED":
+	case "required":
 		fallthrough
-	case "PREFERRED":
+	case "preferred":
 		fallthrough
-	case "DISCOURAGED":
+	case "discouraged":
 		*e = UserVerification(v)
 		return nil
 	default:
@@ -99,7 +99,7 @@ func (e *UserVerification) UnmarshalJSON(data []byte) error {
 // WebAuthnSettings - WebAuthn (FIDO2) relying-party configuration governing passwordless and multi-factor authentication for the domain.
 type WebAuthnSettings struct {
 	// Relying-party preference for attestation conveyance during credential creation. NONE requests no attestation, INDIRECT allows anonymized attestation, and DIRECT requests the authenticator's attestation statement.
-	AttestationConveyancePreference *AttestationConveyancePreference `default:"NONE" json:"attestationConveyancePreference"`
+	AttestationConveyancePreference *AttestationConveyancePreference `default:"none" json:"attestationConveyancePreference"`
 	// Preferred authenticator attachment. PLATFORM selects authenticators bound to the device (such as a fingerprint reader); CROSS_PLATFORM selects roaming authenticators (such as a security key).
 	AuthenticatorAttachment *AuthenticatorAttachment `json:"authenticatorAttachment,omitempty"`
 	// Trusted device-attestation X.509 certificates, keyed by name.
@@ -119,7 +119,7 @@ type WebAuthnSettings struct {
 	// Whether the authenticator must create a client-side resident (discoverable) credential.
 	RequireResidentKey *bool `default:"false" json:"requireResidentKey"`
 	// Relying-party requirement regarding user verification during a ceremony. REQUIRED enforces verification, PREFERRED requests it when available, and DISCOURAGED avoids it.
-	UserVerification *UserVerification `default:"PREFERRED" json:"userVerification"`
+	UserVerification *UserVerification `default:"preferred" json:"userVerification"`
 }
 
 func (w WebAuthnSettings) MarshalJSON() ([]byte, error) {

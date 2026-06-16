@@ -13,8 +13,8 @@ import (
 type ScopeHandling string
 
 const (
-	ScopeHandlingDownscoping ScopeHandling = "DOWNSCOPING"
-	ScopeHandlingPermissive  ScopeHandling = "PERMISSIVE"
+	ScopeHandlingDownscoping ScopeHandling = "downscoping"
+	ScopeHandlingPermissive  ScopeHandling = "permissive"
 )
 
 func (e ScopeHandling) ToPointer() *ScopeHandling {
@@ -26,9 +26,9 @@ func (e *ScopeHandling) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
-	case "DOWNSCOPING":
+	case "downscoping":
 		fallthrough
-	case "PERMISSIVE":
+	case "permissive":
 		*e = ScopeHandling(v)
 		return nil
 	default:
@@ -41,7 +41,7 @@ type TokenExchangeOAuthSettings struct {
 	// Whether these settings are inherited from the domain defaults rather than defined here.
 	Inherited *bool `default:"true" json:"inherited"`
 	// How scopes are handled when issuing the exchanged token. DOWNSCOPING restricts the issued token to a subset of the original scopes.
-	ScopeHandling *ScopeHandling `default:"DOWNSCOPING" json:"scopeHandling"`
+	ScopeHandling *ScopeHandling `default:"downscoping" json:"scopeHandling"`
 }
 
 func (t TokenExchangeOAuthSettings) MarshalJSON() ([]byte, error) {

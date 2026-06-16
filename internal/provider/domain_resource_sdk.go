@@ -57,6 +57,7 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 			r.AccountSettings.SendRecoverAccountEmail = types.BoolPointerValue(resp.AccountSettings.SendRecoverAccountEmail)
 			r.AccountSettings.SendVerifyRegistrationAccountEmail = types.BoolPointerValue(resp.AccountSettings.SendVerifyRegistrationAccountEmail)
 		}
+		r.AlertEnabled = types.BoolPointerValue(resp.AlertEnabled)
 		if resp.CertificateSettings == nil {
 			r.CertificateSettings = nil
 		} else {
@@ -109,6 +110,7 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 			r.LoginSettings.RememberMeEnabled = types.BoolPointerValue(resp.LoginSettings.RememberMeEnabled)
 			r.LoginSettings.ResetPasswordOnExpiration = types.BoolPointerValue(resp.LoginSettings.ResetPasswordOnExpiration)
 		}
+		r.Master = types.BoolPointerValue(resp.Master)
 		r.Name = types.StringValue(resp.Name)
 		if resp.Oidc == nil {
 			r.Oidc = nil
@@ -126,7 +128,7 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 			if resp.Oidc.ClientRegistrationSettings == nil {
 				r.Oidc.ClientRegistrationSettings = nil
 			} else {
-				r.Oidc.ClientRegistrationSettings = &tfTypes.ClientRegistrationSettings{}
+				r.Oidc.ClientRegistrationSettings = &tfTypes.AutomationClientRegistrationSettings{}
 				r.Oidc.ClientRegistrationSettings.AllowedScopes = make([]types.String, 0, len(resp.Oidc.ClientRegistrationSettings.AllowedScopes))
 				for _, v := range resp.Oidc.ClientRegistrationSettings.AllowedScopes {
 					r.Oidc.ClientRegistrationSettings.AllowedScopes = append(r.Oidc.ClientRegistrationSettings.AllowedScopes, types.StringValue(v))
@@ -159,6 +161,24 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 				r.Oidc.SecurityProfileSettings = &tfTypes.SecurityProfileSettings{}
 				r.Oidc.SecurityProfileSettings.EnableFapiBrazil = types.BoolPointerValue(resp.Oidc.SecurityProfileSettings.EnableFapiBrazil)
 				r.Oidc.SecurityProfileSettings.EnablePlainFapi = types.BoolPointerValue(resp.Oidc.SecurityProfileSettings.EnablePlainFapi)
+			}
+			if resp.Oidc.WorkloadIdentitySettings == nil {
+				r.Oidc.WorkloadIdentitySettings = nil
+			} else {
+				r.Oidc.WorkloadIdentitySettings = &tfTypes.SpiffeDomainSettings{}
+				r.Oidc.WorkloadIdentitySettings.AllowPrivateIPAddress = types.BoolPointerValue(resp.Oidc.WorkloadIdentitySettings.AllowPrivateIPAddress)
+				r.Oidc.WorkloadIdentitySettings.AllowUnsecuredHTTPURI = types.BoolPointerValue(resp.Oidc.WorkloadIdentitySettings.AllowUnsecuredHTTPURI)
+				r.Oidc.WorkloadIdentitySettings.CacheMaxEntries = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.CacheMaxEntries))
+				r.Oidc.WorkloadIdentitySettings.CacheTTLSeconds = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.CacheTTLSeconds))
+				r.Oidc.WorkloadIdentitySettings.ClockSkewSeconds = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.ClockSkewSeconds))
+				r.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms = make([]types.String, 0, len(resp.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms))
+				for _, v := range resp.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms {
+					r.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms = append(r.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms, types.StringValue(v))
+				}
+				r.Oidc.WorkloadIdentitySettings.Enabled = types.BoolPointerValue(resp.Oidc.WorkloadIdentitySettings.Enabled)
+				r.Oidc.WorkloadIdentitySettings.FetchTimeoutMs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.FetchTimeoutMs))
+				r.Oidc.WorkloadIdentitySettings.MaxJwtLifetimeSeconds = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.MaxJwtLifetimeSeconds))
+				r.Oidc.WorkloadIdentitySettings.MaxResponseSizeKb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.MaxResponseSizeKb))
 			}
 		}
 		if resp.PasswordSettings == nil {
@@ -291,6 +311,7 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 			r.Uma.Enabled = types.BoolPointerValue(resp.Uma.Enabled)
 		}
 		r.UpdatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.UpdatedAt))
+		r.VhostMode = types.BoolPointerValue(resp.VhostMode)
 		r.Vhosts = []tfTypes.VirtualHost{}
 
 		for _, vhostsItem := range resp.Vhosts {
@@ -630,6 +651,12 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			SendVerifyRegistrationAccountEmail:          sendVerifyRegistrationAccountEmail,
 		}
 	}
+	alertEnabled := new(bool)
+	if !r.AlertEnabled.IsUnknown() && !r.AlertEnabled.IsNull() {
+		*alertEnabled = r.AlertEnabled.ValueBool()
+	} else {
+		alertEnabled = nil
+	}
 	var certificateSettings *shared.AutomationCertificateSettings
 	if r.CertificateSettings != nil {
 		fallbackCertificate := new(string)
@@ -701,7 +728,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 	var key1 string
 	key1 = r.Key.ValueString()
 
-	var loginSettings *shared.LoginSettings
+	var loginSettings *shared.LoginSettingsInput
 	if r.LoginSettings != nil {
 		certificateBasedAuthEnabled := new(bool)
 		if !r.LoginSettings.CertificateBasedAuthEnabled.IsUnknown() && !r.LoginSettings.CertificateBasedAuthEnabled.IsNull() {
@@ -714,12 +741,6 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			*certificateBasedAuthURL = r.LoginSettings.CertificateBasedAuthURL.ValueString()
 		} else {
 			certificateBasedAuthURL = nil
-		}
-		enforcePasswordPolicyEnabled := new(bool)
-		if !r.LoginSettings.EnforcePasswordPolicyEnabled.IsUnknown() && !r.LoginSettings.EnforcePasswordPolicyEnabled.IsNull() {
-			*enforcePasswordPolicyEnabled = r.LoginSettings.EnforcePasswordPolicyEnabled.ValueBool()
-		} else {
-			enforcePasswordPolicyEnabled = nil
 		}
 		forgotPasswordEnabled := new(bool)
 		if !r.LoginSettings.ForgotPasswordEnabled.IsUnknown() && !r.LoginSettings.ForgotPasswordEnabled.IsNull() {
@@ -799,10 +820,9 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		} else {
 			resetPasswordOnExpiration = nil
 		}
-		loginSettings = &shared.LoginSettings{
+		loginSettings = &shared.LoginSettingsInput{
 			CertificateBasedAuthEnabled:        certificateBasedAuthEnabled,
 			CertificateBasedAuthURL:            certificateBasedAuthURL,
-			EnforcePasswordPolicyEnabled:       enforcePasswordPolicyEnabled,
 			ForgotPasswordEnabled:              forgotPasswordEnabled,
 			HideForm:                           hideForm,
 			IdentifierFirstEnabled:             identifierFirstEnabled,
@@ -817,6 +837,12 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			RememberMeEnabled:                  rememberMeEnabled,
 			ResetPasswordOnExpiration:          resetPasswordOnExpiration,
 		}
+	}
+	master := new(bool)
+	if !r.Master.IsUnknown() && !r.Master.IsNull() {
+		*master = r.Master.ValueBool()
+	} else {
+		master = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -856,7 +882,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 				TokenReqInterval:     tokenReqInterval,
 			}
 		}
-		var clientRegistrationSettings *shared.ClientRegistrationSettings
+		var clientRegistrationSettings *shared.AutomationClientRegistrationSettings
 		if r.Oidc.ClientRegistrationSettings != nil {
 			allowHTTPSchemeRedirectURI := new(bool)
 			if !r.Oidc.ClientRegistrationSettings.AllowHTTPSchemeRedirectURI.IsUnknown() && !r.Oidc.ClientRegistrationSettings.AllowHTTPSchemeRedirectURI.IsNull() {
@@ -914,7 +940,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			} else {
 				openDynamicClientRegistrationEnabled = nil
 			}
-			clientRegistrationSettings = &shared.ClientRegistrationSettings{
+			clientRegistrationSettings = &shared.AutomationClientRegistrationSettings{
 				AllowHTTPSchemeRedirectURI:               allowHTTPSchemeRedirectURI,
 				AllowLocalhostRedirectURI:                allowLocalhostRedirectURI,
 				AllowRedirectURIParamsExpressionLanguage: allowRedirectURIParamsExpressionLanguage,
@@ -960,6 +986,79 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 				EnablePlainFapi:  enablePlainFapi,
 			}
 		}
+		var workloadIdentitySettings *shared.SpiffeDomainSettings
+		if r.Oidc.WorkloadIdentitySettings != nil {
+			allowPrivateIPAddress := new(bool)
+			if !r.Oidc.WorkloadIdentitySettings.AllowPrivateIPAddress.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.AllowPrivateIPAddress.IsNull() {
+				*allowPrivateIPAddress = r.Oidc.WorkloadIdentitySettings.AllowPrivateIPAddress.ValueBool()
+			} else {
+				allowPrivateIPAddress = nil
+			}
+			allowUnsecuredHTTPURI := new(bool)
+			if !r.Oidc.WorkloadIdentitySettings.AllowUnsecuredHTTPURI.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.AllowUnsecuredHTTPURI.IsNull() {
+				*allowUnsecuredHTTPURI = r.Oidc.WorkloadIdentitySettings.AllowUnsecuredHTTPURI.ValueBool()
+			} else {
+				allowUnsecuredHTTPURI = nil
+			}
+			cacheMaxEntries := new(int)
+			if !r.Oidc.WorkloadIdentitySettings.CacheMaxEntries.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.CacheMaxEntries.IsNull() {
+				*cacheMaxEntries = int(r.Oidc.WorkloadIdentitySettings.CacheMaxEntries.ValueInt32())
+			} else {
+				cacheMaxEntries = nil
+			}
+			cacheTTLSeconds := new(int)
+			if !r.Oidc.WorkloadIdentitySettings.CacheTTLSeconds.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.CacheTTLSeconds.IsNull() {
+				*cacheTTLSeconds = int(r.Oidc.WorkloadIdentitySettings.CacheTTLSeconds.ValueInt32())
+			} else {
+				cacheTTLSeconds = nil
+			}
+			clockSkewSeconds := new(int)
+			if !r.Oidc.WorkloadIdentitySettings.ClockSkewSeconds.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.ClockSkewSeconds.IsNull() {
+				*clockSkewSeconds = int(r.Oidc.WorkloadIdentitySettings.ClockSkewSeconds.ValueInt32())
+			} else {
+				clockSkewSeconds = nil
+			}
+			defaultAllowedAlgorithms := make([]string, 0, len(r.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms))
+			for defaultAllowedAlgorithmsIndex := range r.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms {
+				defaultAllowedAlgorithms = append(defaultAllowedAlgorithms, r.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms[defaultAllowedAlgorithmsIndex].ValueString())
+			}
+			enabled3 := new(bool)
+			if !r.Oidc.WorkloadIdentitySettings.Enabled.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.Enabled.IsNull() {
+				*enabled3 = r.Oidc.WorkloadIdentitySettings.Enabled.ValueBool()
+			} else {
+				enabled3 = nil
+			}
+			fetchTimeoutMs := new(int)
+			if !r.Oidc.WorkloadIdentitySettings.FetchTimeoutMs.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.FetchTimeoutMs.IsNull() {
+				*fetchTimeoutMs = int(r.Oidc.WorkloadIdentitySettings.FetchTimeoutMs.ValueInt32())
+			} else {
+				fetchTimeoutMs = nil
+			}
+			maxJwtLifetimeSeconds := new(int)
+			if !r.Oidc.WorkloadIdentitySettings.MaxJwtLifetimeSeconds.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.MaxJwtLifetimeSeconds.IsNull() {
+				*maxJwtLifetimeSeconds = int(r.Oidc.WorkloadIdentitySettings.MaxJwtLifetimeSeconds.ValueInt32())
+			} else {
+				maxJwtLifetimeSeconds = nil
+			}
+			maxResponseSizeKb := new(int)
+			if !r.Oidc.WorkloadIdentitySettings.MaxResponseSizeKb.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.MaxResponseSizeKb.IsNull() {
+				*maxResponseSizeKb = int(r.Oidc.WorkloadIdentitySettings.MaxResponseSizeKb.ValueInt32())
+			} else {
+				maxResponseSizeKb = nil
+			}
+			workloadIdentitySettings = &shared.SpiffeDomainSettings{
+				AllowPrivateIPAddress:    allowPrivateIPAddress,
+				AllowUnsecuredHTTPURI:    allowUnsecuredHTTPURI,
+				CacheMaxEntries:          cacheMaxEntries,
+				CacheTTLSeconds:          cacheTTLSeconds,
+				ClockSkewSeconds:         clockSkewSeconds,
+				DefaultAllowedAlgorithms: defaultAllowedAlgorithms,
+				Enabled:                  enabled3,
+				FetchTimeoutMs:           fetchTimeoutMs,
+				MaxJwtLifetimeSeconds:    maxJwtLifetimeSeconds,
+				MaxResponseSizeKb:        maxResponseSizeKb,
+			}
+		}
 		oidc = &shared.AutomationOidcSettings{
 			CibaSettings:               cibaSettings,
 			ClientRegistrationSettings: clientRegistrationSettings,
@@ -967,6 +1066,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			RedirectURIStrictMatching:  redirectURIStrictMatching,
 			RequestUris:                requestUris,
 			SecurityProfileSettings:    securityProfileSettings,
+			WorkloadIdentitySettings:   workloadIdentitySettings,
 		}
 	}
 	var passwordSettings *shared.PasswordSettings
@@ -1069,11 +1169,11 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		} else {
 			certificate = nil
 		}
-		enabled3 := new(bool)
+		enabled4 := new(bool)
 		if !r.Saml.Enabled.IsUnknown() && !r.Saml.Enabled.IsNull() {
-			*enabled3 = r.Saml.Enabled.ValueBool()
+			*enabled4 = r.Saml.Enabled.ValueBool()
 		} else {
-			enabled3 = nil
+			enabled4 = nil
 		}
 		entityID := new(string)
 		if !r.Saml.EntityID.IsUnknown() && !r.Saml.EntityID.IsNull() {
@@ -1083,17 +1183,17 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		}
 		saml = &shared.AutomationSamlSettings{
 			Certificate: certificate,
-			Enabled:     enabled3,
+			Enabled:     enabled4,
 			EntityID:    entityID,
 		}
 	}
 	var scim *shared.SCIMSettings
 	if r.Scim != nil {
-		enabled4 := new(bool)
+		enabled5 := new(bool)
 		if !r.Scim.Enabled.IsUnknown() && !r.Scim.Enabled.IsNull() {
-			*enabled4 = r.Scim.Enabled.ValueBool()
+			*enabled5 = r.Scim.Enabled.ValueBool()
 		} else {
-			enabled4 = nil
+			enabled5 = nil
 		}
 		idpSelectionEnabled := new(bool)
 		if !r.Scim.IdpSelectionEnabled.IsUnknown() && !r.Scim.IdpSelectionEnabled.IsNull() {
@@ -1108,18 +1208,18 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			idpSelectionRule = nil
 		}
 		scim = &shared.SCIMSettings{
-			Enabled:             enabled4,
+			Enabled:             enabled5,
 			IdpSelectionEnabled: idpSelectionEnabled,
 			IdpSelectionRule:    idpSelectionRule,
 		}
 	}
 	var secretExpirationSettings *shared.SecretExpirationSettings
 	if r.SecretExpirationSettings != nil {
-		enabled5 := new(bool)
+		enabled6 := new(bool)
 		if !r.SecretExpirationSettings.Enabled.IsUnknown() && !r.SecretExpirationSettings.Enabled.IsNull() {
-			*enabled5 = r.SecretExpirationSettings.Enabled.ValueBool()
+			*enabled6 = r.SecretExpirationSettings.Enabled.ValueBool()
 		} else {
-			enabled5 = nil
+			enabled6 = nil
 		}
 		expiryTimeSeconds := new(int64)
 		if !r.SecretExpirationSettings.ExpiryTimeSeconds.IsUnknown() && !r.SecretExpirationSettings.ExpiryTimeSeconds.IsNull() {
@@ -1128,17 +1228,17 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			expiryTimeSeconds = nil
 		}
 		secretExpirationSettings = &shared.SecretExpirationSettings{
-			Enabled:           enabled5,
+			Enabled:           enabled6,
 			ExpiryTimeSeconds: expiryTimeSeconds,
 		}
 	}
 	var selfServiceAccountManagementSettings *shared.SelfServiceAccountManagementSettings
 	if r.SelfServiceAccountManagementSettings != nil {
-		enabled6 := new(bool)
+		enabled7 := new(bool)
 		if !r.SelfServiceAccountManagementSettings.Enabled.IsUnknown() && !r.SelfServiceAccountManagementSettings.Enabled.IsNull() {
-			*enabled6 = r.SelfServiceAccountManagementSettings.Enabled.ValueBool()
+			*enabled7 = r.SelfServiceAccountManagementSettings.Enabled.ValueBool()
 		} else {
-			enabled6 = nil
+			enabled7 = nil
 		}
 		var resetPassword *shared.ResetPasswordSettings
 		if r.SelfServiceAccountManagementSettings.ResetPassword != nil {
@@ -1160,7 +1260,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			}
 		}
 		selfServiceAccountManagementSettings = &shared.SelfServiceAccountManagementSettings{
-			Enabled:       enabled6,
+			Enabled:       enabled7,
 			ResetPassword: resetPassword,
 		}
 	}
@@ -1194,11 +1294,11 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		for allowedSubjectTokenTypesIndex := range r.TokenExchangeSettings.AllowedSubjectTokenTypes {
 			allowedSubjectTokenTypes = append(allowedSubjectTokenTypes, r.TokenExchangeSettings.AllowedSubjectTokenTypes[allowedSubjectTokenTypesIndex].ValueString())
 		}
-		enabled7 := new(bool)
+		enabled8 := new(bool)
 		if !r.TokenExchangeSettings.Enabled.IsUnknown() && !r.TokenExchangeSettings.Enabled.IsNull() {
-			*enabled7 = r.TokenExchangeSettings.Enabled.ValueBool()
+			*enabled8 = r.TokenExchangeSettings.Enabled.ValueBool()
 		} else {
-			enabled7 = nil
+			enabled8 = nil
 		}
 		maxDelegationDepth := new(int)
 		if !r.TokenExchangeSettings.MaxDelegationDepth.IsUnknown() && !r.TokenExchangeSettings.MaxDelegationDepth.IsNull() {
@@ -1299,7 +1399,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			AllowedActorTokenTypes:     allowedActorTokenTypes,
 			AllowedRequestedTokenTypes: allowedRequestedTokenTypes,
 			AllowedSubjectTokenTypes:   allowedSubjectTokenTypes,
-			Enabled:                    enabled7,
+			Enabled:                    enabled8,
 			MaxDelegationDepth:         maxDelegationDepth,
 			TokenExchangeOAuthSettings: tokenExchangeOAuthSettings,
 			TrustedIssuers:             trustedIssuers,
@@ -1307,15 +1407,21 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 	}
 	var uma *shared.UMASettings
 	if r.Uma != nil {
-		enabled8 := new(bool)
+		enabled9 := new(bool)
 		if !r.Uma.Enabled.IsUnknown() && !r.Uma.Enabled.IsNull() {
-			*enabled8 = r.Uma.Enabled.ValueBool()
+			*enabled9 = r.Uma.Enabled.ValueBool()
 		} else {
-			enabled8 = nil
+			enabled9 = nil
 		}
 		uma = &shared.UMASettings{
-			Enabled: enabled8,
+			Enabled: enabled9,
 		}
+	}
+	vhostMode := new(bool)
+	if !r.VhostMode.IsUnknown() && !r.VhostMode.IsNull() {
+		*vhostMode = r.VhostMode.ValueBool()
+	} else {
+		vhostMode = nil
 	}
 	vhosts := make([]shared.VirtualHost, 0, len(r.Vhosts))
 	for vhostsIndex := range r.Vhosts {
@@ -1426,6 +1532,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 	}
 	out := shared.AutomationDomainInput{
 		AccountSettings:                      accountSettings,
+		AlertEnabled:                         alertEnabled,
 		CertificateSettings:                  certificateSettings,
 		CorsSettings:                         corsSettings,
 		DataPlaneID:                          dataPlaneID,
@@ -1433,6 +1540,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		Enabled:                              enabled1,
 		Key:                                  key1,
 		LoginSettings:                        loginSettings,
+		Master:                               master,
 		Name:                                 name,
 		Oidc:                                 oidc,
 		PasswordSettings:                     passwordSettings,
@@ -1444,6 +1552,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		Tags:                                 tags,
 		TokenExchangeSettings:                tokenExchangeSettings,
 		Uma:                                  uma,
+		VhostMode:                            vhostMode,
 		Vhosts:                               vhosts,
 		WebAuthnSettings:                     webAuthnSettings,
 	}

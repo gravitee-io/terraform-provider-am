@@ -20,7 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -100,7 +99,6 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Stable, immutable identifier for the reporter within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the reporter on create-or-update.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z0-9]([a-z0-9-]*[a-z0-9])?$`), "must match pattern "+regexp.MustCompile(`^[a-z0-9]([a-z0-9-]*[a-z0-9])?$`).String()),
 				},
 			},
 			"name": schema.StringAttribute{

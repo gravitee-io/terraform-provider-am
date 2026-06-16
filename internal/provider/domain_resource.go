@@ -24,7 +24,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -50,6 +49,7 @@ type DomainResource struct {
 // DomainResourceModel describes the resource data model.
 type DomainResourceModel struct {
 	AccountSettings                      *tfTypes.AutomationAccountSettings            `tfsdk:"account_settings"`
+	AlertEnabled                         types.Bool                                    `tfsdk:"alert_enabled"`
 	CertificateSettings                  *tfTypes.AutomationCertificateSettings        `tfsdk:"certificate_settings"`
 	CorsSettings                         *tfTypes.CorsSettings                         `tfsdk:"cors_settings"`
 	CreatedAt                            types.String                                  `tfsdk:"created_at"`
@@ -59,6 +59,7 @@ type DomainResourceModel struct {
 	EnvironmentID                        types.String                                  `tfsdk:"environment_id"`
 	Key                                  types.String                                  `tfsdk:"key"`
 	LoginSettings                        *tfTypes.LoginSettings                        `tfsdk:"login_settings"`
+	Master                               types.Bool                                    `tfsdk:"master"`
 	Name                                 types.String                                  `tfsdk:"name"`
 	Oidc                                 *tfTypes.AutomationOidcSettings               `tfsdk:"oidc"`
 	OrganizationID                       types.String                                  `tfsdk:"organization_id"`
@@ -72,6 +73,7 @@ type DomainResourceModel struct {
 	TokenExchangeSettings                *tfTypes.TokenExchangeSettings                `tfsdk:"token_exchange_settings"`
 	Uma                                  *tfTypes.UMASettings                          `tfsdk:"uma"`
 	UpdatedAt                            types.String                                  `tfsdk:"updated_at"`
+	VhostMode                            types.Bool                                    `tfsdk:"vhost_mode"`
 	Vhosts                               []tfTypes.VirtualHost                         `tfsdk:"vhosts"`
 	WebAuthnSettings                     *tfTypes.WebAuthnSettings                     `tfsdk:"web_authn_settings"`
 }
@@ -240,6 +242,10 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 				Description: `User account settings for the domain: brute-force protection, registration, password reset, remember-me, and MFA challenge behavior.`,
 			},
+			"alert_enabled": schema.BoolAttribute{
+				Optional:    true,
+				Description: `Whether alerting is enabled for the domain.`,
+			},
 			"certificate_settings": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
@@ -334,7 +340,6 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Stable, immutable identifier for the domain within its environment. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the domain on create-or-update.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z0-9]([a-z0-9-]*[a-z0-9])?$`), "must match pattern "+regexp.MustCompile(`^[a-z0-9]([a-z0-9-]*[a-z0-9])?$`).String()),
 				},
 			},
 			"login_settings": schema.SingleNestedAttribute{
@@ -352,7 +357,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `URL used for certificate-based authentication.`,
 					},
 					"enforce_password_policy_enabled": schema.BoolAttribute{
-						Optional: true,
+						Computed: true,
 					},
 					"forgot_password_enabled": schema.BoolAttribute{
 						Computed:    true,
@@ -431,6 +436,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 				Description: `Configuration of the domain's login flow and the features offered on the sign-in page.`,
 			},
+			"master": schema.BoolAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     booldefault.StaticBool(false),
+				Description: `Whether this is the master domain of its environment. A master domain may perform cross-domain token introspection. Default: false`,
+			},
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `Human-readable name of the domain.`,
@@ -501,10 +512,16 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Scopes permitted on client registration requests when the allowed list is enabled.`,
 							},
 							"allowed_scopes_enabled": schema.BoolAttribute{
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Whether registered client scopes are restricted to an allowed list. Default: false`,
 							},
 							"client_template_enabled": schema.BoolAttribute{
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Whether a client may be used as a template for dynamic client registration. Default: false`,
 							},
 							"default_scopes": schema.ListAttribute{
 								Optional:    true,
@@ -512,10 +529,16 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Default scopes added to every client registration request.`,
 							},
 							"dynamic_client_registration_enabled": schema.BoolAttribute{
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Whether Dynamic Client Registration is enabled for the domain. Default: false`,
 							},
 							"open_dynamic_client_registration_enabled": schema.BoolAttribute{
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Whether open (unauthenticated) Dynamic Client Registration is enabled for the domain. Default: false`,
 							},
 						},
 						Description: `OpenID Connect Dynamic Client Registration configuration for the domain.`,
@@ -554,6 +577,44 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 						},
 						Description: `Financial-grade API (FAPI) security profile configuration for the domain.`,
+					},
+					"workload_identity_settings": schema.SingleNestedAttribute{
+						Computed: true,
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"allow_private_ip_address": schema.BoolAttribute{
+								Optional: true,
+							},
+							"allow_unsecured_http_uri": schema.BoolAttribute{
+								Optional: true,
+							},
+							"cache_max_entries": schema.Int32Attribute{
+								Optional: true,
+							},
+							"cache_ttl_seconds": schema.Int32Attribute{
+								Optional: true,
+							},
+							"clock_skew_seconds": schema.Int32Attribute{
+								Optional: true,
+							},
+							"default_allowed_algorithms": schema.ListAttribute{
+								Optional:    true,
+								ElementType: types.StringType,
+							},
+							"enabled": schema.BoolAttribute{
+								Optional: true,
+							},
+							"fetch_timeout_ms": schema.Int32Attribute{
+								Optional: true,
+							},
+							"max_jwt_lifetime_seconds": schema.Int32Attribute{
+								Optional: true,
+							},
+							"max_response_size_kb": schema.Int32Attribute{
+								Optional: true,
+							},
+						},
+						Description: `Workload identity (SPIFFE) settings for the domain.`,
 					},
 				},
 				Description: `OpenID Connect settings for the domain. CIMD (client identity metadata document) settings are not exposed by the Automation API and are reset on update.`,
@@ -880,6 +941,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
 				Description: `Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
+			},
+			"vhost_mode": schema.BoolAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     booldefault.StaticBool(false),
+				Description: `Whether the domain is exposed through its virtual hosts rather than the default context path. When true, vhosts must be supplied. Default: false`,
 			},
 			"vhosts": schema.ListNestedAttribute{
 				Optional: true,

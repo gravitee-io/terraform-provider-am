@@ -12,7 +12,7 @@ type AutomationOidcSettings struct {
 	// Client-Initiated Backchannel Authentication (CIBA) settings for the domain. CIBA lets a relying party initiate end-user authentication from a separate consumption device, without redirecting the user through the browser. Authentication device notifiers are not managed by the Automation API and are not exposed here.
 	CibaSettings *AutomationCIBASettings `json:"cibaSettings,omitempty"`
 	// OpenID Connect Dynamic Client Registration configuration for the domain.
-	ClientRegistrationSettings *ClientRegistrationSettings `json:"clientRegistrationSettings,omitempty"`
+	ClientRegistrationSettings *AutomationClientRegistrationSettings `json:"clientRegistrationSettings,omitempty"`
 	// URLs the user may be redirected to after sign-out (post_logout_redirect_uri).
 	PostLogoutRedirectUris []string `json:"postLogoutRedirectUris,omitempty"`
 	// Whether redirect_uri and post_logout_redirect_uri values are matched strictly during OpenID Connect flows.
@@ -21,6 +21,8 @@ type AutomationOidcSettings struct {
 	RequestUris []string `json:"requestUris,omitempty"`
 	// Financial-grade API (FAPI) security profile configuration for the domain.
 	SecurityProfileSettings *SecurityProfileSettings `json:"securityProfileSettings,omitempty"`
+	// Workload identity (SPIFFE) settings for the domain.
+	WorkloadIdentitySettings *SpiffeDomainSettings `json:"workloadIdentitySettings,omitempty"`
 }
 
 func (a AutomationOidcSettings) MarshalJSON() ([]byte, error) {
@@ -41,7 +43,7 @@ func (a *AutomationOidcSettings) GetCibaSettings() *AutomationCIBASettings {
 	return a.CibaSettings
 }
 
-func (a *AutomationOidcSettings) GetClientRegistrationSettings() *ClientRegistrationSettings {
+func (a *AutomationOidcSettings) GetClientRegistrationSettings() *AutomationClientRegistrationSettings {
 	if a == nil {
 		return nil
 	}
@@ -74,4 +76,11 @@ func (a *AutomationOidcSettings) GetSecurityProfileSettings() *SecurityProfileSe
 		return nil
 	}
 	return a.SecurityProfileSettings
+}
+
+func (a *AutomationOidcSettings) GetWorkloadIdentitySettings() *SpiffeDomainSettings {
+	if a == nil {
+		return nil
+	}
+	return a.WorkloadIdentitySettings
 }

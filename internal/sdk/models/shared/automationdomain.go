@@ -12,6 +12,8 @@ import (
 type AutomationDomain struct {
 	// User account settings for the domain: brute-force protection, registration, password reset, remember-me, and MFA challenge behavior.
 	AccountSettings *AutomationAccountSettings `json:"accountSettings,omitempty"`
+	// Whether alerting is enabled for the domain.
+	AlertEnabled *bool `json:"alertEnabled,omitempty"`
 	// Domain-level certificate settings.
 	CertificateSettings *AutomationCertificateSettings `json:"certificateSettings,omitempty"`
 	// Cross-Origin Resource Sharing configuration controlling which web origins may call the domain's endpoints from a browser.
@@ -28,6 +30,8 @@ type AutomationDomain struct {
 	Key string `json:"key"`
 	// Configuration of the domain's login flow and the features offered on the sign-in page.
 	LoginSettings *LoginSettings `json:"loginSettings,omitempty"`
+	// Whether this is the master domain of its environment. A master domain may perform cross-domain token introspection.
+	Master *bool `default:"false" json:"master"`
 	// Human-readable name of the domain.
 	Name string `json:"name"`
 	// OpenID Connect settings for the domain. CIMD (client identity metadata document) settings are not exposed by the Automation API and are reset on update.
@@ -52,6 +56,8 @@ type AutomationDomain struct {
 	Uma *UMASettings `json:"uma,omitempty"`
 	// Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	// Whether the domain is exposed through its virtual hosts rather than the default context path. When true, vhosts must be supplied.
+	VhostMode *bool `default:"false" json:"vhostMode"`
 	// Virtual hosts the domain is exposed on, overriding the default context path.
 	Vhosts []VirtualHost `json:"vhosts,omitempty"`
 	// WebAuthn (FIDO2) relying-party configuration governing passwordless and multi-factor authentication for the domain.
@@ -74,6 +80,13 @@ func (a *AutomationDomain) GetAccountSettings() *AutomationAccountSettings {
 		return nil
 	}
 	return a.AccountSettings
+}
+
+func (a *AutomationDomain) GetAlertEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.AlertEnabled
 }
 
 func (a *AutomationDomain) GetCertificateSettings() *AutomationCertificateSettings {
@@ -130,6 +143,13 @@ func (a *AutomationDomain) GetLoginSettings() *LoginSettings {
 		return nil
 	}
 	return a.LoginSettings
+}
+
+func (a *AutomationDomain) GetMaster() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.Master
 }
 
 func (a *AutomationDomain) GetName() string {
@@ -214,6 +234,13 @@ func (a *AutomationDomain) GetUpdatedAt() *time.Time {
 		return nil
 	}
 	return a.UpdatedAt
+}
+
+func (a *AutomationDomain) GetVhostMode() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.VhostMode
 }
 
 func (a *AutomationDomain) GetVhosts() []VirtualHost {

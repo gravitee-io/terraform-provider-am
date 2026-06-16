@@ -20,7 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -50,6 +49,7 @@ type IdentityProviderResourceModel struct {
 	DomainKey       types.String              `tfsdk:"domain_key"`
 	DomainWhitelist []types.String            `tfsdk:"domain_whitelist"`
 	EnvironmentID   types.String              `tfsdk:"environment_id"`
+	External        types.Bool                `tfsdk:"external"`
 	GroupMapper     map[string][]types.String `tfsdk:"group_mapper"`
 	Key             types.String              `tfsdk:"key"`
 	Mappers         map[string]types.String   `tfsdk:"mappers"`
@@ -92,6 +92,12 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Optional:    true,
 				Description: `Identifier of the environment.`,
 			},
+			"external": schema.BoolAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     booldefault.StaticBool(false),
+				Description: `Whether this is an external identity provider (one that delegates authentication to a third party) rather than an AM-managed one. Set at creation and immutable afterwards. Default: false`,
+			},
 			"group_mapper": schema.MapAttribute{
 				Optional: true,
 				ElementType: types.ListType{
@@ -104,7 +110,6 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Stable, immutable identifier for the identity provider within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the identity provider on create-or-update.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z0-9]([a-z0-9-]*[a-z0-9])?$`), "must match pattern "+regexp.MustCompile(`^[a-z0-9]([a-z0-9-]*[a-z0-9])?$`).String()),
 				},
 			},
 			"mappers": schema.MapAttribute{

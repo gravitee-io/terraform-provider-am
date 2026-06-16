@@ -11,6 +11,8 @@ import (
 type AutomationDomainInput struct {
 	// User account settings for the domain: brute-force protection, registration, password reset, remember-me, and MFA challenge behavior.
 	AccountSettings *AutomationAccountSettings `json:"accountSettings,omitempty"`
+	// Whether alerting is enabled for the domain.
+	AlertEnabled *bool `json:"alertEnabled,omitempty"`
 	// Domain-level certificate settings.
 	CertificateSettings *AutomationCertificateSettings `json:"certificateSettings,omitempty"`
 	// Cross-Origin Resource Sharing configuration controlling which web origins may call the domain's endpoints from a browser.
@@ -24,7 +26,9 @@ type AutomationDomainInput struct {
 	// Stable, immutable identifier for the domain within its environment. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the domain on create-or-update.
 	Key string `json:"key"`
 	// Configuration of the domain's login flow and the features offered on the sign-in page.
-	LoginSettings *LoginSettings `json:"loginSettings,omitempty"`
+	LoginSettings *LoginSettingsInput `json:"loginSettings,omitempty"`
+	// Whether this is the master domain of its environment. A master domain may perform cross-domain token introspection.
+	Master *bool `default:"false" json:"master"`
 	// Human-readable name of the domain.
 	Name string `json:"name"`
 	// OpenID Connect settings for the domain. CIMD (client identity metadata document) settings are not exposed by the Automation API and are reset on update.
@@ -47,6 +51,8 @@ type AutomationDomainInput struct {
 	TokenExchangeSettings *TokenExchangeSettings `json:"tokenExchangeSettings,omitempty"`
 	// Configuration of the domain's User-Managed Access (UMA 2.0) authorization features.
 	Uma *UMASettings `json:"uma,omitempty"`
+	// Whether the domain is exposed through its virtual hosts rather than the default context path. When true, vhosts must be supplied.
+	VhostMode *bool `default:"false" json:"vhostMode"`
 	// Virtual hosts the domain is exposed on, overriding the default context path.
 	Vhosts []VirtualHost `json:"vhosts,omitempty"`
 	// WebAuthn (FIDO2) relying-party configuration governing passwordless and multi-factor authentication for the domain.
@@ -69,6 +75,13 @@ func (a *AutomationDomainInput) GetAccountSettings() *AutomationAccountSettings 
 		return nil
 	}
 	return a.AccountSettings
+}
+
+func (a *AutomationDomainInput) GetAlertEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.AlertEnabled
 }
 
 func (a *AutomationDomainInput) GetCertificateSettings() *AutomationCertificateSettings {
@@ -113,11 +126,18 @@ func (a *AutomationDomainInput) GetKey() string {
 	return a.Key
 }
 
-func (a *AutomationDomainInput) GetLoginSettings() *LoginSettings {
+func (a *AutomationDomainInput) GetLoginSettings() *LoginSettingsInput {
 	if a == nil {
 		return nil
 	}
 	return a.LoginSettings
+}
+
+func (a *AutomationDomainInput) GetMaster() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.Master
 }
 
 func (a *AutomationDomainInput) GetName() string {
@@ -195,6 +215,13 @@ func (a *AutomationDomainInput) GetUma() *UMASettings {
 		return nil
 	}
 	return a.Uma
+}
+
+func (a *AutomationDomainInput) GetVhostMode() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.VhostMode
 }
 
 func (a *AutomationDomainInput) GetVhosts() []VirtualHost {

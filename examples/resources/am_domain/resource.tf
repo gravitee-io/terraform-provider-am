@@ -32,6 +32,7 @@ resource "am_domain" "my_domain" {
     send_recover_account_email             = false
     send_verify_registration_account_email = false
   }
+  alert_enabled = false
   certificate_settings = {
     fallback_certificate = "default"
   }
@@ -61,7 +62,6 @@ resource "am_domain" "my_domain" {
   login_settings = {
     certificate_based_auth_enabled        = false
     certificate_based_auth_url            = "...my_certificate_based_auth_url..."
-    enforce_password_policy_enabled       = true
     forgot_password_enabled               = false
     hide_form                             = false
     identifier_first_enabled              = false
@@ -76,7 +76,8 @@ resource "am_domain" "my_domain" {
     remember_me_enabled                   = false
     reset_password_on_expiration          = true
   }
-  name = "Example domain"
+  master = false
+  name   = "Example domain"
   oidc = {
     ciba_settings = {
       auth_req_expiry        = 600
@@ -92,13 +93,13 @@ resource "am_domain" "my_domain" {
       allowed_scopes = [
         "..."
       ]
-      allowed_scopes_enabled  = true
-      client_template_enabled = true
+      allowed_scopes_enabled  = false
+      client_template_enabled = false
       default_scopes = [
         "..."
       ]
-      dynamic_client_registration_enabled      = true
-      open_dynamic_client_registration_enabled = true
+      dynamic_client_registration_enabled      = false
+      open_dynamic_client_registration_enabled = false
     }
     post_logout_redirect_uris = [
       "..."
@@ -110,6 +111,20 @@ resource "am_domain" "my_domain" {
     security_profile_settings = {
       enable_fapi_brazil = false
       enable_plain_fapi  = false
+    }
+    workload_identity_settings = {
+      allow_private_ip_address = false
+      allow_unsecured_http_uri = true
+      cache_max_entries        = 0
+      cache_ttl_seconds        = 10
+      clock_skew_seconds       = 1
+      default_allowed_algorithms = [
+        "..."
+      ]
+      enabled                  = true
+      fetch_timeout_ms         = 8
+      max_jwt_lifetime_seconds = 5
+      max_response_size_kb     = 7
     }
   }
   organization_id = "DEFAULT"
@@ -196,6 +211,7 @@ resource "am_domain" "my_domain" {
   uma = {
     enabled = false
   }
+  vhost_mode = false
   vhosts = [
     {
       host                = "auth.example.com"

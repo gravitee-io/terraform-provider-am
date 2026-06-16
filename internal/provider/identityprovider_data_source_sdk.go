@@ -22,6 +22,7 @@ func (r *IdentityProviderDataSourceModel) RefreshFromSharedAutomationIdentityPro
 		for _, v := range resp.DomainWhitelist {
 			r.DomainWhitelist = append(r.DomainWhitelist, types.StringValue(v))
 		}
+		r.External = types.BoolPointerValue(resp.External)
 		if len(resp.GroupMapper) > 0 {
 			r.GroupMapper = make(map[string][]types.String, len(resp.GroupMapper))
 			for groupMapperKey, groupMapperValue := range resp.GroupMapper {

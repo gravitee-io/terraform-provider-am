@@ -8,10 +8,11 @@ import (
 )
 
 type AutomationOidcSettings struct {
-	CibaSettings               *AutomationCIBASettings     `tfsdk:"ciba_settings"`
-	ClientRegistrationSettings *ClientRegistrationSettings `tfsdk:"client_registration_settings"`
-	PostLogoutRedirectUris     []types.String              `tfsdk:"post_logout_redirect_uris"`
-	RedirectURIStrictMatching  types.Bool                  `tfsdk:"redirect_uri_strict_matching"`
-	RequestUris                []types.String              `tfsdk:"request_uris"`
-	SecurityProfileSettings    *SecurityProfileSettings    `tfsdk:"security_profile_settings"`
+	CibaSettings               *AutomationCIBASettings               `tfsdk:"ciba_settings"`
+	ClientRegistrationSettings *AutomationClientRegistrationSettings `tfsdk:"client_registration_settings"`
+	PostLogoutRedirectUris     []types.String                        `tfsdk:"post_logout_redirect_uris"`
+	RedirectURIStrictMatching  types.Bool                            `tfsdk:"redirect_uri_strict_matching"`
+	RequestUris                []types.String                        `tfsdk:"request_uris"`
+	SecurityProfileSettings    *SecurityProfileSettings              `tfsdk:"security_profile_settings"`
+	WorkloadIdentitySettings   *SpiffeDomainSettings                 `tfsdk:"workload_identity_settings"`
 }

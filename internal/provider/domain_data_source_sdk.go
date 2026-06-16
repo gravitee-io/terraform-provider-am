@@ -57,6 +57,7 @@ func (r *DomainDataSourceModel) RefreshFromSharedAutomationDomain(ctx context.Co
 			r.AccountSettings.SendRecoverAccountEmail = types.BoolPointerValue(resp.AccountSettings.SendRecoverAccountEmail)
 			r.AccountSettings.SendVerifyRegistrationAccountEmail = types.BoolPointerValue(resp.AccountSettings.SendVerifyRegistrationAccountEmail)
 		}
+		r.AlertEnabled = types.BoolPointerValue(resp.AlertEnabled)
 		if resp.CertificateSettings == nil {
 			r.CertificateSettings = nil
 		} else {
@@ -109,6 +110,7 @@ func (r *DomainDataSourceModel) RefreshFromSharedAutomationDomain(ctx context.Co
 			r.LoginSettings.RememberMeEnabled = types.BoolPointerValue(resp.LoginSettings.RememberMeEnabled)
 			r.LoginSettings.ResetPasswordOnExpiration = types.BoolPointerValue(resp.LoginSettings.ResetPasswordOnExpiration)
 		}
+		r.Master = types.BoolPointerValue(resp.Master)
 		r.Name = types.StringValue(resp.Name)
 		if resp.Oidc == nil {
 			r.Oidc = nil
@@ -126,7 +128,7 @@ func (r *DomainDataSourceModel) RefreshFromSharedAutomationDomain(ctx context.Co
 			if resp.Oidc.ClientRegistrationSettings == nil {
 				r.Oidc.ClientRegistrationSettings = nil
 			} else {
-				r.Oidc.ClientRegistrationSettings = &tfTypes.ClientRegistrationSettings{}
+				r.Oidc.ClientRegistrationSettings = &tfTypes.AutomationClientRegistrationSettings{}
 				r.Oidc.ClientRegistrationSettings.AllowedScopes = make([]types.String, 0, len(resp.Oidc.ClientRegistrationSettings.AllowedScopes))
 				for _, v := range resp.Oidc.ClientRegistrationSettings.AllowedScopes {
 					r.Oidc.ClientRegistrationSettings.AllowedScopes = append(r.Oidc.ClientRegistrationSettings.AllowedScopes, types.StringValue(v))
@@ -159,6 +161,24 @@ func (r *DomainDataSourceModel) RefreshFromSharedAutomationDomain(ctx context.Co
 				r.Oidc.SecurityProfileSettings = &tfTypes.SecurityProfileSettings{}
 				r.Oidc.SecurityProfileSettings.EnableFapiBrazil = types.BoolPointerValue(resp.Oidc.SecurityProfileSettings.EnableFapiBrazil)
 				r.Oidc.SecurityProfileSettings.EnablePlainFapi = types.BoolPointerValue(resp.Oidc.SecurityProfileSettings.EnablePlainFapi)
+			}
+			if resp.Oidc.WorkloadIdentitySettings == nil {
+				r.Oidc.WorkloadIdentitySettings = nil
+			} else {
+				r.Oidc.WorkloadIdentitySettings = &tfTypes.SpiffeDomainSettings{}
+				r.Oidc.WorkloadIdentitySettings.AllowPrivateIPAddress = types.BoolPointerValue(resp.Oidc.WorkloadIdentitySettings.AllowPrivateIPAddress)
+				r.Oidc.WorkloadIdentitySettings.AllowUnsecuredHTTPURI = types.BoolPointerValue(resp.Oidc.WorkloadIdentitySettings.AllowUnsecuredHTTPURI)
+				r.Oidc.WorkloadIdentitySettings.CacheMaxEntries = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.CacheMaxEntries))
+				r.Oidc.WorkloadIdentitySettings.CacheTTLSeconds = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.CacheTTLSeconds))
+				r.Oidc.WorkloadIdentitySettings.ClockSkewSeconds = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.ClockSkewSeconds))
+				r.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms = make([]types.String, 0, len(resp.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms))
+				for _, v := range resp.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms {
+					r.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms = append(r.Oidc.WorkloadIdentitySettings.DefaultAllowedAlgorithms, types.StringValue(v))
+				}
+				r.Oidc.WorkloadIdentitySettings.Enabled = types.BoolPointerValue(resp.Oidc.WorkloadIdentitySettings.Enabled)
+				r.Oidc.WorkloadIdentitySettings.FetchTimeoutMs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.FetchTimeoutMs))
+				r.Oidc.WorkloadIdentitySettings.MaxJwtLifetimeSeconds = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.MaxJwtLifetimeSeconds))
+				r.Oidc.WorkloadIdentitySettings.MaxResponseSizeKb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Oidc.WorkloadIdentitySettings.MaxResponseSizeKb))
 			}
 		}
 		if resp.PasswordSettings == nil {
@@ -291,6 +311,7 @@ func (r *DomainDataSourceModel) RefreshFromSharedAutomationDomain(ctx context.Co
 			r.Uma.Enabled = types.BoolPointerValue(resp.Uma.Enabled)
 		}
 		r.UpdatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.UpdatedAt))
+		r.VhostMode = types.BoolPointerValue(resp.VhostMode)
 		r.Vhosts = []tfTypes.VirtualHost{}
 
 		for _, vhostsItem := range resp.Vhosts {

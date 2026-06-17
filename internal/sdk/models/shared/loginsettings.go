@@ -12,8 +12,7 @@ type LoginSettings struct {
 	// Whether certificate-based authentication is offered.
 	CertificateBasedAuthEnabled *bool `default:"false" json:"certificateBasedAuthEnabled"`
 	// URL used for certificate-based authentication.
-	CertificateBasedAuthURL      *string `json:"certificateBasedAuthUrl,omitempty"`
-	EnforcePasswordPolicyEnabled *bool   `json:"enforcePasswordPolicyEnabled,omitempty"`
+	CertificateBasedAuthURL *string `json:"certificateBasedAuthUrl,omitempty"`
 	// Whether users can initiate a forgot-password flow from the login page.
 	ForgotPasswordEnabled *bool `default:"false" json:"forgotPasswordEnabled"`
 	// Whether the login form is hidden (for example when only social or identifier-first login is offered).
@@ -65,13 +64,6 @@ func (l *LoginSettings) GetCertificateBasedAuthURL() *string {
 		return nil
 	}
 	return l.CertificateBasedAuthURL
-}
-
-func (l *LoginSettings) GetEnforcePasswordPolicyEnabled() *bool {
-	if l == nil {
-		return nil
-	}
-	return l.EnforcePasswordPolicyEnabled
 }
 
 func (l *LoginSettings) GetForgotPasswordEnabled() *bool {

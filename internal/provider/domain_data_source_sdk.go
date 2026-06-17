@@ -95,7 +95,6 @@ func (r *DomainDataSourceModel) RefreshFromSharedAutomationDomain(ctx context.Co
 			r.LoginSettings = &tfTypes.LoginSettings{}
 			r.LoginSettings.CertificateBasedAuthEnabled = types.BoolPointerValue(resp.LoginSettings.CertificateBasedAuthEnabled)
 			r.LoginSettings.CertificateBasedAuthURL = types.StringPointerValue(resp.LoginSettings.CertificateBasedAuthURL)
-			r.LoginSettings.EnforcePasswordPolicyEnabled = types.BoolPointerValue(resp.LoginSettings.EnforcePasswordPolicyEnabled)
 			r.LoginSettings.ForgotPasswordEnabled = types.BoolPointerValue(resp.LoginSettings.ForgotPasswordEnabled)
 			r.LoginSettings.HideForm = types.BoolPointerValue(resp.LoginSettings.HideForm)
 			r.LoginSettings.IdentifierFirstEnabled = types.BoolPointerValue(resp.LoginSettings.IdentifierFirstEnabled)

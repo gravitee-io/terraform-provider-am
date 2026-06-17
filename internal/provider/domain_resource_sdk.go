@@ -95,7 +95,6 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 			r.LoginSettings = &tfTypes.LoginSettings{}
 			r.LoginSettings.CertificateBasedAuthEnabled = types.BoolPointerValue(resp.LoginSettings.CertificateBasedAuthEnabled)
 			r.LoginSettings.CertificateBasedAuthURL = types.StringPointerValue(resp.LoginSettings.CertificateBasedAuthURL)
-			r.LoginSettings.EnforcePasswordPolicyEnabled = types.BoolPointerValue(resp.LoginSettings.EnforcePasswordPolicyEnabled)
 			r.LoginSettings.ForgotPasswordEnabled = types.BoolPointerValue(resp.LoginSettings.ForgotPasswordEnabled)
 			r.LoginSettings.HideForm = types.BoolPointerValue(resp.LoginSettings.HideForm)
 			r.LoginSettings.IdentifierFirstEnabled = types.BoolPointerValue(resp.LoginSettings.IdentifierFirstEnabled)
@@ -726,7 +725,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 	var key1 string
 	key1 = r.Key.ValueString()
 
-	var loginSettings *shared.LoginSettingsInput
+	var loginSettings *shared.LoginSettings
 	if r.LoginSettings != nil {
 		certificateBasedAuthEnabled := new(bool)
 		if !r.LoginSettings.CertificateBasedAuthEnabled.IsUnknown() && !r.LoginSettings.CertificateBasedAuthEnabled.IsNull() {
@@ -818,7 +817,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		} else {
 			resetPasswordOnExpiration = nil
 		}
-		loginSettings = &shared.LoginSettingsInput{
+		loginSettings = &shared.LoginSettings{
 			CertificateBasedAuthEnabled:        certificateBasedAuthEnabled,
 			CertificateBasedAuthURL:            certificateBasedAuthURL,
 			ForgotPasswordEnabled:              forgotPasswordEnabled,

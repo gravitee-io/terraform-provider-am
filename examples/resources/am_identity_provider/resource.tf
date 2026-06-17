@@ -5,7 +5,6 @@ resource "am_identity_provider" "my_identityprovider" {
     "example.com",
   ]
   environment_id = "DEFAULT"
-  external       = false
   group_mapper = {
     key = [
       # ...

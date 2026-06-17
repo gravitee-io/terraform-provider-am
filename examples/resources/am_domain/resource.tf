@@ -114,17 +114,17 @@ resource "am_domain" "my_domain" {
     }
     workload_identity_settings = {
       allow_private_ip_address = false
-      allow_unsecured_http_uri = true
-      cache_max_entries        = 0
-      cache_ttl_seconds        = 10
-      clock_skew_seconds       = 1
+      allow_unsecured_http_uri = false
+      cache_max_entries        = 50
+      cache_ttl_seconds        = 300
+      clock_skew_seconds       = 30
       default_allowed_algorithms = [
         "..."
       ]
-      enabled                  = true
-      fetch_timeout_ms         = 8
-      max_jwt_lifetime_seconds = 5
-      max_response_size_kb     = 7
+      enabled                  = false
+      fetch_timeout_ms         = 5000
+      max_jwt_lifetime_seconds = 300
+      max_response_size_kb     = 32
     }
   }
   organization_id = "DEFAULT"

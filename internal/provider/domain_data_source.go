@@ -287,9 +287,6 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						Computed:    true,
 						Description: `URL used for certificate-based authentication.`,
 					},
-					"enforce_password_policy_enabled": schema.BoolAttribute{
-						Computed: true,
-					},
 					"forgot_password_enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `Whether users can initiate a forgot-password flow from the login page.`,
@@ -458,35 +455,45 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"allow_private_ip_address": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Whether trust bundles can be fetched from private IP addresses.`,
 							},
 							"allow_unsecured_http_uri": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Whether trust bundles can be fetched over unsecured HTTP URIs.`,
 							},
 							"cache_max_entries": schema.Int32Attribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum number of trust bundle entries retained in the cache.`,
 							},
 							"cache_ttl_seconds": schema.Int32Attribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Time-to-live, in seconds, for cached trust bundle entries.`,
 							},
 							"clock_skew_seconds": schema.Int32Attribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Allowed clock skew, in seconds, when validating JWT temporal claims.`,
 							},
 							"default_allowed_algorithms": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
+								Description: `Default allowlist of signature algorithms accepted for SPIFFE JWT validation.`,
 							},
 							"enabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Whether SPIFFE workload identity support is enabled for the domain.`,
 							},
 							"fetch_timeout_ms": schema.Int32Attribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Timeout, in milliseconds, for fetching trust bundles.`,
 							},
 							"max_jwt_lifetime_seconds": schema.Int32Attribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum accepted JWT lifetime, in seconds, computed as exp minus iat.`,
 							},
 							"max_response_size_kb": schema.Int32Attribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Maximum trust bundle response size, in kilobytes.`,
 							},
 						},
 						Description: `Workload identity (SPIFFE) settings for the domain.`,

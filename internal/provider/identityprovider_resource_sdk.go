@@ -22,7 +22,6 @@ func (r *IdentityProviderResourceModel) RefreshFromSharedAutomationIdentityProvi
 		for _, v := range resp.DomainWhitelist {
 			r.DomainWhitelist = append(r.DomainWhitelist, types.StringValue(v))
 		}
-		r.External = types.BoolPointerValue(resp.External)
 		if len(resp.GroupMapper) > 0 {
 			r.GroupMapper = make(map[string][]types.String, len(resp.GroupMapper))
 			for groupMapperKey, groupMapperValue := range resp.GroupMapper {
@@ -173,12 +172,6 @@ func (r *IdentityProviderResourceModel) ToSharedAutomationIdentityProviderInput(
 	for domainWhitelistIndex := range r.DomainWhitelist {
 		domainWhitelist = append(domainWhitelist, r.DomainWhitelist[domainWhitelistIndex].ValueString())
 	}
-	external := new(bool)
-	if !r.External.IsUnknown() && !r.External.IsNull() {
-		*external = r.External.ValueBool()
-	} else {
-		external = nil
-	}
 	groupMapper := make(map[string][]string)
 	for groupMapperKey := range r.GroupMapper {
 		groupMapperInst := make([]string, 0, len(r.GroupMapper[groupMapperKey]))
@@ -226,7 +219,6 @@ func (r *IdentityProviderResourceModel) ToSharedAutomationIdentityProviderInput(
 	out := shared.AutomationIdentityProviderInput{
 		Configuration:   configuration,
 		DomainWhitelist: domainWhitelist,
-		External:        external,
 		GroupMapper:     groupMapper,
 		Key:             key,
 		Mappers:         mappers,

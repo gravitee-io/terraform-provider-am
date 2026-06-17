@@ -42,7 +42,6 @@ type IdentityProviderDataSourceModel struct {
 	DomainKey       types.String              `tfsdk:"domain_key"`
 	DomainWhitelist []types.String            `tfsdk:"domain_whitelist"`
 	EnvironmentID   types.String              `tfsdk:"environment_id"`
-	External        types.Bool                `tfsdk:"external"`
 	GroupMapper     map[string][]types.String `tfsdk:"group_mapper"`
 	Key             types.String              `tfsdk:"key"`
 	Mappers         map[string]types.String   `tfsdk:"mappers"`
@@ -87,10 +86,6 @@ func (r *IdentityProviderDataSource) Schema(ctx context.Context, req datasource.
 				Computed:    true,
 				Optional:    true,
 				Description: `Identifier of the environment.`,
-			},
-			"external": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether this is an external identity provider (one that delegates authentication to a third party) rather than an AM-managed one. Set at creation and immutable afterwards.`,
 			},
 			"group_mapper": schema.MapAttribute{
 				Computed: true,

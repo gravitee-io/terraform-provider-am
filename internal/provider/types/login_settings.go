@@ -10,7 +10,6 @@ import (
 type LoginSettings struct {
 	CertificateBasedAuthEnabled        types.Bool   `tfsdk:"certificate_based_auth_enabled"`
 	CertificateBasedAuthURL            types.String `tfsdk:"certificate_based_auth_url"`
-	EnforcePasswordPolicyEnabled       types.Bool   `tfsdk:"enforce_password_policy_enabled"`
 	ForgotPasswordEnabled              types.Bool   `tfsdk:"forgot_password_enabled"`
 	HideForm                           types.Bool   `tfsdk:"hide_form"`
 	IdentifierFirstEnabled             types.Bool   `tfsdk:"identifier_first_enabled"`

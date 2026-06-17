@@ -3,18 +3,43 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
+)
+
 // SpiffeDomainSettings - Workload identity (SPIFFE) settings for the domain.
 type SpiffeDomainSettings struct {
-	AllowPrivateIPAddress    *bool    `json:"allowPrivateIpAddress,omitempty"`
-	AllowUnsecuredHTTPURI    *bool    `json:"allowUnsecuredHttpUri,omitempty"`
-	CacheMaxEntries          *int     `json:"cacheMaxEntries,omitempty"`
-	CacheTTLSeconds          *int     `json:"cacheTtlSeconds,omitempty"`
-	ClockSkewSeconds         *int     `json:"clockSkewSeconds,omitempty"`
+	// Whether trust bundles can be fetched from private IP addresses.
+	AllowPrivateIPAddress *bool `default:"false" json:"allowPrivateIpAddress"`
+	// Whether trust bundles can be fetched over unsecured HTTP URIs.
+	AllowUnsecuredHTTPURI *bool `default:"false" json:"allowUnsecuredHttpUri"`
+	// Maximum number of trust bundle entries retained in the cache.
+	CacheMaxEntries *int `default:"50" json:"cacheMaxEntries"`
+	// Time-to-live, in seconds, for cached trust bundle entries.
+	CacheTTLSeconds *int `default:"300" json:"cacheTtlSeconds"`
+	// Allowed clock skew, in seconds, when validating JWT temporal claims.
+	ClockSkewSeconds *int `default:"30" json:"clockSkewSeconds"`
+	// Default allowlist of signature algorithms accepted for SPIFFE JWT validation.
 	DefaultAllowedAlgorithms []string `json:"defaultAllowedAlgorithms,omitempty"`
-	Enabled                  *bool    `json:"enabled,omitempty"`
-	FetchTimeoutMs           *int     `json:"fetchTimeoutMs,omitempty"`
-	MaxJwtLifetimeSeconds    *int     `json:"maxJwtLifetimeSeconds,omitempty"`
-	MaxResponseSizeKb        *int     `json:"maxResponseSizeKb,omitempty"`
+	// Whether SPIFFE workload identity support is enabled for the domain.
+	Enabled *bool `default:"false" json:"enabled"`
+	// Timeout, in milliseconds, for fetching trust bundles.
+	FetchTimeoutMs *int `default:"5000" json:"fetchTimeoutMs"`
+	// Maximum accepted JWT lifetime, in seconds, computed as exp minus iat.
+	MaxJwtLifetimeSeconds *int `default:"300" json:"maxJwtLifetimeSeconds"`
+	// Maximum trust bundle response size, in kilobytes.
+	MaxResponseSizeKb *int `default:"32" json:"maxResponseSizeKb"`
+}
+
+func (s SpiffeDomainSettings) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SpiffeDomainSettings) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *SpiffeDomainSettings) GetAllowPrivateIPAddress() *bool {

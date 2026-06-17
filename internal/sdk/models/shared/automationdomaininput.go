@@ -26,7 +26,7 @@ type AutomationDomainInput struct {
 	// Stable, immutable identifier for the domain within its environment. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the domain on create-or-update.
 	Key string `json:"key"`
 	// Configuration of the domain's login flow and the features offered on the sign-in page.
-	LoginSettings *LoginSettingsInput `json:"loginSettings,omitempty"`
+	LoginSettings *LoginSettings `json:"loginSettings,omitempty"`
 	// Whether this is the master domain of its environment. A master domain may perform cross-domain token introspection.
 	Master *bool `default:"false" json:"master"`
 	// Human-readable name of the domain.
@@ -126,7 +126,7 @@ func (a *AutomationDomainInput) GetKey() string {
 	return a.Key
 }
 
-func (a *AutomationDomainInput) GetLoginSettings() *LoginSettingsInput {
+func (a *AutomationDomainInput) GetLoginSettings() *LoginSettings {
 	if a == nil {
 		return nil
 	}

@@ -49,7 +49,6 @@ type IdentityProviderResourceModel struct {
 	DomainKey       types.String              `tfsdk:"domain_key"`
 	DomainWhitelist []types.String            `tfsdk:"domain_whitelist"`
 	EnvironmentID   types.String              `tfsdk:"environment_id"`
-	External        types.Bool                `tfsdk:"external"`
 	GroupMapper     map[string][]types.String `tfsdk:"group_mapper"`
 	Key             types.String              `tfsdk:"key"`
 	Mappers         map[string]types.String   `tfsdk:"mappers"`
@@ -91,12 +90,6 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Computed:    true,
 				Optional:    true,
 				Description: `Identifier of the environment.`,
-			},
-			"external": schema.BoolAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     booldefault.StaticBool(false),
-				Description: `Whether this is an external identity provider (one that delegates authentication to a third party) rather than an AM-managed one. Set at creation and immutable afterwards. Default: false`,
 			},
 			"group_mapper": schema.MapAttribute{
 				Optional: true,

@@ -16,8 +16,6 @@ type AutomationIdentityProvider struct {
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	// Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected.
 	DomainWhitelist []string `json:"domainWhitelist,omitempty"`
-	// Whether this is an external identity provider (one that delegates authentication to a third party) rather than an AM-managed one. Set at creation and immutable afterwards.
-	External *bool `default:"false" json:"external"`
 	// Group mapper: assigns AM groups based on provider attribute values. Each entry maps a group to the user attribute expressions that grant it.
 	GroupMapper map[string][]string `json:"groupMapper,omitempty"`
 	// Stable, immutable identifier for the identity provider within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the identity provider on create-or-update.
@@ -66,13 +64,6 @@ func (a *AutomationIdentityProvider) GetDomainWhitelist() []string {
 		return nil
 	}
 	return a.DomainWhitelist
-}
-
-func (a *AutomationIdentityProvider) GetExternal() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.External
 }
 
 func (a *AutomationIdentityProvider) GetGroupMapper() map[string][]string {

@@ -1,0 +1,61 @@
+name: Lint OAS & Terraform resources
+on:
+  pull_request:
+jobs:
+  lint:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup go
+        uses: ./.github/actions/setup-go
+
+      - name: Get speakeasy version
+        id: speakeasy-version
+        run: |
+          VERSION=$(grep 'speakeasyVersion:' .speakeasy/workflow.yaml | sed -e 's/speakeasyVersion: //')
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Install Speakeasy
+        uses: mheap/setup-go-cli@fa9b01cdd4115eac636164f0de43bf7d51c82697
+        with:
+          owner: speakeasy-api
+          repo: speakeasy
+          cli_name: speakeasy
+          package_type: zip
+          version: ${{ steps.speakeasy-version.outputs.version }}
+
+      - name: Configure speakeasy CLI
+        run: |
+          mkdir -p ~/.speakeasy
+          echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
+
+      - name: Setup Terraform
+        uses: ./.github/actions/setup-terraform
+
+      - name: Generate
+        run: make speakeasy
+
+      - name: Check repo is clean
+        run: |
+          # Remove the speakeasy CLI binary that mheap/setup-go-cli unpacked here
+          rm -fR speakeasy-${{ steps.speakeasy-version.outputs.version }}-linux
+
+          # workflow.lock is touched on every run; ignore it
+          git checkout -- .speakeasy/workflow.lock
+
+          git add .
+
+          if [[ -n "$(git status --porcelain)" ]]; then
+            export PAGER= # don't let `git diff` invoke `less`
+            git diff --cached
+            exit 1
+          fi
+
+      - name: Run lint
+        run: make lint

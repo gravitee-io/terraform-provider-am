@@ -1,0 +1,99 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Common param Terraform overlay
+  version: 0.0.1
+actions:
+
+  # AM's automation OAS does not yet expose orgId/envId as shared
+  # components — both are inlined per operation. Synthesize the shared
+  # parameter definitions here so x-speakeasy-globals can $ref them and
+  # promote them to provider-level configuration. Speakeasy correlates
+  # inline operation parameters with globals by name (orgId / envId),
+  # so the inline definitions remain valid.
+  - target: $.components
+    description: Add shared parameter components used by x-speakeasy-globals
+    update:
+      parameters:
+        orgIdParam:
+          name: orgId
+          in: path
+          required: true
+          description: Identifier of the organization that owns the environment.
+          schema:
+            type: string
+            default: DEFAULT
+            examples:
+              - DEFAULT
+        envIdParam:
+          name: envId
+          in: path
+          required: true
+          description: Identifier of the environment.
+          schema:
+            type: string
+            default: DEFAULT
+            examples:
+              - DEFAULT
+
+  # Rename so the provider attribute reads as `organization_id` / `environment_id`
+  # instead of `org_id` / `env_id`.
+  - target: $.components.parameters.orgIdParam
+    description: Align parameter naming with property naming
+    update:
+      x-speakeasy-name-override: organizationId
+  - target: $.components.parameters.envIdParam
+    description: Align parameter naming with property naming
+    update:
+      x-speakeasy-name-override: environmentId
+
+  # Replace every inline orgId/envId parameter with a $ref to the shared
+  # component. This lets Speakeasy correlate operation params with the
+  # x-speakeasy-globals declaration so they're supplied from provider
+  # config rather than appearing on every resource.
+  #
+  # NOTE: Speakeasy's overlay engine does not honor the "null = remove"
+  # semantic of OpenAPI Overlay §3.4 — `null` values are merged in as
+  # literal null/"null", leaving the inline fields alongside the $ref
+  # (which violates OpenAPI 3.0 §3.10's $ref-must-be-sibling-less rule
+  # and triggers ~160 "unknown property" lint warnings).
+  #
+  # Workaround: add the $ref via `update`, then `remove` each sibling
+  # field individually. The filter [?@.name=='orgId'] keeps matching
+  # through the field removals because `name` is removed last.
+
+  # orgId
+  - target: $.paths.*.*.parameters[?@.name=='orgId']
+    description: Add $ref to orgIdParam alongside the inline fields
+    update:
+      $ref: '#/components/parameters/orgIdParam'
+  - target: $.paths.*.*.parameters[?@.name=='orgId'].in
+    remove: true
+  - target: $.paths.*.*.parameters[?@.name=='orgId'].description
+    remove: true
+  - target: $.paths.*.*.parameters[?@.name=='orgId'].required
+    remove: true
+  - target: $.paths.*.*.parameters[?@.name=='orgId'].schema
+    remove: true
+  - target: $.paths.*.*.parameters[?@.name=='orgId'].example
+    remove: true
+  - target: $.paths.*.*.parameters[?@.name=='orgId'].name
+    remove: true
+
+  # envId
+  - target: $.paths.*.*.parameters[?@.name=='envId']
+    description: Add $ref to envIdParam alongside the inline fields
+    update:
+      $ref: '#/components/parameters/envIdParam'
+  - target: $.paths.*.*.parameters[?@.name=='envId'].in
+    remove: true
+  - target: $.paths.*.*.parameters[?@.name=='envId'].description
+    remove: true
+  - target: $.paths.*.*.parameters[?@.name=='envId'].required
+    remove: true
+  - target: $.paths.*.*.parameters[?@.name=='envId'].schema
+    remove: true
+  - target: $.paths.*.*.parameters[?@.name=='envId'].example
+    remove: true
+  - target: $.paths.*.*.parameters[?@.name=='envId'].name
+    remove: true

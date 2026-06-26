@@ -1,0 +1,74 @@
+configVersion: 2.0.0
+generation:
+  sdkClassName: GraviteeAm
+  maintainOpenAPIOrder: true
+  usageSnippets:
+    optionalPropertyRendering: withExample
+    sdkInitStyle: constructor
+  useClassNamesForArrayFields: true
+  fixes:
+    nameResolutionDec2023: true
+    nameResolutionFeb2025: true
+    parameterOrderingFeb2024: true
+    requestResponseComponentNamesFeb2024: true
+    securityFeb2025: true
+    sharedErrorComponentsApr2025: true
+    sharedNestedComponentsJan2026: false
+    nameOverrideFeb2026: false
+  auth:
+    oAuth2ClientCredentialsEnabled: true
+    oAuth2PasswordEnabled: true
+    hoistGlobalSecurity: true
+  sdkHooksConfigAccess: true
+  schemas:
+    allOfMergeStrategy: shallowMerge
+  requestBodyFieldName: ""
+  versioningStrategy: automatic
+  persistentEdits:
+    enabled: "true"
+  tests:
+    generateTests: false
+    generateNewTests: true
+    skipResponseBodyAssertions: false
+go:
+  version: ""
+terraform:
+  version: 0.0.1
+  additionalActions: []
+  additionalDataSources: []
+  additionalDependencies: {}
+  additionalEphemeralResources: []
+  additionalFunctions: []
+  additionalListResources: []
+  additionalProviderAttributes:
+    httpHeaders: http_headers
+    tlsSkipVerify: ""
+  additionalResources: []
+  allowUnknownFieldsInWeakUnions: false
+  author: gravitee-io
+  baseErrorName: AmError
+  debugLogging: {}
+  defaultErrorName: APIError
+  enableCustomCodeRegions: false
+  enableOperationSecurity: false
+  enableOperationServers: false
+  enableTypeDeduplication: false
+  environmentVariables:
+    - env: AM_SERVER_URL
+      providerAttribute: server_url
+    - env: AM_SA_TOKEN
+      providerAttribute: bearer_auth
+    - env: AM_ORG_ID
+      providerAttribute: organization_id
+    - env: AM_ENV_ID
+      providerAttribute: environment_id
+  excludeEmptyObjectSchemas: false
+  forwardCompatibleEnumsByDefault: false
+  includeEmptyObjects: false
+  inferUnionDiscriminators: false
+  packageName: am
+  preApplyUnionDiscriminators: false
+  providerTypeNameOverride: ""
+  respectRequiredFields: false
+  respectTitlesForPrimitiveUnionMembers: false
+  unionStrategy: populated-fields

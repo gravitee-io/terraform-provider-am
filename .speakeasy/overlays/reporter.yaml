@@ -1,0 +1,47 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Reporter overlay
+  version: 0.0.1
+actions:
+
+  # Entity declaration
+  - target: $.components.schemas.AutomationReporter
+    update:
+      x-speakeasy-entity: Reporter
+
+  # Body `key` ↔ path `reporterKey` correlation: rename the path parameter
+  # so Speakeasy auto-matches by name against the entity's `key` field.
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}"].get.parameters[?@.name=='reporterKey']
+    update:
+      x-speakeasy-name-override: key
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}"].delete.parameters[?@.name=='reporterKey']
+    update:
+      x-speakeasy-name-override: key
+
+  # Operation mapping
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters"].put
+    update:
+      x-speakeasy-entity-operation: Reporter#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}"].get
+    update:
+      x-speakeasy-entity-operation: Reporter#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}"].delete
+    update:
+      x-speakeasy-entity-operation: Reporter#delete
+
+  # Sensitive parameter handling — `configuration` is a JSON-encoded string
+  # that typically contains broker/database credentials, API tokens, and
+  # other reporter-backend secrets.
+  - target: $.components.schemas.AutomationReporter.properties.configuration
+    update:
+      x-speakeasy-param-sensitive: true
+
+  # Immutable after creation — changing these forces resource recreation.
+  # create/update share one PUT op, so ForceNew is not auto-inferred; set it explicitly.
+  - target: $.components.schemas.AutomationReporter.properties.type
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.AutomationReporter.properties.system
+    update:
+      x-speakeasy-param-force-new: true

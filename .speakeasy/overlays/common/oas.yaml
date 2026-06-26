@@ -1,0 +1,56 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Root terraform overlay
+  version: 0.0.1
+actions:
+  - target: $
+    description: |
+      Setup SDK retries.
+      Silences the speakeasy "generator-retries" lint hint and gives the SDK
+      a backoff strategy for 5XX responses and connection errors.
+    update:
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 500 # 500 milliseconds
+          maxInterval: 30000 # 30 seconds
+          maxElapsedTime: 60000 # 1 minute
+          exponent: 1.5
+        statusCodes:
+          - 5XX
+        retryConnectionErrors: true
+  - target: $
+    description: |
+      Promote orgId/envId to provider-level configuration so they don't have
+      to be repeated on every resource. The referenced parameter components
+      are synthesized in common/param.yaml.
+    update:
+      x-speakeasy-globals:
+        parameters:
+          - $ref: '#/components/parameters/orgIdParam'
+          - $ref: '#/components/parameters/envIdParam'
+  - target: $.info
+    description: Override title for Terraform Registry rendering
+    update:
+      title: Gravitee
+  - target: $.info
+    description: Override description for Terraform Registry rendering
+    update:
+      description: |
+        Gravitee Access Management Terraform Provider (alpha)
+
+        You can manage with Terraform the following:
+        * Domains
+        * Certificates
+        * Identity Providers
+        * Reporters
+
+        Compatible with Gravitee Access Management 4.12.0.
+  - target: $.components.securitySchemes.BearerAuth
+    description: Remove trailing period for generated env-var suffix
+    update:
+      description: "Authentication uses a bearer token: a JWT, or an opaque user service-account\
+        \ access token. Every operation is additionally permission-gated against the\
+        \ target organization, environment, and resource; a caller lacking the required\
+        \ permission receives a 403 response"

@@ -1,0 +1,20 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Common schema Terraform overlay
+  version: 0.0.1
+actions:
+
+  ## Nothing is computed by default (mirrors APIM convention)
+  ## Keeps Terraform plans clean — un-configured attributes stay null,
+  ## not Unknown, avoiding spurious diffs.
+  - target: $.components.schemas.*.properties.*
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+
+  ## Drop the Error schema from generated Terraform state shape.
+  - target: $.components.schemas.Error
+    description: Intentionally ignored for Terraform state
+    update:
+      x-speakeasy-terraform-ignore: true

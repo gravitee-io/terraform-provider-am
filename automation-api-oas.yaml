@@ -1,0 +1,2649 @@
+#
+# Copyright (C) 2015 The Gravitee team (http://gravitee.io)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+openapi: 3.0.1
+info:
+  contact:
+    email: team-gko@graviteesource.com
+    name: DevX team
+    url: https://www.gravitee.io/
+  description: |-
+    Declarative, idempotent management of Gravitee Access Management resources.
+
+    Each resource is identified by a stable, immutable `key` that you choose. Applying a resource with `PUT` creates it on first use and updates it on subsequent applies, so the same request can be replayed safely to converge on a desired state.
+
+    The API only sees and manages resources it owns (those marked as managed by the Automation API). Resources created through the Management API or console are invisible to these endpoints and cannot be read, updated, or deleted here; conversely, resources created here are fully owned by the Automation API.
+
+    Domains are the top-level resource; certificates, identity providers, and reporters are managed as sub-resources of a domain. Deleting a domain cascades to its Automation-managed sub-resources. Some sub-resources support a `system` flag identifying the domain's built-in default; the flag is immutable once set.
+
+    This API complements the Management API, which remains the interactive, full-featured management surface.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: Gravitee.io AM - Automation API
+  version: 4.12.0
+servers:
+- url: http://localhost:8093/automation
+security:
+- BearerAuth: []
+tags:
+- description: Certificates configured under a domain to sign and verify tokens.
+  name: Certificates
+- description: "Security domains: the top-level container for an authentication and\
+    \ authorization configuration. Create, read, update, and delete domains, and reach\
+    \ their sub-resources."
+  name: Domains
+- description: Identity providers configured under a domain to authenticate users.
+  name: Identity Providers
+- description: Reporters configured under a domain to persist audit events to a backend.
+  name: Reporters
+paths:
+  /organizations/{orgId}/environments/{envId}/domains:
+    get:
+      description: Returns all security domains within the specified environment.
+      operationId: automationListDomains
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                AutomationDomainList:
+                  value:
+                  - key: example-domain
+                    name: Example domain
+                    description: An example authentication domain
+                    enabled: true
+                    path: /example-domain
+                    dataPlaneId: default
+                    tags:
+                    - eu
+                    - production
+                    accountSettings:
+                      inherited: false
+                      loginAttemptsDetectionEnabled: true
+                      maxLoginAttempts: 10
+                      accountBlockedDuration: 7200
+                    oidc:
+                      redirectUriStrictMatching: true
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AutomationDomain"
+          description: List of domains
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        default:
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 500
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unexpected error
+      summary: List all domains
+      tags:
+      - Domains
+    put:
+      description: Idempotent create-or-update. Uses the key field in the body to
+        identify the domain. On first apply the domain is created; subsequent applies
+        update it. dataPlaneId is required at creation and immutable afterwards.
+      operationId: automationCreateOrUpdateDomain
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Domain:
+                description: A domain with common settings
+                value:
+                  key: example-domain
+                  name: Example domain
+                  description: An example authentication domain
+                  enabled: true
+                  path: /example-domain
+                  dataPlaneId: default
+                  tags:
+                  - eu
+                  - production
+                  accountSettings:
+                    inherited: false
+                    loginAttemptsDetectionEnabled: true
+                    maxLoginAttempts: 10
+                    accountBlockedDuration: 7200
+                  oidc:
+                    redirectUriStrictMatching: true
+            schema:
+              $ref: "#/components/schemas/AutomationDomain"
+        description: Desired state of the domain.
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Domain:
+                  description: A domain with common settings
+                  value:
+                    key: example-domain
+                    name: Example domain
+                    description: An example authentication domain
+                    enabled: true
+                    path: /example-domain
+                    dataPlaneId: default
+                    tags:
+                    - eu
+                    - production
+                    accountSettings:
+                      inherited: false
+                      loginAttemptsDetectionEnabled: true
+                      maxLoginAttempts: 10
+                      accountBlockedDuration: 7200
+                    oidc:
+                      redirectUriStrictMatching: true
+              schema:
+                $ref: "#/components/schemas/AutomationDomain"
+          description: The created or updated domain
+        "400":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 400
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Invalid request: validation failure, an immutable field change,\
+            \ a key that already exists for a domain not managed by the Automation\
+            \ API, or an unknown defaultIdentityProviderForRegistration reference"
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+      summary: Create or update a domain
+      tags:
+      - Domains
+  /organizations/{orgId}/environments/{envId}/domains/{domainKey}:
+    delete:
+      description: "Deletes an Automation-managed domain. Deletion cascades to the\
+        \ domain's sub-resources (certificates, identity providers, and reporters).\
+        \ Deleting a domain that does not exist also returns 204."
+      operationId: automationDeleteDomain
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Domain successfully deleted
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        default:
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 500
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unexpected error
+      summary: Delete a domain
+      tags:
+      - Domains
+    get:
+      description: Retrieves a single Automation-managed security domain by its key.
+      operationId: automationGetDomain
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Domain:
+                  description: A domain with common settings
+                  value:
+                    key: example-domain
+                    name: Example domain
+                    description: An example authentication domain
+                    enabled: true
+                    path: /example-domain
+                    dataPlaneId: default
+                    tags:
+                    - eu
+                    - production
+                    accountSettings:
+                      inherited: false
+                      loginAttemptsDetectionEnabled: true
+                      maxLoginAttempts: 10
+                      accountBlockedDuration: 7200
+                    oidc:
+                      redirectUriStrictMatching: true
+              schema:
+                $ref: "#/components/schemas/AutomationDomain"
+          description: The domain
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Domain not found, or not managed by the Automation API"
+      summary: Get a domain
+      tags:
+      - Domains
+  /organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates:
+    get:
+      description: Returns all certificates managed by the Automation API under the
+        domain. Certificates created outside the Automation API are not returned.
+      operationId: automationListCertificates
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                AutomationCertificateList:
+                  value:
+                  - key: signing-cert
+                    name: Signing certificate
+                    type: javakeystore-am-certificate
+                    configuration: "{\"jks\":{\"content\":\"...\",\"name\":\"keystore.jks\"\
+                      },\"storepass\":\"secret\",\"alias\":\"mykey\",\"keypass\":\"\
+                      secret\"}"
+                  - key: default
+                    system: true
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AutomationCertificate"
+          description: List of certificates
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Domain not found, or not managed by the Automation API"
+      summary: List a domain's certificates
+      tags:
+      - Certificates
+      - Domains
+    put:
+      description: Idempotent create-or-update. Uses the key field in the body to
+        identify the certificate within the domain. Re-applying an unchanged definition
+        is a no-op. The system flag is immutable; changing it requires deleting and
+        recreating the certificate.
+      operationId: automationCreateOrUpdateCertificate
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Certificate:
+                description: A fully specified certificate
+                value:
+                  key: signing-cert
+                  name: Signing certificate
+                  type: javakeystore-am-certificate
+                  configuration: "{\"jks\":{\"content\":\"...\",\"name\":\"keystore.jks\"\
+                    },\"storepass\":\"secret\",\"alias\":\"mykey\",\"keypass\":\"\
+                    secret\"}"
+              System certificate:
+                description: The domain's system certificate; only system and key
+                  are needed
+                value:
+                  key: default
+                  system: true
+            schema:
+              $ref: "#/components/schemas/AutomationCertificate"
+        description: "Desired state of the certificate. For a system certificate,\
+          \ supply only system: true and key."
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Certificate:
+                  description: A fully specified certificate
+                  value:
+                    key: signing-cert
+                    name: Signing certificate
+                    type: javakeystore-am-certificate
+                    configuration: "{\"jks\":{\"content\":\"...\",\"name\":\"keystore.jks\"\
+                      },\"storepass\":\"secret\",\"alias\":\"mykey\",\"keypass\":\"\
+                      secret\"}"
+                System certificate:
+                  description: The domain's system certificate; only system and key
+                    are needed
+                  value:
+                    key: default
+                    system: true
+              schema:
+                $ref: "#/components/schemas/AutomationCertificate"
+          description: The created or updated certificate
+        "400":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 400
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Invalid request: a key conflict, a missing required field\
+            \ for a non-system certificate, an attempt to change the immutable system\
+            \ flag, or a second system certificate for the domain"
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Domain not found, or not managed by the Automation API"
+      summary: Create or update a certificate
+      tags:
+      - Certificates
+      - Domains
+  /organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}:
+    delete:
+      description: Deletes an Automation-managed certificate by its key. Deleting
+        a certificate that does not exist also returns 204.
+      operationId: automationDeleteCertificate
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      - description: Key of the certificate within the domain.
+        example: signing-cert
+        in: path
+        name: certKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Certificate successfully deleted
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        default:
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 500
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unexpected error
+      summary: Delete a certificate
+      tags:
+      - Certificates
+      - Domains
+    get:
+      description: Retrieves a single Automation-managed certificate by its key.
+      operationId: automationGetCertificate
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      - description: Key of the certificate within the domain.
+        example: signing-cert
+        in: path
+        name: certKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Certificate:
+                  description: A fully specified certificate
+                  value:
+                    key: signing-cert
+                    name: Signing certificate
+                    type: javakeystore-am-certificate
+                    configuration: "{\"jks\":{\"content\":\"...\",\"name\":\"keystore.jks\"\
+                      },\"storepass\":\"secret\",\"alias\":\"mykey\",\"keypass\":\"\
+                      secret\"}"
+                System certificate:
+                  description: The domain's system certificate; only system and key
+                    are needed
+                  value:
+                    key: default
+                    system: true
+              schema:
+                $ref: "#/components/schemas/AutomationCertificate"
+          description: The certificate
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Domain or certificate not found, or not managed by the Automation\
+            \ API"
+      summary: Get a certificate
+      tags:
+      - Certificates
+      - Domains
+  /organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities:
+    get:
+      description: Returns all identity providers managed by the Automation API under
+        the domain. Identity providers created outside the Automation API are not
+        returned.
+      operationId: automationListIdentityProviders
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                AutomationIdentityProviderList:
+                  value:
+                  - key: corporate-ldap
+                    name: Corporate LDAP
+                    type: inline-am-idp
+                    configuration: "{\"users\":[{\"username\":\"admin\",\"password\"\
+                      :\"...\"}]}"
+                    mappers:
+                      sub: username
+                      email: email
+                    roleMapper:
+                      role-id:
+                      - username=admin
+                    groupMapper:
+                      group-id:
+                      - username=admin
+                    domainWhitelist:
+                    - example.com
+                  - key: default
+                    system: true
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AutomationIdentityProvider"
+          description: List of identity providers
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Domain not found, or not managed by the Automation API"
+      summary: List a domain's identity providers
+      tags:
+      - Identity Providers
+      - Domains
+    put:
+      description: Idempotent create-or-update. Uses the key field in the body to
+        identify the identity provider within the domain. On first apply the identity
+        provider is created; subsequent applies update it. The system flag is immutable;
+        changing it requires deleting and recreating the identity provider.
+      operationId: automationCreateOrUpdateIdentityProvider
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Identity provider:
+                description: A fully specified identity provider
+                value:
+                  key: corporate-ldap
+                  name: Corporate LDAP
+                  type: inline-am-idp
+                  configuration: "{\"users\":[{\"username\":\"admin\",\"password\"\
+                    :\"...\"}]}"
+                  mappers:
+                    sub: username
+                    email: email
+                  roleMapper:
+                    role-id:
+                    - username=admin
+                  groupMapper:
+                    group-id:
+                    - username=admin
+                  domainWhitelist:
+                  - example.com
+              System identity provider:
+                description: The domain's system identity provider; only system and
+                  key are needed
+                value:
+                  key: default
+                  system: true
+            schema:
+              $ref: "#/components/schemas/AutomationIdentityProvider"
+        description: "Desired state of the identity provider. For a system identity\
+          \ provider, supply only system: true and key."
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Identity provider:
+                  description: A fully specified identity provider
+                  value:
+                    key: corporate-ldap
+                    name: Corporate LDAP
+                    type: inline-am-idp
+                    configuration: "{\"users\":[{\"username\":\"admin\",\"password\"\
+                      :\"...\"}]}"
+                    mappers:
+                      sub: username
+                      email: email
+                    roleMapper:
+                      role-id:
+                      - username=admin
+                    groupMapper:
+                      group-id:
+                      - username=admin
+                    domainWhitelist:
+                    - example.com
+                System identity provider:
+                  description: The domain's system identity provider; only system
+                    and key are needed
+                  value:
+                    key: default
+                    system: true
+              schema:
+                $ref: "#/components/schemas/AutomationIdentityProvider"
+          description: The created or updated identity provider
+        "400":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 400
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Invalid request: a key conflict, a missing required field\
+            \ (name or type) for a non-system identity provider, an attempt to change\
+            \ the immutable system flag, or a second system identity provider for\
+            \ the domain"
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Domain not found, or not managed by the Automation API"
+      summary: Create or update an identity provider
+      tags:
+      - Identity Providers
+      - Domains
+  /organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities/{identityKey}:
+    delete:
+      description: Deletes an Automation-managed identity provider by its key. Deleting
+        an identity provider that does not exist also returns 204.
+      operationId: automationDeleteIdentityProvider
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      - description: Key of the identity within the domain.
+        example: corporate-ldap
+        in: path
+        name: identityKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Identity provider successfully deleted
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        default:
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 500
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unexpected error
+      summary: Delete an identity provider
+      tags:
+      - Identity Providers
+      - Domains
+    get:
+      description: Retrieves a single Automation-managed identity provider by its
+        key.
+      operationId: automationGetIdentityProvider
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      - description: Key of the identity within the domain.
+        example: corporate-ldap
+        in: path
+        name: identityKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Identity provider:
+                  description: A fully specified identity provider
+                  value:
+                    key: corporate-ldap
+                    name: Corporate LDAP
+                    type: inline-am-idp
+                    configuration: "{\"users\":[{\"username\":\"admin\",\"password\"\
+                      :\"...\"}]}"
+                    mappers:
+                      sub: username
+                      email: email
+                    roleMapper:
+                      role-id:
+                      - username=admin
+                    groupMapper:
+                      group-id:
+                      - username=admin
+                    domainWhitelist:
+                    - example.com
+                System identity provider:
+                  description: The domain's system identity provider; only system
+                    and key are needed
+                  value:
+                    key: default
+                    system: true
+              schema:
+                $ref: "#/components/schemas/AutomationIdentityProvider"
+          description: The identity provider
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Domain or identity provider not found, or not managed by the\
+            \ Automation API"
+      summary: Get an identity provider
+      tags:
+      - Identity Providers
+      - Domains
+  /organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters:
+    get:
+      description: Returns all reporters managed by the Automation API under the domain.
+        Reporters created outside the Automation API are not returned.
+      operationId: automationListReporters
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                AutomationReporterList:
+                  value:
+                  - key: audit-kafka
+                    name: Audit events to Kafka
+                    type: reporter-am-kafka
+                    enabled: true
+                    configuration: "{\"bootstrapServers\":\"kafka:9092\",\"topic\"\
+                      :\"audit\"}"
+                  - key: default
+                    system: true
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AutomationReporter"
+          description: List of reporters
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Domain not found, or not managed by the Automation API"
+      summary: List a domain's reporters
+      tags:
+      - Reporters
+      - Domains
+    put:
+      description: Idempotent create-or-update. Uses the key field in the body to
+        identify the reporter within the domain. On first apply the reporter is created;
+        subsequent applies update it. The system flag is immutable; changing it requires
+        deleting and recreating the reporter.
+      operationId: automationCreateOrUpdateReporter
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Reporter:
+                description: A fully specified reporter
+                value:
+                  key: audit-kafka
+                  name: Audit events to Kafka
+                  type: reporter-am-kafka
+                  enabled: true
+                  configuration: "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"\
+                    audit\"}"
+              System reporter:
+                description: The domain's system reporter; only system and key are
+                  needed
+                value:
+                  key: default
+                  system: true
+            schema:
+              $ref: "#/components/schemas/AutomationReporter"
+        description: "Desired state of the reporter. For a system reporter, supply\
+          \ only system: true and key."
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Reporter:
+                  description: A fully specified reporter
+                  value:
+                    key: audit-kafka
+                    name: Audit events to Kafka
+                    type: reporter-am-kafka
+                    enabled: true
+                    configuration: "{\"bootstrapServers\":\"kafka:9092\",\"topic\"\
+                      :\"audit\"}"
+                System reporter:
+                  description: The domain's system reporter; only system and key are
+                    needed
+                  value:
+                    key: default
+                    system: true
+              schema:
+                $ref: "#/components/schemas/AutomationReporter"
+          description: The created or updated reporter
+        "400":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 400
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Invalid request: a key conflict, a missing required field\
+            \ (name, type, or configuration) for a non-system reporter, an attempt\
+            \ to change the immutable system flag, or a second system reporter for\
+            \ the domain"
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Domain not found, or not managed by the Automation API"
+      summary: Create or update a reporter
+      tags:
+      - Reporters
+      - Domains
+  /organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}:
+    delete:
+      description: Deletes an Automation-managed reporter by its key. Deleting a reporter
+        that does not exist also returns 204.
+      operationId: automationDeleteReporter
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      - description: Key of the reporter within the domain.
+        example: audit-kafka
+        in: path
+        name: reporterKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Reporter successfully deleted
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        default:
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 500
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unexpected error
+      summary: Delete a reporter
+      tags:
+      - Reporters
+      - Domains
+    get:
+      description: Retrieves a single Automation-managed reporter by its key.
+      operationId: automationGetReporter
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the domain belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: "Key of the domain: its stable, immutable Automation identifier\
+          \ within the environment."
+        example: example-domain
+        in: path
+        name: domainKey
+        required: true
+        schema:
+          type: string
+      - description: Key of the reporter within the domain.
+        example: audit-kafka
+        in: path
+        name: reporterKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Reporter:
+                  description: A fully specified reporter
+                  value:
+                    key: audit-kafka
+                    name: Audit events to Kafka
+                    type: reporter-am-kafka
+                    enabled: true
+                    configuration: "{\"bootstrapServers\":\"kafka:9092\",\"topic\"\
+                      :\"audit\"}"
+                System reporter:
+                  description: The domain's system reporter; only system and key are
+                    needed
+                  value:
+                    key: default
+                    system: true
+              schema:
+                $ref: "#/components/schemas/AutomationReporter"
+          description: The reporter
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Domain or reporter not found, or not managed by the Automation\
+            \ API"
+      summary: Get a reporter
+      tags:
+      - Reporters
+      - Domains
+components:
+  schemas:
+    AutomationAccountSettings:
+      type: object
+      description: "User account settings for the domain: brute-force protection,\
+        \ registration, password reset, remember-me, and MFA challenge behavior."
+      properties:
+        accountBlockedDuration:
+          type: integer
+          format: int32
+          description: "Duration, in seconds, for which the account remains blocked\
+            \ after too many failed login attempts."
+          example: 7200
+        autoLoginAfterRegistration:
+          type: boolean
+          default: false
+          description: Whether the user is automatically logged in after completing
+            registration.
+        autoLoginAfterResetPassword:
+          type: boolean
+          default: false
+          description: Whether the user is automatically logged in after a password
+            reset.
+        completeRegistrationWhenResetPassword:
+          type: boolean
+          default: false
+          description: Whether resetting a password also completes a pending registration.
+        defaultIdentityProviderForRegistration:
+          type: string
+          description: "Key of an identity provider that exists under this domain,\
+            \ used as the default for user registration. Resolved against the domain's\
+            \ identity providers when applied; a value that does not match an existing\
+            \ identity provider is rejected with a 400 response."
+          example: users-idp
+        deletePasswordlessDevicesAfterResetPassword:
+          type: boolean
+          default: false
+          description: Whether passwordless (WebAuthn) devices are deleted when the
+            password is reset.
+        dynamicUserRegistration:
+          type: boolean
+          default: false
+          description: Whether dynamic (self-service) user registration is enabled.
+        inherited:
+          type: boolean
+          default: true
+          description: "Whether account settings are inherited from the parent (domain).\
+            \ When true, the other fields are ignored. Has no effect when applied\
+            \ to domains."
+        loginAttemptsDetectionEnabled:
+          type: boolean
+          default: false
+          description: Whether brute-force authentication attempts are detected and
+            blocked.
+        loginAttemptsResetTime:
+          type: integer
+          format: int32
+          description: "Time, in seconds, after which the login attempt counter is\
+            \ reset when the maximum has not been reached."
+          example: 600
+        maxLoginAttempts:
+          type: integer
+          format: int32
+          description: Maximum number of failed login attempts before the account
+            is blocked.
+          example: 10
+        mfaChallengeAttemptsDetectionEnabled:
+          type: boolean
+          default: false
+          description: Whether failed MFA challenge attempts are detected and blocked.
+        mfaChallengeAttemptsResetTime:
+          type: integer
+          format: int32
+          description: "Time, in seconds, after which the MFA challenge attempt counter\
+            \ is reset."
+          example: 600
+        mfaChallengeMaxAttempts:
+          type: integer
+          format: int32
+          description: Maximum number of failed MFA challenge attempts before the
+            user is blocked.
+          example: 3
+        mfaChallengeSendVerifyAlertEmail:
+          type: boolean
+          default: false
+          description: Whether to send an alert email after too many failed MFA challenge
+            attempts.
+        redirectUriAfterRegistration:
+          type: string
+          description: URL the user is redirected to after registration.
+          example: https://app.example.com/welcome
+        redirectUriAfterResetPassword:
+          type: string
+          description: URL the user is redirected to after a password reset.
+          example: https://app.example.com/signin
+        rememberMe:
+          type: boolean
+          default: false
+          description: Whether users can remain logged in for a fixed duration (remember-me).
+        rememberMeDuration:
+          type: integer
+          format: int32
+          description: "Duration, in seconds, for which a remembered session stays\
+            \ valid."
+          example: 604800
+        resetPasswordConfirmIdentity:
+          type: boolean
+          default: false
+          description: Whether the user must confirm their identity before resetting
+            a password.
+        resetPasswordCustomForm:
+          type: boolean
+          default: false
+          description: Whether a custom form is used for the password-reset step.
+        resetPasswordCustomFormFields:
+          type: array
+          description: Custom fields rendered on the password-reset form.
+          items:
+            $ref: "#/components/schemas/FormField"
+        resetPasswordInvalidateTokens:
+          type: boolean
+          default: false
+          description: Whether existing tokens are invalidated when the password is
+            reset.
+        sendRecoverAccountEmail:
+          type: boolean
+          default: false
+          description: Whether to send an account-recovery email.
+        sendVerifyRegistrationAccountEmail:
+          type: boolean
+          default: false
+          description: Whether to send a registration-verification email.
+      title: Account settings
+    AutomationCIBASettings:
+      type: object
+      description: "Client-Initiated Backchannel Authentication (CIBA) settings for\
+        \ the domain. CIBA lets a relying party initiate end-user authentication from\
+        \ a separate consumption device, without redirecting the user through the\
+        \ browser. Authentication device notifiers are not managed by the Automation\
+        \ API and are not exposed here."
+      properties:
+        authReqExpiry:
+          type: integer
+          format: int32
+          description: "Default validity period, in seconds, of the issued auth_req_id."
+          example: 600
+        bindingMessageLength:
+          type: integer
+          format: int32
+          description: Maximum number of characters accepted for the binding_message
+            parameter.
+          example: 256
+        enabled:
+          type: boolean
+          default: false
+          description: Whether Client-Initiated Backchannel Authentication is enabled
+            for the domain.
+        tokenReqInterval:
+          type: integer
+          format: int32
+          description: "Minimum delay, in seconds, that a client must wait between\
+            \ two polls of the token endpoint for the same auth_req_id (POLL or PING\
+            \ delivery mode)."
+          example: 5
+      title: CIBA settings
+    AutomationCertificate:
+      type: object
+      description: "A certificate managed under a domain by the Automation API. The\
+        \ key field is the stable, immutable identity used for idempotent create-or-update."
+      properties:
+        configuration:
+          type: string
+          description: Plugin-specific configuration as a JSON-encoded string. Its
+            shape is defined by the selected certificate type.
+          example: "{\"jks\":{\"content\":\"...\",\"name\":\"keystore.jks\"},\"storepass\"\
+            :\"secret\",\"alias\":\"mykey\",\"keypass\":\"secret\"}"
+        createdAt:
+          type: string
+          format: date-time
+          description: "Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only."
+          readOnly: true
+        expiresAt:
+          type: string
+          format: date-time
+          description: "Expiry timestamp (ISO-8601 / RFC 3339, UTC), when known for\
+            \ the certificate type. Read-only."
+          readOnly: true
+        key:
+          type: string
+          description: "Stable, immutable identifier for the certificate within its\
+            \ domain. Lowercase alphanumeric and hyphens, starting and ending with\
+            \ an alphanumeric character. Used to identify the certificate on create-or-update."
+          example: signing-cert
+          maxLength: 255
+          minLength: 1
+          title: Key
+        name:
+          type: string
+          description: Human-readable name of the certificate.
+          example: Signing certificate
+          maxLength: 255
+          minLength: 1
+        system:
+          type: boolean
+          default: false
+          description: "Whether this is the domain's system certificate. Immutable\
+            \ after creation. When true, only key is required; the certificate is\
+            \ built from the domains.certificates.default.* system settings and the\
+            \ name, type, and configuration fields are ignored."
+        type:
+          type: string
+          description: Certificate plugin type identifier. Immutable after creation.
+          example: javakeystore-am-certificate
+          maxLength: 2147483647
+          minLength: 1
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only."
+          readOnly: true
+      required:
+      - key
+      title: Certificate
+    AutomationCertificateSettings:
+      type: object
+      description: Domain-level certificate settings.
+      properties:
+        fallbackCertificate:
+          type: string
+          description: "Key of a certificate managed under this domain, used as the\
+            \ fallback certificate when a client does not specify one. Must reference\
+            \ a certificate created via the domain's certificate endpoints."
+          example: default
+      title: Certificate settings
+    AutomationClientRegistrationSettings:
+      type: object
+      description: OpenID Connect Dynamic Client Registration configuration for the
+        domain.
+      properties:
+        allowHttpSchemeRedirectUri:
+          type: boolean
+          default: false
+          description: Whether the unsecured http scheme is permitted in redirect
+            URIs.
+        allowLocalhostRedirectUri:
+          type: boolean
+          default: false
+          description: Whether localhost is permitted as a redirect URI host.
+        allowRedirectUriParamsExpressionLanguage:
+          type: boolean
+          default: false
+          description: Whether expression language is permitted in redirect URI parameters.
+        allowWildCardRedirectUri:
+          type: boolean
+          default: false
+          description: Whether wildcards are permitted in redirect URIs.
+        allowedScopes:
+          type: array
+          description: Scopes permitted on client registration requests when the allowed
+            list is enabled.
+          items:
+            type: string
+            description: Scopes permitted on client registration requests when the
+              allowed list is enabled.
+        allowedScopesEnabled:
+          type: boolean
+          default: false
+          description: Whether registered client scopes are restricted to an allowed
+            list.
+        clientTemplateEnabled:
+          type: boolean
+          default: false
+          description: Whether a client may be used as a template for dynamic client
+            registration.
+        defaultScopes:
+          type: array
+          description: Default scopes added to every client registration request.
+          items:
+            type: string
+            description: Default scopes added to every client registration request.
+        dynamicClientRegistrationEnabled:
+          type: boolean
+          default: false
+          description: Whether Dynamic Client Registration is enabled for the domain.
+        openDynamicClientRegistrationEnabled:
+          type: boolean
+          default: false
+          description: Whether open (unauthenticated) Dynamic Client Registration
+            is enabled for the domain.
+      title: Client registration settings
+    AutomationDomain:
+      type: object
+      description: "A security domain managed by the Automation API. The key field\
+        \ is the stable, immutable identity used for idempotent create-or-update.\
+        \ Certificates, identity providers, and reporters are not embedded; they are\
+        \ managed via the domain's sub-resource endpoints and referenced here by key."
+      properties:
+        accountSettings:
+          $ref: "#/components/schemas/AutomationAccountSettings"
+        alertEnabled:
+          type: boolean
+          description: Whether alerting is enabled for the domain.
+        certificateSettings:
+          $ref: "#/components/schemas/AutomationCertificateSettings"
+        corsSettings:
+          $ref: "#/components/schemas/CorsSettings"
+        createdAt:
+          type: string
+          format: date-time
+          description: "Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only."
+          readOnly: true
+        dataPlaneId:
+          type: string
+          description: Identifier of the data plane this domain is connected to. Required
+            at creation and immutable afterwards; included in the desired-state document
+            but never re-applied on update.
+          example: default
+          maxLength: 255
+          minLength: 1
+        description:
+          type: string
+          description: Human-readable description of the domain.
+          example: An example authentication domain
+        enabled:
+          type: boolean
+          default: true
+          description: Whether the domain handles incoming authentication and authorization
+            requests.
+        key:
+          type: string
+          description: "Stable, immutable identifier for the domain within its environment.\
+            \ Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric\
+            \ character. Used to identify the domain on create-or-update."
+          example: example-domain
+          maxLength: 255
+          minLength: 1
+          title: Key
+        loginSettings:
+          $ref: "#/components/schemas/LoginSettings"
+        master:
+          type: boolean
+          default: false
+          description: Whether this is the master domain of its environment. A master
+            domain may perform cross-domain token introspection.
+        name:
+          type: string
+          description: Human-readable name of the domain.
+          example: Example domain
+          maxLength: 255
+          minLength: 1
+        oidc:
+          $ref: "#/components/schemas/AutomationOidcSettings"
+        passwordSettings:
+          $ref: "#/components/schemas/PasswordSettings"
+        path:
+          type: string
+          description: "Context path the domain is served under, relative to the gateway.\
+            \ Must start with a slash."
+          example: /example-domain
+          maxLength: 255
+          minLength: 1
+        saml:
+          $ref: "#/components/schemas/AutomationSamlSettings"
+        scim:
+          $ref: "#/components/schemas/SCIMSettings"
+        secretExpirationSettings:
+          $ref: "#/components/schemas/SecretExpirationSettings"
+        selfServiceAccountManagementSettings:
+          $ref: "#/components/schemas/SelfServiceAccountManagementSettings"
+        tags:
+          type: array
+          description: Sharding tags that control which gateways deploy this domain.
+          example:
+          - eu
+          - production
+          items:
+            type: string
+            description: Sharding tags that control which gateways deploy this domain.
+            example: "[\"eu\",\"production\"]"
+          uniqueItems: true
+        tokenExchangeSettings:
+          $ref: "#/components/schemas/TokenExchangeSettings"
+        uma:
+          $ref: "#/components/schemas/UMASettings"
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only."
+          readOnly: true
+        vhostMode:
+          type: boolean
+          default: false
+          description: "Whether the domain is exposed through its virtual hosts rather\
+            \ than the default context path. When true, vhosts must be supplied."
+        vhosts:
+          type: array
+          description: "Virtual hosts the domain is exposed on, overriding the default\
+            \ context path."
+          items:
+            $ref: "#/components/schemas/VirtualHost"
+        webAuthnSettings:
+          $ref: "#/components/schemas/WebAuthnSettings"
+      required:
+      - dataPlaneId
+      - key
+      - name
+      - path
+      title: Domain
+    AutomationIdentityProvider:
+      type: object
+      description: "An identity provider managed under a domain by the Automation\
+        \ API. The key field is the stable, immutable identity used for idempotent\
+        \ create-or-update."
+      properties:
+        configuration:
+          type: string
+          description: Plugin-specific configuration as a JSON-encoded string. Its
+            shape is defined by the selected identity provider type.
+          example: "{\"users\":[{\"username\":\"admin\",\"password\":\"...\"}]}"
+        createdAt:
+          type: string
+          format: date-time
+          description: "Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only."
+          readOnly: true
+        domainWhitelist:
+          type: array
+          description: "Email domains allowed to authenticate through this identity\
+            \ provider. When set, users whose email domain is not listed are rejected."
+          example:
+          - example.com
+          items:
+            type: string
+            description: "Email domains allowed to authenticate through this identity\
+              \ provider. When set, users whose email domain is not listed are rejected."
+            example: "[\"example.com\"]"
+        groupMapper:
+          type: object
+          additionalProperties:
+            type: array
+            description: "Group mapper: assigns AM groups based on provider attribute\
+              \ values. Each entry maps a group to the user attribute expressions\
+              \ that grant it."
+            items:
+              type: string
+              description: "Group mapper: assigns AM groups based on provider attribute\
+                \ values. Each entry maps a group to the user attribute expressions\
+                \ that grant it."
+          description: "Group mapper: assigns AM groups based on provider attribute\
+            \ values. Each entry maps a group to the user attribute expressions that\
+            \ grant it."
+        key:
+          type: string
+          description: "Stable, immutable identifier for the identity provider within\
+            \ its domain. Lowercase alphanumeric and hyphens, starting and ending\
+            \ with an alphanumeric character. Used to identify the identity provider\
+            \ on create-or-update."
+          example: corporate-ldap
+          maxLength: 255
+          minLength: 1
+          title: Key
+        mappers:
+          type: object
+          additionalProperties:
+            type: string
+            description: "Attribute mappers: maps provider claims to AM user profile\
+              \ attributes."
+            example: "{\"sub\":\"username\",\"email\":\"email\"}"
+          description: "Attribute mappers: maps provider claims to AM user profile\
+            \ attributes."
+          example:
+            email: email
+            sub: username
+        name:
+          type: string
+          description: Human-readable name of the identity provider.
+          example: Corporate LDAP
+          maxLength: 255
+          minLength: 1
+        roleMapper:
+          type: object
+          additionalProperties:
+            type: array
+            description: "Role mapper: assigns AM roles based on provider attribute\
+              \ values. Each entry maps a role to the user attribute expressions that\
+              \ grant it."
+            items:
+              type: string
+              description: "Role mapper: assigns AM roles based on provider attribute\
+                \ values. Each entry maps a role to the user attribute expressions\
+                \ that grant it."
+          description: "Role mapper: assigns AM roles based on provider attribute\
+            \ values. Each entry maps a role to the user attribute expressions that\
+            \ grant it."
+        system:
+          type: boolean
+          default: false
+          description: "Whether this is the domain's system identity provider. Immutable\
+            \ after creation. When true, only key is required; the identity provider\
+            \ is built from the domains.identities.default.* system settings and the\
+            \ name, type, and configuration fields are ignored."
+        type:
+          type: string
+          description: Identity provider plugin type identifier. Immutable after creation.
+          example: inline-am-idp
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only."
+          readOnly: true
+      required:
+      - key
+      title: Identity provider
+    AutomationOidcSettings:
+      type: object
+      description: OpenID Connect settings for the domain. CIMD (client identity metadata
+        document) settings are not exposed by the Automation API and are reset on
+        update.
+      properties:
+        cibaSettings:
+          $ref: "#/components/schemas/AutomationCIBASettings"
+        clientRegistrationSettings:
+          $ref: "#/components/schemas/AutomationClientRegistrationSettings"
+        postLogoutRedirectUris:
+          type: array
+          description: URLs the user may be redirected to after sign-out (post_logout_redirect_uri).
+          items:
+            type: string
+            description: URLs the user may be redirected to after sign-out (post_logout_redirect_uri).
+        redirectUriStrictMatching:
+          type: boolean
+          default: false
+          description: Whether redirect_uri and post_logout_redirect_uri values are
+            matched strictly during OpenID Connect flows.
+        requestUris:
+          type: array
+          description: Allowed request_uri values for passing OpenID Connect request
+            objects by reference.
+          items:
+            type: string
+            description: Allowed request_uri values for passing OpenID Connect request
+              objects by reference.
+        securityProfileSettings:
+          $ref: "#/components/schemas/SecurityProfileSettings"
+        workloadIdentitySettings:
+          $ref: "#/components/schemas/SpiffeDomainSettings"
+      title: OpenID Connect settings
+    AutomationReporter:
+      type: object
+      description: "A reporter managed under a domain by the Automation API. Reporters\
+        \ persist audit events to a backend. The key field is the stable, immutable\
+        \ identity used for idempotent create-or-update."
+      properties:
+        configuration:
+          type: string
+          description: Plugin-specific configuration as a JSON-encoded string. Its
+            shape is defined by the selected reporter type.
+          example: "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}"
+        createdAt:
+          type: string
+          format: date-time
+          description: "Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only."
+          readOnly: true
+        dataType:
+          type: string
+          description: "Category of data the reporter handles, derived from its type.\
+            \ Read-only."
+          readOnly: true
+        enabled:
+          type: boolean
+          default: true
+          description: Whether the reporter is enabled.
+        key:
+          type: string
+          description: "Stable, immutable identifier for the reporter within its domain.\
+            \ Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric\
+            \ character. Used to identify the reporter on create-or-update."
+          example: audit-kafka
+          maxLength: 255
+          minLength: 1
+          title: Key
+        name:
+          type: string
+          description: Human-readable name of the reporter.
+          example: Audit events to Kafka
+          maxLength: 255
+          minLength: 1
+        system:
+          type: boolean
+          default: false
+          description: "Whether this is the domain's system reporter. Immutable after\
+            \ creation. When true, only key is required; the reporter is built from\
+            \ the domains.reporters.default.* and repository system settings and the\
+            \ name, type, and configuration fields are ignored."
+        type:
+          type: string
+          description: Reporter plugin type identifier. Immutable after creation.
+          example: reporter-am-kafka
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only."
+          readOnly: true
+      required:
+      - key
+      title: Reporter
+    AutomationSamlSettings:
+      type: object
+      description: Settings for the domain acting as a SAML 2.0 identity provider
+        (IdP).
+      properties:
+        certificate:
+          type: string
+          description: "Key of a certificate managed under this domain, used to sign\
+            \ SAML responses. Must reference a certificate created via the domain's\
+            \ certificate endpoints."
+          example: signing-cert
+        enabled:
+          type: boolean
+          default: false
+          description: Whether the domain exposes the SAML 2.0 IdP protocol.
+        entityId:
+          type: string
+          description: URL or URN that uniquely identifies this IdP (the SAML entity
+            ID).
+          example: https://auth.example.com/saml2/idp/entity
+      title: SAML 2.0 settings
+    CorsSettings:
+      type: object
+      description: Cross-Origin Resource Sharing configuration controlling which web
+        origins may call the domain's endpoints from a browser.
+      properties:
+        allowCredentials:
+          type: boolean
+          default: false
+          description: "Whether the browser may send credentials (cookies, authorization\
+            \ headers) with cross-origin requests."
+        allowedHeaders:
+          type: array
+          description: Request headers permitted on cross-origin requests.
+          example:
+          - Authorization
+          - Content-Type
+          items:
+            type: string
+            description: Request headers permitted on cross-origin requests.
+            example: "[\"Authorization\",\"Content-Type\"]"
+          uniqueItems: true
+        allowedMethods:
+          type: array
+          description: HTTP methods permitted on cross-origin requests.
+          example:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          items:
+            type: string
+            description: HTTP methods permitted on cross-origin requests.
+            example: "[\"GET\",\"POST\",\"PUT\",\"DELETE\"]"
+          uniqueItems: true
+        allowedOrigins:
+          type: array
+          description: Origins permitted to make cross-origin requests. Use "*" to
+            allow any origin.
+          example:
+          - https://app.example.com
+          items:
+            type: string
+            description: Origins permitted to make cross-origin requests. Use "*"
+              to allow any origin.
+            example: "[\"https://app.example.com\"]"
+          uniqueItems: true
+        enabled:
+          type: boolean
+          default: false
+          description: Whether CORS handling is enabled for the domain.
+        maxAge:
+          type: integer
+          format: int32
+          default: 86400
+          description: "How long, in seconds, a browser may cache the result of a\
+            \ preflight request."
+      title: CORS settings
+    Error:
+      type: object
+      description: Error response body returned for failed requests.
+      properties:
+        http_status:
+          type: integer
+          format: int32
+          description: HTTP status code of the error response.
+          example: 400
+        message:
+          type: string
+          description: Human-readable description of the error.
+    FormField:
+      type: object
+      description: "A single field shown on a user-facing form, such as registration."
+      properties:
+        key:
+          type: string
+          description: "Identifier of the field, mapped to a user attribute."
+          example: email
+        label:
+          type: string
+          description: Label displayed for the field.
+          example: Email
+        type:
+          type: string
+          description: Input type of the field.
+          example: email
+      title: Form field
+    LoginSettings:
+      type: object
+      description: Configuration of the domain's login flow and the features offered
+        on the sign-in page.
+      properties:
+        certificateBasedAuthEnabled:
+          type: boolean
+          default: false
+          description: Whether certificate-based authentication is offered.
+        certificateBasedAuthUrl:
+          type: string
+          description: URL used for certificate-based authentication.
+        forgotPasswordEnabled:
+          type: boolean
+          default: false
+          description: Whether users can initiate a forgot-password flow from the
+            login page.
+        hideForm:
+          type: boolean
+          default: false
+          description: Whether the login form is hidden (for example when only social
+            or identifier-first login is offered).
+        identifierFirstEnabled:
+          type: boolean
+          default: false
+          description: "Whether identifier-first login is enabled, prompting for the\
+            \ username before the password."
+        inherited:
+          type: boolean
+          default: true
+          description: "Whether these login settings are inherited from a parent scope\
+            \ rather than defined here. When true, the other fields are ignored."
+        magicLinkAuthEnabled:
+          type: boolean
+          default: false
+          description: Whether magic-link authentication is offered.
+        passwordlessDeviceNamingEnabled:
+          type: boolean
+          default: false
+          description: Whether users can name their passwordless devices.
+        passwordlessEnabled:
+          type: boolean
+          default: false
+          description: Whether passwordless (WebAuthn) authentication is offered.
+        passwordlessEnforcePasswordEnabled:
+          type: boolean
+          default: false
+          description: Whether a password is still required alongside passwordless
+            authentication.
+        passwordlessEnforcePasswordMaxAge:
+          type: integer
+          format: int32
+          description: "Period, in seconds, after which the user's credentials must\
+            \ be re-entered to keep using passwordless authentication."
+        passwordlessRememberDeviceEnabled:
+          type: boolean
+          default: false
+          description: Whether a passwordless device can be remembered to skip future
+            challenges.
+        registerEnabled:
+          type: boolean
+          default: false
+          description: Whether users can self-register from the login page.
+        rememberMeEnabled:
+          type: boolean
+          default: false
+          description: Whether the login page offers a remember-me option.
+        resetPasswordOnExpiration:
+          type: boolean
+          description: Whether the user is forced to reset their password once it
+            expires.
+      title: Login settings
+    PasswordSettings:
+      type: object
+      description: "Password policy applied to users of the domain: complexity requirements,\
+        \ expiry, and history."
+      properties:
+        excludePasswordsInDictionary:
+          type: boolean
+          description: Whether passwords found in a common-password dictionary are
+            rejected.
+        excludeUserProfileInfoInPassword:
+          type: boolean
+          description: Whether passwords containing the user's profile information
+            are rejected.
+        expiryDuration:
+          type: integer
+          format: int32
+          description: Number of days after which a password expires and must be changed.
+        includeNumbers:
+          type: boolean
+          description: Whether a password must contain at least one number.
+        includeSpecialCharacters:
+          type: boolean
+          description: Whether a password must contain at least one special character.
+        inherited:
+          type: boolean
+          default: true
+          description: "Whether these password settings are inherited from a parent\
+            \ scope rather than defined here. When true, the other fields are ignored."
+        lettersInMixedCase:
+          type: boolean
+          description: Whether a password must contain both uppercase and lowercase
+            letters.
+        maxConsecutiveLetters:
+          type: integer
+          format: int32
+          description: Maximum number of identical consecutive characters allowed
+            in a password.
+        maxLength:
+          type: integer
+          format: int32
+          default: 128
+          description: Maximum number of characters a password may contain.
+        minLength:
+          type: integer
+          format: int32
+          default: 8
+          description: Minimum number of characters a password must contain.
+        oldPasswords:
+          type: integer
+          format: int32
+          description: Number of previous passwords retained in history and barred
+            from reuse.
+        passwordHistoryEnabled:
+          type: boolean
+          default: false
+          description: Whether password history is enforced to prevent reuse of recent
+            passwords.
+      title: Password settings
+    ResetPasswordSettings:
+      type: object
+      description: Rules applied to a self-service password reset.
+      properties:
+        oldPasswordRequired:
+          type: boolean
+          default: false
+          description: Whether the user must supply their current password to set
+            a new one.
+        tokenAge:
+          type: integer
+          format: int32
+          description: "Lifetime, in seconds, of the password-reset token."
+      title: Reset-password settings
+    SCIMSettings:
+      type: object
+      description: Configuration of the domain's SCIM 2.0 provisioning endpoints.
+      properties:
+        enabled:
+          type: boolean
+          default: false
+          description: Whether the SCIM provisioning API is enabled for the domain.
+        idpSelectionEnabled:
+          type: boolean
+          default: false
+          description: Whether an identity provider is selected for SCIM-provisioned
+            users using a selection rule.
+        idpSelectionRule:
+          type: string
+          description: Expression that selects the identity provider for a SCIM-provisioned
+            user.
+      title: SCIM settings
+    SecretExpirationSettings:
+      type: object
+      description: Controls whether client secrets in the domain expire and after
+        how long.
+      properties:
+        enabled:
+          type: boolean
+          description: Whether client-secret expiration is enabled.
+        expiryTimeSeconds:
+          type: integer
+          format: int64
+          description: "Lifetime, in seconds, of a client secret before it expires."
+          example: 7776000
+      title: Secret expiration settings
+    SecurityProfileSettings:
+      type: object
+      description: Financial-grade API (FAPI) security profile configuration for the
+        domain.
+      properties:
+        enableFapiBrazil:
+          type: boolean
+          default: false
+          description: Whether the Open Banking Brasil Financial-grade API security
+            profile (version 1.0) is applied.
+        enablePlainFapi:
+          type: boolean
+          default: false
+          description: Whether the standard Financial-grade API security profile (version
+            1.0) is applied.
+      title: Security profile settings
+    SelfServiceAccountManagementSettings:
+      type: object
+      description: "Controls whether end users can manage their own account (for example,\
+        \ reset their password) and the rules that apply."
+      properties:
+        enabled:
+          type: boolean
+          default: false
+          description: Whether self-service account management is enabled for end
+            users.
+        resetPassword:
+          $ref: "#/components/schemas/ResetPasswordSettings"
+      title: Self-service account management settings
+    SpiffeDomainSettings:
+      type: object
+      description: Workload identity (SPIFFE) settings for the domain.
+      properties:
+        allowPrivateIpAddress:
+          type: boolean
+          default: false
+          description: Whether trust bundles can be fetched from private IP addresses.
+        allowUnsecuredHttpUri:
+          type: boolean
+          default: false
+          description: Whether trust bundles can be fetched over unsecured HTTP URIs.
+        cacheMaxEntries:
+          type: integer
+          format: int32
+          default: 50
+          description: Maximum number of trust bundle entries retained in the cache.
+        cacheTtlSeconds:
+          type: integer
+          format: int32
+          default: 300
+          description: "Time-to-live, in seconds, for cached trust bundle entries."
+        clockSkewSeconds:
+          type: integer
+          format: int32
+          default: 30
+          description: "Allowed clock skew, in seconds, when validating JWT temporal\
+            \ claims."
+        defaultAllowedAlgorithms:
+          type: array
+          description: Default allowlist of signature algorithms accepted for SPIFFE
+            JWT validation.
+          items:
+            type: string
+            description: Default allowlist of signature algorithms accepted for SPIFFE
+              JWT validation.
+        enabled:
+          type: boolean
+          default: false
+          description: Whether SPIFFE workload identity support is enabled for the
+            domain.
+        fetchTimeoutMs:
+          type: integer
+          format: int32
+          default: 5000
+          description: "Timeout, in milliseconds, for fetching trust bundles."
+        maxJwtLifetimeSeconds:
+          type: integer
+          format: int32
+          default: 300
+          description: "Maximum accepted JWT lifetime, in seconds, computed as exp\
+            \ minus iat."
+        maxResponseSizeKb:
+          type: integer
+          format: int32
+          default: 32
+          description: "Maximum trust bundle response size, in kilobytes."
+    TokenExchangeOAuthSettings:
+      type: object
+      description: "OAuth-specific token-exchange behavior, such as how scopes are\
+        \ handled, with optional inheritance from domain defaults."
+      properties:
+        inherited:
+          type: boolean
+          default: true
+          description: Whether these settings are inherited from the domain defaults
+            rather than defined here.
+        scopeHandling:
+          type: string
+          default: downscoping
+          description: How scopes are handled when issuing the exchanged token. DOWNSCOPING
+            restricts the issued token to a subset of the original scopes.
+          enum:
+          - downscoping
+          - permissive
+      title: Token exchange OAuth settings
+    TokenExchangeSettings:
+      type: object
+      description: "OAuth 2.0 Token Exchange (RFC 8693) configuration for the domain,\
+        \ covering impersonation and delegation."
+      properties:
+        allowDelegation:
+          type: boolean
+          default: false
+          description: "Whether delegation is allowed, where an actor acts on behalf\
+            \ of the subject and an \"act\" claim is added to the issued token. At\
+            \ least one of allowImpersonation or allowDelegation must be enabled."
+        allowImpersonation:
+          type: boolean
+          default: true
+          description: "Whether impersonation is allowed, where the issued token represents\
+            \ the subject directly. At least one of allowImpersonation or allowDelegation\
+            \ must be enabled."
+        allowedActorTokenTypes:
+          type: array
+          description: Token types accepted as the actor token when delegating.
+          example:
+          - urn:ietf:params:oauth:token-type:access_token
+          - urn:ietf:params:oauth:token-type:id_token
+          items:
+            type: string
+            description: Token types accepted as the actor token when delegating.
+            example: "[\"urn:ietf:params:oauth:token-type:access_token\",\"urn:ietf:params:oauth:token-type:id_token\"\
+              ]"
+        allowedRequestedTokenTypes:
+          type: array
+          description: Token types that may be requested as the result of an exchange.
+          example:
+          - urn:ietf:params:oauth:token-type:access_token
+          - urn:ietf:params:oauth:token-type:id_token
+          items:
+            type: string
+            description: Token types that may be requested as the result of an exchange.
+            example: "[\"urn:ietf:params:oauth:token-type:access_token\",\"urn:ietf:params:oauth:token-type:id_token\"\
+              ]"
+        allowedSubjectTokenTypes:
+          type: array
+          description: Token types accepted as the subject token in an exchange.
+          example:
+          - urn:ietf:params:oauth:token-type:access_token
+          - urn:ietf:params:oauth:token-type:id_token
+          items:
+            type: string
+            description: Token types accepted as the subject token in an exchange.
+            example: "[\"urn:ietf:params:oauth:token-type:access_token\",\"urn:ietf:params:oauth:token-type:id_token\"\
+              ]"
+        enabled:
+          type: boolean
+          default: false
+          description: Whether token exchange is enabled for the domain.
+        maxDelegationDepth:
+          type: integer
+          format: int32
+          default: 25
+          description: Maximum depth of the delegation chain (nested "act" claims).
+            Clamped to the range 1–100.
+        tokenExchangeOAuthSettings:
+          $ref: "#/components/schemas/TokenExchangeOAuthSettings"
+        trustedIssuers:
+          type: array
+          description: "External issuers whose JWTs may be accepted as subject or\
+            \ actor tokens. When unset, only domain-issued tokens are accepted."
+          items:
+            $ref: "#/components/schemas/TrustedIssuer"
+      title: Token exchange settings
+    TrustedIssuer:
+      type: object
+      description: "An external token issuer whose JWTs are accepted as subject or\
+        \ actor tokens during token exchange, validated with the configured key material."
+      properties:
+        certificate:
+          type: string
+          description: PEM-encoded X.509 certificate. Required when keyResolutionMethod
+            is PEM.
+        issuer:
+          type: string
+          description: Expected value of the "iss" claim in the external JWT.
+          example: https://issuer.example.com
+        jwksUri:
+          type: string
+          description: JWKS endpoint URL. Required when keyResolutionMethod is JWKS_URL.
+          example: https://issuer.example.com/.well-known/jwks.json
+        keyResolutionMethod:
+          type: string
+          description: How the issuer's signing key is resolved. JWKS_URL fetches
+            keys from a JWKS endpoint; PEM uses an inline X.509 certificate.
+          enum:
+          - jwks_url
+          - pem
+        scopeMappings:
+          type: object
+          additionalProperties:
+            type: string
+            description: One-to-one mapping from external scope to domain scope. Unmapped
+              issuer scopes are dropped (fail-closed).
+          description: One-to-one mapping from external scope to domain scope. Unmapped
+            issuer scopes are dropped (fail-closed).
+        userBindingCriteria:
+          type: array
+          description: Criteria used to locate a domain user when user binding is
+            enabled. All criteria are combined with AND.
+          items:
+            $ref: "#/components/schemas/UserBindingCriterion"
+        userBindingEnabled:
+          type: boolean
+          default: false
+          description: "Whether the external JWT subject is resolved to a single domain\
+            \ user using the user binding criteria. When false, a virtual user is\
+            \ built from the token claims only."
+      title: Trusted issuer
+    UMASettings:
+      type: object
+      description: Configuration of the domain's User-Managed Access (UMA 2.0) authorization
+        features.
+      properties:
+        enabled:
+          type: boolean
+          default: false
+          description: Whether User-Managed Access is enabled for the domain.
+      title: UMA settings
+    UserBindingCriterion:
+      type: object
+      description: A single rule that matches a domain user attribute against a value
+        derived from the external token claims.
+      properties:
+        attribute:
+          type: string
+          description: Domain user attribute used for the lookup. Must match a field
+            supported by the user repository search.
+          example: emails.value
+        expression:
+          type: string
+          description: Expression evaluated against the validated token claims (variable
+            "token") to produce the value to match.
+          example: "{#token['email']}"
+      title: User binding criterion
+    VirtualHost:
+      type: object
+      description: A host and path the domain is exposed on. The host and path combination
+        must be unique across all domains.
+      properties:
+        host:
+          type: string
+          description: Hostname the domain is served on.
+          example: auth.example.com
+        overrideEntrypoint:
+          type: boolean
+          default: false
+          description: Whether this virtual host overrides the organization entry
+            point.
+        path:
+          type: string
+          description: Context path the domain is served under on this host.
+          example: /customers
+      title: Virtual host
+    WebAuthnSettings:
+      type: object
+      description: WebAuthn (FIDO2) relying-party configuration governing passwordless
+        and multi-factor authentication for the domain.
+      properties:
+        attestationConveyancePreference:
+          type: string
+          default: none
+          description: "Relying-party preference for attestation conveyance during\
+            \ credential creation. NONE requests no attestation, INDIRECT allows anonymized\
+            \ attestation, and DIRECT requests the authenticator's attestation statement."
+          enum:
+          - none
+          - indirect
+          - direct
+        authenticatorAttachment:
+          type: string
+          description: Preferred authenticator attachment. PLATFORM selects authenticators
+            bound to the device (such as a fingerprint reader); CROSS_PLATFORM selects
+            roaming authenticators (such as a security key).
+          enum:
+          - cross_platform
+          - platform
+        certificates:
+          type: object
+          additionalProperties:
+            type: string
+            description: "Trusted device-attestation X.509 certificates, keyed by\
+              \ name."
+          description: "Trusted device-attestation X.509 certificates, keyed by name."
+        enforceAuthenticatorIntegrity:
+          type: boolean
+          default: false
+          description: Whether to periodically re-verify that registered authenticators
+            remain valid against the FIDO2 Metadata Service.
+        enforceAuthenticatorIntegrityMaxAge:
+          type: integer
+          format: int32
+          description: "Maximum elapsed time, in seconds, since an authenticator was\
+            \ last verified before it is re-checked on the next passwordless login."
+        forceRegistration:
+          type: boolean
+          default: false
+          description: Whether to reject registration of a credential already registered
+            to a different user.
+        origin:
+          type: string
+          description: Relying-party origin; must match the browser's window.location.origin
+            during registration and authentication ceremonies.
+          example: https://auth.example.com
+        relyingPartyId:
+          type: string
+          description: "Relying-party identifier: a domain string that scopes credentials\
+            \ to this entity. A credential can only be used with the relying party\
+            \ it was registered against."
+          example: auth.example.com
+        relyingPartyName:
+          type: string
+          description: Human-readable relying-party name shown to users during ceremonies.
+          example: Example Inc.
+        requireResidentKey:
+          type: boolean
+          default: false
+          description: Whether the authenticator must create a client-side resident
+            (discoverable) credential.
+        userVerification:
+          type: string
+          default: preferred
+          description: "Relying-party requirement regarding user verification during\
+            \ a ceremony. REQUIRED enforces verification, PREFERRED requests it when\
+            \ available, and DISCOURAGED avoids it."
+          enum:
+          - required
+          - preferred
+          - discouraged
+      title: WebAuthn settings
+  securitySchemes:
+    BearerAuth:
+      description: "Authentication uses a bearer token: a JWT, or an opaque user service-account\
+        \ access token. Every operation is additionally permission-gated against the\
+        \ target organization, environment, and resource; a caller lacking the required\
+        \ permission receives a 403 response."
+      scheme: bearer
+      type: http

@@ -1,0 +1,21 @@
+workflowVersion: 1.0.0
+speakeasyVersion: 1.766.0
+sources:
+    am:
+        inputs:
+            - location: automation-api-oas.yaml
+        overlays:
+            - location: .speakeasy/overlays/common/oas.yaml
+            - location: .speakeasy/overlays/common/param.yaml
+            - location: .speakeasy/overlays/common/schema.yaml
+            - location: .speakeasy/overlays/domain.yaml
+            - location: .speakeasy/overlays/certificate.yaml
+            - location: .speakeasy/overlays/identities.yaml
+            - location: .speakeasy/overlays/reporter.yaml
+        output: .speakeasy/output/computed.json
+        registry:
+            location: registry.speakeasyapi.dev/gravitee/gravitee/am-automation-api
+targets:
+    am:
+        target: terraform
+        source: am

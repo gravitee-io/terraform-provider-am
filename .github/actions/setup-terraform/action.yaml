@@ -1,0 +1,14 @@
+name: setup-terraform
+description: Install Terraform CLI
+inputs:
+  terraform_version:
+    description: 'Terraform version to use'
+    required: false
+    default: 'latest'
+runs:
+  using: 'composite'
+  steps:
+    - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+      with:
+        terraform_version: '${{ inputs.terraform_version }}'
+        terraform_wrapper: false

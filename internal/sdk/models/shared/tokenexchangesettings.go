@@ -21,11 +21,15 @@ type TokenExchangeSettings struct {
 	AllowedSubjectTokenTypes []string `json:"allowedSubjectTokenTypes,omitempty"`
 	// Whether token exchange is enabled for the domain.
 	Enabled *bool `default:"false" json:"enabled"`
+	// ID-JAG issuance behavior of token exchange.
+	IDJagSettings *IDJagSettings `json:"idJagSettings,omitempty"`
 	// Maximum depth of the delegation chain (nested "act" claims). Clamped to the range 1–100.
 	MaxDelegationDepth *int `default:"25" json:"maxDelegationDepth"`
 	// OAuth-specific token-exchange behavior, such as how scopes are handled, with optional inheritance from domain defaults.
 	TokenExchangeOAuthSettings *TokenExchangeOAuthSettings `json:"tokenExchangeOAuthSettings,omitempty"`
-	// External issuers whose JWTs may be accepted as subject or actor tokens. When unset, only domain-issued tokens are accepted.
+	// Deprecated: use the trusted-domains API instead. External issuers whose JWTs may be accepted as subject or actor tokens. A projection over the security domain's token-exchange trusted domains; a write replaces the list, so an omitted issuer is no longer trusted.
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	TrustedIssuers []TrustedIssuer `json:"trustedIssuers,omitempty"`
 }
 
@@ -80,6 +84,13 @@ func (t *TokenExchangeSettings) GetEnabled() *bool {
 		return nil
 	}
 	return t.Enabled
+}
+
+func (t *TokenExchangeSettings) GetIDJagSettings() *IDJagSettings {
+	if t == nil {
+		return nil
+	}
+	return t.IDJagSettings
 }
 
 func (t *TokenExchangeSettings) GetMaxDelegationDepth() *int {

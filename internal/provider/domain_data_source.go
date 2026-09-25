@@ -45,9 +45,11 @@ type DomainDataSourceModel struct {
 	CreatedAt                            types.String                                  `tfsdk:"created_at"`
 	DataPlaneID                          types.String                                  `tfsdk:"data_plane_id"`
 	Description                          types.String                                  `tfsdk:"description"`
+	DryRunErrors                         []tfTypes.DryRunError                         `tfsdk:"dry_run_errors"`
 	Enabled                              types.Bool                                    `tfsdk:"enabled"`
 	EnvironmentID                        types.String                                  `tfsdk:"environment_id"`
 	Key                                  types.String                                  `tfsdk:"key"`
+	KeyRetrievalSettings                 *tfTypes.KeyRetrievalSettings                 `tfsdk:"key_retrieval_settings"`
 	LoginSettings                        *tfTypes.LoginSettings                        `tfsdk:"login_settings"`
 	Master                               types.Bool                                    `tfsdk:"master"`
 	Name                                 types.String                                  `tfsdk:"name"`
@@ -66,6 +68,7 @@ type DomainDataSourceModel struct {
 	VhostMode                            types.Bool                                    `tfsdk:"vhost_mode"`
 	Vhosts                               []tfTypes.VirtualHost                         `tfsdk:"vhosts"`
 	WebAuthnSettings                     *tfTypes.WebAuthnSettings                     `tfsdk:"web_authn_settings"`
+	WebProtectionSettings                *tfTypes.WebProtectionSettings                `tfsdk:"web_protection_settings"`
 }
 
 // Metadata returns the data source type name.
@@ -239,7 +242,11 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 					"enabled": schema.BoolAttribute{
 						Computed:    true,
-						Description: `Whether CORS handling is enabled for the domain.`,
+						Description: `Whether CORS handling is enabled for the domain when not inherited.`,
+					},
+					"inherited": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether CORS settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.`,
 					},
 					"max_age": schema.Int32Attribute{
 						Computed:    true,
@@ -254,11 +261,25 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			},
 			"data_plane_id": schema.StringAttribute{
 				Computed:    true,
-				Description: `Identifier of the data plane this domain is connected to. Required at creation and immutable afterwards; included in the desired-state document but never re-applied on update.`,
+				Description: `Identifier of the data plane this domain is connected to. Optional at creation and resolved from the environment's data planes when omitted. Immutable afterwards: an apply that names a different one is rejected.`,
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: `Human-readable description of the domain.`,
+			},
+			"dry_run_errors": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"message": schema.StringAttribute{
+							Computed: true,
+						},
+						"severity": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
+				Description: `Validation errors returned when dryRun is true. Absent when validation succeeds.`,
 			},
 			"enabled": schema.BoolAttribute{
 				Computed:    true,
@@ -275,6 +296,36 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},
+			},
+			"key_retrieval_settings": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"allow_private_ip_address": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether key material can be fetched from private IP addresses.`,
+					},
+					"allow_unsecured_http_uri": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether key material can be fetched over unsecured HTTP URIs.`,
+					},
+					"cache_max_entries": schema.Int32Attribute{
+						Computed:    true,
+						Description: `Maximum number of key material entries retained in the cache.`,
+					},
+					"cache_ttl_seconds": schema.Int32Attribute{
+						Computed:    true,
+						Description: `Time-to-live, in seconds, for cached key material.`,
+					},
+					"fetch_timeout_ms": schema.Int32Attribute{
+						Computed:    true,
+						Description: `Timeout, in milliseconds, for fetching key material.`,
+					},
+					"max_response_size_kb": schema.Int32Attribute{
+						Computed:    true,
+						Description: `Maximum key material response size, in kilobytes.`,
+					},
+				},
+				Description: `Fetch, SSRF and cache limits applied to every trusted domain in the security domain.`,
 			},
 			"login_settings": schema.SingleNestedAttribute{
 				Computed: true,
@@ -455,20 +506,24 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"allow_private_ip_address": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether trust bundles can be fetched from private IP addresses.`,
+								Computed:           true,
+								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.allowPrivateIpAddress.`,
 							},
 							"allow_unsecured_http_uri": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Whether trust bundles can be fetched over unsecured HTTP URIs.`,
+								Computed:           true,
+								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.allowUnsecuredHttpUri.`,
 							},
 							"cache_max_entries": schema.Int32Attribute{
-								Computed:    true,
-								Description: `Maximum number of trust bundle entries retained in the cache.`,
+								Computed:           true,
+								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.cacheMaxEntries.`,
 							},
 							"cache_ttl_seconds": schema.Int32Attribute{
-								Computed:    true,
-								Description: `Time-to-live, in seconds, for cached trust bundle entries.`,
+								Computed:           true,
+								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.cacheTtlSeconds.`,
 							},
 							"clock_skew_seconds": schema.Int32Attribute{
 								Computed:    true,
@@ -484,16 +539,18 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 								Description: `Whether SPIFFE workload identity support is enabled for the domain.`,
 							},
 							"fetch_timeout_ms": schema.Int32Attribute{
-								Computed:    true,
-								Description: `Timeout, in milliseconds, for fetching trust bundles.`,
+								Computed:           true,
+								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.fetchTimeoutMs.`,
 							},
 							"max_jwt_lifetime_seconds": schema.Int32Attribute{
 								Computed:    true,
 								Description: `Maximum accepted JWT lifetime, in seconds, computed as exp minus iat.`,
 							},
 							"max_response_size_kb": schema.Int32Attribute{
-								Computed:    true,
-								Description: `Maximum trust bundle response size, in kilobytes.`,
+								Computed:           true,
+								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.maxResponseSizeKb.`,
 							},
 						},
 						Description: `Workload identity (SPIFFE) settings for the domain.`,
@@ -673,6 +730,16 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						Computed:    true,
 						Description: `Whether token exchange is enabled for the domain.`,
 					},
+					"id_jag_settings": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"lax_validation": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Lax validation: also accept an access token issued to the requesting client as the subject token. By default only an ID token is accepted.`,
+							},
+						},
+						Description: `ID-JAG issuance behavior of token exchange.`,
+					},
 					"max_delegation_depth": schema.Int32Attribute{
 						Computed:    true,
 						Description: `Maximum depth of the delegation chain (nested "act" claims). Clamped to the range 1–100.`,
@@ -738,7 +805,8 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 								},
 							},
 						},
-						Description: `External issuers whose JWTs may be accepted as subject or actor tokens. When unset, only domain-issued tokens are accepted.`,
+						DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+						Description:        `Deprecated: use the trusted-domains API instead. External issuers whose JWTs may be accepted as subject or actor tokens. A projection over the security domain's token-exchange trusted domains; a write replaces the list, so an omitted issuer is no longer trusted.`,
 					},
 				},
 				Description: `OAuth 2.0 Token Exchange (RFC 8693) configuration for the domain, covering impersonation and delegation.`,
@@ -831,6 +899,75 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 				Description: `WebAuthn (FIDO2) relying-party configuration governing passwordless and multi-factor authentication for the domain.`,
+			},
+			"web_protection_settings": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"csp": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"directives": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `CSP directives, one per entry, in the form "directive-name value". A trailing semicolon is optional. Directive names must be valid CSP tokens and must not repeat; values are not interpreted. Directives that take no value, such as "upgrade-insecure-requests", may be supplied on their own. When reportOnly is enabled, a "report-uri" or "report-to" directive is required.`,
+							},
+							"enabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether CSP is enabled for the domain when not inherited.`,
+							},
+							"inherited": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether CSP settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.`,
+							},
+							"report_only": schema.BoolAttribute{
+								Computed:    true,
+								Description: `When true, the policy is delivered as Content-Security-Policy-Report-Only.`,
+							},
+							"script_inline_nonce": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether inline scripts are allowed via a per-request nonce.`,
+							},
+						},
+						Description: `Content Security Policy configuration for the domain's login and consent pages.`,
+					},
+					"xframe": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"action": schema.StringAttribute{
+								Computed:    true,
+								Description: `X-Frame-Options action. Supported values: DENY, SAMEORIGIN. Leave empty to omit the header.`,
+							},
+							"enabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether X-Frame-Options is enabled for the domain when not inherited.`,
+							},
+							"inherited": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether X-Frame-Options settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.`,
+							},
+						},
+						Description: `Controls whether the domain's pages may be embedded in frames on other origins.`,
+					},
+					"xss": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"action": schema.StringAttribute{
+								Computed:    true,
+								Description: `Value of the X-XSS-Protection header.`,
+							},
+							"enabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether X-XSS-Protection is enabled for the domain when not inherited.`,
+							},
+							"inherited": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether X-XSS-Protection settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.`,
+							},
+						},
+						Description: `Controls the legacy X-XSS-Protection response header.`,
+					},
+				},
+				Description: `HTTP security headers applied to the domain's login and consent pages.`,
 			},
 		},
 	}

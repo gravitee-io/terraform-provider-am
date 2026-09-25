@@ -9,26 +9,38 @@ import (
 
 // SpiffeDomainSettings - Workload identity (SPIFFE) settings for the domain.
 type SpiffeDomainSettings struct {
-	// Whether trust bundles can be fetched from private IP addresses.
-	AllowPrivateIPAddress *bool `default:"false" json:"allowPrivateIpAddress"`
-	// Whether trust bundles can be fetched over unsecured HTTP URIs.
-	AllowUnsecuredHTTPURI *bool `default:"false" json:"allowUnsecuredHttpUri"`
-	// Maximum number of trust bundle entries retained in the cache.
-	CacheMaxEntries *int `default:"50" json:"cacheMaxEntries"`
-	// Time-to-live, in seconds, for cached trust bundle entries.
-	CacheTTLSeconds *int `default:"300" json:"cacheTtlSeconds"`
+	// Deprecated: moved to keyRetrievalSettings.allowPrivateIpAddress.
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	AllowPrivateIPAddress *bool `json:"allowPrivateIpAddress,omitempty"`
+	// Deprecated: moved to keyRetrievalSettings.allowUnsecuredHttpUri.
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	AllowUnsecuredHTTPURI *bool `json:"allowUnsecuredHttpUri,omitempty"`
+	// Deprecated: moved to keyRetrievalSettings.cacheMaxEntries.
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	CacheMaxEntries *int `json:"cacheMaxEntries,omitempty"`
+	// Deprecated: moved to keyRetrievalSettings.cacheTtlSeconds.
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	CacheTTLSeconds *int `json:"cacheTtlSeconds,omitempty"`
 	// Allowed clock skew, in seconds, when validating JWT temporal claims.
 	ClockSkewSeconds *int `default:"30" json:"clockSkewSeconds"`
 	// Default allowlist of signature algorithms accepted for SPIFFE JWT validation.
 	DefaultAllowedAlgorithms []string `json:"defaultAllowedAlgorithms,omitempty"`
 	// Whether SPIFFE workload identity support is enabled for the domain.
 	Enabled *bool `default:"false" json:"enabled"`
-	// Timeout, in milliseconds, for fetching trust bundles.
-	FetchTimeoutMs *int `default:"5000" json:"fetchTimeoutMs"`
+	// Deprecated: moved to keyRetrievalSettings.fetchTimeoutMs.
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	FetchTimeoutMs *int `json:"fetchTimeoutMs,omitempty"`
 	// Maximum accepted JWT lifetime, in seconds, computed as exp minus iat.
 	MaxJwtLifetimeSeconds *int `default:"300" json:"maxJwtLifetimeSeconds"`
-	// Maximum trust bundle response size, in kilobytes.
-	MaxResponseSizeKb *int `default:"32" json:"maxResponseSizeKb"`
+	// Deprecated: moved to keyRetrievalSettings.maxResponseSizeKb.
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	MaxResponseSizeKb *int `json:"maxResponseSizeKb,omitempty"`
 }
 
 func (s SpiffeDomainSettings) MarshalJSON() ([]byte, error) {

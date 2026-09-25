@@ -273,7 +273,7 @@ func (s *Domains) AutomationListDomains(ctx context.Context, request operations.
 }
 
 // AutomationCreateOrUpdateDomain - Create or update a domain
-// Idempotent create-or-update. Uses the key field in the body to identify the domain. On first apply the domain is created; subsequent applies update it. dataPlaneId is required at creation and immutable afterwards.
+// Idempotent create-or-update. Uses the key field in the body to identify the domain. On first apply the domain is created; subsequent applies update it. dataPlaneId is optional at creation, resolved from the environment's data planes when omitted, and immutable afterwards. When dryRun is true, the endpoint validates the payload without persisting; the returned domain carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
 func (s *Domains) AutomationCreateOrUpdateDomain(ctx context.Context, request operations.AutomationCreateOrUpdateDomainRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateDomainResponse, error) {
 	globals := operations.AutomationCreateOrUpdateDomainGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -336,6 +336,10 @@ func (s *Domains) AutomationCreateOrUpdateDomain(ctx context.Context, request op
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	if reqContentType != "" {
 		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateQueryParams(ctx, req, request, globals, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {

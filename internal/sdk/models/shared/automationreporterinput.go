@@ -9,7 +9,11 @@ import (
 
 // AutomationReporterInput - A reporter managed under a domain by the Automation API. Reporters persist audit events to a backend. The key field is the stable, immutable identity used for idempotent create-or-update.
 type AutomationReporterInput struct {
-	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type.
+	// Audit event types the attribute mappings apply to. Empty means every event type. Ignored when system is true.
+	AttributeMappingEventTypes []string `json:"attributeMappingEventTypes,omitempty"`
+	// Additional attributes exported alongside the regular audit payload. Each entry pairs an expression read from the audit context with the field name its value is exported under. Ignored when system is true; a system reporter exports no additional attributes.
+	AttributeMappings []ReporterAttributeMapping `json:"attributeMappings,omitempty"`
+	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.
 	Configuration *string `json:"configuration,omitempty"`
 	// Whether the reporter is enabled.
 	Enabled *bool `default:"true" json:"enabled"`
@@ -17,7 +21,7 @@ type AutomationReporterInput struct {
 	Key string `json:"key"`
 	// Human-readable name of the reporter.
 	Name *string `json:"name,omitempty"`
-	// Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, and configuration fields are ignored.
+	// Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, configuration, attributeMappings and attributeMappingEventTypes fields are ignored.
 	System *bool `default:"false" json:"system"`
 	// Reporter plugin type identifier. Immutable after creation.
 	Type *string `json:"type,omitempty"`
@@ -32,6 +36,20 @@ func (a *AutomationReporterInput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (a *AutomationReporterInput) GetAttributeMappingEventTypes() []string {
+	if a == nil {
+		return nil
+	}
+	return a.AttributeMappingEventTypes
+}
+
+func (a *AutomationReporterInput) GetAttributeMappings() []ReporterAttributeMapping {
+	if a == nil {
+		return nil
+	}
+	return a.AttributeMappings
 }
 
 func (a *AutomationReporterInput) GetConfiguration() *string {

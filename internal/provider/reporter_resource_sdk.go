@@ -7,6 +7,7 @@ import (
 	"context"
 	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-am/internal/provider/typeconvert"
+	tfTypes "github.com/gravitee-io/terraform-provider-am/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -17,6 +18,20 @@ func (r *ReporterResourceModel) RefreshFromSharedAutomationReporter(ctx context.
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.AttributeMappingEventTypes = make([]types.String, 0, len(resp.AttributeMappingEventTypes))
+		for _, v := range resp.AttributeMappingEventTypes {
+			r.AttributeMappingEventTypes = append(r.AttributeMappingEventTypes, types.StringValue(v))
+		}
+		r.AttributeMappings = []tfTypes.ReporterAttributeMapping{}
+
+		for _, attributeMappingsItem := range resp.AttributeMappings {
+			var attributeMappings tfTypes.ReporterAttributeMapping
+
+			attributeMappings.ExportedName = types.StringPointerValue(attributeMappingsItem.ExportedName)
+			attributeMappings.Expression = types.StringPointerValue(attributeMappingsItem.Expression)
+
+			r.AttributeMappings = append(r.AttributeMappings, attributeMappings)
+		}
 		configurationValuable, configurationDiags := customtypes.MaskedJSONType{}.ValueFromString(ctx, types.StringPointerValue(resp.Configuration))
 		diags.Append(configurationDiags...)
 		r.Configuration = configurationValuable.(customtypes.MaskedJSON)
@@ -133,6 +148,29 @@ func (r *ReporterResourceModel) ToOperationsAutomationGetReporterRequest(ctx con
 func (r *ReporterResourceModel) ToSharedAutomationReporterInput(ctx context.Context) (*shared.AutomationReporterInput, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	attributeMappingEventTypes := make([]string, 0, len(r.AttributeMappingEventTypes))
+	for attributeMappingEventTypesIndex := range r.AttributeMappingEventTypes {
+		attributeMappingEventTypes = append(attributeMappingEventTypes, r.AttributeMappingEventTypes[attributeMappingEventTypesIndex].ValueString())
+	}
+	attributeMappings := make([]shared.ReporterAttributeMapping, 0, len(r.AttributeMappings))
+	for attributeMappingsIndex := range r.AttributeMappings {
+		exportedName := new(string)
+		if !r.AttributeMappings[attributeMappingsIndex].ExportedName.IsUnknown() && !r.AttributeMappings[attributeMappingsIndex].ExportedName.IsNull() {
+			*exportedName = r.AttributeMappings[attributeMappingsIndex].ExportedName.ValueString()
+		} else {
+			exportedName = nil
+		}
+		expression := new(string)
+		if !r.AttributeMappings[attributeMappingsIndex].Expression.IsUnknown() && !r.AttributeMappings[attributeMappingsIndex].Expression.IsNull() {
+			*expression = r.AttributeMappings[attributeMappingsIndex].Expression.ValueString()
+		} else {
+			expression = nil
+		}
+		attributeMappings = append(attributeMappings, shared.ReporterAttributeMapping{
+			ExportedName: exportedName,
+			Expression:   expression,
+		})
+	}
 	configuration := new(string)
 	if !r.Configuration.IsUnknown() && !r.Configuration.IsNull() {
 		*configuration = r.Configuration.ValueString()
@@ -167,12 +205,14 @@ func (r *ReporterResourceModel) ToSharedAutomationReporterInput(ctx context.Cont
 		typeVar = nil
 	}
 	out := shared.AutomationReporterInput{
-		Configuration: configuration,
-		Enabled:       enabled,
-		Key:           key,
-		Name:          name,
-		System:        system,
-		Type:          typeVar,
+		AttributeMappingEventTypes: attributeMappingEventTypes,
+		AttributeMappings:          attributeMappings,
+		Configuration:              configuration,
+		Enabled:                    enabled,
+		Key:                        key,
+		Name:                       name,
+		System:                     system,
+		Type:                       typeVar,
 	}
 
 	return &out, diags

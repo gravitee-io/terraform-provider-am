@@ -13,5 +13,6 @@ type CorsSettings struct {
 	AllowedMethods   []types.String `tfsdk:"allowed_methods"`
 	AllowedOrigins   []types.String `tfsdk:"allowed_origins"`
 	Enabled          types.Bool     `tfsdk:"enabled"`
+	Inherited        types.Bool     `tfsdk:"inherited"`
 	MaxAge           types.Int32    `tfsdk:"max_age"`
 }

@@ -3,7 +3,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 4.12.0 and generator version 2.887.0
+// Generated from OpenAPI doc version 4.13.0 and generator version 2.887.0
 
 import (
 	"context"
@@ -57,9 +57,11 @@ func Pointer[T any](v T) *T { return &v }
 // * Identity Providers
 // * Reporters
 //
-// Compatible with Gravitee Access Management 4.12.0.
+// Compatible with Gravitee Access Management 4.13.0.
 type GraviteeAm struct {
 	SDKVersion string
+	// Data planes configured under an environment to store the runtime data of its domains.
+	DataPlanes *DataPlanes
 	// Security domains: the top-level container for an authentication and authorization configuration. Create, read, update, and delete domains, and reach their sub-resources.
 	Domains *Domains
 	// Certificates configured under a domain to sign and verify tokens.
@@ -159,7 +161,7 @@ func New(opts ...SDKOption) *GraviteeAm {
 	sdk := &GraviteeAm{
 		SDKVersion: "0.0.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.0.1 2.887.0 4.12.0 github.com/gravitee-io/terraform-provider-am/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.0.1 2.887.0 4.13.0 github.com/gravitee-io/terraform-provider-am/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},
@@ -181,6 +183,7 @@ func New(opts ...SDKOption) *GraviteeAm {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 
+	sdk.DataPlanes = newDataPlanes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Domains = newDomains(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Certificates = newCertificates(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.IdentityProviders = newIdentityProviders(sdk, sdk.sdkConfiguration, sdk.hooks)

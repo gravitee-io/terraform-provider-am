@@ -73,7 +73,7 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				CustomType:  customtypes.MaskedJSONType{},
 				Optional:    true,
 				Sensitive:   true,
-				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type.`,
+				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,

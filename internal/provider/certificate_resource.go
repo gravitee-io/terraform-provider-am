@@ -70,7 +70,7 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 				CustomType:  customtypes.MaskedJSONType{},
 				Optional:    true,
 				Sensitive:   true,
-				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type.`,
+				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected. The uploaded keystore file is masked too; sending ******** back keeps it.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,

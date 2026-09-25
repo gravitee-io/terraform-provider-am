@@ -51,14 +51,24 @@ resource "am_domain" "my_domain" {
     allowed_origins = [
       "https://app.example.com",
     ]
-    enabled = false
-    max_age = 86400
+    enabled   = false
+    inherited = true
+    max_age   = 86400
   }
   data_plane_id  = "default"
   description    = "An example authentication domain"
+  dry_run        = false
   enabled        = true
   environment_id = "DEFAULT"
   key            = "example-domain"
+  key_retrieval_settings = {
+    allow_private_ip_address = false
+    allow_unsecured_http_uri = false
+    cache_max_entries        = 50
+    cache_ttl_seconds        = 300
+    fetch_timeout_ms         = 5000
+    max_response_size_kb     = 32
+  }
   login_settings = {
     certificate_based_auth_enabled        = false
     certificate_based_auth_url            = "...my_certificate_based_auth_url..."
@@ -114,17 +124,17 @@ resource "am_domain" "my_domain" {
     }
     workload_identity_settings = {
       allow_private_ip_address = false
-      allow_unsecured_http_uri = false
-      cache_max_entries        = 50
-      cache_ttl_seconds        = 300
+      allow_unsecured_http_uri = true
+      cache_max_entries        = 0
+      cache_ttl_seconds        = 10
       clock_skew_seconds       = 30
       default_allowed_algorithms = [
         "..."
       ]
       enabled                  = false
-      fetch_timeout_ms         = 5000
+      fetch_timeout_ms         = 8
       max_jwt_lifetime_seconds = 300
-      max_response_size_kb     = 32
+      max_response_size_kb     = 7
     }
   }
   organization_id = "DEFAULT"
@@ -183,7 +193,10 @@ resource "am_domain" "my_domain" {
       "urn:ietf:params:oauth:token-type:access_token",
       "urn:ietf:params:oauth:token-type:id_token",
     ]
-    enabled              = false
+    enabled = false
+    id_jag_settings = {
+      lax_validation = false
+    }
     max_delegation_depth = 25
     token_exchange_o_auth_settings = {
       inherited      = true
@@ -233,5 +246,28 @@ resource "am_domain" "my_domain" {
     relying_party_name                      = "Example Inc."
     require_resident_key                    = false
     user_verification                       = "preferred"
+  }
+  web_protection_settings = {
+    csp = {
+      directives = [
+        "default-src 'self'",
+        "script-src 'self'",
+        "upgrade-insecure-requests",
+      ]
+      enabled             = false
+      inherited           = true
+      report_only         = false
+      script_inline_nonce = true
+    }
+    xframe = {
+      action    = "DENY"
+      enabled   = false
+      inherited = true
+    }
+    xss = {
+      action    = "1; mode=block"
+      enabled   = false
+      inherited = true
+    }
   }
 }

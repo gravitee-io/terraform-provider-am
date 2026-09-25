@@ -82,6 +82,7 @@ func (p *AmProvider) Schema(ctx context.Context, req provider.SchemaRequest, res
 		MarkdownDescription: `Gravitee: Gravitee Access Management Terraform Provider (alpha)` + "\n" +
 			`` + "\n" +
 			`You can manage with Terraform the following:` + "\n" +
+			`* Data Planes` + "\n" +
 			`* Domains` + "\n" +
 			`* Certificates` + "\n" +
 			`* Identity Providers` + "\n" +
@@ -194,6 +195,7 @@ func (p *AmProvider) Actions(_ context.Context) []func() action.Action {
 func (p *AmProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewCertificateResource,
+		NewDataPlaneResource,
 		NewDomainResource,
 		NewIdentityProviderResource,
 		NewReporterResource,
@@ -203,6 +205,7 @@ func (p *AmProvider) Resources(ctx context.Context) []func() resource.Resource {
 func (p *AmProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewCertificateDataSource,
+		NewDataPlaneDataSource,
 		NewDomainDataSource,
 		NewIdentityProviderDataSource,
 		NewReporterDataSource,

@@ -52,6 +52,7 @@ func Pointer[T any](v T) *T { return &v }
 // GraviteeAm - Gravitee: Gravitee Access Management Terraform Provider (alpha)
 //
 // You can manage with Terraform the following:
+// * Data Planes
 // * Domains
 // * Certificates
 // * Identity Providers

@@ -47,7 +47,7 @@ type AutomationDeleteDataPlaneRequest struct {
 	// Identifier of the environment.
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Id of the data plane within the environment.
-	DataPlaneID string `pathParam:"style=simple,explode=false,name=dataPlaneId"`
+	ID string `pathParam:"style=simple,explode=false,name=dataPlaneId"`
 }
 
 func (a AutomationDeleteDataPlaneRequest) MarshalJSON() ([]byte, error) {
@@ -75,11 +75,11 @@ func (a *AutomationDeleteDataPlaneRequest) GetEnvironmentID() *string {
 	return a.EnvironmentID
 }
 
-func (a *AutomationDeleteDataPlaneRequest) GetDataPlaneID() string {
+func (a *AutomationDeleteDataPlaneRequest) GetID() string {
 	if a == nil {
 		return ""
 	}
-	return a.DataPlaneID
+	return a.ID
 }
 
 type AutomationDeleteDataPlaneResponse struct {

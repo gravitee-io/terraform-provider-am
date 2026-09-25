@@ -5,6 +5,7 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/gravitee-io/terraform-provider-am/internal/provider/typeconvert"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/shared"
@@ -25,9 +26,9 @@ func (r *DataPlaneResourceModel) RefreshFromSharedAutomationDataPlaneOutput(ctx 
 			r.Hosts = append(r.Hosts, types.StringValue(v))
 		}
 		r.ID = types.StringValue(resp.ID)
-		r.Name = types.StringPointerValue(resp.Name)
+		r.Name = types.StringValue(resp.Name)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
-		r.Type = types.StringPointerValue(resp.Type)
+		r.Type = types.StringValue(resp.Type)
 		r.UpdatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.UpdatedAt))
 	}
 
@@ -122,10 +123,8 @@ func (r *DataPlaneResourceModel) ToOperationsAutomationGetDataPlaneRequest(ctx c
 func (r *DataPlaneResourceModel) ToSharedAutomationDataPlaneInput(ctx context.Context) (*shared.AutomationDataPlaneInput, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var configuration *shared.Configuration
-	if r.Configuration != nil {
-		configuration = &shared.Configuration{}
-	}
+	var configuration interface{}
+	_ = json.Unmarshal([]byte(r.Configuration.ValueString()), &configuration)
 	gatewayURL := new(string)
 	if !r.GatewayURL.IsUnknown() && !r.GatewayURL.IsNull() {
 		*gatewayURL = r.GatewayURL.ValueString()
@@ -135,18 +134,12 @@ func (r *DataPlaneResourceModel) ToSharedAutomationDataPlaneInput(ctx context.Co
 	var id string
 	id = r.ID.ValueString()
 
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
-	typeVar := new(string)
-	if !r.Type.IsUnknown() && !r.Type.IsNull() {
-		*typeVar = r.Type.ValueString()
-	} else {
-		typeVar = nil
-	}
+	var name string
+	name = r.Name.ValueString()
+
+	var typeVar string
+	typeVar = r.Type.ValueString()
+
 	out := shared.AutomationDataPlaneInput{
 		Configuration: configuration,
 		GatewayURL:    gatewayURL,

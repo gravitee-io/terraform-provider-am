@@ -3,25 +3,21 @@
 
 package shared
 
-// Configuration - Connection settings. Write-only: it can hold credentials.
-type Configuration struct {
-}
-
 // AutomationDataPlaneInput - A data plane managed by the Automation API. Data planes store the runtime data of the domains bound to them. The id field is the stable, immutable identity used for idempotent create-or-update.
 type AutomationDataPlaneInput struct {
 	// Connection settings. Write-only: it can hold credentials.
-	Configuration *Configuration `json:"configuration,omitempty"`
+	Configuration any `json:"configuration"`
 	// Base URL of the gateway serving the domains bound to this data plane. Must be an absolute http(s) URL with a lowercase scheme; omitted or empty leaves it unset.
 	GatewayURL *string `json:"gatewayUrl,omitempty"`
 	// Stable, immutable identifier for the data plane within its environment. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. This is the value a domain's dataPlaneId refers to.
 	ID string `json:"id"`
 	// Human-readable name of the data plane.
-	Name *string `json:"name,omitempty"`
+	Name string `json:"name"`
 	// Data plane plugin type identifier, matching the dataplane-am-<type> plugin. Immutable after creation.
-	Type *string `json:"type,omitempty"`
+	Type string `json:"type"`
 }
 
-func (a *AutomationDataPlaneInput) GetConfiguration() *Configuration {
+func (a *AutomationDataPlaneInput) GetConfiguration() any {
 	if a == nil {
 		return nil
 	}
@@ -42,16 +38,16 @@ func (a *AutomationDataPlaneInput) GetID() string {
 	return a.ID
 }
 
-func (a *AutomationDataPlaneInput) GetName() *string {
+func (a *AutomationDataPlaneInput) GetName() string {
 	if a == nil {
-		return nil
+		return ""
 	}
 	return a.Name
 }
 
-func (a *AutomationDataPlaneInput) GetType() *string {
+func (a *AutomationDataPlaneInput) GetType() string {
 	if a == nil {
-		return nil
+		return ""
 	}
 	return a.Type
 }

@@ -25,9 +25,9 @@ func (r *DataPlaneDataSourceModel) RefreshFromSharedAutomationDataPlaneOutput(ct
 			r.Hosts = append(r.Hosts, types.StringValue(v))
 		}
 		r.ID = types.StringValue(resp.ID)
-		r.Name = types.StringPointerValue(resp.Name)
+		r.Name = types.StringValue(resp.Name)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
-		r.Type = types.StringPointerValue(resp.Type)
+		r.Type = types.StringValue(resp.Type)
 		r.UpdatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.UpdatedAt))
 	}
 

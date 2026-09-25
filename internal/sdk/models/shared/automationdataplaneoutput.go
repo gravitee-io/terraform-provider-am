@@ -23,11 +23,11 @@ type AutomationDataPlaneOutput struct {
 	// Stable, immutable identifier for the data plane within its environment. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. This is the value a domain's dataPlaneId refers to.
 	ID string `json:"id"`
 	// Human-readable name of the data plane.
-	Name *string `json:"name,omitempty"`
+	Name string `json:"name"`
 	// Identifier of the organization the data plane belongs to. Read-only.
 	OrganizationID *string `json:"organizationId,omitempty"`
 	// Data plane plugin type identifier, matching the dataplane-am-<type> plugin. Immutable after creation.
-	Type *string `json:"type,omitempty"`
+	Type string `json:"type"`
 	// Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 }
@@ -85,9 +85,9 @@ func (a *AutomationDataPlaneOutput) GetID() string {
 	return a.ID
 }
 
-func (a *AutomationDataPlaneOutput) GetName() *string {
+func (a *AutomationDataPlaneOutput) GetName() string {
 	if a == nil {
-		return nil
+		return ""
 	}
 	return a.Name
 }
@@ -99,9 +99,9 @@ func (a *AutomationDataPlaneOutput) GetOrganizationID() *string {
 	return a.OrganizationID
 }
 
-func (a *AutomationDataPlaneOutput) GetType() *string {
+func (a *AutomationDataPlaneOutput) GetType() string {
 	if a == nil {
-		return nil
+		return ""
 	}
 	return a.Type
 }

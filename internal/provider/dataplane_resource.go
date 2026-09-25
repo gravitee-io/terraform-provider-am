@@ -8,8 +8,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	tfTypes "github.com/gravitee-io/terraform-provider-am/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -44,17 +44,17 @@ type DataPlaneResource struct {
 
 // DataPlaneResourceModel describes the resource data model.
 type DataPlaneResourceModel struct {
-	Configuration  *tfTypes.Configuration `tfsdk:"configuration"`
-	CreatedAt      types.String           `tfsdk:"created_at"`
-	Database       types.String           `tfsdk:"database"`
-	EnvironmentID  types.String           `tfsdk:"environment_id"`
-	GatewayURL     types.String           `tfsdk:"gateway_url"`
-	Hosts          []types.String         `tfsdk:"hosts"`
-	ID             types.String           `tfsdk:"id"`
-	Name           types.String           `tfsdk:"name"`
-	OrganizationID types.String           `tfsdk:"organization_id"`
-	Type           types.String           `tfsdk:"type"`
-	UpdatedAt      types.String           `tfsdk:"updated_at"`
+	Configuration  jsontypes.Normalized `tfsdk:"configuration"`
+	CreatedAt      types.String         `tfsdk:"created_at"`
+	Database       types.String         `tfsdk:"database"`
+	EnvironmentID  types.String         `tfsdk:"environment_id"`
+	GatewayURL     types.String         `tfsdk:"gateway_url"`
+	Hosts          []types.String       `tfsdk:"hosts"`
+	ID             types.String         `tfsdk:"id"`
+	Name           types.String         `tfsdk:"name"`
+	OrganizationID types.String         `tfsdk:"organization_id"`
+	Type           types.String         `tfsdk:"type"`
+	UpdatedAt      types.String         `tfsdk:"updated_at"`
 }
 
 func (r *DataPlaneResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,10 +65,11 @@ func (r *DataPlaneResource) Schema(ctx context.Context, req resource.SchemaReque
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "DataPlane Resource",
 		Attributes: map[string]schema.Attribute{
-			"configuration": schema.SingleNestedAttribute{
-				Optional:    true,
+			"configuration": schema.StringAttribute{
+				CustomType:  jsontypes.NormalizedType{},
+				Required:    true,
 				Sensitive:   true,
-				Description: `Connection settings. Write-only: it can hold credentials.`,
+				Description: `Connection settings. Write-only: it can hold credentials. Parsed as JSON.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -107,7 +108,7 @@ func (r *DataPlaneResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"name": schema.StringAttribute{
-				Optional:    true,
+				Required:    true,
 				Description: `Human-readable name of the data plane.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 128),
@@ -119,7 +120,7 @@ func (r *DataPlaneResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Identifier of the organization that owns the environment.`,
 			},
 			"type": schema.StringAttribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},

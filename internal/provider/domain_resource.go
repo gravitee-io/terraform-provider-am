@@ -366,8 +366,11 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Identifier of the environment.`,
 			},
 			"key": schema.StringAttribute{
-				Required:    true,
-				Description: `Stable, immutable identifier for the domain within its environment. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the domain on create-or-update.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Stable, immutable identifier for the domain within its environment. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the domain on create-or-update. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},

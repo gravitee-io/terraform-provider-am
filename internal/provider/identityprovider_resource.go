@@ -101,8 +101,11 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Group mapper: assigns AM groups based on provider attribute values. Each entry maps a group to the user attribute expressions that grant it.`,
 			},
 			"key": schema.StringAttribute{
-				Required:    true,
-				Description: `Stable, immutable identifier for the identity provider within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the identity provider on create-or-update.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Stable, immutable identifier for the identity provider within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the identity provider on create-or-update. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},

@@ -90,8 +90,11 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Expiry timestamp (ISO-8601 / RFC 3339, UTC), when known for the certificate type. Read-only.`,
 			},
 			"key": schema.StringAttribute{
-				Required:    true,
-				Description: `Stable, immutable identifier for the certificate within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the certificate on create-or-update.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Stable, immutable identifier for the certificate within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the certificate on create-or-update. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},

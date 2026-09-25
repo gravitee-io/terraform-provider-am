@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -44,18 +45,18 @@ type ReporterResource struct {
 
 // ReporterResourceModel describes the resource data model.
 type ReporterResourceModel struct {
-	Configuration  types.String `tfsdk:"configuration"`
-	CreatedAt      types.String `tfsdk:"created_at"`
-	DataType       types.String `tfsdk:"data_type"`
-	DomainKey      types.String `tfsdk:"domain_key"`
-	Enabled        types.Bool   `tfsdk:"enabled"`
-	EnvironmentID  types.String `tfsdk:"environment_id"`
-	Key            types.String `tfsdk:"key"`
-	Name           types.String `tfsdk:"name"`
-	OrganizationID types.String `tfsdk:"organization_id"`
-	System         types.Bool   `tfsdk:"system"`
-	Type           types.String `tfsdk:"type"`
-	UpdatedAt      types.String `tfsdk:"updated_at"`
+	Configuration  customtypes.MaskedJSON `tfsdk:"configuration"`
+	CreatedAt      types.String           `tfsdk:"created_at"`
+	DataType       types.String           `tfsdk:"data_type"`
+	DomainKey      types.String           `tfsdk:"domain_key"`
+	Enabled        types.Bool             `tfsdk:"enabled"`
+	EnvironmentID  types.String           `tfsdk:"environment_id"`
+	Key            types.String           `tfsdk:"key"`
+	Name           types.String           `tfsdk:"name"`
+	OrganizationID types.String           `tfsdk:"organization_id"`
+	System         types.Bool             `tfsdk:"system"`
+	Type           types.String           `tfsdk:"type"`
+	UpdatedAt      types.String           `tfsdk:"updated_at"`
 }
 
 func (r *ReporterResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -67,6 +68,7 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 		MarkdownDescription: "Reporter Resource",
 		Attributes: map[string]schema.Attribute{
 			"configuration": schema.StringAttribute{
+				CustomType:  customtypes.MaskedJSONType{},
 				Optional:    true,
 				Sensitive:   true,
 				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type.`,

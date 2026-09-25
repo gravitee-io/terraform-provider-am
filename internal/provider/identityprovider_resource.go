@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -44,7 +45,7 @@ type IdentityProviderResource struct {
 
 // IdentityProviderResourceModel describes the resource data model.
 type IdentityProviderResourceModel struct {
-	Configuration   types.String              `tfsdk:"configuration"`
+	Configuration   customtypes.MaskedJSON    `tfsdk:"configuration"`
 	CreatedAt       types.String              `tfsdk:"created_at"`
 	DomainKey       types.String              `tfsdk:"domain_key"`
 	DomainWhitelist []types.String            `tfsdk:"domain_whitelist"`
@@ -69,6 +70,7 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 		MarkdownDescription: "IdentityProvider Resource",
 		Attributes: map[string]schema.Attribute{
 			"configuration": schema.StringAttribute{
+				CustomType:  customtypes.MaskedJSONType{},
 				Optional:    true,
 				Sensitive:   true,
 				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type.`,

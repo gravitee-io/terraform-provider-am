@@ -6,6 +6,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -37,18 +38,18 @@ type ReporterDataSource struct {
 
 // ReporterDataSourceModel describes the data model.
 type ReporterDataSourceModel struct {
-	Configuration  types.String `tfsdk:"configuration"`
-	CreatedAt      types.String `tfsdk:"created_at"`
-	DataType       types.String `tfsdk:"data_type"`
-	DomainKey      types.String `tfsdk:"domain_key"`
-	Enabled        types.Bool   `tfsdk:"enabled"`
-	EnvironmentID  types.String `tfsdk:"environment_id"`
-	Key            types.String `tfsdk:"key"`
-	Name           types.String `tfsdk:"name"`
-	OrganizationID types.String `tfsdk:"organization_id"`
-	System         types.Bool   `tfsdk:"system"`
-	Type           types.String `tfsdk:"type"`
-	UpdatedAt      types.String `tfsdk:"updated_at"`
+	Configuration  customtypes.MaskedJSON `tfsdk:"configuration"`
+	CreatedAt      types.String           `tfsdk:"created_at"`
+	DataType       types.String           `tfsdk:"data_type"`
+	DomainKey      types.String           `tfsdk:"domain_key"`
+	Enabled        types.Bool             `tfsdk:"enabled"`
+	EnvironmentID  types.String           `tfsdk:"environment_id"`
+	Key            types.String           `tfsdk:"key"`
+	Name           types.String           `tfsdk:"name"`
+	OrganizationID types.String           `tfsdk:"organization_id"`
+	System         types.Bool             `tfsdk:"system"`
+	Type           types.String           `tfsdk:"type"`
+	UpdatedAt      types.String           `tfsdk:"updated_at"`
 }
 
 // Metadata returns the data source type name.
@@ -63,6 +64,7 @@ func (r *ReporterDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 
 		Attributes: map[string]schema.Attribute{
 			"configuration": schema.StringAttribute{
+				CustomType:  customtypes.MaskedJSONType{},
 				Computed:    true,
 				Sensitive:   true,
 				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type.`,

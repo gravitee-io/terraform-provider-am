@@ -12,19 +12,21 @@ type AutomationDomainInput struct {
 	// User account settings for the domain: brute-force protection, registration, password reset, remember-me, and MFA challenge behavior.
 	AccountSettings *AutomationAccountSettings `json:"accountSettings,omitempty"`
 	// Whether alerting is enabled for the domain.
-	AlertEnabled *bool `json:"alertEnabled,omitempty"`
+	AlertEnabled *bool `default:"false" json:"alertEnabled"`
 	// Domain-level certificate settings.
 	CertificateSettings *AutomationCertificateSettings `json:"certificateSettings,omitempty"`
 	// Cross-Origin Resource Sharing configuration controlling which web origins may call the domain's endpoints from a browser.
 	CorsSettings *CorsSettings `json:"corsSettings,omitempty"`
-	// Identifier of the data plane this domain is connected to. Required at creation and immutable afterwards; included in the desired-state document but never re-applied on update.
-	DataPlaneID string `json:"dataPlaneId"`
+	// Identifier of the data plane this domain is connected to. Optional at creation and resolved from the environment's data planes when omitted. Immutable afterwards: an apply that names a different one is rejected.
+	DataPlaneID *string `json:"dataPlaneId,omitempty"`
 	// Human-readable description of the domain.
 	Description *string `json:"description,omitempty"`
 	// Whether the domain handles incoming authentication and authorization requests.
 	Enabled *bool `default:"true" json:"enabled"`
 	// Stable, immutable identifier for the domain within its environment. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the domain on create-or-update.
 	Key string `json:"key"`
+	// Fetch, SSRF and cache limits applied to every trusted domain in the security domain.
+	KeyRetrievalSettings *KeyRetrievalSettings `json:"keyRetrievalSettings,omitempty"`
 	// Configuration of the domain's login flow and the features offered on the sign-in page.
 	LoginSettings *LoginSettings `json:"loginSettings,omitempty"`
 	// Whether this is the master domain of its environment. A master domain may perform cross-domain token introspection.
@@ -46,7 +48,7 @@ type AutomationDomainInput struct {
 	// Controls whether end users can manage their own account (for example, reset their password) and the rules that apply.
 	SelfServiceAccountManagementSettings *SelfServiceAccountManagementSettings `json:"selfServiceAccountManagementSettings,omitempty"`
 	// Sharding tags that control which gateways deploy this domain.
-	Tags []string `json:"tags,omitempty"`
+	Tags []string `json:"tags"`
 	// OAuth 2.0 Token Exchange (RFC 8693) configuration for the domain, covering impersonation and delegation.
 	TokenExchangeSettings *TokenExchangeSettings `json:"tokenExchangeSettings,omitempty"`
 	// Configuration of the domain's User-Managed Access (UMA 2.0) authorization features.
@@ -57,6 +59,8 @@ type AutomationDomainInput struct {
 	Vhosts []VirtualHost `json:"vhosts,omitempty"`
 	// WebAuthn (FIDO2) relying-party configuration governing passwordless and multi-factor authentication for the domain.
 	WebAuthnSettings *WebAuthnSettings `json:"webAuthnSettings,omitempty"`
+	// HTTP security headers applied to the domain's login and consent pages.
+	WebProtectionSettings *WebProtectionSettings `json:"webProtectionSettings,omitempty"`
 }
 
 func (a AutomationDomainInput) MarshalJSON() ([]byte, error) {
@@ -98,9 +102,9 @@ func (a *AutomationDomainInput) GetCorsSettings() *CorsSettings {
 	return a.CorsSettings
 }
 
-func (a *AutomationDomainInput) GetDataPlaneID() string {
+func (a *AutomationDomainInput) GetDataPlaneID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.DataPlaneID
 }
@@ -124,6 +128,13 @@ func (a *AutomationDomainInput) GetKey() string {
 		return ""
 	}
 	return a.Key
+}
+
+func (a *AutomationDomainInput) GetKeyRetrievalSettings() *KeyRetrievalSettings {
+	if a == nil {
+		return nil
+	}
+	return a.KeyRetrievalSettings
 }
 
 func (a *AutomationDomainInput) GetLoginSettings() *LoginSettings {
@@ -236,4 +247,11 @@ func (a *AutomationDomainInput) GetWebAuthnSettings() *WebAuthnSettings {
 		return nil
 	}
 	return a.WebAuthnSettings
+}
+
+func (a *AutomationDomainInput) GetWebProtectionSettings() *WebProtectionSettings {
+	if a == nil {
+		return nil
+	}
+	return a.WebProtectionSettings
 }

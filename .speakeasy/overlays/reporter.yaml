@@ -10,6 +10,11 @@ actions:
     update:
       x-speakeasy-entity: Reporter
 
+  # The resource's own attributes are not computed; nested settings are (common/schema.yaml).
+  - target: $.components.schemas.AutomationReporter.properties.*
+    update:
+      x-speakeasy-param-computed: false
+
   # Body `key` ↔ path `reporterKey` correlation: rename the path parameter
   # so Speakeasy auto-matches by name against the entity's `key` field.
   - target: $.paths["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}"].get.parameters[?@.name=='reporterKey']
@@ -37,11 +42,39 @@ actions:
     update:
       x-speakeasy-param-sensitive: true
 
+  # Masked values in responses compare equal to the configured ones (customtypes.MaskedJSON).
+  - target: $.components.schemas.AutomationReporter.properties.configuration
+    update:
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - "github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
+        schemaType: customtypes.MaskedJSONType{}
+        valueType: customtypes.MaskedJSON
+
   # Immutable after creation — changing these forces resource recreation.
   # create/update share one PUT op, so ForceNew is not auto-inferred; set it explicitly.
+  - target: $.components.schemas.AutomationReporter.properties.key
+    update:
+      x-speakeasy-param-force-new: true
   - target: $.components.schemas.AutomationReporter.properties.type
     update:
       x-speakeasy-param-force-new: true
   - target: $.components.schemas.AutomationReporter.properties.system
     update:
       x-speakeasy-param-force-new: true
+
+  # A system resource sets only its key; AM supplies these.
+  - target: $.components.schemas.AutomationReporter.properties["name","type","configuration"]
+    update:
+      x-speakeasy-param-computed: true
+
+  # The provider reads a list AM omits back as empty. attributeMappings is computed for the
+  # same reason as the domain's vhosts.
+  - target: $.components.schemas.AutomationReporter.properties.attributeMappingEventTypes
+    update:
+      default: []
+      format: set
+      uniqueItems: false
+  - target: $.components.schemas.AutomationReporter.properties.attributeMappings
+    update:
+      x-speakeasy-param-computed: true

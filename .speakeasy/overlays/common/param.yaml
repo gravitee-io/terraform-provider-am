@@ -97,3 +97,8 @@ actions:
     remove: true
   - target: $.paths.*.*.parameters[?@.name=='envId'].name
     remove: true
+
+  - target: $.paths.*.*.parameters[?@.name=='dryRun']
+    description: Not necessary in Terraform context
+    update:
+      x-speakeasy-terraform-ignore: true

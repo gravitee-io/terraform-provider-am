@@ -29,8 +29,8 @@ make unit-tests
 # Build the provider binary
 go build
 
-# Acceptance tests — not yet wired up
-make acceptance-tests   # currently exits 1 with a TODO
+# Acceptance tests against a live AM (e.g. the local stack); needs a token
+AM_SA_TOKEN=<token> make acceptance-tests
 ```
 
 The Speakeasy CLI must be authenticated (`speakeasy auth login`). The pinned
@@ -54,10 +54,10 @@ version lives in `.speakeasy/workflow.yaml` (`speakeasyVersion`).
 
 ### Provider structure (`internal/provider/`)
 
-- **4 managed resources**: `am_domain`, `am_certificate`,
+- **5 managed resources**: `am_domain`, `am_data_plane`, `am_certificate`,
   `am_identity_provider`, `am_reporter` — certificates/IdPs/reporters are
   nested under a Domain
-- **4 data sources** mirror them
+- **5 data sources** mirror them
 - Each resource: `*_resource.go` (CRUD) + `*_resource_sdk.go` (Terraform ↔
   SDK type mapping)
 - `provider.go` — provider schema, auth wiring, defaulting
@@ -81,9 +81,9 @@ installations.
 | File | Purpose |
 |---|---|
 | `common/oas.yaml` | Root-level: `x-speakeasy-retries`, `x-speakeasy-globals` promoting org/env, README/title rewrites |
-| `common/param.yaml` | Synthesises `components.parameters.{orgIdParam, envIdParam}` (the raw OAS has none), names them `organizationId`/`environmentId`, replaces every inline `orgId`/`envId` with a `$ref` |
-| `common/schema.yaml` | `x-speakeasy-param-computed: false` globally (cleaner plans), ignore the `Error` schema |
-| `domain.yaml`, `certificate.yaml`, `identities.yaml`, `reporter.yaml` | Per-entity: `x-speakeasy-entity`, three `x-speakeasy-entity-operation` mappings (create-or-update/read/delete), `key`-path-param rename, sensitive marking for `configuration` |
+| `common/param.yaml` | Synthesises `components.parameters.{orgIdParam, envIdParam}` (the raw OAS has none), names them `organizationId`/`environmentId`, replaces every inline `orgId`/`envId` with a `$ref`, ignores `dryRun` query parameters |
+| `common/schema.yaml` | Nested settings properties computed, ignore the `Error` schema and dry-run errors |
+| `domain.yaml`, `dataplane.yaml`, `certificate.yaml`, `identities.yaml`, `reporter.yaml` | Per-entity: `x-speakeasy-entity`, its own properties not computed (cleaner plans), three `x-speakeasy-entity-operation` mappings (create-or-update/read/delete), identity path-param rename, force-new on the identity, sensitive `configuration`, defaults for values AM returns when unset |
 
 ### AM-specific gotchas (worth knowing before editing overlays)
 
@@ -104,7 +104,11 @@ installations.
    `[?@.name=='orgId']` keeps matching through the chain. Don't try to
    shortcut this with a single `update` containing `null`s.
 
-3. **The merged OAS lives at `.speakeasy/output/computed.json`** (gitignored).
+3. **Every value AM returns for an attribute the config leaves unset needs a
+   default or `computed`**, or the plan never converges. The acceptance
+   tests catch this: they fail when the plan after an apply is not empty.
+
+4. **The merged OAS lives at `.speakeasy/output/computed.json`** (gitignored).
    When an overlay isn't producing what you expect, run `make merge-overlays`
    and read that file — it's exactly what Speakeasy's codegen sees.
 
@@ -122,9 +126,9 @@ reach for first:
 - `x-speakeasy-entity` / `x-speakeasy-entity-operation` — map an OAS schema
   + operations onto a Terraform resource lifecycle
 
-There are no `internal/planmodifiers/`, `internal/validators/`, or
-`internal/customtypes/` packages in this repo yet — add them when an
-overlay actually needs to reference custom Go.
+`internal/provider/customtypes/` holds hand-written custom types referenced
+from overlays via `x-speakeasy-terraform-custom-type`; `MaskedJSON` compares
+plugin `configuration` with AM's `********` masking taken into account.
 
 ## Conventions
 

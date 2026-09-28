@@ -10,13 +10,13 @@ import (
 // AutomationCIBASettings - Client-Initiated Backchannel Authentication (CIBA) settings for the domain. CIBA lets a relying party initiate end-user authentication from a separate consumption device, without redirecting the user through the browser. Authentication device notifiers are not managed by the Automation API and are not exposed here.
 type AutomationCIBASettings struct {
 	// Default validity period, in seconds, of the issued auth_req_id.
-	AuthReqExpiry *int `json:"authReqExpiry,omitempty"`
+	AuthReqExpiry *int `default:"600" json:"authReqExpiry"`
 	// Maximum number of characters accepted for the binding_message parameter.
-	BindingMessageLength *int `json:"bindingMessageLength,omitempty"`
+	BindingMessageLength *int `default:"256" json:"bindingMessageLength"`
 	// Whether Client-Initiated Backchannel Authentication is enabled for the domain.
 	Enabled *bool `default:"false" json:"enabled"`
 	// Minimum delay, in seconds, that a client must wait between two polls of the token endpoint for the same auth_req_id (POLL or PING delivery mode).
-	TokenReqInterval *int `json:"tokenReqInterval,omitempty"`
+	TokenReqInterval *int `default:"5" json:"tokenReqInterval"`
 }
 
 func (a AutomationCIBASettings) MarshalJSON() ([]byte, error) {

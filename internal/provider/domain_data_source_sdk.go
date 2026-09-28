@@ -82,13 +82,25 @@ func (r *DomainDataSourceModel) RefreshFromSharedAutomationDomain(ctx context.Co
 				r.CorsSettings.AllowedOrigins = append(r.CorsSettings.AllowedOrigins, types.StringValue(v))
 			}
 			r.CorsSettings.Enabled = types.BoolPointerValue(resp.CorsSettings.Enabled)
+			r.CorsSettings.Inherited = types.BoolPointerValue(resp.CorsSettings.Inherited)
 			r.CorsSettings.MaxAge = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.CorsSettings.MaxAge))
 		}
 		r.CreatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CreatedAt))
-		r.DataPlaneID = types.StringValue(resp.DataPlaneID)
+		r.DataPlaneID = types.StringPointerValue(resp.DataPlaneID)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.Enabled = types.BoolPointerValue(resp.Enabled)
 		r.Key = types.StringValue(resp.Key)
+		if resp.KeyRetrievalSettings == nil {
+			r.KeyRetrievalSettings = nil
+		} else {
+			r.KeyRetrievalSettings = &tfTypes.KeyRetrievalSettings{}
+			r.KeyRetrievalSettings.AllowPrivateIPAddress = types.BoolPointerValue(resp.KeyRetrievalSettings.AllowPrivateIPAddress)
+			r.KeyRetrievalSettings.AllowUnsecuredHTTPURI = types.BoolPointerValue(resp.KeyRetrievalSettings.AllowUnsecuredHTTPURI)
+			r.KeyRetrievalSettings.CacheMaxEntries = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.KeyRetrievalSettings.CacheMaxEntries))
+			r.KeyRetrievalSettings.CacheTTLSeconds = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.KeyRetrievalSettings.CacheTTLSeconds))
+			r.KeyRetrievalSettings.FetchTimeoutMs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.KeyRetrievalSettings.FetchTimeoutMs))
+			r.KeyRetrievalSettings.MaxResponseSizeKb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.KeyRetrievalSettings.MaxResponseSizeKb))
+		}
 		if resp.LoginSettings == nil {
 			r.LoginSettings = nil
 		} else {
@@ -257,6 +269,12 @@ func (r *DomainDataSourceModel) RefreshFromSharedAutomationDomain(ctx context.Co
 			}
 			r.TokenExchangeSettings.AllowImpersonation = types.BoolPointerValue(resp.TokenExchangeSettings.AllowImpersonation)
 			r.TokenExchangeSettings.Enabled = types.BoolPointerValue(resp.TokenExchangeSettings.Enabled)
+			if resp.TokenExchangeSettings.IDJagSettings == nil {
+				r.TokenExchangeSettings.IDJagSettings = nil
+			} else {
+				r.TokenExchangeSettings.IDJagSettings = &tfTypes.IDJagSettings{}
+				r.TokenExchangeSettings.IDJagSettings.LaxValidation = types.BoolPointerValue(resp.TokenExchangeSettings.IDJagSettings.LaxValidation)
+			}
 			r.TokenExchangeSettings.MaxDelegationDepth = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.TokenExchangeSettings.MaxDelegationDepth))
 			if resp.TokenExchangeSettings.TokenExchangeOAuthSettings == nil {
 				r.TokenExchangeSettings.TokenExchangeOAuthSettings = nil
@@ -353,6 +371,40 @@ func (r *DomainDataSourceModel) RefreshFromSharedAutomationDomain(ctx context.Co
 				r.WebAuthnSettings.UserVerification = types.StringValue(string(*resp.WebAuthnSettings.UserVerification))
 			} else {
 				r.WebAuthnSettings.UserVerification = types.StringNull()
+			}
+		}
+		if resp.WebProtectionSettings == nil {
+			r.WebProtectionSettings = nil
+		} else {
+			r.WebProtectionSettings = &tfTypes.WebProtectionSettings{}
+			if resp.WebProtectionSettings.Csp == nil {
+				r.WebProtectionSettings.Csp = nil
+			} else {
+				r.WebProtectionSettings.Csp = &tfTypes.CspSettings{}
+				r.WebProtectionSettings.Csp.Directives = make([]types.String, 0, len(resp.WebProtectionSettings.Csp.Directives))
+				for _, v := range resp.WebProtectionSettings.Csp.Directives {
+					r.WebProtectionSettings.Csp.Directives = append(r.WebProtectionSettings.Csp.Directives, types.StringValue(v))
+				}
+				r.WebProtectionSettings.Csp.Enabled = types.BoolPointerValue(resp.WebProtectionSettings.Csp.Enabled)
+				r.WebProtectionSettings.Csp.Inherited = types.BoolPointerValue(resp.WebProtectionSettings.Csp.Inherited)
+				r.WebProtectionSettings.Csp.ReportOnly = types.BoolPointerValue(resp.WebProtectionSettings.Csp.ReportOnly)
+				r.WebProtectionSettings.Csp.ScriptInlineNonce = types.BoolPointerValue(resp.WebProtectionSettings.Csp.ScriptInlineNonce)
+			}
+			if resp.WebProtectionSettings.Xframe == nil {
+				r.WebProtectionSettings.Xframe = nil
+			} else {
+				r.WebProtectionSettings.Xframe = &tfTypes.XFrameSettings{}
+				r.WebProtectionSettings.Xframe.Action = types.StringPointerValue(resp.WebProtectionSettings.Xframe.Action)
+				r.WebProtectionSettings.Xframe.Enabled = types.BoolPointerValue(resp.WebProtectionSettings.Xframe.Enabled)
+				r.WebProtectionSettings.Xframe.Inherited = types.BoolPointerValue(resp.WebProtectionSettings.Xframe.Inherited)
+			}
+			if resp.WebProtectionSettings.XSS == nil {
+				r.WebProtectionSettings.XSS = nil
+			} else {
+				r.WebProtectionSettings.XSS = &tfTypes.XSSProtectionSettings{}
+				r.WebProtectionSettings.XSS.Action = types.StringPointerValue(resp.WebProtectionSettings.XSS.Action)
+				r.WebProtectionSettings.XSS.Enabled = types.BoolPointerValue(resp.WebProtectionSettings.XSS.Enabled)
+				r.WebProtectionSettings.XSS.Inherited = types.BoolPointerValue(resp.WebProtectionSettings.XSS.Inherited)
 			}
 		}
 	}

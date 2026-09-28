@@ -17,8 +17,10 @@ type CorsSettings struct {
 	AllowedMethods []string `json:"allowedMethods,omitempty"`
 	// Origins permitted to make cross-origin requests. Use "*" to allow any origin.
 	AllowedOrigins []string `json:"allowedOrigins,omitempty"`
-	// Whether CORS handling is enabled for the domain.
+	// Whether CORS handling is enabled for the domain when not inherited.
 	Enabled *bool `default:"false" json:"enabled"`
+	// Whether CORS settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
+	Inherited *bool `default:"true" json:"inherited"`
 	// How long, in seconds, a browser may cache the result of a preflight request.
 	MaxAge *int `default:"86400" json:"maxAge"`
 }
@@ -67,6 +69,13 @@ func (c *CorsSettings) GetEnabled() *bool {
 		return nil
 	}
 	return c.Enabled
+}
+
+func (c *CorsSettings) GetInherited() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.Inherited
 }
 
 func (c *CorsSettings) GetMaxAge() *int {

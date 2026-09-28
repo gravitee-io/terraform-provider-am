@@ -3,6 +3,10 @@
 #   AM_SA_TOKEN    - bearer (service-account) token
 #   AM_ORG_ID      - organization id (defaults to "DEFAULT")
 #   AM_ENV_ID      - environment id  (defaults to "DEFAULT")
+#
+# Consumed by the acceptance tests only:
+#   AM_TEST_MONGODB_HOST - MongoDB host AM reaches for a test data plane (defaults to "mongodb")
+#   AM_TEST_MONGODB_PORT - its port (defaults to "27017")
 
 AM_OAS_BRANCH ?= master
 
@@ -26,6 +30,7 @@ OVERLAY_FILES := \
     .speakeasy/overlays/common/param.yaml \
     .speakeasy/overlays/common/schema.yaml \
     .speakeasy/overlays/domain.yaml \
+    .speakeasy/overlays/dataplane.yaml \
     .speakeasy/overlays/certificate.yaml \
     .speakeasy/overlays/identities.yaml \
     .speakeasy/overlays/reporter.yaml
@@ -52,11 +57,8 @@ unit-tests: ## Run unit tests (no AM instance required)
 	@go test -count=1 ./internal/...
 
 .PHONY: acceptance-tests
-acceptance-tests: ## Run acceptance tests against a live AM (not wired up yet)
-	@echo "TODO: acceptance tests require a running AM Automation API."
-	@echo "      Wire up tests/acceptance/ + a Kind cluster harness, then"
-	@echo "      replace this target with the real go test invocation."
-	@exit 1
+acceptance-tests: ## Run acceptance tests against a live AM; needs AM_SA_TOKEN (AM_SERVER_URL defaults to the local stack)
+	@TF_ACC=1 go test -count=1 -v ./tests/acceptance
 
 .PHONY: help
 help: ## Display this help.

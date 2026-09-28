@@ -260,7 +260,7 @@ func (s *IdentityProviders) AutomationListIdentityProviders(ctx context.Context,
 }
 
 // AutomationCreateOrUpdateIdentityProvider - Create or update an identity provider
-// Idempotent create-or-update. Uses the key field in the body to identify the identity provider within the domain. On first apply the identity provider is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the identity provider.
+// Idempotent create-or-update. Uses the key field in the body to identify the identity provider within the domain. On first apply the identity provider is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the identity provider. When dryRun is true, the endpoint validates the payload without persisting; the returned identity provider carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
 func (s *IdentityProviders) AutomationCreateOrUpdateIdentityProvider(ctx context.Context, request operations.AutomationCreateOrUpdateIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateIdentityProviderResponse, error) {
 	globals := operations.AutomationCreateOrUpdateIdentityProviderGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -323,6 +323,10 @@ func (s *IdentityProviders) AutomationCreateOrUpdateIdentityProvider(ctx context
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	if reqContentType != "" {
 		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateQueryParams(ctx, req, request, globals, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {

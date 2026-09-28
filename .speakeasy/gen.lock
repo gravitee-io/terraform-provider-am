@@ -1,27 +1,30 @@
 lockVersion: ""
 id: ""
 management:
-  docChecksum: 52d4e85c13eb50949dd7c3be61ebeee6
-  docVersion: 4.12.0
-  speakeasyVersion: 1.766.0
-  generationVersion: 2.887.0
+  docChecksum: 2d3b3ef67e955c3e90153a531aae83f7
+  docVersion: 4.13.0
+  speakeasyVersion: 1.799.0
+  generationVersion: 2.941.0
   releaseVersion: 0.0.1
-  configChecksum: 116ec4b73d4dbaf6e47d63b3fb2ecad6
+  configChecksum: 461e961c6a0bbb29bf4adb717d4e2b28
 persistentEdits:
-  generation_id: fe1c6d2b-138d-47d2-8167-27edeb21a060
-  pristine_commit_hash: f71ec6eaf013d8a6652c4a1813d84c3e3b32c78e
-  pristine_tree_hash: a44dddf3c277fcf3cd5edc89591070d19d698307
+  generation_id: 4c6c4bcc-cf1a-430c-ae23-72b090bb531b
+  pristine_commit_hash: bd99c813d42064c1ef1a0d714143b2b19508e74a
+  pristine_tree_hash: 6517bf30b9c175484081334584b4ddaf8594071b
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.47.6
+    core: 3.48.2
+    deprecations: 2.82.0
     globalSecurity: 2.82.3
     globalServerURLs: 2.83.2
     globals: 3.0.5
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.7
-    retries: 2.81.4
+    retries: 2.81.6
+    sets: 0.1.3
+    typeOverrides: 2.81.2
 trackedFiles:
   .gitattributes:
     id: 24139dae6567
@@ -31,6 +34,10 @@ trackedFiles:
     id: 22ef8e2b19d6
     last_write_checksum: sha1:a4ab29d4806c8b89306e8c79e992f73f64fb83d7
     pristine_git_object: 4e51b9efb1af041360c473af1c7eed28994c1ff1
+  examples/data-sources/am_data_plane/data-source.tf:
+    id: 47104fbf86b8
+    last_write_checksum: sha1:f037e8fe7bd22ffaa29a4c34b584a4c6e4a0cf8b
+    pristine_git_object: 76998be290b4b9134faa4319905a00719609064e
   examples/data-sources/am_domain/data-source.tf:
     id: 34ee41b4000a
     last_write_checksum: sha1:0f1aea69ff168f556e0489cd67ac345a0d7b7d8d
@@ -59,6 +66,18 @@ trackedFiles:
     id: f5941b99b61d
     last_write_checksum: sha1:3a4b51a42aa83ed10dba4ff6e89402b777ebcd5a
     pristine_git_object: c15c4869b4b1c01975633ff16757f028e2fedfb8
+  examples/resources/am_data_plane/import-by-string-id.tf:
+    id: 8d005dc59b83
+    last_write_checksum: sha1:99c14e0563564d471a68ed6b01eeb246662e1a3e
+    pristine_git_object: 2d45c73a61cafdfa7cc92756c156631638169342
+  examples/resources/am_data_plane/import.sh:
+    id: ca7a7554b4c1
+    last_write_checksum: sha1:257d3488bdf737568c8d6de24e178e96f8178589
+    pristine_git_object: f58dc8f1959da9dcab8c38ce73f372888af8c2d1
+  examples/resources/am_data_plane/resource.tf:
+    id: 32e922156e1b
+    last_write_checksum: sha1:49ca320d344e78330ed2ce0b5a1e0f4d73458255
+    pristine_git_object: d01fc2ff64d1686f76895d66a57de3c125f1818d
   examples/resources/am_domain/import-by-string-id.tf:
     id: 7eb2f7088839
     last_write_checksum: sha1:9a679be5677bf5041524e638a463a1235beb0144
@@ -69,8 +88,8 @@ trackedFiles:
     pristine_git_object: d4f0a13001d142c5aad051cd598c2787eb714a23
   examples/resources/am_domain/resource.tf:
     id: bcb737681ae6
-    last_write_checksum: sha1:38af0c175eaa66f818dbb5d8e2df69a9b547a3c8
-    pristine_git_object: 45b3d27ea71bbf24b907b0ae6af2eb300b7f4c2e
+    last_write_checksum: sha1:15c0135ee6383e995ffeced9c1e5077ef5ebd917
+    pristine_git_object: d41764356ca74fecd03d05c3cd0a4b83ad961626
   examples/resources/am_identity_provider/import-by-string-id.tf:
     id: 6f2b44ca45af
     last_write_checksum: sha1:e855d7225b81206f63110bd54b25bb4024fee543
@@ -93,12 +112,12 @@ trackedFiles:
     pristine_git_object: 2ad13f3057e00997203d0750f545e3cd35fc28c6
   examples/resources/am_reporter/resource.tf:
     id: 696c5e0c5a6c
-    last_write_checksum: sha1:b5a4ab22f6df6fcc46b0c85163f26b2f1bb5308e
-    pristine_git_object: 4f1266b4a22a8123da484d7140edac29974e6e09
+    last_write_checksum: sha1:a6ea37154e7c7da4f00bf39bfcf49314b754e3ab
+    pristine_git_object: 9b4f4d6020a884fa9b665c8dff9ff45261cedac8
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:e776eb4d6cb14e6225b9dc1728ce438fcdba8344
-    pristine_git_object: 7713a9db1e58196c4b2d982c9cd901685cc5fb6a
+    last_write_checksum: sha1:d213357431f9ac0bdc37553f5fa4ac9b454f1852
+    pristine_git_object: 995e179134b7270b18528e7fa6670e714f28b452
   internal/planmodifiers/boolplanmodifier/suppress_diff.go:
     id: 3cf85b98963e
     last_write_checksum: sha1:6c02a234374809043626322723e572dc8551c62a
@@ -229,8 +248,8 @@ trackedFiles:
     pristine_git_object: 31801d062c99f262c96b5be50c90007472f85370
   internal/planmodifiers/stringplanmodifier/use_hoisted_value.go:
     id: f9220e0f9187
-    last_write_checksum: sha1:258437a15f45a77508a7bb98fa9640f0e96813ff
-    pristine_git_object: d386e97eb0a50b07c5df5de526f54d8a5175d6ef
+    last_write_checksum: sha1:34fb786efaa6338366853b2a9b679cf9d751a60b
+    pristine_git_object: 77856c55bb228c3e1cc5132399a7ad65e1aa3d8c
   internal/planmodifiers/utils/hoisted_value.go:
     id: 7c3741509670
     last_write_checksum: sha1:f1dabb2748bc9a550311eb7fd0be80fc506fad95
@@ -241,56 +260,72 @@ trackedFiles:
     pristine_git_object: cd0dbf813362d30f2c7b2f489f99a65ea2d528e0
   internal/provider/certificate_data_source.go:
     id: 3cc801066939
-    last_write_checksum: sha1:dd828e0eb518ed29a4c559ae2dfe5cd7177e5ddf
-    pristine_git_object: 7c8d0e0d4233503397ae59d39fc4689f9dd1ce30
+    last_write_checksum: sha1:445c27eaaf92738a89a5433c9cd5dda39a429955
+    pristine_git_object: 932363698f47b1b769351933e6138f01f6a1ab52
   internal/provider/certificate_data_source_sdk.go:
     id: d3dff8a7fae1
-    last_write_checksum: sha1:ec96d084993991c8b9b41f1e1e9ba85cd49f3058
-    pristine_git_object: 86e79d93b2daf97dd3fca8af331ef60c23e8925d
+    last_write_checksum: sha1:089092eced7d589241c6cc43d8cd13fc10b6c042
+    pristine_git_object: 87e676a233f9588dd9dc9ab81db9e0f6148b4c34
   internal/provider/certificate_resource.go:
     id: bdfa827216a2
-    last_write_checksum: sha1:d495ae85e2b0cceb916777eb7c62bdf97125b3e6
-    pristine_git_object: 1c7556c5bcab43225eb96ad625bfc6a45c509974
+    last_write_checksum: sha1:99a411183e0aef4859c9f66b983824776a00cac9
+    pristine_git_object: 9f37f61ff6e2a53b091449dd55eae9ce2a77f9b6
   internal/provider/certificate_resource_sdk.go:
     id: df2508cad27a
-    last_write_checksum: sha1:4bbe91b643a56992c423a4d58916bc631e97c340
-    pristine_git_object: 09740c447b7f701a91387e733d2567dcbceb19b2
+    last_write_checksum: sha1:af1c6f47372e2d89f9b78a273e6c742d1a776a39
+    pristine_git_object: ce4c988d6d77cdc3057367fbcb0d4631201d011d
+  internal/provider/dataplane_data_source.go:
+    id: 9711b064b1f2
+    last_write_checksum: sha1:f6278a135ac98e812edf4779e310087b5d3c241a
+    pristine_git_object: e91df116ee82c165aaa3f4f423ae6c7befbbf011
+  internal/provider/dataplane_data_source_sdk.go:
+    id: a94ce61290bb
+    last_write_checksum: sha1:eac6631311890224e1a25f33f7555372cbc97684
+    pristine_git_object: 8825ec28a4bc4c056549d02e6afe3c751adce0d8
+  internal/provider/dataplane_resource.go:
+    id: 29fb39c99b4d
+    last_write_checksum: sha1:e91f4d8913b56ecc4c076c28a70a4c92fb03ced2
+    pristine_git_object: 791f2d96157d34851cf29b4fd7511af5c73fea62
+  internal/provider/dataplane_resource_sdk.go:
+    id: f79994bba231
+    last_write_checksum: sha1:ba2a1374813c766f45b2b1f61e55e26566d17cc5
+    pristine_git_object: 801b940e2ed27816efb02db0317f08ed6da491d5
   internal/provider/domain_data_source.go:
     id: bb66d8949357
-    last_write_checksum: sha1:2478ee25f75db19783768be1df1fd2b5921ffed2
-    pristine_git_object: ad63a93ddb6ee99924e9fb6636481bdc371a965f
+    last_write_checksum: sha1:ac1e01b23a70c8ba09fa84303dbcb087b3654b65
+    pristine_git_object: 6a00458c04d74e6e500e88d0550b0b3cbd6f109d
   internal/provider/domain_data_source_sdk.go:
     id: be578134c22d
-    last_write_checksum: sha1:fbeb933541cab226db1d622d3b7775676df9818b
-    pristine_git_object: 52b2595e9126628eea2778054ec259264fda34e2
+    last_write_checksum: sha1:f00b1f22fe66474012697054dd386d03ae2d82f7
+    pristine_git_object: 1437893c738d0216d38440f2c13ee26e86402de0
   internal/provider/domain_resource.go:
     id: 5a818b70c107
-    last_write_checksum: sha1:f2cbf5e8a323dd4c70575892b78606955a6c43c8
-    pristine_git_object: ae982ea4f5170246d31855eb2ec7441c4642923d
+    last_write_checksum: sha1:db0bfa9d52b82282aee81724be7a3cc353e5be40
+    pristine_git_object: fc505ffb8f372ee5cd9f353cb5080d9f8e5a6e3b
   internal/provider/domain_resource_sdk.go:
     id: 4942f28340ad
-    last_write_checksum: sha1:4f2d1a7a464c2882683f04253d858d66adb0f0a8
-    pristine_git_object: 137dfe93e81a338c6c7027a0995258ada489b4e4
+    last_write_checksum: sha1:2403097b4f00625d6d56544335c9833d66023abb
+    pristine_git_object: a38d702aba6ab6e85d230ce510eff7ab86ea7d48
   internal/provider/identityprovider_data_source.go:
     id: 1e5482aa31e2
-    last_write_checksum: sha1:07dbf203043c09ad361c1a47de83cc50587ada5c
-    pristine_git_object: 43fd0dd90f50004b1886854bd33a2a44bf455087
+    last_write_checksum: sha1:69adb0cd46358247b89e2fb388d726ebd67ed5cf
+    pristine_git_object: a8fb5e6cb0708c4d5d7e3370f5cc41fee694d87a
   internal/provider/identityprovider_data_source_sdk.go:
     id: 5044c80635a2
-    last_write_checksum: sha1:c160bef1a5a3d4b1d379b1f306c96ea6dbef9cf3
-    pristine_git_object: 9ed93abbda3ef6968b63f8a4dfb824165393a78c
+    last_write_checksum: sha1:5a64667fcfbab2029cc62583df8f25ce7ec46c28
+    pristine_git_object: 91b5d1d130ae4ef9e931f29935a87110dcd307b7
   internal/provider/identityprovider_resource.go:
     id: 58c5a9b0f23d
-    last_write_checksum: sha1:ec4fbbf8d17188511d82cf145445427e01be5925
-    pristine_git_object: 485c26c781616c01947309a9c79216a5eb267e4c
+    last_write_checksum: sha1:f91075e1c2f6f3a86360985e6751da914d828f61
+    pristine_git_object: 6860d84829b63475e01677a4eb427a0836e526e9
   internal/provider/identityprovider_resource_sdk.go:
     id: 2716363f6d1b
-    last_write_checksum: sha1:cc8c0103ba0d6d8f918a6c869318712ab11c6768
-    pristine_git_object: c0dde047d85ff6e0229842a5786334eda8973e40
+    last_write_checksum: sha1:a6f73f6fcde598d2cb454e32c5a538cff23bfbda
+    pristine_git_object: f13133315a0ba7f4a32994b6f4ce5c9a9c479c72
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:505d91afed983a845d2e243019a78fe47dc90bae
-    pristine_git_object: 396ed6a5e5dcc779bf5d6b8eb5c11f15e99e5ac5
+    last_write_checksum: sha1:1b55bec509cd9dd46d605bc6a6261f9f0bf3489d
+    pristine_git_object: 90b9038a19efa895b54eb3ce8bbb53b84dc5feda
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
     last_write_checksum: sha1:42e02d5e7e31b0a5d4e14deb739cf5020c79f2e0
@@ -349,20 +384,20 @@ trackedFiles:
     pristine_git_object: 2e7d63a4864472f1837e48f18da0524ea87f3c3b
   internal/provider/reporter_data_source.go:
     id: e5e89c5cc824
-    last_write_checksum: sha1:fc02f2a6064dbc419512864e6b13bc24048b213d
-    pristine_git_object: bd2b19ea796f2fca0d7c69bd33ebd5b28815c9e6
+    last_write_checksum: sha1:c596c9583d314417434e6f55325325531a456f1c
+    pristine_git_object: baa6a82d7d341da38e8a012a7996847fbff68a48
   internal/provider/reporter_data_source_sdk.go:
     id: f1281e5ca4ae
-    last_write_checksum: sha1:95a163a2750b59bdaa3ab3cbe7b97ef5445c4391
-    pristine_git_object: ba04c75f4e16ba8897bee4c987b202af5afff9ef
+    last_write_checksum: sha1:75d82ce79796a2938852e0978d0d588dfdfcfe0c
+    pristine_git_object: 8d5dfa42afb3f0e4f0943df4004a7d15b2270402
   internal/provider/reporter_resource.go:
     id: 07e2ce9a2d7e
-    last_write_checksum: sha1:d44d386ebf9b4f6240ba77d8303b8333260d4c58
-    pristine_git_object: 490dfb00bf8146e2cde474fb3b2c477699add7e1
+    last_write_checksum: sha1:5170505d40f56570a820e69581f5c3b414052b6c
+    pristine_git_object: 6486859c1fb206b8e6a7ffbd5a99a714e49cfe27
   internal/provider/reporter_resource_sdk.go:
     id: 6aa5cc34a3da
-    last_write_checksum: sha1:f73ae7ebdb45105c0e5d64be7c19dbfe0e62b621
-    pristine_git_object: 55d256989604d9ad6cb20ca4e9f46c60735f9696
+    last_write_checksum: sha1:7b35dbbeaa79bdeea1496a912f107595f468933c
+    pristine_git_object: 1e34aee043d9c6c7f9a735d3067ec225c9355b7c
   internal/provider/typeconvert/date.go:
     id: dfe2bc95ad1b
     last_write_checksum: sha1:3010826bc710cb1068692f62736c7b82f46aa142
@@ -401,12 +436,24 @@ trackedFiles:
     pristine_git_object: a264b1b2372c8392127d9488bf34bfca979fafa5
   internal/provider/types/cors_settings.go:
     id: 7299c421ace8
-    last_write_checksum: sha1:4b11005c78fb778076143cdbb10ef80b23659544
-    pristine_git_object: 24322cba60061a198393e6dc8ed0677a209f603f
+    last_write_checksum: sha1:062d4d5724d2c3bdb00ca506bbf12ed9fce01fd9
+    pristine_git_object: 53f103a939c92364fb96459e1aca7742eff8cba2
+  internal/provider/types/csp_settings.go:
+    id: 9dfb1902ba89
+    last_write_checksum: sha1:cabf802736f9f2770cd84dcbd3fe4e08037c1f50
+    pristine_git_object: 28cfa9f856d65aa321d36ec618044b9482c188c0
   internal/provider/types/form_field.go:
     id: 7baf2277045c
     last_write_checksum: sha1:439c4fc14461c318d1c0e4db2ee338c712504124
     pristine_git_object: 76cc0113eebad7f10e10ba3710d3d9fececdee93
+  internal/provider/types/id_jag_settings.go:
+    id: ebed787a0c32
+    last_write_checksum: sha1:61d856aed4eafba90fdf8419949f8c68630cbe8d
+    pristine_git_object: bbf65c2bc1c1f4a4729a4681d3ea8a4873396f76
+  internal/provider/types/key_retrieval_settings.go:
+    id: ad58b29021b5
+    last_write_checksum: sha1:5c3983bbf3f89d2a4e1fdfac6528f08cb8de29ff
+    pristine_git_object: 9747c65bd367abb6f3f132f09a89283b43e3d279
   internal/provider/types/login_settings.go:
     id: efd51f82cdf9
     last_write_checksum: sha1:9fd789d7c6e26c9ad386f564fbece09d2d558c02
@@ -415,6 +462,10 @@ trackedFiles:
     id: c765894919af
     last_write_checksum: sha1:df9cccd2b13351343dc8d87f230ce1a256efbbc6
     pristine_git_object: 5592742b4f38cc2b6a108e70f3bf15b81a297ee0
+  internal/provider/types/reporter_attribute_mapping.go:
+    id: 93a88176d7a5
+    last_write_checksum: sha1:88a72d1bd7815017d5c4d92bcd2b8baa63b0e021
+    pristine_git_object: db815b46747050c56c0caa1ef89f8cefab43478d
   internal/provider/types/reset_password_settings.go:
     id: 461aa7282b65
     last_write_checksum: sha1:7c8663228e8095e2f95eda76dcd9cef7003f300a
@@ -445,8 +496,8 @@ trackedFiles:
     pristine_git_object: c774780926863eb0c1b08243525d2b908558012b
   internal/provider/types/token_exchange_settings.go:
     id: 75e438968b32
-    last_write_checksum: sha1:f9008b82f98cb98cd495fd1992ca379e8a2024c8
-    pristine_git_object: a642e3f452be31f6125f0ab2f62bc44f18cba098
+    last_write_checksum: sha1:37dc02bb80088d79d611b6f0a5b28f03b76d0d63
+    pristine_git_object: 7732ece666953de6912d9a3f28b5c83425ff739a
   internal/provider/types/trusted_issuer.go:
     id: 0100d947d47f
     last_write_checksum: sha1:8f5481a3028e80e0f663103862c3aa1ea4f7b73a
@@ -467,6 +518,18 @@ trackedFiles:
     id: 22c4adc2ed12
     last_write_checksum: sha1:52c0dc5c12a7bebbeb5463c831a32a61038bbd30
     pristine_git_object: 07120fbcda4953c4c9314c97526e2d4c56767e1b
+  internal/provider/types/web_protection_settings.go:
+    id: c42617f3b7fc
+    last_write_checksum: sha1:8e3146cb4ae57420b0bd80ac73d1970dce4b0dc0
+    pristine_git_object: 98d1a6b0c926cff26d7e65aabf3f2d317de8de93
+  internal/provider/types/x_frame_settings.go:
+    id: 1ba881eca423
+    last_write_checksum: sha1:11613185e7ad5180f52752d8db71d2ad4304997d
+    pristine_git_object: 46d0673a87881a2d3252c3af2170de2d5a271532
+  internal/provider/types/xss_protection_settings.go:
+    id: fbe2e710c292
+    last_write_checksum: sha1:2b231991745de253068c718820146b206e9f2f1e
+    pristine_git_object: 18e799a8d8c9d14fc6d08f7338c4227383d535d9
   internal/provider/utils.go:
     id: 312d50f148af
     last_write_checksum: sha1:5cb73e190b9b30e5abfff6def18aa36af0b6f6a4
@@ -477,28 +540,32 @@ trackedFiles:
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
   internal/sdk/certificates.go:
     id: 046da0c60b45
-    last_write_checksum: sha1:a336915d9587995b25265da840bc3e9b16585b1b
-    pristine_git_object: 831523ef01126b497e4f0046eb89c782429fe096
+    last_write_checksum: sha1:a67d42d4831957b8abea4367c402010891536bc7
+    pristine_git_object: 93bf3c3353b6326614e095861a2a1221f2d270ae
+  internal/sdk/dataplanes.go:
+    id: ffc1afe49a55
+    last_write_checksum: sha1:30ee1a0ebf1fd8b7b73368d66cd991774f12812f
+    pristine_git_object: fb256ff73300eac670f64f2021705680139b7de5
   internal/sdk/docs/models/operations/option.md:
     id: a35737eb2e35
     last_write_checksum: sha1:0ddac2141a14720a53ad8a9d0ce242ab4d9a742c
     pristine_git_object: 6d873950cb9496df59bf1faa53b866b16f5ed4eb
   internal/sdk/domains.go:
     id: b0cb4c52ef7b
-    last_write_checksum: sha1:c04173fcb907897165d15a810737d399383351cb
-    pristine_git_object: 692b538da4b90fa43452844c064b22dfc79129c4
+    last_write_checksum: sha1:a586223febe028764151b40ee5c43f0e3c3b8530
+    pristine_git_object: 20d7c20175d5071a21187934fa5bc65723ee869c
   internal/sdk/graviteeam.go:
     id: 58538b569570
-    last_write_checksum: sha1:9305612aee52b9c8c211528497ac6f0fe48d803d
-    pristine_git_object: d8d33c136d859306d93a7a13b21d3c3a204177b6
+    last_write_checksum: sha1:9e74d4b49eff9a3d101aa682c2946d2215ef20fc
+    pristine_git_object: d334e266e775b5a0e9dac355707c0d764fcfe0f0
   internal/sdk/identityproviders.go:
     id: c0aab467e537
-    last_write_checksum: sha1:10098571104a1afec91b219bcca73531c4f2f305
-    pristine_git_object: 0bf3b77f384b6aa13b5b60f56e59a84eb085a65d
+    last_write_checksum: sha1:524587ae2c06d72a08c9e6d8433f4541498d176d
+    pristine_git_object: 17a7e263c9812c413b011fb816a289f58b47ab4d
   internal/sdk/internal/config/sdkconfiguration.go:
     id: 6af0bc8635d9
-    last_write_checksum: sha1:1dd4b812152d77c7eb9e4436686da42cb8ac771c
-    pristine_git_object: cacbab4e8645a5370d49d3fbae36771970eb6140
+    last_write_checksum: sha1:d28c16bfd3c29bcfabda228c843b802881e5d1e9
+    pristine_git_object: 859e15cc6fea9f30d04519b66e5436b7a250b1cf
   internal/sdk/internal/globals/globals.go:
     id: c501ad19864b
     last_write_checksum: sha1:e92e66416ed6303e61aa5d1c42659af416d64614
@@ -517,32 +584,32 @@ trackedFiles:
     pristine_git_object: 23cc89a5c7157d7fbb6f14d134f5cc4dde873976
   internal/sdk/internal/utils/form.go:
     id: a29055426367
-    last_write_checksum: sha1:f7e7af021adc945cac5d85ce7b667dec2c12af8e
-    pristine_git_object: 758ddbbe5c4de70c39adcbac3b3155ed0844dbf7
+    last_write_checksum: sha1:cfc6cac0025100f06fcadb4cc9202d37c2f4da1a
+    pristine_git_object: 952af2a35d5925b0bf2055e2b1c6e6b9939cedfc
   internal/sdk/internal/utils/headers.go:
     id: f035883ac0ff
-    last_write_checksum: sha1:c4de0efd1e8d13dfc317a7a936c1b691e1354459
-    pristine_git_object: a3abfa1d471f43ff069fdde7af40bb4703aed1fd
+    last_write_checksum: sha1:ff0dcdc2fdd430fd512a80f4e04a0bf1ce46f530
+    pristine_git_object: dafcafc14883ed5ac1f50b616b42fafb9380321a
   internal/sdk/internal/utils/json.go:
     id: 2231afac3add
-    last_write_checksum: sha1:5ca23143e092686d40bcbf3dc73c27d76e373c03
-    pristine_git_object: 6d1ddcc87876b41164af1725afa1934bd9aa0412
+    last_write_checksum: sha1:0dc3b205e92e1bebe00e2e26d6445bfdb5b8df04
+    pristine_git_object: 875c703cf81c02ee8e7879a2b6f5d46c95022f8a
   internal/sdk/internal/utils/pathparams.go:
     id: e7fec2afe4a6
-    last_write_checksum: sha1:e8d66a8f7d3aa6155fc5be07952b9d9cc5f1e3d5
-    pristine_git_object: b44278959370b013ed9e293935d4771fb5da9d47
+    last_write_checksum: sha1:bba41760c258f687f3b3663d4866637547b5035a
+    pristine_git_object: d10f01c150c559b66cf4449e936756db98b22d13
   internal/sdk/internal/utils/queryparams.go:
     id: fb88ad971185
-    last_write_checksum: sha1:c9dbf30e1622db00086a7a8af2b62b4320d0e9f1
-    pristine_git_object: 132ac7ecb607e1dc28a2b0976dffd73f437f1c58
+    last_write_checksum: sha1:46db7bb4a48d9048c6fa4e7f0f6a6c767d3935ff
+    pristine_git_object: b917d027221ad29746435e135e1c7eaf2702c965
   internal/sdk/internal/utils/requestbody.go:
     id: c971a8b3bbf5
-    last_write_checksum: sha1:947973f4b79d8f543c159cef3c4673f0943c22c0
-    pristine_git_object: 63964c73bae0a6291ee66d85092e21d3c4196df1
+    last_write_checksum: sha1:2b7efbfade62de7666870aa19d025a462889b05a
+    pristine_git_object: 97d03526fb7ee5db3f3cf2d15c3cde8f7eaf4218
   internal/sdk/internal/utils/retries.go:
     id: 6832c2142453
-    last_write_checksum: sha1:610f1ada0db43ce4f84800b21e3280d027f97e41
-    pristine_git_object: 1433e3854537026717f4fea6f73b063be22c38a7
+    last_write_checksum: sha1:acb9ddef6de3afde8c672d00153d574cfc06979c
+    pristine_git_object: c1176804dd2fde8db639ff8345c6450cf6d03020
   internal/sdk/internal/utils/security.go:
     id: 6ebe9eaeb99b
     last_write_checksum: sha1:1e48c45ce4c682b462fa9dbf8ad59900f75e6844
@@ -553,36 +620,48 @@ trackedFiles:
     pristine_git_object: 1908834600f32fea204071dbf623d22d4b00b8ea
   internal/sdk/internal/utils/union_test.go:
     id: 4c885192f6f0
-    last_write_checksum: sha1:4313990a636fb81411b11559959524a298b4fd38
-    pristine_git_object: faf7f637931e7c40b6eda133370134b41c3852fd
+    last_write_checksum: sha1:43abba52163ad2a6f142614edefec1e39d069057
+    pristine_git_object: 5909f771617dd6a5d16165d6f999ef5727cf49ac
   internal/sdk/internal/utils/utils.go:
     id: feefcdf75dbd
-    last_write_checksum: sha1:2fe9f3d0d42c8f3df89a8b57bd5d76e087099bdf
-    pristine_git_object: 19a84be9ece852a3fbc754939a2959c1dc59ce90
+    last_write_checksum: sha1:3520bafe186e4466b73a1b62c20c7cdd1058c2e3
+    pristine_git_object: ebf79447fd8c1690421e0a9769526a7e84722c7e
   internal/sdk/models/errors/apierror.go:
     id: bf281d768352
     last_write_checksum: sha1:48baa200e233c2bfe77fb5b39ab9bbd257e9c36d
     pristine_git_object: aac3bd31bc35ca9cfa535f71be8a234594bd6762
+  internal/sdk/models/errors/responsevalidationerror.go:
+    id: e68fc4339a19
+    last_write_checksum: sha1:4e532213085184642e545f5794b19b7d8a76eeac
+    pristine_git_object: e6484923daa30356417dc199e1850462d73c01e7
   internal/sdk/models/operations/automationcreateorupdatecertificate.go:
     id: b8c970d7b9ed
-    last_write_checksum: sha1:e718f543e4ac89f427acbd5bbbce3e18b0db271a
-    pristine_git_object: 92292d0bce52c1b46a150946686bc23f4c775adb
+    last_write_checksum: sha1:898d8a321ecfaa2f7bd3bcd361bb0c51ec026625
+    pristine_git_object: 5576d4f388f3668bbddd00ca9b34ef8f919ff428
+  internal/sdk/models/operations/automationcreateorupdatedataplane.go:
+    id: 8f2bffabf93f
+    last_write_checksum: sha1:17fb92c0620eebceedf945727ebe13a89a8a43e9
+    pristine_git_object: c2a473b78978dd25aeb5cef6e17e14c0123d3f57
   internal/sdk/models/operations/automationcreateorupdatedomain.go:
     id: c74d0a02179c
-    last_write_checksum: sha1:1e93be77669d7b38ad19ec0d87061ea049f01d77
-    pristine_git_object: beda50c2f438c97d4272d086e28f780a69fb29cf
+    last_write_checksum: sha1:4e916512f535775ec9ebc2b944ad5813130cd5e0
+    pristine_git_object: 451d4f54f707407cb2d69371e846f75a183f95b5
   internal/sdk/models/operations/automationcreateorupdateidentityprovider.go:
     id: c63db3f361d0
-    last_write_checksum: sha1:79d7d947d43988cc87142cb964415f5ac4a08ba8
-    pristine_git_object: 7d4f1c1362c572c5ab91842fd85cf43920125d1c
+    last_write_checksum: sha1:353f7e75d82cc2d547411d9c31f5b87fdb661505
+    pristine_git_object: e39c58d3b834170919d338a90a7668d115bf10f0
   internal/sdk/models/operations/automationcreateorupdatereporter.go:
     id: 7819a96c14ba
-    last_write_checksum: sha1:a568cc1317765b78283858ee6699ac749ba5a8f9
-    pristine_git_object: 0f16c424db75b2bc55e33c36aec0627682292b11
+    last_write_checksum: sha1:1922eefc07d70cad9c44d089fb2dc4dd4a76c324
+    pristine_git_object: 4dec2f22ccca860ab4c4bcb36324b786500a13dd
   internal/sdk/models/operations/automationdeletecertificate.go:
     id: d95207d3c9d0
     last_write_checksum: sha1:8fb35fadde24b7c6bce36816b2e50930ec418bfe
     pristine_git_object: 98e249368462c94ea01a4260b4c8d5ed42a7f845
+  internal/sdk/models/operations/automationdeletedataplane.go:
+    id: df66afa20f26
+    last_write_checksum: sha1:88bcbe6a13a8f268e5333085c44cd3ae71a2483d
+    pristine_git_object: ee3e454ead969412f26d86f81a07f5123818b8bb
   internal/sdk/models/operations/automationdeletedomain.go:
     id: 26ffb6354e03
     last_write_checksum: sha1:cf482329e4fdc065fa06fb639b0fcf8a51139ac6
@@ -599,6 +678,10 @@ trackedFiles:
     id: dd9377c8a477
     last_write_checksum: sha1:3569dc05ab18af9192970710827563f4c156518b
     pristine_git_object: f32293cf7b6cbd1cebddbfc7bee62089ec71af56
+  internal/sdk/models/operations/automationgetdataplane.go:
+    id: f84513d4857e
+    last_write_checksum: sha1:c252420027df3139d49187c670d16ab9808220f8
+    pristine_git_object: a28373266e2fdd388b2cc57924e6bf5cf507165d
   internal/sdk/models/operations/automationgetdomain.go:
     id: 8a67f5aabf32
     last_write_checksum: sha1:aeabb4019e8a7a92a3223b5483b199861fbcf6ec
@@ -615,6 +698,10 @@ trackedFiles:
     id: 59467d0a475b
     last_write_checksum: sha1:64f64317024bc01785b4e6b6c62e93b358457321
     pristine_git_object: 689d1096ce67802bca53bffd3ed1e0eed1e20997
+  internal/sdk/models/operations/automationlistdataplanes.go:
+    id: 15518e7b417d
+    last_write_checksum: sha1:511a0af4bd26663b490f2f71d0dfa5181b0d9a0f
+    pristine_git_object: 1da464dbf29f0f741b035268bedb0f5f83825b10
   internal/sdk/models/operations/automationlistdomains.go:
     id: 24cf40ea660a
     last_write_checksum: sha1:90cd8fa2f4b65451431f2132f8cf5539a96a37d9
@@ -629,68 +716,84 @@ trackedFiles:
     pristine_git_object: 6b6112df68cfcb5bc7981879882872fde05cd8d7
   internal/sdk/models/operations/options.go:
     id: 6d0d29414e00
-    last_write_checksum: sha1:ea1c6577f54f192148c5c8501a2a261a12e97d56
-    pristine_git_object: db41cee2581ff6958a64c2eb83818440d1fad62d
+    last_write_checksum: sha1:e0def2e37d27eae230672448d7d898b3a9fc4045
+    pristine_git_object: f7ca82a853190d8128328038a3be46b8b5330f22
   internal/sdk/models/shared/automationaccountsettings.go:
     id: 0c5730d31fae
     last_write_checksum: sha1:8509445ccbb6687d67638e224c46de2d7611f6fc
     pristine_git_object: 56a533aa0e82d603402e1f0472a88ec8c1ac8d80
   internal/sdk/models/shared/automationcertificate.go:
     id: 0d5bf1f72801
-    last_write_checksum: sha1:9105f47f509bee1e71489fab48e53ac6d17389c3
-    pristine_git_object: a3cebf3470ccbbe485ad1e5540a70848f7154e14
+    last_write_checksum: sha1:0b4b435b603314ee2832f84e4689e42d14bdc460
+    pristine_git_object: 4103e5dfaaadb1d2c7676e4be0430b7841a37c2b
   internal/sdk/models/shared/automationcertificateinput.go:
     id: f1a0b7ddc82b
-    last_write_checksum: sha1:db9c15a4fdcf1bd3f93ee4e43789500f13a2df1d
-    pristine_git_object: 76dfc4bef0cf6b2ca03fc20f7a046bb4c11a9924
+    last_write_checksum: sha1:bfb134a023dc4c206c3c86e1f823207d5598ca9e
+    pristine_git_object: 5c6b49e9764624e013e73508d9cbf35f8fa38ebb
   internal/sdk/models/shared/automationcertificatesettings.go:
     id: 6ce39e02283f
     last_write_checksum: sha1:bebd67f8e339e9c44c4fd473cb4a29a06a538188
     pristine_git_object: 150d64c75539457c275d787960f64b580b910641
   internal/sdk/models/shared/automationcibasettings.go:
     id: f590f07038fe
-    last_write_checksum: sha1:ee6d502af8bace66ac6190d5de78fe63b95865b1
-    pristine_git_object: 2083f46679cd57e89f6d321ee6a6689fd3721e62
+    last_write_checksum: sha1:0c1911a6345ad030b6d7768c24b55edecf0f600c
+    pristine_git_object: 11888bea24bbd5a6886fc1b32ce5f084b2d753c7
   internal/sdk/models/shared/automationclientregistrationsettings.go:
     id: eac811c36090
     last_write_checksum: sha1:22b0aa2578c7609b57ad85b4e9c9c3f5745db405
     pristine_git_object: 67ad341cd5118a1f0ac9c0aaa4a71ce633e729e8
+  internal/sdk/models/shared/automationdataplaneinput.go:
+    id: 0f1df3a78b3f
+    last_write_checksum: sha1:5347424750016914d391dc719b21a8adee3988e2
+    pristine_git_object: 2b6daf4b587005e73f46e56784cd937b19f1c0db
+  internal/sdk/models/shared/automationdataplaneoutput.go:
+    id: ceac6a75783b
+    last_write_checksum: sha1:5a97990c411b8c4b641a226c4e3b6df540093fb5
+    pristine_git_object: fddd50b96689c183409b05d50d96022d603dd664
   internal/sdk/models/shared/automationdomain.go:
     id: df64326fcf31
-    last_write_checksum: sha1:0ada06ff3d78167c24880e3f7106e19b80333756
-    pristine_git_object: de8baeb6733904d8fc4249a2ad8c6f37220e066f
+    last_write_checksum: sha1:636ed960889993e621608451c99fa2bcbe3b2ca5
+    pristine_git_object: 807c91258597965ffb146d7273cd37e288d06e0e
   internal/sdk/models/shared/automationdomaininput.go:
     id: 45b604b6b01c
-    last_write_checksum: sha1:7ea35e8eb4f1f5d42486cbac80dd9daaadbd3fe8
-    pristine_git_object: b602edb2a1a8496bf2a40a009e44a52ea88df448
+    last_write_checksum: sha1:f27eedd77a8cc4b6810dec0a5ef9f8556fb9cf30
+    pristine_git_object: 2082fb7e3e6c5938d71d3d928c9adff5f73add7e
   internal/sdk/models/shared/automationidentityprovider.go:
     id: c242bb567c49
-    last_write_checksum: sha1:abdc4f3127bda7beec1e31550441373eefaa25e7
-    pristine_git_object: d0f2a30abe72f877dbe5c9b2cf9584329e995207
+    last_write_checksum: sha1:add9117f59ac672040efd09f3e25fe9d1cefe2f8
+    pristine_git_object: 9210bda9a6abd3b6c5f3de0f6867412f44d5bc36
   internal/sdk/models/shared/automationidentityproviderinput.go:
     id: d25aaa8f7ca7
-    last_write_checksum: sha1:ef01483a4b99c6d43007e8c113d9d7e00bfc14e5
-    pristine_git_object: d7fc7e95eb68b5437fd70939af7896901c174e80
+    last_write_checksum: sha1:9d25e4dcc16552f538c63ea8c52525321f5c73c2
+    pristine_git_object: 6f5d2d08be4bfeeb1e062a5173e47f6c381581d7
   internal/sdk/models/shared/automationoidcsettings.go:
     id: 5f62505f1197
     last_write_checksum: sha1:dedd3d19f3f3a1b53773791817d7914260e3ee41
     pristine_git_object: 7893f48c11f5b5e2af115423bedcbe73e2fc56ce
   internal/sdk/models/shared/automationreporter.go:
     id: 068380aea7dd
-    last_write_checksum: sha1:b10d9c782d43c67372d349abfd69d76588b7133c
-    pristine_git_object: cac8d1cd56beb35d595d7a4fe54536a406bb39db
+    last_write_checksum: sha1:336b43a52ba6242221bbb5877002f56449a632c9
+    pristine_git_object: da067f4353db49c5377c258504a4109bf26d1850
   internal/sdk/models/shared/automationreporterinput.go:
     id: 0be99a997035
-    last_write_checksum: sha1:7f4411534c2b4b054393c5d6c75d9839534bcb4c
-    pristine_git_object: baefb5cdd5c94bfe892c360a9ae0f580aa0e94cb
+    last_write_checksum: sha1:8a1f3fa9663396a882010a003fcec91518d9bf86
+    pristine_git_object: 98732b467d72650022b003ed8321da13baa68d28
   internal/sdk/models/shared/automationsamlsettings.go:
     id: dc2d2f7e9cea
     last_write_checksum: sha1:3ad8e12b1ed91c1b3dfc9df9479ad73b9e662473
     pristine_git_object: 195591a957a8b1aeeff46be2310817759f105000
   internal/sdk/models/shared/corssettings.go:
     id: b3dd5116ab76
-    last_write_checksum: sha1:27947deea2893bc7e3cc42f6e0880fe6809aabc7
-    pristine_git_object: 485565e3dcfd66c55f9e8d02820a4771b27832fc
+    last_write_checksum: sha1:793e9b8e2e4130d391aff06376cb5a00bc6a39f4
+    pristine_git_object: 53c871a3b34bfc3b18adfd842f64f8cd6af7ad53
+  internal/sdk/models/shared/cspsettings.go:
+    id: d25ea68011dc
+    last_write_checksum: sha1:4924fcbe1bb0b4b67d2bca698e5865c8cb7c1b12
+    pristine_git_object: 8a9a7a6e75d7fea5f52be791345568f86fd67697
+  internal/sdk/models/shared/dryrunerror.go:
+    id: 7504b734de35
+    last_write_checksum: sha1:406093682af0663a7b4ce39585604e65207f14f0
+    pristine_git_object: 958d7716e6ba25c334dfd95c2006ff44eb95df07
   internal/sdk/models/shared/error.go:
     id: a388f67481aa
     last_write_checksum: sha1:d7ea674c7fb852b6e4089914717943543b1f7a09
@@ -699,6 +802,14 @@ trackedFiles:
     id: 40328fb9ce5e
     last_write_checksum: sha1:e96b17aec8b1e14499d54336c96dff6ad6b83bca
     pristine_git_object: 9fe814eda6a78b999632eb651f5f6e79723d9335
+  internal/sdk/models/shared/idjagsettings.go:
+    id: d025018b6d0c
+    last_write_checksum: sha1:9fb17db9d47db958118b24043a14c403350c7f19
+    pristine_git_object: f769011c4c7813d4043bf3e48d1cc3f96b29fec9
+  internal/sdk/models/shared/keyretrievalsettings.go:
+    id: b492665c4117
+    last_write_checksum: sha1:7e37b142edfd883887fe2e60761289fd19032ea1
+    pristine_git_object: fdf4bd7811479dc1c780d3afbc8892c02290ca7b
   internal/sdk/models/shared/loginsettings.go:
     id: e6c02318e24a
     last_write_checksum: sha1:aef2212bbc6f15d0e859486610881b1262a82ac5
@@ -707,6 +818,10 @@ trackedFiles:
     id: 28cdd0f19d56
     last_write_checksum: sha1:54bb125eab9646399f3340d48432840014d605da
     pristine_git_object: cccc6e507510c1309e158503f03396266cc03697
+  internal/sdk/models/shared/reporterattributemapping.go:
+    id: d87742e208b6
+    last_write_checksum: sha1:93969bbe207103486e49a2456426f2708d15d81a
+    pristine_git_object: 1e7b726f71b63b9f61adf750ca1054287bdb3e7e
   internal/sdk/models/shared/resetpasswordsettings.go:
     id: 97ba717b0693
     last_write_checksum: sha1:2cfc765a6ec0a40b4e771defb8ab3110944365b0
@@ -731,22 +846,26 @@ trackedFiles:
     id: a64e733c45f9
     last_write_checksum: sha1:2ed66aed1ad61d0802408c47f3d1bfb1c3969955
     pristine_git_object: fed549d7aa7f621841613b3a4610dc51335df722
+  internal/sdk/models/shared/severity.go:
+    id: 3aae0a5727e9
+    last_write_checksum: sha1:02d9bc6bf01197432fa8f49beb8f0ba3c83b5d34
+    pristine_git_object: a282519dbbe65344f1428f6391d56cc56d56db1e
   internal/sdk/models/shared/spiffedomainsettings.go:
     id: ef93140c5a39
-    last_write_checksum: sha1:8f36d1e0789920fd1469ec01503e166b99d84989
-    pristine_git_object: 2a22c1e6e829e1a3ab97739238f43575e023b6b6
+    last_write_checksum: sha1:04574385c3d7383761be3ea9c4de016bc558ee76
+    pristine_git_object: 1ec8260f2e75bd491bb589d35a6016d9875f3f68
   internal/sdk/models/shared/tokenexchangeoauthsettings.go:
     id: 80d0cbfeb686
     last_write_checksum: sha1:a90cb06e65562024c9b3b9ed69bfcadc31382b2e
     pristine_git_object: 05ec97ee66a3232cc5fffb818a522e39d1e01825
   internal/sdk/models/shared/tokenexchangesettings.go:
     id: a7c90aa91207
-    last_write_checksum: sha1:23f573d1cc500f0b234c1373db6d3d1e83640103
-    pristine_git_object: e2dd18a6c173046423da3ebab16909b3ac660721
+    last_write_checksum: sha1:3031a7611f2a5fb92b95c1d05f01cfc4dad3b56c
+    pristine_git_object: c68dc25e7afa81272455e098bf012d3df14d39a3
   internal/sdk/models/shared/trustedissuer.go:
     id: a95f72893ad7
-    last_write_checksum: sha1:3159ab52732234d5c9438d51de67ae4e1a5d144c
-    pristine_git_object: 5025f4522d302f87346c048cce43801f7bb6c477
+    last_write_checksum: sha1:231c369bf35f515c42769ec050be0fb7ff06840a
+    pristine_git_object: 577db7c349647dfa67880cdd67187f3d0c951708
   internal/sdk/models/shared/umasettings.go:
     id: 8d7a09e99b91
     last_write_checksum: sha1:6b8cc7d316a35e2eec5b722c3c40b0ee82e6872b
@@ -763,22 +882,34 @@ trackedFiles:
     id: 2c374dd9657b
     last_write_checksum: sha1:065f7e1856beb86391cbee17fb6bebada304412e
     pristine_git_object: 28f4caac68b27d89f83fc27eb612c585d1b45ffd
+  internal/sdk/models/shared/webprotectionsettings.go:
+    id: e88dc42840f7
+    last_write_checksum: sha1:d26333c0b8da684d5065bf0ba59033da34088018
+    pristine_git_object: 355655e47998125dbc98149a59fb958984faa421
+  internal/sdk/models/shared/xframesettings.go:
+    id: ab87b1edf9dc
+    last_write_checksum: sha1:7bed55fc82247a6e02a7de88419dc2be4355488e
+    pristine_git_object: eb1dcb28b48a2e4eb46b5856c8f960ff3aa93d8f
+  internal/sdk/models/shared/xssprotectionsettings.go:
+    id: 1f120880c625
+    last_write_checksum: sha1:e5b61c9515992d9ab42da05e09627ce1616a1a83
+    pristine_git_object: 048e06c4771607bc1f8e664c2c2fc184ecda22e2
   internal/sdk/optionalnullable/optionalnullable.go:
     id: 4b83aa3f3df3
-    last_write_checksum: sha1:eb1c7d4333d39fff54827fd3b98443df8e2a22a8
-    pristine_git_object: 0778181a45eeb34d8b86ef855fb74dd99106bb97
+    last_write_checksum: sha1:35ac10956c16852cc4dcbec54e30be1fe828794e
+    pristine_git_object: d6066cd1d6e9957b4e54cf5fec0629c30eda0e2d
   internal/sdk/optionalnullable/optionalnullable_test.go:
     id: 3920a41dfc4c
-    last_write_checksum: sha1:4495e62cc50bf51d4db762ca6b9902c1e1e0464d
-    pristine_git_object: 1a9bcd0cc4a56f4034599c5a32058b0490dd17f8
+    last_write_checksum: sha1:d76c8ae51fd82ba31d57a7f57cd2e9b83d7bbb34
+    pristine_git_object: 3851483e03ce4e6b06c6c61fd82d1a735032739c
   internal/sdk/reporters.go:
     id: 73b3a565b2bb
-    last_write_checksum: sha1:a76cc5e115ff5b727c742858942bba03b7243896
-    pristine_git_object: 9aedd506ed7a75978ae1e8107e53d0f4c2e3e132
+    last_write_checksum: sha1:206e4c93d133a8a7cc725fa962e156c5ea80e2dd
+    pristine_git_object: 2788eb5308b7bdc7aa389b34df4137de793917b0
   internal/sdk/retry/config.go:
     id: 7ea5fa9128b6
-    last_write_checksum: sha1:1cdb99de13f9db4dbcd610122cef47332cf02ec7
-    pristine_git_object: c9fb2a2267b398e2bcabbb199d6636ef8887d004
+    last_write_checksum: sha1:22068a7fd6e154053ff85678a7fdb6a0d02ac790
+    pristine_git_object: 225f89fa83232afd070195744a60dbcf308996a7
   internal/sdk/types/bigint.go:
     id: fc530b70337e
     last_write_checksum: sha1:c1ec8524ee4ed730b8514bb36c6abbb3c063d787
@@ -876,7 +1007,7 @@ examples:
           envId: "DEFAULT"
       responses:
         "200":
-          application/json: [{"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}]
+          application/json: [{"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}]
     error:
       parameters:
         path:
@@ -893,18 +1024,22 @@ examples:
         path:
           orgId: "DEFAULT"
           envId: "DEFAULT"
+        query:
+          dryRun: false
       requestBody:
-        application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
+        application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
       responses:
         "200":
-          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
+          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
     error:
       parameters:
         path:
           orgId: "DEFAULT"
           envId: "DEFAULT"
+        query:
+          dryRun: false
       requestBody:
-        application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "certificateSettings": {"fallbackCertificate": "default"}, "corsSettings": {"allowCredentials": false, "allowedHeaders": ["Authorization", "Content-Type"], "allowedMethods": ["GET", "POST", "PUT", "DELETE"], "allowedOrigins": ["https://app.example.com"], "enabled": false, "maxAge": 86400}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"cibaSettings": {"authReqExpiry": 600, "bindingMessageLength": 256, "enabled": false, "tokenReqInterval": 5}, "redirectUriStrictMatching": false}, "path": "/example-domain", "saml": {"certificate": "signing-cert", "enabled": false, "entityId": "https://auth.example.com/saml2/idp/entity"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "tags": ["eu", "production"], "tokenExchangeSettings": {"allowDelegation": false, "allowImpersonation": true, "allowedActorTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedRequestedTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedSubjectTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "enabled": false, "maxDelegationDepth": 25, "trustedIssuers": [{"issuer": "https://issuer.example.com", "jwksUri": "https://issuer.example.com/.well-known/jwks.json", "userBindingCriteria": [{"attribute": "emails.value", "expression": "{#token['email']}"}], "userBindingEnabled": false}]}, "vhostMode": false, "vhosts": [{"host": "auth.example.com", "overrideEntrypoint": false, "path": "/customers"}], "webAuthnSettings": {"attestationConveyancePreference": "none", "enforceAuthenticatorIntegrity": false, "forceRegistration": false, "origin": "https://auth.example.com", "relyingPartyId": "auth.example.com", "relyingPartyName": "Example Inc.", "requireResidentKey": false, "userVerification": "preferred"}}
+        application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "certificateSettings": {"fallbackCertificate": "default"}, "corsSettings": {"allowCredentials": false, "allowedHeaders": ["Authorization", "Content-Type"], "allowedMethods": ["GET", "POST", "PUT", "DELETE"], "allowedOrigins": ["https://app.example.com"], "enabled": false, "inherited": true, "maxAge": 86400}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "path": "/example-domain", "saml": {"certificate": "signing-cert", "enabled": false, "entityId": "https://auth.example.com/saml2/idp/entity"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "tags": ["eu", "production"], "tokenExchangeSettings": {"allowDelegation": false, "allowImpersonation": true, "allowedActorTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedRequestedTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedSubjectTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "enabled": false, "maxDelegationDepth": 25}, "vhostMode": false, "vhosts": [], "webAuthnSettings": {"attestationConveyancePreference": "none", "enforceAuthenticatorIntegrity": false, "forceRegistration": false, "origin": "https://auth.example.com", "relyingPartyId": "auth.example.com", "relyingPartyName": "Example Inc.", "requireResidentKey": false, "userVerification": "preferred"}, "webProtectionSettings": {"csp": {"directives": ["default-src 'self'", "script-src 'self'", "upgrade-insecure-requests"], "enabled": false, "inherited": true, "reportOnly": false, "scriptInlineNonce": true}, "xframe": {"action": "DENY", "enabled": false, "inherited": true}, "xss": {"action": "1; mode=block", "enabled": false, "inherited": true}}}
       responses:
         "400":
           application/json: {"http_status": 400, "message": "A human-readable description of the error"}
@@ -940,7 +1075,7 @@ examples:
           domainKey: "example-domain"
       responses:
         "200":
-          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "certificateSettings": {"fallbackCertificate": "default"}, "corsSettings": {"allowCredentials": false, "allowedHeaders": ["Authorization", "Content-Type"], "allowedMethods": ["GET", "POST", "PUT", "DELETE"], "allowedOrigins": ["https://app.example.com"], "enabled": false, "maxAge": 86400}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"cibaSettings": {"authReqExpiry": 600, "bindingMessageLength": 256, "enabled": false, "tokenReqInterval": 5}, "redirectUriStrictMatching": false}, "path": "/example-domain", "saml": {"certificate": "signing-cert", "enabled": false, "entityId": "https://auth.example.com/saml2/idp/entity"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "tags": ["eu", "production"], "tokenExchangeSettings": {"allowDelegation": false, "allowImpersonation": true, "allowedActorTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedRequestedTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedSubjectTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "enabled": false, "maxDelegationDepth": 25, "trustedIssuers": [{"issuer": "https://issuer.example.com", "jwksUri": "https://issuer.example.com/.well-known/jwks.json", "userBindingCriteria": [{"attribute": "emails.value", "expression": "{#token['email']}"}], "userBindingEnabled": false}]}, "vhostMode": false, "vhosts": [{"host": "auth.example.com", "overrideEntrypoint": false, "path": "/customers"}], "webAuthnSettings": {"attestationConveyancePreference": "none", "enforceAuthenticatorIntegrity": false, "forceRegistration": false, "origin": "https://auth.example.com", "relyingPartyId": "auth.example.com", "relyingPartyName": "Example Inc.", "requireResidentKey": false, "userVerification": "preferred"}}
+          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "certificateSettings": {"fallbackCertificate": "default"}, "corsSettings": {"allowCredentials": false, "allowedHeaders": ["Authorization", "Content-Type"], "allowedMethods": ["GET", "POST", "PUT", "DELETE"], "allowedOrigins": ["https://app.example.com"], "enabled": false, "inherited": true, "maxAge": 86400}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "path": "/example-domain", "saml": {"certificate": "signing-cert", "enabled": false, "entityId": "https://auth.example.com/saml2/idp/entity"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "tags": ["eu", "production"], "tokenExchangeSettings": {"allowDelegation": false, "allowImpersonation": true, "allowedActorTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedRequestedTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedSubjectTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "enabled": false, "maxDelegationDepth": 25}, "vhostMode": false, "vhosts": [], "webAuthnSettings": {"attestationConveyancePreference": "none", "enforceAuthenticatorIntegrity": false, "forceRegistration": false, "origin": "https://auth.example.com", "relyingPartyId": "auth.example.com", "relyingPartyName": "Example Inc.", "requireResidentKey": false, "userVerification": "preferred"}, "webProtectionSettings": {"csp": {"directives": ["default-src 'self'", "script-src 'self'", "upgrade-insecure-requests"], "enabled": false, "inherited": true, "reportOnly": false, "scriptInlineNonce": true}, "xframe": {"action": "DENY", "enabled": false, "inherited": true}, "xss": {"action": "1; mode=block", "enabled": false, "inherited": true}}}
         "403":
           application/json: {"http_status": 400}
     Domain:
@@ -951,7 +1086,7 @@ examples:
           domainKey: "example-domain"
       responses:
         "200":
-          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
+          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
     error:
       parameters:
         path:
@@ -998,6 +1133,8 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
         application/json: {"configuration": "{\"jks\":{\"content\":\"...\",\"name\":\"keystore.jks\"},\"storepass\":\"secret\",\"alias\":\"mykey\",\"keypass\":\"secret\"}", "key": "signing-cert", "name": "Signing certificate", "system": false, "type": "javakeystore-am-certificate"}
       responses:
@@ -1009,6 +1146,8 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
         application/json: {"key": "default", "system": true}
       responses:
@@ -1020,6 +1159,8 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
         application/json: {"configuration": "{\"jks\":{\"content\":\"...\",\"name\":\"keystore.jks\"},\"storepass\":\"secret\",\"alias\":\"mykey\",\"keypass\":\"secret\"}", "key": "signing-cert", "name": "Signing certificate", "system": false, "type": "javakeystore-am-certificate"}
       responses:
@@ -1033,6 +1174,8 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
         application/json: {"configuration": "{\"jks\":{\"content\":\"...\",\"name\":\"keystore.jks\"},\"storepass\":\"secret\",\"alias\":\"mykey\",\"keypass\":\"secret\"}", "key": "signing-cert", "name": "Signing certificate", "system": false, "type": "javakeystore-am-certificate"}
       responses:
@@ -1126,7 +1269,7 @@ examples:
           domainKey: "example-domain"
       responses:
         "200":
-          application/json: [{"configuration": "{\"users\":[{\"username\":\"admin\",\"password\":\"...\"}]}", "domainWhitelist": ["example.com"], "groupMapper": {"group-id": ["username=admin"]}, "key": "corporate-ldap", "mappers": {"sub": "username", "email": "email"}, "name": "Corporate LDAP", "roleMapper": {"role-id": ["username=admin"]}, "system": false, "type": "inline-am-idp"}, {"key": "default", "system": true}]
+          application/json: [{"configuration": "{\"users\":[{\"username\":\"admin\",\"password\":\"...\"}]}", "domainWhitelist": ["example.com"], "groupMapper": {"group-id": ["username=admin"]}, "key": "corporate-ldap", "mappers": {"sub": "username", "email": "email"}, "name": "Corporate LDAP", "roleMapper": {"role-id": ["username=admin"]}, "system": false, "type": "inline-am-idp"}, {"domainWhitelist": ["example.com"], "key": "default", "system": true}]
     error:
       parameters:
         path:
@@ -1143,6 +1286,8 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
         application/json: {"configuration": "{\"users\":[{\"username\":\"admin\",\"password\":\"...\"}]}", "domainWhitelist": ["example.com"], "groupMapper": {"group-id": ["username=admin"]}, "key": "corporate-ldap", "mappers": {"sub": "username", "email": "email"}, "name": "Corporate LDAP", "roleMapper": {"role-id": ["username=admin"]}, "system": false, "type": "inline-am-idp"}
       responses:
@@ -1154,17 +1299,21 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
-        application/json: {"key": "default", "system": true}
+        application/json: {"domainWhitelist": ["example.com"], "key": "default", "system": true}
       responses:
         "200":
-          application/json: {"key": "default", "system": true}
+          application/json: {"domainWhitelist": ["example.com"], "key": "default", "system": true}
     speakeasy-default-automation-create-or-update-identity-provider:
       parameters:
         path:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
         application/json: {"configuration": "{\"users\":[{\"username\":\"admin\",\"password\":\"...\"}]}", "domainWhitelist": ["example.com"], "key": "corporate-ldap", "mappers": {"email": "email", "sub": "username"}, "name": "Corporate LDAP", "system": false, "type": "inline-am-idp"}
       responses:
@@ -1178,6 +1327,8 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
         application/json: {"configuration": "{\"users\":[{\"username\":\"admin\",\"password\":\"...\"}]}", "domainWhitelist": ["example.com"], "key": "corporate-ldap", "mappers": {"email": "email", "sub": "username"}, "name": "Corporate LDAP", "system": false, "type": "inline-am-idp"}
       responses:
@@ -1240,7 +1391,7 @@ examples:
           identityKey: "corporate-ldap"
       responses:
         "200":
-          application/json: {"key": "default", "system": true}
+          application/json: {"domainWhitelist": ["example.com"], "key": "default", "system": true}
     error:
       parameters:
         path:
@@ -1260,7 +1411,7 @@ examples:
           domainKey: "example-domain"
       responses:
         "200":
-          application/json: [{"configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}]
+          application/json: [{"attributeMappingEventTypes": [], "configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}]
         "403":
           application/json: {"http_status": 400}
     AutomationReporterList:
@@ -1271,7 +1422,7 @@ examples:
           domainKey: "example-domain"
       responses:
         "200":
-          application/json: [{"configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}, {"enabled": true, "key": "default", "system": true}]
+          application/json: [{"attributeMappingEventTypes": [], "configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}, {"attributeMappingEventTypes": [], "enabled": true, "key": "default", "system": true}]
     error:
       parameters:
         path:
@@ -1288,33 +1439,39 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
-        application/json: {"configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
+        application/json: {"attributeMappingEventTypes": [], "configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
       responses:
         "200":
-          application/json: {"configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
+          application/json: {"attributeMappingEventTypes": [], "configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
     System reporter:
       parameters:
         path:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
-        application/json: {"enabled": true, "key": "default", "system": true}
+        application/json: {"attributeMappingEventTypes": [], "enabled": true, "key": "default", "system": true}
       responses:
         "200":
-          application/json: {"enabled": true, "key": "default", "system": true}
+          application/json: {"attributeMappingEventTypes": [], "enabled": true, "key": "default", "system": true}
     speakeasy-default-automation-create-or-update-reporter:
       parameters:
         path:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
-        application/json: {"configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
+        application/json: {"attributeMappingEventTypes": [], "attributeMappings": [{"exportedName": "user_sub", "expression": "{#context.attributes['user'].additionalInformation['sub']}"}], "configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
       responses:
         "200":
-          application/json: {"configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
+          application/json: {"attributeMappingEventTypes": [], "attributeMappings": [{"exportedName": "user_sub", "expression": "{#context.attributes['user'].additionalInformation['sub']}"}], "configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
         "400":
           application/json: {"http_status": 400}
     error:
@@ -1323,8 +1480,10 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           domainKey: "example-domain"
+        query:
+          dryRun: false
       requestBody:
-        application/json: {"configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
+        application/json: {"attributeMappingEventTypes": [], "attributeMappings": [{"exportedName": "user_sub", "expression": "{#context.attributes['user'].additionalInformation['sub']}"}], "configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
       responses:
         "400":
           application/json: {"http_status": 400, "message": "A human-readable description of the error"}
@@ -1363,7 +1522,7 @@ examples:
           reporterKey: "audit-kafka"
       responses:
         "200":
-          application/json: {"configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
+          application/json: {"attributeMappingEventTypes": [], "attributeMappings": [{"exportedName": "user_sub", "expression": "{#context.attributes['user'].additionalInformation['sub']}"}], "configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
         "403":
           application/json: {"http_status": 400}
     Reporter:
@@ -1375,7 +1534,7 @@ examples:
           reporterKey: "audit-kafka"
       responses:
         "200":
-          application/json: {"configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
+          application/json: {"attributeMappingEventTypes": [], "configuration": "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}", "enabled": true, "key": "audit-kafka", "name": "Audit events to Kafka", "system": false, "type": "reporter-am-kafka"}
     System reporter:
       parameters:
         path:
@@ -1385,7 +1544,7 @@ examples:
           reporterKey: "audit-kafka"
       responses:
         "200":
-          application/json: {"enabled": true, "key": "default", "system": true}
+          application/json: {"attributeMappingEventTypes": [], "enabled": true, "key": "default", "system": true}
     error:
       parameters:
         path:
@@ -1393,6 +1552,95 @@ examples:
           envId: "DEFAULT"
           domainKey: "example-domain"
           reporterKey: "audit-kafka"
+      responses:
+        "403":
+          application/json: {"http_status": 403, "message": "A human-readable description of the error"}
+  automationListDataPlanes:
+    DataPlaneList:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+      responses:
+        "200":
+          application/json: [{"createdAt": "2026-01-15T09:30:00.000Z", "database": "gravitee-am-acme", "environmentId": "DEFAULT", "gatewayUrl": "https://gateway-eu.example.com", "hosts": ["mongo:27017"], "id": "acme-eu", "name": "ACME EU data plane", "organizationId": "DEFAULT", "type": "mongodb", "updatedAt": "2026-01-15T09:30:00.000Z"}]
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+      responses:
+        "403":
+          application/json: {"http_status": 403, "message": "A human-readable description of the error"}
+        default:
+          application/json: {"http_status": 403, "message": "A human-readable description of the error"}
+  automationCreateOrUpdateDataPlane:
+    DataPlane:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+      requestBody:
+        application/json: {"configuration": {"mongodb": {"dbname": "gravitee-am-acme", "host": "mongo", "port": 27017}}, "gatewayUrl": "https://gateway-eu.example.com", "id": "acme-eu", "name": "ACME EU data plane", "type": "mongodb"}
+      responses:
+        "200":
+          application/json: {"createdAt": "2026-01-15T09:30:00.000Z", "database": "gravitee-am-acme", "environmentId": "DEFAULT", "gatewayUrl": "https://gateway-eu.example.com", "hosts": ["mongo:27017"], "id": "acme-eu", "name": "ACME EU data plane", "organizationId": "DEFAULT", "type": "mongodb", "updatedAt": "2026-01-15T09:30:00.000Z"}
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+      requestBody:
+        application/json: {"configuration": {}, "gatewayUrl": "https://gateway-eu.example.com", "id": "acme-eu", "name": "ACME EU data plane", "type": "mongodb"}
+      responses:
+        "400":
+          application/json: {"http_status": 400, "message": "A human-readable description of the error"}
+  automationDeleteDataPlane:
+    speakeasy-default-automation-delete-data-plane:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          dataPlaneId: "acme-eu"
+      responses:
+        "403":
+          application/json: {"http_status": 400}
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          dataPlaneId: "acme-eu"
+      responses:
+        "403":
+          application/json: {"http_status": 403, "message": "A human-readable description of the error"}
+  automationGetDataPlane:
+    speakeasy-default-automation-get-data-plane:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          dataPlaneId: "acme-eu"
+      responses:
+        "200":
+          application/json: {"database": "gravitee-am-acme", "environmentId": "DEFAULT", "gatewayUrl": "https://gateway-eu.example.com", "hosts": ["mongo:27017"], "id": "acme-eu", "name": "ACME EU data plane", "organizationId": "DEFAULT", "type": "mongodb"}
+        "403":
+          application/json: {"http_status": 400}
+    DataPlane:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          dataPlaneId: "acme-eu"
+      responses:
+        "200":
+          application/json: {"createdAt": "2026-01-15T09:30:00.000Z", "database": "gravitee-am-acme", "environmentId": "DEFAULT", "gatewayUrl": "https://gateway-eu.example.com", "hosts": ["mongo:27017"], "id": "acme-eu", "name": "ACME EU data plane", "organizationId": "DEFAULT", "type": "mongodb", "updatedAt": "2026-01-15T09:30:00.000Z"}
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          dataPlaneId: "acme-eu"
       responses:
         "403":
           application/json: {"http_status": 403, "message": "A human-readable description of the error"}

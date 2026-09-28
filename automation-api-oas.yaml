@@ -34,7 +34,7 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Gravitee.io AM - Automation API
-  version: 4.12.0
+  version: 4.13.0
 servers:
 - url: http://localhost:8093/automation
 security:
@@ -42,6 +42,9 @@ security:
 tags:
 - description: Certificates configured under a domain to sign and verify tokens.
   name: Certificates
+- description: Data planes configured under an environment to store the runtime data
+    of its domains.
+  name: Data Planes
 - description: "Security domains: the top-level container for an authentication and\
     \ authorization configuration. Create, read, update, and delete domains, and reach\
     \ their sub-resources."
@@ -51,6 +54,317 @@ tags:
 - description: Reporters configured under a domain to persist audit events to a backend.
   name: Reporters
 paths:
+  /organizations/{orgId}/environments/{envId}/dataplanes:
+    get:
+      description: Returns all data planes managed by the Automation API in the environment.
+        Data planes provisioned outside the Automation API are not returned.
+      operationId: automationListDataPlanes
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the resource belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                DataPlaneList:
+                  description: DataPlaneList
+                  value:
+                  - id: acme-eu
+                    name: ACME EU data plane
+                    type: mongodb
+                    gatewayUrl: https://gateway-eu.example.com
+                    database: gravitee-am-acme
+                    hosts:
+                    - mongo:27017
+                    organizationId: DEFAULT
+                    environmentId: DEFAULT
+                    createdAt: 2026-01-15T09:30:00.000Z
+                    updatedAt: 2026-01-15T09:30:00.000Z
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AutomationDataPlane"
+          description: List of data planes
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        default:
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 500
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unexpected error
+      summary: List an environment's data planes
+      tags:
+      - Data Planes
+    put:
+      description: "Idempotent create-or-update. Uses the id field in the body to\
+        \ identify the data plane within the environment. The type is immutable, and\
+        \ the organization and environment come from the path. An id: reference updates\
+        \ a data plane the Automation API does not manage, and cannot create one."
+      operationId: automationCreateOrUpdateDataPlane
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the resource belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              DataPlane:
+                description: A MongoDB data plane
+                value:
+                  id: acme-eu
+                  name: ACME EU data plane
+                  type: mongodb
+                  gatewayUrl: https://gateway-eu.example.com
+                  configuration:
+                    mongodb:
+                      dbname: gravitee-am-acme
+                      host: mongo
+                      port: 27017
+            schema:
+              $ref: "#/components/schemas/AutomationDataPlane"
+        description: Desired state of the data plane.
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                DataPlane:
+                  description: DataPlane
+                  value:
+                    id: acme-eu
+                    name: ACME EU data plane
+                    type: mongodb
+                    gatewayUrl: https://gateway-eu.example.com
+                    database: gravitee-am-acme
+                    hosts:
+                    - mongo:27017
+                    organizationId: DEFAULT
+                    environmentId: DEFAULT
+                    createdAt: 2026-01-15T09:30:00.000Z
+                    updatedAt: 2026-01-15T09:30:00.000Z
+              schema:
+                $ref: "#/components/schemas/AutomationDataPlane"
+          description: The created or updated data plane
+        "400":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 400
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Invalid request: a missing required field, an unknown data\
+            \ plane type, a configuration the type's plugin rejects, an id reserved\
+            \ by the node's gravitee.yml, or an attempt to change an immutable field"
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "An id: reference naming a data plane that does not exist in\
+            \ this environment"
+        "409":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 409
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: The id is already taken by a data plane the Automation API
+            does not manage
+      summary: Create or update a data plane
+      tags:
+      - Data Planes
+  /organizations/{orgId}/environments/{envId}/dataplanes/{dataPlaneId}:
+    delete:
+      description: Deletes an Automation-managed data plane by its id. Deleting a
+        data plane that does not exist also returns 204.
+      operationId: automationDeleteDataPlane
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the resource belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: Id of the data plane within the environment.
+        example: acme-eu
+        in: path
+        name: dataPlaneId
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Data plane successfully deleted
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "409":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 409
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: At least one domain still references the data plane
+      summary: Delete a data plane
+      tags:
+      - Data Planes
+    get:
+      description: Retrieves a single Automation-managed data plane by its id.
+      operationId: automationGetDataPlane
+      parameters:
+      - description: Identifier of the organization that owns the environment.
+        example: DEFAULT
+        in: path
+        name: orgId
+        required: true
+        schema:
+          type: string
+      - description: Identifier of the environment the resource belongs to.
+        example: DEFAULT
+        in: path
+        name: envId
+        required: true
+        schema:
+          type: string
+      - description: Id of the data plane within the environment.
+        example: acme-eu
+        in: path
+        name: dataPlaneId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                DataPlane:
+                  description: DataPlane
+                  value:
+                    id: acme-eu
+                    name: ACME EU data plane
+                    type: mongodb
+                    gatewayUrl: https://gateway-eu.example.com
+                    database: gravitee-am-acme
+                    hosts:
+                    - mongo:27017
+                    organizationId: DEFAULT
+                    environmentId: DEFAULT
+                    createdAt: 2026-01-15T09:30:00.000Z
+                    updatedAt: 2026-01-15T09:30:00.000Z
+              schema:
+                $ref: "#/components/schemas/AutomationDataPlane"
+          description: The data plane
+        "403":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 403
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Permission denied
+        "404":
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    http_status: 404
+                    message: A human-readable description of the error
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: "Data plane not found in this environment, or not managed by\
+            \ the Automation API"
+      summary: Get a data plane
+      tags:
+      - Data Planes
   /organizations/{orgId}/environments/{envId}/domains:
     get:
       description: Returns all security domains within the specified environment.
@@ -63,7 +377,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -124,9 +438,13 @@ paths:
       tags:
       - Domains
     put:
-      description: Idempotent create-or-update. Uses the key field in the body to
-        identify the domain. On first apply the domain is created; subsequent applies
-        update it. dataPlaneId is required at creation and immutable afterwards.
+      description: "Idempotent create-or-update. Uses the key field in the body to\
+        \ identify the domain. On first apply the domain is created; subsequent applies\
+        \ update it. dataPlaneId is optional at creation, resolved from the environment's\
+        \ data planes when omitted, and immutable afterwards. When dryRun is true,\
+        \ the endpoint validates the payload without persisting; the returned domain\
+        \ carries a dryRunErrors list (empty on success, populated with validation\
+        \ errors otherwise)."
       operationId: automationCreateOrUpdateDomain
       parameters:
       - description: Identifier of the organization that owns the environment.
@@ -136,13 +454,20 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
         required: true
         schema:
           type: string
+      - description: "When true, validates the payload without persisting. The returned\
+          \ domain includes a dryRunErrors field."
+        in: query
+        name: dryRun
+        schema:
+          type: boolean
+          default: false
       requestBody:
         content:
           application/json:
@@ -196,7 +521,8 @@ paths:
                       redirectUriStrictMatching: true
               schema:
                 $ref: "#/components/schemas/AutomationDomain"
-          description: The created or updated domain
+          description: The created or updated domain. When dryRun is true the domain
+            includes a dryRunErrors field with any validation errors.
         "400":
           content:
             application/json:
@@ -238,7 +564,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -292,7 +618,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -372,7 +698,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -434,10 +760,12 @@ paths:
       - Certificates
       - Domains
     put:
-      description: Idempotent create-or-update. Uses the key field in the body to
-        identify the certificate within the domain. Re-applying an unchanged definition
-        is a no-op. The system flag is immutable; changing it requires deleting and
-        recreating the certificate.
+      description: "Idempotent create-or-update. Uses the key field in the body to\
+        \ identify the certificate within the domain. Re-applying an unchanged definition\
+        \ is a no-op. The system flag is immutable; changing it requires deleting\
+        \ and recreating the certificate. When dryRun is true, the endpoint validates\
+        \ the payload without persisting; the returned certificate carries a dryRunErrors\
+        \ list (empty on success, populated with validation errors otherwise)."
       operationId: automationCreateOrUpdateCertificate
       parameters:
       - description: Identifier of the organization that owns the environment.
@@ -447,7 +775,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -462,6 +790,13 @@ paths:
         required: true
         schema:
           type: string
+      - description: "When true, validates the payload without persisting. The returned\
+          \ certificate includes a dryRunErrors field."
+        in: query
+        name: dryRun
+        schema:
+          type: boolean
+          default: false
       requestBody:
         content:
           application/json:
@@ -508,7 +843,8 @@ paths:
                     system: true
               schema:
                 $ref: "#/components/schemas/AutomationCertificate"
-          description: The created or updated certificate
+          description: The created or updated certificate. When dryRun is true the
+            certificate includes a dryRunErrors field with any validation errors.
         "400":
           content:
             application/json:
@@ -561,7 +897,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -623,7 +959,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -709,7 +1045,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -781,10 +1117,13 @@ paths:
       - Identity Providers
       - Domains
     put:
-      description: Idempotent create-or-update. Uses the key field in the body to
-        identify the identity provider within the domain. On first apply the identity
-        provider is created; subsequent applies update it. The system flag is immutable;
-        changing it requires deleting and recreating the identity provider.
+      description: "Idempotent create-or-update. Uses the key field in the body to\
+        \ identify the identity provider within the domain. On first apply the identity\
+        \ provider is created; subsequent applies update it. The system flag is immutable;\
+        \ changing it requires deleting and recreating the identity provider. When\
+        \ dryRun is true, the endpoint validates the payload without persisting; the\
+        \ returned identity provider carries a dryRunErrors list (empty on success,\
+        \ populated with validation errors otherwise)."
       operationId: automationCreateOrUpdateIdentityProvider
       parameters:
       - description: Identifier of the organization that owns the environment.
@@ -794,7 +1133,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -809,6 +1148,13 @@ paths:
         required: true
         schema:
           type: string
+      - description: "When true, validates the payload without persisting. The returned\
+          \ identity provider includes a dryRunErrors field."
+        in: query
+        name: dryRun
+        schema:
+          type: boolean
+          default: false
       requestBody:
         content:
           application/json:
@@ -875,7 +1221,9 @@ paths:
                     system: true
               schema:
                 $ref: "#/components/schemas/AutomationIdentityProvider"
-          description: The created or updated identity provider
+          description: The created or updated identity provider. When dryRun is true
+            the identity provider includes a dryRunErrors field with any validation
+            errors.
         "400":
           content:
             application/json:
@@ -929,7 +1277,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -992,7 +1340,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -1087,7 +1435,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -1149,10 +1497,13 @@ paths:
       - Reporters
       - Domains
     put:
-      description: Idempotent create-or-update. Uses the key field in the body to
-        identify the reporter within the domain. On first apply the reporter is created;
-        subsequent applies update it. The system flag is immutable; changing it requires
-        deleting and recreating the reporter.
+      description: "Idempotent create-or-update. Uses the key field in the body to\
+        \ identify the reporter within the domain. On first apply the reporter is\
+        \ created; subsequent applies update it. The system flag is immutable; changing\
+        \ it requires deleting and recreating the reporter. When dryRun is true, the\
+        \ endpoint validates the payload without persisting; the returned reporter\
+        \ carries a dryRunErrors list (empty on success, populated with validation\
+        \ errors otherwise)."
       operationId: automationCreateOrUpdateReporter
       parameters:
       - description: Identifier of the organization that owns the environment.
@@ -1162,7 +1513,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -1177,6 +1528,13 @@ paths:
         required: true
         schema:
           type: string
+      - description: "When true, validates the payload without persisting. The returned\
+          \ reporter includes a dryRunErrors field."
+        in: query
+        name: dryRun
+        schema:
+          type: boolean
+          default: false
       requestBody:
         content:
           application/json:
@@ -1223,7 +1581,8 @@ paths:
                     system: true
               schema:
                 $ref: "#/components/schemas/AutomationReporter"
-          description: The created or updated reporter
+          description: The created or updated reporter. When dryRun is true the reporter
+            includes a dryRunErrors field with any validation errors.
         "400":
           content:
             application/json:
@@ -1277,7 +1636,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -1339,7 +1698,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: Identifier of the environment the domain belongs to.
+      - description: Identifier of the environment the resource belongs to.
         example: DEFAULT
         in: path
         name: envId
@@ -1555,14 +1914,14 @@ components:
         authReqExpiry:
           type: integer
           format: int32
+          default: 600
           description: "Default validity period, in seconds, of the issued auth_req_id."
-          example: 600
         bindingMessageLength:
           type: integer
           format: int32
+          default: 256
           description: Maximum number of characters accepted for the binding_message
             parameter.
-          example: 256
         enabled:
           type: boolean
           default: false
@@ -1571,10 +1930,10 @@ components:
         tokenReqInterval:
           type: integer
           format: int32
+          default: 5
           description: "Minimum delay, in seconds, that a client must wait between\
             \ two polls of the token endpoint for the same auth_req_id (POLL or PING\
             \ delivery mode)."
-          example: 5
       title: CIBA settings
     AutomationCertificate:
       type: object
@@ -1583,14 +1942,25 @@ components:
       properties:
         configuration:
           type: string
-          description: Plugin-specific configuration as a JSON-encoded string. Its
-            shape is defined by the selected certificate type.
+          description: "Plugin-specific configuration as a JSON-encoded string. Its\
+            \ shape is defined by the selected certificate type. Sensitive values,\
+            \ as flagged by the plugin, are returned as ******** in every response.\
+            \ Sending ******** back on update keeps the stored value; sending it on\
+            \ create is rejected. The uploaded keystore file is masked too; sending\
+            \ ******** back keeps it."
           example: "{\"jks\":{\"content\":\"...\",\"name\":\"keystore.jks\"},\"storepass\"\
             :\"secret\",\"alias\":\"mykey\",\"keypass\":\"secret\"}"
         createdAt:
           type: string
           format: date-time
           description: "Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only."
+          readOnly: true
+        dryRunErrors:
+          type: array
+          description: Validation errors returned when dryRun is true. Absent when
+            validation succeeds.
+          items:
+            $ref: "#/components/schemas/DryRunError"
           readOnly: true
         expiresAt:
           type: string
@@ -1701,6 +2071,89 @@ components:
           description: Whether open (unauthenticated) Dynamic Client Registration
             is enabled for the domain.
       title: Client registration settings
+    AutomationDataPlane:
+      type: object
+      description: "A data plane managed by the Automation API. Data planes store\
+        \ the runtime data of the domains bound to them. The id field is the stable,\
+        \ immutable identity used for idempotent create-or-update."
+      properties:
+        configuration:
+          type: object
+          description: "Connection settings. Write-only: it can hold credentials."
+          example:
+            mongodb:
+              dbname: gravitee-am-acme
+              host: mongo
+              port: 27017
+          writeOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: "Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only."
+          readOnly: true
+        database:
+          type: string
+          description: Name of the database the configuration points at. Read-only.
+          example: gravitee-am-acme
+          readOnly: true
+        environmentId:
+          type: string
+          description: Identifier of the environment the data plane belongs to. Read-only.
+          example: DEFAULT
+          readOnly: true
+        gatewayUrl:
+          type: string
+          description: Base URL of the gateway serving the domains bound to this data
+            plane. Must be an absolute http(s) URL with a lowercase scheme; omitted
+            or empty leaves it unset.
+          example: https://gateway-eu.example.com
+          maxLength: 256
+          minLength: 0
+          pattern: ^\s*$|^https?://.+
+        hosts:
+          type: array
+          description: "Hosts the configuration points at, as host:port. Read-only."
+          example:
+          - mongo:27017
+          items:
+            type: string
+            description: "Hosts the configuration points at, as host:port. Read-only."
+            example: "[\"mongo:27017\"]"
+            readOnly: true
+          readOnly: true
+        id:
+          type: string
+          description: "Stable, immutable identifier for the data plane within its\
+            \ environment. Lowercase alphanumeric and hyphens, starting and ending\
+            \ with an alphanumeric character. This is the value a domain's dataPlaneId\
+            \ refers to."
+          example: acme-eu
+          maxLength: 64
+          minLength: 1
+        name:
+          type: string
+          description: Human-readable name of the data plane.
+          example: ACME EU data plane
+          maxLength: 128
+          minLength: 1
+        organizationId:
+          type: string
+          description: Identifier of the organization the data plane belongs to. Read-only.
+          example: DEFAULT
+          readOnly: true
+        type:
+          type: string
+          description: "Data plane plugin type identifier, matching the dataplane-am-<type>\
+            \ plugin. Immutable after creation."
+          example: mongodb
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only."
+          readOnly: true
+      required:
+      - id
+      title: Data plane
     AutomationDomain:
       type: object
       description: "A security domain managed by the Automation API. The key field\
@@ -1712,6 +2165,7 @@ components:
           $ref: "#/components/schemas/AutomationAccountSettings"
         alertEnabled:
           type: boolean
+          default: false
           description: Whether alerting is enabled for the domain.
         certificateSettings:
           $ref: "#/components/schemas/AutomationCertificateSettings"
@@ -1724,16 +2178,24 @@ components:
           readOnly: true
         dataPlaneId:
           type: string
-          description: Identifier of the data plane this domain is connected to. Required
-            at creation and immutable afterwards; included in the desired-state document
-            but never re-applied on update.
+          description: "Identifier of the data plane this domain is connected to.\
+            \ Optional at creation and resolved from the environment's data planes\
+            \ when omitted. Immutable afterwards: an apply that names a different\
+            \ one is rejected."
           example: default
           maxLength: 255
-          minLength: 1
+          minLength: 0
         description:
           type: string
           description: Human-readable description of the domain.
           example: An example authentication domain
+        dryRunErrors:
+          type: array
+          description: Validation errors returned when dryRun is true. Absent when
+            validation succeeds.
+          items:
+            $ref: "#/components/schemas/DryRunError"
+          readOnly: true
         enabled:
           type: boolean
           default: true
@@ -1748,6 +2210,8 @@ components:
           maxLength: 255
           minLength: 1
           title: Key
+        keyRetrievalSettings:
+          $ref: "#/components/schemas/KeyRetrievalSettings"
         loginSettings:
           $ref: "#/components/schemas/LoginSettings"
         master:
@@ -1813,8 +2277,9 @@ components:
             $ref: "#/components/schemas/VirtualHost"
         webAuthnSettings:
           $ref: "#/components/schemas/WebAuthnSettings"
+        webProtectionSettings:
+          $ref: "#/components/schemas/WebProtectionSettings"
       required:
-      - dataPlaneId
       - key
       - name
       - path
@@ -1827,8 +2292,11 @@ components:
       properties:
         configuration:
           type: string
-          description: Plugin-specific configuration as a JSON-encoded string. Its
-            shape is defined by the selected identity provider type.
+          description: "Plugin-specific configuration as a JSON-encoded string. Its\
+            \ shape is defined by the selected identity provider type. Sensitive values,\
+            \ as flagged by the plugin, are returned as ******** in every response.\
+            \ Sending ******** back on update keeps the stored value; sending it on\
+            \ create is rejected."
           example: "{\"users\":[{\"username\":\"admin\",\"password\":\"...\"}]}"
         createdAt:
           type: string
@@ -1837,27 +2305,27 @@ components:
           readOnly: true
         domainWhitelist:
           type: array
+          default: []
           description: "Email domains allowed to authenticate through this identity\
             \ provider. When set, users whose email domain is not listed are rejected."
           example:
           - example.com
           items:
             type: string
-            description: "Email domains allowed to authenticate through this identity\
-              \ provider. When set, users whose email domain is not listed are rejected."
-            example: "[\"example.com\"]"
+        dryRunErrors:
+          type: array
+          description: Validation errors returned when dryRun is true. Absent when
+            validation succeeds.
+          items:
+            $ref: "#/components/schemas/DryRunError"
+          readOnly: true
         groupMapper:
           type: object
           additionalProperties:
             type: array
-            description: "Group mapper: assigns AM groups based on provider attribute\
-              \ values. Each entry maps a group to the user attribute expressions\
-              \ that grant it."
             items:
               type: string
-              description: "Group mapper: assigns AM groups based on provider attribute\
-                \ values. Each entry maps a group to the user attribute expressions\
-                \ that grant it."
+          default: {}
           description: "Group mapper: assigns AM groups based on provider attribute\
             \ values. Each entry maps a group to the user attribute expressions that\
             \ grant it."
@@ -1875,9 +2343,7 @@ components:
           type: object
           additionalProperties:
             type: string
-            description: "Attribute mappers: maps provider claims to AM user profile\
-              \ attributes."
-            example: "{\"sub\":\"username\",\"email\":\"email\"}"
+          default: {}
           description: "Attribute mappers: maps provider claims to AM user profile\
             \ attributes."
           example:
@@ -1893,14 +2359,9 @@ components:
           type: object
           additionalProperties:
             type: array
-            description: "Role mapper: assigns AM roles based on provider attribute\
-              \ values. Each entry maps a role to the user attribute expressions that\
-              \ grant it."
             items:
               type: string
-              description: "Role mapper: assigns AM roles based on provider attribute\
-                \ values. Each entry maps a role to the user attribute expressions\
-                \ that grant it."
+          default: {}
           description: "Role mapper: assigns AM roles based on provider attribute\
             \ values. Each entry maps a role to the user attribute expressions that\
             \ grant it."
@@ -1963,10 +2424,30 @@ components:
         \ persist audit events to a backend. The key field is the stable, immutable\
         \ identity used for idempotent create-or-update."
       properties:
+        attributeMappingEventTypes:
+          type: array
+          description: Audit event types the attribute mappings apply to. Empty means
+            every event type. Ignored when system is true.
+          items:
+            type: string
+            description: Audit event types the attribute mappings apply to. Empty
+              means every event type. Ignored when system is true.
+          uniqueItems: true
+        attributeMappings:
+          type: array
+          description: Additional attributes exported alongside the regular audit
+            payload. Each entry pairs an expression read from the audit context with
+            the field name its value is exported under. Ignored when system is true;
+            a system reporter exports no additional attributes.
+          items:
+            $ref: "#/components/schemas/ReporterAttributeMapping"
         configuration:
           type: string
-          description: Plugin-specific configuration as a JSON-encoded string. Its
-            shape is defined by the selected reporter type.
+          description: "Plugin-specific configuration as a JSON-encoded string. Its\
+            \ shape is defined by the selected reporter type. Sensitive values, as\
+            \ flagged by the plugin, are returned as ******** in every response. Sending\
+            \ ******** back on update keeps the stored value; sending it on create\
+            \ is rejected."
           example: "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}"
         createdAt:
           type: string
@@ -1977,6 +2458,13 @@ components:
           type: string
           description: "Category of data the reporter handles, derived from its type.\
             \ Read-only."
+          readOnly: true
+        dryRunErrors:
+          type: array
+          description: Validation errors returned when dryRun is true. Absent when
+            validation succeeds.
+          items:
+            $ref: "#/components/schemas/DryRunError"
           readOnly: true
         enabled:
           type: boolean
@@ -2003,7 +2491,8 @@ components:
           description: "Whether this is the domain's system reporter. Immutable after\
             \ creation. When true, only key is required; the reporter is built from\
             \ the domains.reporters.default.* and repository system settings and the\
-            \ name, type, and configuration fields are ignored."
+            \ name, type, configuration, attributeMappings and attributeMappingEventTypes\
+            \ fields are ignored."
         type:
           type: string
           description: Reporter plugin type identifier. Immutable after creation.
@@ -2086,7 +2575,13 @@ components:
         enabled:
           type: boolean
           default: false
-          description: Whether CORS handling is enabled for the domain.
+          description: Whether CORS handling is enabled for the domain when not inherited.
+        inherited:
+          type: boolean
+          default: true
+          description: "Whether CORS settings are inherited from the gateway defaults\
+            \ (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides\
+            \ and enabled=false inherits."
         maxAge:
           type: integer
           format: int32
@@ -2094,6 +2589,62 @@ components:
           description: "How long, in seconds, a browser may cache the result of a\
             \ preflight request."
       title: CORS settings
+    CspSettings:
+      type: object
+      description: Content Security Policy configuration for the domain's login and
+        consent pages.
+      properties:
+        directives:
+          type: array
+          description: "CSP directives, one per entry, in the form \"directive-name\
+            \ value\". A trailing semicolon is optional. Directive names must be valid\
+            \ CSP tokens and must not repeat; values are not interpreted. Directives\
+            \ that take no value, such as \"upgrade-insecure-requests\", may be supplied\
+            \ on their own. When reportOnly is enabled, a \"report-uri\" or \"report-to\"\
+            \ directive is required."
+          example:
+          - default-src 'self'
+          - script-src 'self'
+          - upgrade-insecure-requests
+          items:
+            type: string
+            description: "CSP directives, one per entry, in the form \"directive-name\
+              \ value\". A trailing semicolon is optional. Directive names must be\
+              \ valid CSP tokens and must not repeat; values are not interpreted.\
+              \ Directives that take no value, such as \"upgrade-insecure-requests\"\
+              , may be supplied on their own. When reportOnly is enabled, a \"report-uri\"\
+              \ or \"report-to\" directive is required."
+            example: "[\"default-src 'self'\",\"script-src 'self'\",\"upgrade-insecure-requests\"\
+              ]"
+        enabled:
+          type: boolean
+          default: false
+          description: Whether CSP is enabled for the domain when not inherited.
+        inherited:
+          type: boolean
+          default: true
+          description: "Whether CSP settings are inherited from the gateway defaults\
+            \ (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides\
+            \ and enabled=false inherits."
+        reportOnly:
+          type: boolean
+          default: false
+          description: "When true, the policy is delivered as Content-Security-Policy-Report-Only."
+        scriptInlineNonce:
+          type: boolean
+          default: true
+          description: Whether inline scripts are allowed via a per-request nonce.
+      title: CSP settings
+    DryRunError:
+      type: object
+      description: Validation errors returned when dryRun is true. Absent when validation
+        succeeds.
+      properties:
+        message:
+          type: string
+        severity:
+          $ref: "#/components/schemas/Severity"
+      readOnly: true
     Error:
       type: object
       description: Error response body returned for failed requests.
@@ -2123,6 +2674,51 @@ components:
           description: Input type of the field.
           example: email
       title: Form field
+    IdJagSettings:
+      type: object
+      description: ID-JAG issuance behavior of token exchange.
+      properties:
+        laxValidation:
+          type: boolean
+          default: false
+          description: "Lax validation: also accept an access token issued to the\
+            \ requesting client as the subject token. By default only an ID token\
+            \ is accepted."
+      title: ID-JAG settings
+    KeyRetrievalSettings:
+      type: object
+      description: "Fetch, SSRF and cache limits applied to every trusted domain in\
+        \ the security domain."
+      properties:
+        allowPrivateIpAddress:
+          type: boolean
+          default: false
+          description: Whether key material can be fetched from private IP addresses.
+        allowUnsecuredHttpUri:
+          type: boolean
+          default: false
+          description: Whether key material can be fetched over unsecured HTTP URIs.
+        cacheMaxEntries:
+          type: integer
+          format: int32
+          default: 50
+          description: Maximum number of key material entries retained in the cache.
+        cacheTtlSeconds:
+          type: integer
+          format: int32
+          default: 300
+          description: "Time-to-live, in seconds, for cached key material."
+        fetchTimeoutMs:
+          type: integer
+          format: int32
+          default: 5000
+          description: "Timeout, in milliseconds, for fetching key material."
+        maxResponseSizeKb:
+          type: integer
+          format: int32
+          default: 32
+          description: "Maximum key material response size, in kilobytes."
+      title: Trusted domain key retrieval settings
     LoginSettings:
       type: object
       description: Configuration of the domain's login flow and the features offered
@@ -2253,6 +2849,20 @@ components:
           description: Whether password history is enforced to prevent reuse of recent
             passwords.
       title: Password settings
+    ReporterAttributeMapping:
+      type: object
+      description: "Exports one additional attribute, read from the audit context\
+        \ by expression, under a chosen field name."
+      properties:
+        exportedName:
+          type: string
+          description: The name the evaluated value takes on the exported payload.
+          example: user_sub
+        expression:
+          type: string
+          description: Expression evaluated against the audit context.
+          example: "{#context.attributes['user'].additionalInformation['sub']}"
+      title: Reporter attribute mapping
     ResetPasswordSettings:
       type: object
       description: Rules applied to a self-service password reset.
@@ -2328,28 +2938,33 @@ components:
         resetPassword:
           $ref: "#/components/schemas/ResetPasswordSettings"
       title: Self-service account management settings
+    Severity:
+      type: string
+      enum:
+      - error
+      - warning
     SpiffeDomainSettings:
       type: object
       description: Workload identity (SPIFFE) settings for the domain.
       properties:
         allowPrivateIpAddress:
           type: boolean
-          default: false
-          description: Whether trust bundles can be fetched from private IP addresses.
+          deprecated: true
+          description: "Deprecated: moved to keyRetrievalSettings.allowPrivateIpAddress."
         allowUnsecuredHttpUri:
           type: boolean
-          default: false
-          description: Whether trust bundles can be fetched over unsecured HTTP URIs.
+          deprecated: true
+          description: "Deprecated: moved to keyRetrievalSettings.allowUnsecuredHttpUri."
         cacheMaxEntries:
           type: integer
           format: int32
-          default: 50
-          description: Maximum number of trust bundle entries retained in the cache.
+          deprecated: true
+          description: "Deprecated: moved to keyRetrievalSettings.cacheMaxEntries."
         cacheTtlSeconds:
           type: integer
           format: int32
-          default: 300
-          description: "Time-to-live, in seconds, for cached trust bundle entries."
+          deprecated: true
+          description: "Deprecated: moved to keyRetrievalSettings.cacheTtlSeconds."
         clockSkewSeconds:
           type: integer
           format: int32
@@ -2358,12 +2973,18 @@ components:
             \ claims."
         defaultAllowedAlgorithms:
           type: array
+          default:
+          - RS256
+          - RS384
+          - RS512
+          - ES256
+          - ES384
+          - ES512
+          - EdDSA
           description: Default allowlist of signature algorithms accepted for SPIFFE
             JWT validation.
           items:
             type: string
-            description: Default allowlist of signature algorithms accepted for SPIFFE
-              JWT validation.
         enabled:
           type: boolean
           default: false
@@ -2372,8 +2993,8 @@ components:
         fetchTimeoutMs:
           type: integer
           format: int32
-          default: 5000
-          description: "Timeout, in milliseconds, for fetching trust bundles."
+          deprecated: true
+          description: "Deprecated: moved to keyRetrievalSettings.fetchTimeoutMs."
         maxJwtLifetimeSeconds:
           type: integer
           format: int32
@@ -2383,8 +3004,8 @@ components:
         maxResponseSizeKb:
           type: integer
           format: int32
-          default: 32
-          description: "Maximum trust bundle response size, in kilobytes."
+          deprecated: true
+          description: "Deprecated: moved to keyRetrievalSettings.maxResponseSizeKb."
     TokenExchangeOAuthSettings:
       type: object
       description: "OAuth-specific token-exchange behavior, such as how scopes are\
@@ -2458,6 +3079,8 @@ components:
           type: boolean
           default: false
           description: Whether token exchange is enabled for the domain.
+        idJagSettings:
+          $ref: "#/components/schemas/IdJagSettings"
         maxDelegationDepth:
           type: integer
           format: int32
@@ -2468,13 +3091,17 @@ components:
           $ref: "#/components/schemas/TokenExchangeOAuthSettings"
         trustedIssuers:
           type: array
-          description: "External issuers whose JWTs may be accepted as subject or\
-            \ actor tokens. When unset, only domain-issued tokens are accepted."
+          deprecated: true
+          description: "Deprecated: use the trusted-domains API instead. External\
+            \ issuers whose JWTs may be accepted as subject or actor tokens. A projection\
+            \ over the security domain's token-exchange trusted domains; a write replaces\
+            \ the list, so an omitted issuer is no longer trusted."
           items:
             $ref: "#/components/schemas/TrustedIssuer"
       title: Token exchange settings
     TrustedIssuer:
       type: object
+      deprecated: true
       description: "An external token issuer whose JWTs are accepted as subject or\
         \ actor tokens during token exchange, validated with the configured key material."
       properties:
@@ -2639,6 +3266,60 @@ components:
           - preferred
           - discouraged
       title: WebAuthn settings
+    WebProtectionSettings:
+      type: object
+      description: HTTP security headers applied to the domain's login and consent
+        pages.
+      properties:
+        csp:
+          $ref: "#/components/schemas/CspSettings"
+        xframe:
+          $ref: "#/components/schemas/XFrameSettings"
+        xss:
+          $ref: "#/components/schemas/XssProtectionSettings"
+      title: Web protection settings
+    XFrameSettings:
+      type: object
+      description: Controls whether the domain's pages may be embedded in frames on
+        other origins.
+      properties:
+        action:
+          type: string
+          description: "X-Frame-Options action. Supported values: DENY, SAMEORIGIN.\
+            \ Leave empty to omit the header."
+          example: DENY
+        enabled:
+          type: boolean
+          default: false
+          description: Whether X-Frame-Options is enabled for the domain when not
+            inherited.
+        inherited:
+          type: boolean
+          default: true
+          description: "Whether X-Frame-Options settings are inherited from the gateway\
+            \ defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true\
+            \ overrides and enabled=false inherits."
+      title: X-Frame-Options settings
+    XssProtectionSettings:
+      type: object
+      description: Controls the legacy X-XSS-Protection response header.
+      properties:
+        action:
+          type: string
+          description: Value of the X-XSS-Protection header.
+          example: 1; mode=block
+        enabled:
+          type: boolean
+          default: false
+          description: Whether X-XSS-Protection is enabled for the domain when not
+            inherited.
+        inherited:
+          type: boolean
+          default: true
+          description: "Whether X-XSS-Protection settings are inherited from the gateway\
+            \ defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true\
+            \ overrides and enabled=false inherits."
+      title: XSS protection settings
   securitySchemes:
     BearerAuth:
       description: "Authentication uses a bearer token: a JWT, or an opaque user service-account\

@@ -14,6 +14,15 @@ Reporter Resource
 
 ```terraform
 resource "am_reporter" "my_reporter" {
+  attribute_mapping_event_types = [
+    "..."
+  ]
+  attribute_mappings = [
+    {
+      exported_name = "user_sub"
+      expression    = "{#context.attributes['user'].additionalInformation['sub']}"
+    }
+  ]
   configuration   = "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}"
   domain_key      = "example-domain"
   enabled         = true
@@ -32,16 +41,18 @@ resource "am_reporter" "my_reporter" {
 ### Required
 
 - `domain_key` (String) Key of the domain: its stable, immutable Automation identifier within the environment.
-- `key` (String) Stable, immutable identifier for the reporter within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the reporter on create-or-update.
+- `key` (String) Stable, immutable identifier for the reporter within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the reporter on create-or-update. Requires replacement if changed.
 
 ### Optional
 
-- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type.
+- `attribute_mapping_event_types` (Set of String) Audit event types the attribute mappings apply to. Empty means every event type. Ignored when system is true. Default: []
+- `attribute_mappings` (Attributes List) Additional attributes exported alongside the regular audit payload. Each entry pairs an expression read from the audit context with the field name its value is exported under. Ignored when system is true; a system reporter exports no additional attributes. (see [below for nested schema](#nestedatt--attribute_mappings))
+- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.
 - `enabled` (Boolean) Whether the reporter is enabled. Default: true
 - `environment_id` (String) Identifier of the environment.
 - `name` (String) Human-readable name of the reporter.
 - `organization_id` (String) Identifier of the organization that owns the environment.
-- `system` (Boolean) Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, and configuration fields are ignored. Default: false; Requires replacement if changed.
+- `system` (Boolean) Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, configuration, attributeMappings and attributeMappingEventTypes fields are ignored. Default: false; Requires replacement if changed.
 - `type` (String) Reporter plugin type identifier. Immutable after creation. Requires replacement if changed.
 
 ### Read-Only
@@ -49,6 +60,14 @@ resource "am_reporter" "my_reporter" {
 - `created_at` (String) Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 - `data_type` (String) Category of data the reporter handles, derived from its type. Read-only.
 - `updated_at` (String) Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
+
+<a id="nestedatt--attribute_mappings"></a>
+### Nested Schema for `attribute_mappings`
+
+Optional:
+
+- `exported_name` (String) The name the evaluated value takes on the exported payload.
+- `expression` (String) Expression evaluated against the audit context.
 
 ## Import
 

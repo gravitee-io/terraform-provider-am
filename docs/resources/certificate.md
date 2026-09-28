@@ -31,11 +31,11 @@ resource "am_certificate" "my_certificate" {
 ### Required
 
 - `domain_key` (String) Key of the domain: its stable, immutable Automation identifier within the environment.
-- `key` (String) Stable, immutable identifier for the certificate within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the certificate on create-or-update.
+- `key` (String) Stable, immutable identifier for the certificate within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the certificate on create-or-update. Requires replacement if changed.
 
 ### Optional
 
-- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type.
+- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected. The uploaded keystore file is masked too; sending ******** back keeps it.
 - `environment_id` (String) Identifier of the environment.
 - `name` (String) Human-readable name of the certificate.
 - `organization_id` (String) Identifier of the organization that owns the environment.

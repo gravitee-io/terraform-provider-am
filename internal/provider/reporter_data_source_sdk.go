@@ -5,7 +5,9 @@ package provider
 
 import (
 	"context"
+	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-am/internal/provider/typeconvert"
+	tfTypes "github.com/gravitee-io/terraform-provider-am/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -16,7 +18,23 @@ func (r *ReporterDataSourceModel) RefreshFromSharedAutomationReporter(ctx contex
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Configuration = types.StringPointerValue(resp.Configuration)
+		r.AttributeMappingEventTypes = make([]types.String, 0, len(resp.AttributeMappingEventTypes))
+		for _, v := range resp.AttributeMappingEventTypes {
+			r.AttributeMappingEventTypes = append(r.AttributeMappingEventTypes, types.StringValue(v))
+		}
+		r.AttributeMappings = []tfTypes.ReporterAttributeMapping{}
+
+		for _, attributeMappingsItem := range resp.AttributeMappings {
+			var attributeMappings tfTypes.ReporterAttributeMapping
+
+			attributeMappings.ExportedName = types.StringPointerValue(attributeMappingsItem.ExportedName)
+			attributeMappings.Expression = types.StringPointerValue(attributeMappingsItem.Expression)
+
+			r.AttributeMappings = append(r.AttributeMappings, attributeMappings)
+		}
+		configurationValuable, configurationDiags := customtypes.MaskedJSONType{}.ValueFromString(ctx, types.StringPointerValue(resp.Configuration))
+		diags.Append(configurationDiags...)
+		r.Configuration = configurationValuable.(customtypes.MaskedJSON)
 		r.CreatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CreatedAt))
 		r.DataType = types.StringPointerValue(resp.DataType)
 		r.Enabled = types.BoolPointerValue(resp.Enabled)

@@ -8,13 +8,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-am/internal/planmodifiers/stringplanmodifier"
+	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -44,7 +48,7 @@ type IdentityProviderResource struct {
 
 // IdentityProviderResourceModel describes the resource data model.
 type IdentityProviderResourceModel struct {
-	Configuration   types.String              `tfsdk:"configuration"`
+	Configuration   customtypes.MaskedJSON    `tfsdk:"configuration"`
 	CreatedAt       types.String              `tfsdk:"created_at"`
 	DomainKey       types.String              `tfsdk:"domain_key"`
 	DomainWhitelist []types.String            `tfsdk:"domain_whitelist"`
@@ -69,9 +73,11 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 		MarkdownDescription: "IdentityProvider Resource",
 		Attributes: map[string]schema.Attribute{
 			"configuration": schema.StringAttribute{
+				CustomType:  customtypes.MaskedJSONType{},
+				Computed:    true,
 				Optional:    true,
 				Sensitive:   true,
-				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type.`,
+				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -82,9 +88,11 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Key of the domain: its stable, immutable Automation identifier within the environment.`,
 			},
 			"domain_whitelist": schema.ListAttribute{
+				Computed:    true,
 				Optional:    true,
+				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
-				Description: `Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected.`,
+				Description: `Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected. Default: []`,
 			},
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
@@ -99,8 +107,11 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Group mapper: assigns AM groups based on provider attribute values. Each entry maps a group to the user attribute expressions that grant it.`,
 			},
 			"key": schema.StringAttribute{
-				Required:    true,
-				Description: `Stable, immutable identifier for the identity provider within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the identity provider on create-or-update.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Stable, immutable identifier for the identity provider within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the identity provider on create-or-update. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},
@@ -111,6 +122,7 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Attribute mappers: maps provider claims to AM user profile attributes.`,
 			},
 			"name": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Human-readable name of the identity provider.`,
 				Validators: []validator.String{
@@ -139,9 +151,11 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Whether this is the domain's system identity provider. Immutable after creation. When true, only key is required; the identity provider is built from the domains.identities.default.* system settings and the name, type, and configuration fields are ignored. Default: false; Requires replacement if changed.`,
 			},
 			"type": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Identity provider plugin type identifier. Immutable after creation. Requires replacement if changed.`,
 			},
@@ -444,8 +458,8 @@ func (r *IdentityProviderResource) ImportState(ctx context.Context, req resource
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -459,8 +473,8 @@ func (r *IdentityProviderResource) ImportState(ctx context.Context, req resource
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

@@ -11,14 +11,16 @@ import (
 	tfTypes "github.com/gravitee-io/terraform-provider-am/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-am/internal/validators/objectvalidators"
-	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/setdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -58,6 +60,7 @@ type DomainResourceModel struct {
 	Enabled                              types.Bool                                    `tfsdk:"enabled"`
 	EnvironmentID                        types.String                                  `tfsdk:"environment_id"`
 	Key                                  types.String                                  `tfsdk:"key"`
+	KeyRetrievalSettings                 *tfTypes.KeyRetrievalSettings                 `tfsdk:"key_retrieval_settings"`
 	LoginSettings                        *tfTypes.LoginSettings                        `tfsdk:"login_settings"`
 	Master                               types.Bool                                    `tfsdk:"master"`
 	Name                                 types.String                                  `tfsdk:"name"`
@@ -76,6 +79,7 @@ type DomainResourceModel struct {
 	VhostMode                            types.Bool                                    `tfsdk:"vhost_mode"`
 	Vhosts                               []tfTypes.VirtualHost                         `tfsdk:"vhosts"`
 	WebAuthnSettings                     *tfTypes.WebAuthnSettings                     `tfsdk:"web_authn_settings"`
+	WebProtectionSettings                *tfTypes.WebProtectionSettings                `tfsdk:"web_protection_settings"`
 }
 
 func (r *DomainResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -91,6 +95,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"account_blocked_duration": schema.Int32Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Duration, in seconds, for which the account remains blocked after too many failed login attempts.`,
 					},
@@ -113,6 +118,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether resetting a password also completes a pending registration. Default: false`,
 					},
 					"default_identity_provider_for_registration": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Key of an identity provider that exists under this domain, used as the default for user registration. Resolved against the domain's identity providers when applied; a value that does not match an existing identity provider is rejected with a 400 response.`,
 					},
@@ -141,10 +147,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether brute-force authentication attempts are detected and blocked. Default: false`,
 					},
 					"login_attempts_reset_time": schema.Int32Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Time, in seconds, after which the login attempt counter is reset when the maximum has not been reached.`,
 					},
 					"max_login_attempts": schema.Int32Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Maximum number of failed login attempts before the account is blocked.`,
 					},
@@ -155,10 +163,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether failed MFA challenge attempts are detected and blocked. Default: false`,
 					},
 					"mfa_challenge_attempts_reset_time": schema.Int32Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Time, in seconds, after which the MFA challenge attempt counter is reset.`,
 					},
 					"mfa_challenge_max_attempts": schema.Int32Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Maximum number of failed MFA challenge attempts before the user is blocked.`,
 					},
@@ -169,10 +179,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether to send an alert email after too many failed MFA challenge attempts. Default: false`,
 					},
 					"redirect_uri_after_registration": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `URL the user is redirected to after registration.`,
 					},
 					"redirect_uri_after_reset_password": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `URL the user is redirected to after a password reset.`,
 					},
@@ -183,6 +195,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether users can remain logged in for a fixed duration (remember-me). Default: false`,
 					},
 					"remember_me_duration": schema.Int32Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Duration, in seconds, for which a remembered session stays valid.`,
 					},
@@ -199,6 +212,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether a custom form is used for the password-reset step. Default: false`,
 					},
 					"reset_password_custom_form_fields": schema.ListNestedAttribute{
+						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
@@ -206,14 +220,17 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							Attributes: map[string]schema.Attribute{
 								"key": schema.StringAttribute{
+									Computed:    true,
 									Optional:    true,
 									Description: `Identifier of the field, mapped to a user attribute.`,
 								},
 								"label": schema.StringAttribute{
+									Computed:    true,
 									Optional:    true,
 									Description: `Label displayed for the field.`,
 								},
 								"type": schema.StringAttribute{
+									Computed:    true,
 									Optional:    true,
 									Description: `Input type of the field.`,
 								},
@@ -243,14 +260,17 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `User account settings for the domain: brute-force protection, registration, password reset, remember-me, and MFA challenge behavior.`,
 			},
 			"alert_enabled": schema.BoolAttribute{
+				Computed:    true,
 				Optional:    true,
-				Description: `Whether alerting is enabled for the domain.`,
+				Default:     booldefault.StaticBool(false),
+				Description: `Whether alerting is enabled for the domain. Default: false`,
 			},
 			"certificate_settings": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"fallback_certificate": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. Must reference a certificate created via the domain's certificate endpoints.`,
 					},
@@ -267,35 +287,35 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(false),
 						Description: `Whether the browser may send credentials (cookies, authorization headers) with cross-origin requests. Default: false`,
 					},
-					"allowed_headers": schema.ListAttribute{
+					"allowed_headers": schema.SetAttribute{
+						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Request headers permitted on cross-origin requests.`,
-						Validators: []validator.List{
-							listvalidator.UniqueValues(),
-						},
 					},
-					"allowed_methods": schema.ListAttribute{
+					"allowed_methods": schema.SetAttribute{
+						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `HTTP methods permitted on cross-origin requests.`,
-						Validators: []validator.List{
-							listvalidator.UniqueValues(),
-						},
 					},
-					"allowed_origins": schema.ListAttribute{
+					"allowed_origins": schema.SetAttribute{
+						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Origins permitted to make cross-origin requests. Use "*" to allow any origin.`,
-						Validators: []validator.List{
-							listvalidator.UniqueValues(),
-						},
 					},
 					"enabled": schema.BoolAttribute{
 						Computed:    true,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
-						Description: `Whether CORS handling is enabled for the domain. Default: false`,
+						Description: `Whether CORS handling is enabled for the domain when not inherited. Default: false`,
+					},
+					"inherited": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
+						Description: `Whether CORS settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits. Default: true`,
 					},
 					"max_age": schema.Int32Attribute{
 						Computed:    true,
@@ -311,13 +331,13 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 			"data_plane_id": schema.StringAttribute{
-				Required: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Identifier of the data plane this domain is connected to. Required at creation and immutable afterwards; included in the desired-state document but never re-applied on update. Requires replacement if changed.`,
+				Description: `Identifier of the data plane this domain is connected to. Optional at creation and resolved from the environment's data planes when omitted. Immutable afterwards: an apply that names a different one is rejected. Requires replacement if changed.`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthBetween(1, 255),
+					stringvalidator.UTF8LengthBetween(0, 255),
 				},
 			},
 			"description": schema.StringAttribute{
@@ -336,11 +356,57 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Identifier of the environment.`,
 			},
 			"key": schema.StringAttribute{
-				Required:    true,
-				Description: `Stable, immutable identifier for the domain within its environment. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the domain on create-or-update.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Stable, immutable identifier for the domain within its environment. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the domain on create-or-update. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},
+			},
+			"key_retrieval_settings": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"allow_private_ip_address": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Whether key material can be fetched from private IP addresses. Default: false`,
+					},
+					"allow_unsecured_http_uri": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
+						Description: `Whether key material can be fetched over unsecured HTTP URIs. Default: false`,
+					},
+					"cache_max_entries": schema.Int32Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     int32default.StaticInt32(50),
+						Description: `Maximum number of key material entries retained in the cache. Default: 50`,
+					},
+					"cache_ttl_seconds": schema.Int32Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     int32default.StaticInt32(300),
+						Description: `Time-to-live, in seconds, for cached key material. Default: 300`,
+					},
+					"fetch_timeout_ms": schema.Int32Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     int32default.StaticInt32(5000),
+						Description: `Timeout, in milliseconds, for fetching key material. Default: 5000`,
+					},
+					"max_response_size_kb": schema.Int32Attribute{
+						Computed:    true,
+						Optional:    true,
+						Default:     int32default.StaticInt32(32),
+						Description: `Maximum key material response size, in kilobytes. Default: 32`,
+					},
+				},
+				Description: `Fetch, SSRF and cache limits applied to every trusted domain in the security domain.`,
 			},
 			"login_settings": schema.SingleNestedAttribute{
 				Computed: true,
@@ -353,6 +419,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether certificate-based authentication is offered. Default: false`,
 					},
 					"certificate_based_auth_url": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `URL used for certificate-based authentication.`,
 					},
@@ -405,6 +472,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether a password is still required alongside passwordless authentication. Default: false`,
 					},
 					"passwordless_enforce_password_max_age": schema.Int32Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Period, in seconds, after which the user's credentials must be re-entered to keep using passwordless authentication.`,
 					},
@@ -427,6 +495,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether the login page offers a remember-me option. Default: false`,
 					},
 					"reset_password_on_expiration": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Whether the user is forced to reset their password once it expires.`,
 					},
@@ -455,12 +524,16 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"auth_req_expiry": schema.Int32Attribute{
+								Computed:    true,
 								Optional:    true,
-								Description: `Default validity period, in seconds, of the issued auth_req_id.`,
+								Default:     int32default.StaticInt32(600),
+								Description: `Default validity period, in seconds, of the issued auth_req_id. Default: 600`,
 							},
 							"binding_message_length": schema.Int32Attribute{
+								Computed:    true,
 								Optional:    true,
-								Description: `Maximum number of characters accepted for the binding_message parameter.`,
+								Default:     int32default.StaticInt32(256),
+								Description: `Maximum number of characters accepted for the binding_message parameter. Default: 256`,
 							},
 							"enabled": schema.BoolAttribute{
 								Computed:    true,
@@ -469,8 +542,10 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Whether Client-Initiated Backchannel Authentication is enabled for the domain. Default: false`,
 							},
 							"token_req_interval": schema.Int32Attribute{
+								Computed:    true,
 								Optional:    true,
-								Description: `Minimum delay, in seconds, that a client must wait between two polls of the token endpoint for the same auth_req_id (POLL or PING delivery mode).`,
+								Default:     int32default.StaticInt32(5),
+								Description: `Minimum delay, in seconds, that a client must wait between two polls of the token endpoint for the same auth_req_id (POLL or PING delivery mode). Default: 5`,
 							},
 						},
 						Description: `Client-Initiated Backchannel Authentication (CIBA) settings for the domain. CIBA lets a relying party initiate end-user authentication from a separate consumption device, without redirecting the user through the browser. Authentication device notifiers are not managed by the Automation API and are not exposed here.`,
@@ -504,6 +579,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Whether wildcards are permitted in redirect URIs. Default: false`,
 							},
 							"allowed_scopes": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `Scopes permitted on client registration requests when the allowed list is enabled.`,
@@ -521,6 +597,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Whether a client may be used as a template for dynamic client registration. Default: false`,
 							},
 							"default_scopes": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `Default scopes added to every client registration request.`,
@@ -541,6 +618,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `OpenID Connect Dynamic Client Registration configuration for the domain.`,
 					},
 					"post_logout_redirect_uris": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `URLs the user may be redirected to after sign-out (post_logout_redirect_uri).`,
@@ -552,6 +630,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether redirect_uri and post_logout_redirect_uri values are matched strictly during OpenID Connect flows. Default: false`,
 					},
 					"request_uris": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Allowed request_uri values for passing OpenID Connect request objects by reference.`,
@@ -580,28 +659,28 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"allow_private_ip_address": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether trust bundles can be fetched from private IP addresses. Default: false`,
+								Computed:           true,
+								Optional:           true,
+								DeprecationMessage: `Use key_retrieval_settings.allow_private_ip_address instead.`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.allowPrivateIpAddress.`,
 							},
 							"allow_unsecured_http_uri": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether trust bundles can be fetched over unsecured HTTP URIs. Default: false`,
+								Computed:           true,
+								Optional:           true,
+								DeprecationMessage: `Use key_retrieval_settings.allow_unsecured_http_uri instead.`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.allowUnsecuredHttpUri.`,
 							},
 							"cache_max_entries": schema.Int32Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     int32default.StaticInt32(50),
-								Description: `Maximum number of trust bundle entries retained in the cache. Default: 50`,
+								Computed:           true,
+								Optional:           true,
+								DeprecationMessage: `Use key_retrieval_settings.cache_max_entries instead.`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.cacheMaxEntries.`,
 							},
 							"cache_ttl_seconds": schema.Int32Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     int32default.StaticInt32(300),
-								Description: `Time-to-live, in seconds, for cached trust bundle entries. Default: 300`,
+								Computed:           true,
+								Optional:           true,
+								DeprecationMessage: `Use key_retrieval_settings.cache_ttl_seconds instead.`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.cacheTtlSeconds.`,
 							},
 							"clock_skew_seconds": schema.Int32Attribute{
 								Computed:    true,
@@ -610,9 +689,19 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Allowed clock skew, in seconds, when validating JWT temporal claims. Default: 30`,
 							},
 							"default_allowed_algorithms": schema.ListAttribute{
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								Default: listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{
+									types.StringValue("RS256"),
+									types.StringValue("RS384"),
+									types.StringValue("RS512"),
+									types.StringValue("ES256"),
+									types.StringValue("ES384"),
+									types.StringValue("ES512"),
+									types.StringValue("EdDSA"),
+								})),
 								ElementType: types.StringType,
-								Description: `Default allowlist of signature algorithms accepted for SPIFFE JWT validation.`,
+								Description: `Default allowlist of signature algorithms accepted for SPIFFE JWT validation. Default: ["RS256","RS384","RS512","ES256","ES384","ES512","EdDSA"]`,
 							},
 							"enabled": schema.BoolAttribute{
 								Computed:    true,
@@ -621,10 +710,10 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Whether SPIFFE workload identity support is enabled for the domain. Default: false`,
 							},
 							"fetch_timeout_ms": schema.Int32Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     int32default.StaticInt32(5000),
-								Description: `Timeout, in milliseconds, for fetching trust bundles. Default: 5000`,
+								Computed:           true,
+								Optional:           true,
+								DeprecationMessage: `Use key_retrieval_settings.fetch_timeout_ms instead.`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.fetchTimeoutMs.`,
 							},
 							"max_jwt_lifetime_seconds": schema.Int32Attribute{
 								Computed:    true,
@@ -633,10 +722,10 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Maximum accepted JWT lifetime, in seconds, computed as exp minus iat. Default: 300`,
 							},
 							"max_response_size_kb": schema.Int32Attribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     int32default.StaticInt32(32),
-								Description: `Maximum trust bundle response size, in kilobytes. Default: 32`,
+								Computed:           true,
+								Optional:           true,
+								DeprecationMessage: `Use key_retrieval_settings.max_response_size_kb instead.`,
+								Description:        `Deprecated: moved to keyRetrievalSettings.maxResponseSizeKb.`,
 							},
 						},
 						Description: `Workload identity (SPIFFE) settings for the domain.`,
@@ -654,22 +743,27 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"exclude_passwords_in_dictionary": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Whether passwords found in a common-password dictionary are rejected.`,
 					},
 					"exclude_user_profile_info_in_password": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Whether passwords containing the user's profile information are rejected.`,
 					},
 					"expiry_duration": schema.Int32Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Number of days after which a password expires and must be changed.`,
 					},
 					"include_numbers": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Whether a password must contain at least one number.`,
 					},
 					"include_special_characters": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Whether a password must contain at least one special character.`,
 					},
@@ -680,10 +774,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether these password settings are inherited from a parent scope rather than defined here. When true, the other fields are ignored. Default: true`,
 					},
 					"letters_in_mixed_case": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Whether a password must contain both uppercase and lowercase letters.`,
 					},
 					"max_consecutive_letters": schema.Int32Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Maximum number of identical consecutive characters allowed in a password.`,
 					},
@@ -700,6 +796,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Minimum number of characters a password must contain. Default: 8`,
 					},
 					"old_passwords": schema.Int32Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Number of previous passwords retained in history and barred from reuse.`,
 					},
@@ -724,6 +821,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"certificate": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Key of a certificate managed under this domain, used to sign SAML responses. Must reference a certificate created via the domain's certificate endpoints.`,
 					},
@@ -734,6 +832,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether the domain exposes the SAML 2.0 IdP protocol. Default: false`,
 					},
 					"entity_id": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `URL or URN that uniquely identifies this IdP (the SAML entity ID).`,
 					},
@@ -757,6 +856,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether an identity provider is selected for SCIM-provisioned users using a selection rule. Default: false`,
 					},
 					"idp_selection_rule": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Expression that selects the identity provider for a SCIM-provisioned user.`,
 					},
@@ -768,10 +868,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Whether client-secret expiration is enabled.`,
 					},
 					"expiry_time_seconds": schema.Int64Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Lifetime, in seconds, of a client secret before it expires.`,
 					},
@@ -799,6 +901,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Description: `Whether the user must supply their current password to set a new one. Default: false`,
 							},
 							"token_age": schema.Int32Attribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Lifetime, in seconds, of the password-reset token.`,
 							},
@@ -808,13 +911,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 				Description: `Controls whether end users can manage their own account (for example, reset their password) and the rules that apply.`,
 			},
-			"tags": schema.ListAttribute{
+			"tags": schema.SetAttribute{
+				Computed:    true,
 				Optional:    true,
+				Default:     setdefault.StaticValue(types.SetValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
-				Description: `Sharding tags that control which gateways deploy this domain.`,
-				Validators: []validator.List{
-					listvalidator.UniqueValues(),
-				},
+				Description: `Sharding tags that control which gateways deploy this domain. Default: []`,
 			},
 			"token_exchange_settings": schema.SingleNestedAttribute{
 				Computed: true,
@@ -833,16 +935,19 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether impersonation is allowed, where the issued token represents the subject directly. At least one of allowImpersonation or allowDelegation must be enabled. Default: true`,
 					},
 					"allowed_actor_token_types": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Token types accepted as the actor token when delegating.`,
 					},
 					"allowed_requested_token_types": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Token types that may be requested as the result of an exchange.`,
 					},
 					"allowed_subject_token_types": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Token types accepted as the subject token in an exchange.`,
@@ -852,6 +957,19 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Default:     booldefault.StaticBool(false),
 						Description: `Whether token exchange is enabled for the domain. Default: false`,
+					},
+					"id_jag_settings": schema.SingleNestedAttribute{
+						Computed: true,
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"lax_validation": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Lax validation: also accept an access token issued to the requesting client as the subject token. By default only an ID token is accepted. Default: false`,
+							},
+						},
+						Description: `ID-JAG issuance behavior of token exchange.`,
 					},
 					"max_delegation_depth": schema.Int32Attribute{
 						Computed:    true,
@@ -885,6 +1003,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `OAuth-specific token-exchange behavior, such as how scopes are handled, with optional inheritance from domain defaults.`,
 					},
 					"trusted_issuers": schema.ListNestedAttribute{
+						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
@@ -892,18 +1011,22 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							Attributes: map[string]schema.Attribute{
 								"certificate": schema.StringAttribute{
+									Computed:    true,
 									Optional:    true,
 									Description: `PEM-encoded X.509 certificate. Required when keyResolutionMethod is PEM.`,
 								},
 								"issuer": schema.StringAttribute{
+									Computed:    true,
 									Optional:    true,
 									Description: `Expected value of the "iss" claim in the external JWT.`,
 								},
 								"jwks_uri": schema.StringAttribute{
+									Computed:    true,
 									Optional:    true,
 									Description: `JWKS endpoint URL. Required when keyResolutionMethod is JWKS_URL.`,
 								},
 								"key_resolution_method": schema.StringAttribute{
+									Computed:    true,
 									Optional:    true,
 									Description: `How the issuer's signing key is resolved. JWKS_URL fetches keys from a JWKS endpoint; PEM uses an inline X.509 certificate. must be one of ["jwks_url", "pem"]`,
 									Validators: []validator.String{
@@ -914,11 +1037,13 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"scope_mappings": schema.MapAttribute{
+									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `One-to-one mapping from external scope to domain scope. Unmapped issuer scopes are dropped (fail-closed).`,
 								},
 								"user_binding_criteria": schema.ListNestedAttribute{
+									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Validators: []validator.Object{
@@ -926,10 +1051,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										},
 										Attributes: map[string]schema.Attribute{
 											"attribute": schema.StringAttribute{
+												Computed:    true,
 												Optional:    true,
 												Description: `Domain user attribute used for the lookup. Must match a field supported by the user repository search.`,
 											},
 											"expression": schema.StringAttribute{
+												Computed:    true,
 												Optional:    true,
 												Description: `Expression evaluated against the validated token claims (variable "token") to produce the value to match.`,
 											},
@@ -945,7 +1072,8 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 							},
 						},
-						Description: `External issuers whose JWTs may be accepted as subject or actor tokens. When unset, only domain-issued tokens are accepted.`,
+						DeprecationMessage: `Manage trusted issuers as trusted domains in AM instead.`,
+						Description:        `Deprecated: use the trusted-domains API instead. External issuers whose JWTs may be accepted as subject or actor tokens. A projection over the security domain's token-exchange trusted domains; a write replaces the list, so an omitted issuer is no longer trusted.`,
 					},
 				},
 				Description: `OAuth 2.0 Token Exchange (RFC 8693) configuration for the domain, covering impersonation and delegation.`,
@@ -974,6 +1102,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Whether the domain is exposed through its virtual hosts rather than the default context path. When true, vhosts must be supplied. Default: false`,
 			},
 			"vhosts": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
@@ -981,6 +1110,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					Attributes: map[string]schema.Attribute{
 						"host": schema.StringAttribute{
+							Computed:    true,
 							Optional:    true,
 							Description: `Hostname the domain is served on.`,
 						},
@@ -991,6 +1121,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Description: `Whether this virtual host overrides the organization entry point. Default: false`,
 						},
 						"path": schema.StringAttribute{
+							Computed:    true,
 							Optional:    true,
 							Description: `Context path the domain is served under on this host.`,
 						},
@@ -1016,6 +1147,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"authenticator_attachment": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Preferred authenticator attachment. PLATFORM selects authenticators bound to the device (such as a fingerprint reader); CROSS_PLATFORM selects roaming authenticators (such as a security key). must be one of ["cross_platform", "platform"]`,
 						Validators: []validator.String{
@@ -1026,6 +1158,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"certificates": schema.MapAttribute{
+						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Trusted device-attestation X.509 certificates, keyed by name.`,
@@ -1037,6 +1170,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether to periodically re-verify that registered authenticators remain valid against the FIDO2 Metadata Service. Default: false`,
 					},
 					"enforce_authenticator_integrity_max_age": schema.Int32Attribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Maximum elapsed time, in seconds, since an authenticator was last verified before it is re-checked on the next passwordless login.`,
 					},
@@ -1047,14 +1181,17 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Whether to reject registration of a credential already registered to a different user. Default: false`,
 					},
 					"origin": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Relying-party origin; must match the browser's window.location.origin during registration and authentication ceremonies.`,
 					},
 					"relying_party_id": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Relying-party identifier: a domain string that scopes credentials to this entity. A credential can only be used with the relying party it was registered against.`,
 					},
 					"relying_party_name": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
 						Description: `Human-readable relying-party name shown to users during ceremonies.`,
 					},
@@ -1079,6 +1216,98 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 				Description: `WebAuthn (FIDO2) relying-party configuration governing passwordless and multi-factor authentication for the domain.`,
+			},
+			"web_protection_settings": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"csp": schema.SingleNestedAttribute{
+						Computed: true,
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"directives": schema.ListAttribute{
+								Computed:    true,
+								Optional:    true,
+								ElementType: types.StringType,
+								Description: `CSP directives, one per entry, in the form "directive-name value". A trailing semicolon is optional. Directive names must be valid CSP tokens and must not repeat; values are not interpreted. Directives that take no value, such as "upgrade-insecure-requests", may be supplied on their own. When reportOnly is enabled, a "report-uri" or "report-to" directive is required.`,
+							},
+							"enabled": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Whether CSP is enabled for the domain when not inherited. Default: false`,
+							},
+							"inherited": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Whether CSP settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits. Default: true`,
+							},
+							"report_only": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `When true, the policy is delivered as Content-Security-Policy-Report-Only. Default: false`,
+							},
+							"script_inline_nonce": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Whether inline scripts are allowed via a per-request nonce. Default: true`,
+							},
+						},
+						Description: `Content Security Policy configuration for the domain's login and consent pages.`,
+					},
+					"xframe": schema.SingleNestedAttribute{
+						Computed: true,
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"action": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `X-Frame-Options action. Supported values: DENY, SAMEORIGIN. Leave empty to omit the header.`,
+							},
+							"enabled": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Whether X-Frame-Options is enabled for the domain when not inherited. Default: false`,
+							},
+							"inherited": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Whether X-Frame-Options settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits. Default: true`,
+							},
+						},
+						Description: `Controls whether the domain's pages may be embedded in frames on other origins.`,
+					},
+					"xss": schema.SingleNestedAttribute{
+						Computed: true,
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"action": schema.StringAttribute{
+								Computed:    true,
+								Optional:    true,
+								Description: `Value of the X-XSS-Protection header.`,
+							},
+							"enabled": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Whether X-XSS-Protection is enabled for the domain when not inherited. Default: false`,
+							},
+							"inherited": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
+								Description: `Whether X-XSS-Protection settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits. Default: true`,
+							},
+						},
+						Description: `Controls the legacy X-XSS-Protection response header.`,
+					},
+				},
+				Description: `HTTP security headers applied to the domain's login and consent pages.`,
 			},
 		},
 	}
@@ -1369,8 +1598,8 @@ func (r *DomainResource) ImportState(ctx context.Context, req resource.ImportSta
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -1384,8 +1613,8 @@ func (r *DomainResource) ImportState(ctx context.Context, req resource.ImportSta
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

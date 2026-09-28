@@ -260,7 +260,7 @@ func (s *Certificates) AutomationListCertificates(ctx context.Context, request o
 }
 
 // AutomationCreateOrUpdateCertificate - Create or update a certificate
-// Idempotent create-or-update. Uses the key field in the body to identify the certificate within the domain. Re-applying an unchanged definition is a no-op. The system flag is immutable; changing it requires deleting and recreating the certificate.
+// Idempotent create-or-update. Uses the key field in the body to identify the certificate within the domain. Re-applying an unchanged definition is a no-op. The system flag is immutable; changing it requires deleting and recreating the certificate. When dryRun is true, the endpoint validates the payload without persisting; the returned certificate carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
 func (s *Certificates) AutomationCreateOrUpdateCertificate(ctx context.Context, request operations.AutomationCreateOrUpdateCertificateRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateCertificateResponse, error) {
 	globals := operations.AutomationCreateOrUpdateCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -323,6 +323,10 @@ func (s *Certificates) AutomationCreateOrUpdateCertificate(ctx context.Context, 
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	if reqContentType != "" {
 		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateQueryParams(ctx, req, request, globals, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {

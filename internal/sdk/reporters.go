@@ -260,7 +260,7 @@ func (s *Reporters) AutomationListReporters(ctx context.Context, request operati
 }
 
 // AutomationCreateOrUpdateReporter - Create or update a reporter
-// Idempotent create-or-update. Uses the key field in the body to identify the reporter within the domain. On first apply the reporter is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the reporter.
+// Idempotent create-or-update. Uses the key field in the body to identify the reporter within the domain. On first apply the reporter is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the reporter. When dryRun is true, the endpoint validates the payload without persisting; the returned reporter carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
 func (s *Reporters) AutomationCreateOrUpdateReporter(ctx context.Context, request operations.AutomationCreateOrUpdateReporterRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateReporterResponse, error) {
 	globals := operations.AutomationCreateOrUpdateReporterGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -323,6 +323,10 @@ func (s *Reporters) AutomationCreateOrUpdateReporter(ctx context.Context, reques
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	if reqContentType != "" {
 		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateQueryParams(ctx, req, request, globals, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {

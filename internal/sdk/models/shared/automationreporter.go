@@ -10,19 +10,25 @@ import (
 
 // AutomationReporter - A reporter managed under a domain by the Automation API. Reporters persist audit events to a backend. The key field is the stable, immutable identity used for idempotent create-or-update.
 type AutomationReporter struct {
-	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type.
+	// Audit event types the attribute mappings apply to. Empty means every event type. Ignored when system is true.
+	AttributeMappingEventTypes []string `json:"attributeMappingEventTypes"`
+	// Additional attributes exported alongside the regular audit payload. Each entry pairs an expression read from the audit context with the field name its value is exported under. Ignored when system is true; a system reporter exports no additional attributes.
+	AttributeMappings []ReporterAttributeMapping `json:"attributeMappings,omitempty"`
+	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.
 	Configuration *string `json:"configuration,omitempty"`
 	// Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	// Category of data the reporter handles, derived from its type. Read-only.
 	DataType *string `json:"dataType,omitempty"`
+	// Validation errors returned when dryRun is true. Absent when validation succeeds.
+	DryRunErrors []DryRunError `json:"dryRunErrors,omitempty"`
 	// Whether the reporter is enabled.
 	Enabled *bool `default:"true" json:"enabled"`
 	// Stable, immutable identifier for the reporter within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the reporter on create-or-update.
 	Key string `json:"key"`
 	// Human-readable name of the reporter.
 	Name *string `json:"name,omitempty"`
-	// Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, and configuration fields are ignored.
+	// Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, configuration, attributeMappings and attributeMappingEventTypes fields are ignored.
 	System *bool `default:"false" json:"system"`
 	// Reporter plugin type identifier. Immutable after creation.
 	Type *string `json:"type,omitempty"`
@@ -39,6 +45,20 @@ func (a *AutomationReporter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (a *AutomationReporter) GetAttributeMappingEventTypes() []string {
+	if a == nil {
+		return nil
+	}
+	return a.AttributeMappingEventTypes
+}
+
+func (a *AutomationReporter) GetAttributeMappings() []ReporterAttributeMapping {
+	if a == nil {
+		return nil
+	}
+	return a.AttributeMappings
 }
 
 func (a *AutomationReporter) GetConfiguration() *string {
@@ -60,6 +80,13 @@ func (a *AutomationReporter) GetDataType() *string {
 		return nil
 	}
 	return a.DataType
+}
+
+func (a *AutomationReporter) GetDryRunErrors() []DryRunError {
+	if a == nil {
+		return nil
+	}
+	return a.DryRunErrors
 }
 
 func (a *AutomationReporter) GetEnabled() *bool {

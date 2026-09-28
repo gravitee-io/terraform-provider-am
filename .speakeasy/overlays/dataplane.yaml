@@ -1,0 +1,59 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Data plane overlay
+  version: 0.0.1
+actions:
+
+  # Entity declaration
+  - target: $.components.schemas.AutomationDataPlane
+    update:
+      x-speakeasy-entity: DataPlane
+
+  # The resource's own attributes are not computed; nested settings are (common/schema.yaml).
+  - target: $.components.schemas.AutomationDataPlane.properties.*
+    update:
+      x-speakeasy-param-computed: false
+
+  # Body `id` ↔ path `dataPlaneId` correlation: rename the path parameter
+  # so Speakeasy auto-matches by name against the entity's `id` field.
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/dataplanes/{dataPlaneId}"].get.parameters[?@.name=='dataPlaneId']
+    update:
+      x-speakeasy-name-override: id
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/dataplanes/{dataPlaneId}"].delete.parameters[?@.name=='dataPlaneId']
+    update:
+      x-speakeasy-name-override: id
+
+  # Operation mapping
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/dataplanes"].put
+    update:
+      x-speakeasy-entity-operation: DataPlane#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/dataplanes/{dataPlaneId}"].get
+    update:
+      x-speakeasy-entity-operation: DataPlane#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/dataplanes/{dataPlaneId}"].delete
+    update:
+      x-speakeasy-entity-operation: DataPlane#delete
+
+  # AM rejects a PUT missing any of these.
+  - target: $.components.schemas.AutomationDataPlane.required
+    update:
+      - name
+      - type
+      - configuration
+
+  # Sensitive parameter handling — `configuration` is a JSON-encoded string
+  # holding one `mongodb` or `jdbc` block, which can carry database credentials.
+  - target: $.components.schemas.AutomationDataPlane.properties.configuration
+    update:
+      x-speakeasy-type-override: any
+      x-speakeasy-param-sensitive: true
+
+  # Immutable after creation — changing these forces resource recreation.
+  # create/update share one PUT op, so ForceNew is not auto-inferred; set it explicitly.
+  - target: $.components.schemas.AutomationDataPlane.properties.id
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.AutomationDataPlane.properties.type
+    update:
+      x-speakeasy-param-force-new: true

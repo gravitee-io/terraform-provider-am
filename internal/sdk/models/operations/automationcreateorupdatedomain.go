@@ -46,6 +46,8 @@ type AutomationCreateOrUpdateDomainRequest struct {
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Identifier of the environment.
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+	// When true, validates the payload without persisting. The returned domain includes a dryRunErrors field.
+	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
 	// Desired state of the domain.
 	AutomationDomain shared.AutomationDomainInput `request:"mediaType=application/json"`
 }
@@ -75,6 +77,13 @@ func (a *AutomationCreateOrUpdateDomainRequest) GetEnvironmentID() *string {
 	return a.EnvironmentID
 }
 
+func (a *AutomationCreateOrUpdateDomainRequest) GetDryRun() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.DryRun
+}
+
 func (a *AutomationCreateOrUpdateDomainRequest) GetAutomationDomain() shared.AutomationDomainInput {
 	if a == nil {
 		return shared.AutomationDomainInput{}
@@ -89,7 +98,7 @@ type AutomationCreateOrUpdateDomainResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// The created or updated domain
+	// The created or updated domain. When dryRun is true the domain includes a dryRunErrors field with any validation errors.
 	AutomationDomain *shared.AutomationDomain
 	// Invalid request: validation failure, an immutable field change, a key that already exists for a domain not managed by the Automation API, or an unknown defaultIdentityProviderForRegistration reference
 	Error *shared.Error

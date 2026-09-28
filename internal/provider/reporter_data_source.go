@@ -6,6 +6,8 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
+	tfTypes "github.com/gravitee-io/terraform-provider-am/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -37,18 +39,20 @@ type ReporterDataSource struct {
 
 // ReporterDataSourceModel describes the data model.
 type ReporterDataSourceModel struct {
-	Configuration  types.String `tfsdk:"configuration"`
-	CreatedAt      types.String `tfsdk:"created_at"`
-	DataType       types.String `tfsdk:"data_type"`
-	DomainKey      types.String `tfsdk:"domain_key"`
-	Enabled        types.Bool   `tfsdk:"enabled"`
-	EnvironmentID  types.String `tfsdk:"environment_id"`
-	Key            types.String `tfsdk:"key"`
-	Name           types.String `tfsdk:"name"`
-	OrganizationID types.String `tfsdk:"organization_id"`
-	System         types.Bool   `tfsdk:"system"`
-	Type           types.String `tfsdk:"type"`
-	UpdatedAt      types.String `tfsdk:"updated_at"`
+	AttributeMappingEventTypes []types.String                     `tfsdk:"attribute_mapping_event_types"`
+	AttributeMappings          []tfTypes.ReporterAttributeMapping `tfsdk:"attribute_mappings"`
+	Configuration              customtypes.MaskedJSON             `tfsdk:"configuration"`
+	CreatedAt                  types.String                       `tfsdk:"created_at"`
+	DataType                   types.String                       `tfsdk:"data_type"`
+	DomainKey                  types.String                       `tfsdk:"domain_key"`
+	Enabled                    types.Bool                         `tfsdk:"enabled"`
+	EnvironmentID              types.String                       `tfsdk:"environment_id"`
+	Key                        types.String                       `tfsdk:"key"`
+	Name                       types.String                       `tfsdk:"name"`
+	OrganizationID             types.String                       `tfsdk:"organization_id"`
+	System                     types.Bool                         `tfsdk:"system"`
+	Type                       types.String                       `tfsdk:"type"`
+	UpdatedAt                  types.String                       `tfsdk:"updated_at"`
 }
 
 // Metadata returns the data source type name.
@@ -62,10 +66,32 @@ func (r *ReporterDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 		MarkdownDescription: "Reporter DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"attribute_mapping_event_types": schema.SetAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+				Description: `Audit event types the attribute mappings apply to. Empty means every event type. Ignored when system is true.`,
+			},
+			"attribute_mappings": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"exported_name": schema.StringAttribute{
+							Computed:    true,
+							Description: `The name the evaluated value takes on the exported payload.`,
+						},
+						"expression": schema.StringAttribute{
+							Computed:    true,
+							Description: `Expression evaluated against the audit context.`,
+						},
+					},
+				},
+				Description: `Additional attributes exported alongside the regular audit payload. Each entry pairs an expression read from the audit context with the field name its value is exported under. Ignored when system is true; a system reporter exports no additional attributes.`,
+			},
 			"configuration": schema.StringAttribute{
+				CustomType:  customtypes.MaskedJSONType{},
 				Computed:    true,
 				Sensitive:   true,
-				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type.`,
+				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -106,7 +132,7 @@ func (r *ReporterDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 			},
 			"system": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, and configuration fields are ignored.`,
+				Description: `Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, configuration, attributeMappings and attributeMappingEventTypes fields are ignored.`,
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,

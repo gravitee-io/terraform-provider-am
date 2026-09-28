@@ -8,6 +8,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-am/internal/planmodifiers/stringplanmodifier"
+	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -44,17 +46,17 @@ type CertificateResource struct {
 
 // CertificateResourceModel describes the resource data model.
 type CertificateResourceModel struct {
-	Configuration  types.String `tfsdk:"configuration"`
-	CreatedAt      types.String `tfsdk:"created_at"`
-	DomainKey      types.String `tfsdk:"domain_key"`
-	EnvironmentID  types.String `tfsdk:"environment_id"`
-	ExpiresAt      types.String `tfsdk:"expires_at"`
-	Key            types.String `tfsdk:"key"`
-	Name           types.String `tfsdk:"name"`
-	OrganizationID types.String `tfsdk:"organization_id"`
-	System         types.Bool   `tfsdk:"system"`
-	Type           types.String `tfsdk:"type"`
-	UpdatedAt      types.String `tfsdk:"updated_at"`
+	Configuration  customtypes.MaskedJSON `tfsdk:"configuration"`
+	CreatedAt      types.String           `tfsdk:"created_at"`
+	DomainKey      types.String           `tfsdk:"domain_key"`
+	EnvironmentID  types.String           `tfsdk:"environment_id"`
+	ExpiresAt      types.String           `tfsdk:"expires_at"`
+	Key            types.String           `tfsdk:"key"`
+	Name           types.String           `tfsdk:"name"`
+	OrganizationID types.String           `tfsdk:"organization_id"`
+	System         types.Bool             `tfsdk:"system"`
+	Type           types.String           `tfsdk:"type"`
+	UpdatedAt      types.String           `tfsdk:"updated_at"`
 }
 
 func (r *CertificateResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -66,9 +68,11 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 		MarkdownDescription: "Certificate Resource",
 		Attributes: map[string]schema.Attribute{
 			"configuration": schema.StringAttribute{
+				CustomType:  customtypes.MaskedJSONType{},
+				Computed:    true,
 				Optional:    true,
 				Sensitive:   true,
-				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type.`,
+				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected. The uploaded keystore file is masked too; sending ******** back keeps it.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -88,13 +92,17 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Expiry timestamp (ISO-8601 / RFC 3339, UTC), when known for the certificate type. Read-only.`,
 			},
 			"key": schema.StringAttribute{
-				Required:    true,
-				Description: `Stable, immutable identifier for the certificate within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the certificate on create-or-update.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Stable, immutable identifier for the certificate within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the certificate on create-or-update. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},
 			},
 			"name": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Human-readable name of the certificate.`,
 				Validators: []validator.String{
@@ -116,9 +124,11 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Whether this is the domain's system certificate. Immutable after creation. When true, only key is required; the certificate is built from the domains.certificates.default.* system settings and the name, type, and configuration fields are ignored. Default: false; Requires replacement if changed.`,
 			},
 			"type": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Certificate plugin type identifier. Immutable after creation. Requires replacement if changed.`,
 				Validators: []validator.String{
@@ -424,8 +434,8 @@ func (r *CertificateResource) ImportState(ctx context.Context, req resource.Impo
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -439,8 +449,8 @@ func (r *CertificateResource) ImportState(ctx context.Context, req resource.Impo
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

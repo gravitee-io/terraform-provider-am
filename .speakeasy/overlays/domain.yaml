@@ -10,6 +10,11 @@ actions:
     update:
       x-speakeasy-entity: Domain
 
+  # The resource's own attributes are not computed; nested settings are (common/schema.yaml).
+  - target: $.components.schemas.AutomationDomain.properties.*
+    update:
+      x-speakeasy-param-computed: false
+
   # Body `key` ↔ path `domainKey` correlation: rename the path parameter
   # so Speakeasy auto-matches by name against the entity's `key` field.
   # URL pattern is unchanged.
@@ -31,9 +36,54 @@ actions:
     update:
       x-speakeasy-entity-operation: Domain#delete
 
+  # Immutable after creation — changing it forces resource recreation.
+  - target: $.components.schemas.AutomationDomain.properties.key
+    update:
+      x-speakeasy-param-force-new: true
+
   # dataPlaneId is required at creation and immutable afterwards — changing it
   # forces resource recreation. create/update share one PUT op, so ForceNew is
   # not auto-inferred; set it explicitly.
   - target: $.components.schemas.AutomationDomain.properties.dataPlaneId
     update:
       x-speakeasy-param-force-new: true
+
+  # The provider reads a list AM omits back as empty.
+  - target: $.components.schemas.AutomationDomain.properties.tags
+    update:
+      default: []
+      format: set
+      uniqueItems: false
+  # Speakeasy ignores a default on a list of objects, so vhosts is computed; `vhosts = []` clears them.
+  - target: $.components.schemas.AutomationDomain.properties.vhosts
+    update:
+      x-speakeasy-param-computed: true
+
+  # AM holds these as sets and returns them in its own order; a set needs no uniqueness validator.
+  - target: $.components.schemas.CorsSettings.properties["allowedOrigins","allowedMethods","allowedHeaders"]
+    update:
+      format: set
+      uniqueItems: false
+
+  # Deprecation messages name the replacement in Terraform terms.
+  - target: $.components.schemas.SpiffeDomainSettings.properties.allowPrivateIpAddress
+    update:
+      x-speakeasy-deprecation-message: Use key_retrieval_settings.allow_private_ip_address instead.
+  - target: $.components.schemas.SpiffeDomainSettings.properties.allowUnsecuredHttpUri
+    update:
+      x-speakeasy-deprecation-message: Use key_retrieval_settings.allow_unsecured_http_uri instead.
+  - target: $.components.schemas.SpiffeDomainSettings.properties.cacheMaxEntries
+    update:
+      x-speakeasy-deprecation-message: Use key_retrieval_settings.cache_max_entries instead.
+  - target: $.components.schemas.SpiffeDomainSettings.properties.cacheTtlSeconds
+    update:
+      x-speakeasy-deprecation-message: Use key_retrieval_settings.cache_ttl_seconds instead.
+  - target: $.components.schemas.SpiffeDomainSettings.properties.fetchTimeoutMs
+    update:
+      x-speakeasy-deprecation-message: Use key_retrieval_settings.fetch_timeout_ms instead.
+  - target: $.components.schemas.SpiffeDomainSettings.properties.maxResponseSizeKb
+    update:
+      x-speakeasy-deprecation-message: Use key_retrieval_settings.max_response_size_kb instead.
+  - target: $.components.schemas.TokenExchangeSettings.properties.trustedIssuers
+    update:
+      x-speakeasy-deprecation-message: Manage trusted issuers as trusted domains in AM instead.

@@ -82,13 +82,25 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 				r.CorsSettings.AllowedOrigins = append(r.CorsSettings.AllowedOrigins, types.StringValue(v))
 			}
 			r.CorsSettings.Enabled = types.BoolPointerValue(resp.CorsSettings.Enabled)
+			r.CorsSettings.Inherited = types.BoolPointerValue(resp.CorsSettings.Inherited)
 			r.CorsSettings.MaxAge = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.CorsSettings.MaxAge))
 		}
 		r.CreatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CreatedAt))
-		r.DataPlaneID = types.StringValue(resp.DataPlaneID)
+		r.DataPlaneID = types.StringPointerValue(resp.DataPlaneID)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.Enabled = types.BoolPointerValue(resp.Enabled)
 		r.Key = types.StringValue(resp.Key)
+		if resp.KeyRetrievalSettings == nil {
+			r.KeyRetrievalSettings = nil
+		} else {
+			r.KeyRetrievalSettings = &tfTypes.KeyRetrievalSettings{}
+			r.KeyRetrievalSettings.AllowPrivateIPAddress = types.BoolPointerValue(resp.KeyRetrievalSettings.AllowPrivateIPAddress)
+			r.KeyRetrievalSettings.AllowUnsecuredHTTPURI = types.BoolPointerValue(resp.KeyRetrievalSettings.AllowUnsecuredHTTPURI)
+			r.KeyRetrievalSettings.CacheMaxEntries = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.KeyRetrievalSettings.CacheMaxEntries))
+			r.KeyRetrievalSettings.CacheTTLSeconds = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.KeyRetrievalSettings.CacheTTLSeconds))
+			r.KeyRetrievalSettings.FetchTimeoutMs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.KeyRetrievalSettings.FetchTimeoutMs))
+			r.KeyRetrievalSettings.MaxResponseSizeKb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.KeyRetrievalSettings.MaxResponseSizeKb))
+		}
 		if resp.LoginSettings == nil {
 			r.LoginSettings = nil
 		} else {
@@ -257,6 +269,12 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 			}
 			r.TokenExchangeSettings.AllowImpersonation = types.BoolPointerValue(resp.TokenExchangeSettings.AllowImpersonation)
 			r.TokenExchangeSettings.Enabled = types.BoolPointerValue(resp.TokenExchangeSettings.Enabled)
+			if resp.TokenExchangeSettings.IDJagSettings == nil {
+				r.TokenExchangeSettings.IDJagSettings = nil
+			} else {
+				r.TokenExchangeSettings.IDJagSettings = &tfTypes.IDJagSettings{}
+				r.TokenExchangeSettings.IDJagSettings.LaxValidation = types.BoolPointerValue(resp.TokenExchangeSettings.IDJagSettings.LaxValidation)
+			}
 			r.TokenExchangeSettings.MaxDelegationDepth = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.TokenExchangeSettings.MaxDelegationDepth))
 			if resp.TokenExchangeSettings.TokenExchangeOAuthSettings == nil {
 				r.TokenExchangeSettings.TokenExchangeOAuthSettings = nil
@@ -353,6 +371,40 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 				r.WebAuthnSettings.UserVerification = types.StringValue(string(*resp.WebAuthnSettings.UserVerification))
 			} else {
 				r.WebAuthnSettings.UserVerification = types.StringNull()
+			}
+		}
+		if resp.WebProtectionSettings == nil {
+			r.WebProtectionSettings = nil
+		} else {
+			r.WebProtectionSettings = &tfTypes.WebProtectionSettings{}
+			if resp.WebProtectionSettings.Csp == nil {
+				r.WebProtectionSettings.Csp = nil
+			} else {
+				r.WebProtectionSettings.Csp = &tfTypes.CspSettings{}
+				r.WebProtectionSettings.Csp.Directives = make([]types.String, 0, len(resp.WebProtectionSettings.Csp.Directives))
+				for _, v := range resp.WebProtectionSettings.Csp.Directives {
+					r.WebProtectionSettings.Csp.Directives = append(r.WebProtectionSettings.Csp.Directives, types.StringValue(v))
+				}
+				r.WebProtectionSettings.Csp.Enabled = types.BoolPointerValue(resp.WebProtectionSettings.Csp.Enabled)
+				r.WebProtectionSettings.Csp.Inherited = types.BoolPointerValue(resp.WebProtectionSettings.Csp.Inherited)
+				r.WebProtectionSettings.Csp.ReportOnly = types.BoolPointerValue(resp.WebProtectionSettings.Csp.ReportOnly)
+				r.WebProtectionSettings.Csp.ScriptInlineNonce = types.BoolPointerValue(resp.WebProtectionSettings.Csp.ScriptInlineNonce)
+			}
+			if resp.WebProtectionSettings.Xframe == nil {
+				r.WebProtectionSettings.Xframe = nil
+			} else {
+				r.WebProtectionSettings.Xframe = &tfTypes.XFrameSettings{}
+				r.WebProtectionSettings.Xframe.Action = types.StringPointerValue(resp.WebProtectionSettings.Xframe.Action)
+				r.WebProtectionSettings.Xframe.Enabled = types.BoolPointerValue(resp.WebProtectionSettings.Xframe.Enabled)
+				r.WebProtectionSettings.Xframe.Inherited = types.BoolPointerValue(resp.WebProtectionSettings.Xframe.Inherited)
+			}
+			if resp.WebProtectionSettings.XSS == nil {
+				r.WebProtectionSettings.XSS = nil
+			} else {
+				r.WebProtectionSettings.XSS = &tfTypes.XSSProtectionSettings{}
+				r.WebProtectionSettings.XSS.Action = types.StringPointerValue(resp.WebProtectionSettings.XSS.Action)
+				r.WebProtectionSettings.XSS.Enabled = types.BoolPointerValue(resp.WebProtectionSettings.XSS.Enabled)
+				r.WebProtectionSettings.XSS.Inherited = types.BoolPointerValue(resp.WebProtectionSettings.XSS.Inherited)
 			}
 		}
 	}
@@ -692,6 +744,12 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		} else {
 			enabled = nil
 		}
+		inherited1 := new(bool)
+		if !r.CorsSettings.Inherited.IsUnknown() && !r.CorsSettings.Inherited.IsNull() {
+			*inherited1 = r.CorsSettings.Inherited.ValueBool()
+		} else {
+			inherited1 = nil
+		}
 		maxAge := new(int)
 		if !r.CorsSettings.MaxAge.IsUnknown() && !r.CorsSettings.MaxAge.IsNull() {
 			*maxAge = int(r.CorsSettings.MaxAge.ValueInt32())
@@ -704,12 +762,16 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			AllowedMethods:   allowedMethods,
 			AllowedOrigins:   allowedOrigins,
 			Enabled:          enabled,
+			Inherited:        inherited1,
 			MaxAge:           maxAge,
 		}
 	}
-	var dataPlaneID string
-	dataPlaneID = r.DataPlaneID.ValueString()
-
+	dataPlaneID := new(string)
+	if !r.DataPlaneID.IsUnknown() && !r.DataPlaneID.IsNull() {
+		*dataPlaneID = r.DataPlaneID.ValueString()
+	} else {
+		dataPlaneID = nil
+	}
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
@@ -725,6 +787,53 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 	var key1 string
 	key1 = r.Key.ValueString()
 
+	var keyRetrievalSettings *shared.KeyRetrievalSettings
+	if r.KeyRetrievalSettings != nil {
+		allowPrivateIPAddress := new(bool)
+		if !r.KeyRetrievalSettings.AllowPrivateIPAddress.IsUnknown() && !r.KeyRetrievalSettings.AllowPrivateIPAddress.IsNull() {
+			*allowPrivateIPAddress = r.KeyRetrievalSettings.AllowPrivateIPAddress.ValueBool()
+		} else {
+			allowPrivateIPAddress = nil
+		}
+		allowUnsecuredHTTPURI := new(bool)
+		if !r.KeyRetrievalSettings.AllowUnsecuredHTTPURI.IsUnknown() && !r.KeyRetrievalSettings.AllowUnsecuredHTTPURI.IsNull() {
+			*allowUnsecuredHTTPURI = r.KeyRetrievalSettings.AllowUnsecuredHTTPURI.ValueBool()
+		} else {
+			allowUnsecuredHTTPURI = nil
+		}
+		cacheMaxEntries := new(int)
+		if !r.KeyRetrievalSettings.CacheMaxEntries.IsUnknown() && !r.KeyRetrievalSettings.CacheMaxEntries.IsNull() {
+			*cacheMaxEntries = int(r.KeyRetrievalSettings.CacheMaxEntries.ValueInt32())
+		} else {
+			cacheMaxEntries = nil
+		}
+		cacheTTLSeconds := new(int)
+		if !r.KeyRetrievalSettings.CacheTTLSeconds.IsUnknown() && !r.KeyRetrievalSettings.CacheTTLSeconds.IsNull() {
+			*cacheTTLSeconds = int(r.KeyRetrievalSettings.CacheTTLSeconds.ValueInt32())
+		} else {
+			cacheTTLSeconds = nil
+		}
+		fetchTimeoutMs := new(int)
+		if !r.KeyRetrievalSettings.FetchTimeoutMs.IsUnknown() && !r.KeyRetrievalSettings.FetchTimeoutMs.IsNull() {
+			*fetchTimeoutMs = int(r.KeyRetrievalSettings.FetchTimeoutMs.ValueInt32())
+		} else {
+			fetchTimeoutMs = nil
+		}
+		maxResponseSizeKb := new(int)
+		if !r.KeyRetrievalSettings.MaxResponseSizeKb.IsUnknown() && !r.KeyRetrievalSettings.MaxResponseSizeKb.IsNull() {
+			*maxResponseSizeKb = int(r.KeyRetrievalSettings.MaxResponseSizeKb.ValueInt32())
+		} else {
+			maxResponseSizeKb = nil
+		}
+		keyRetrievalSettings = &shared.KeyRetrievalSettings{
+			AllowPrivateIPAddress: allowPrivateIPAddress,
+			AllowUnsecuredHTTPURI: allowUnsecuredHTTPURI,
+			CacheMaxEntries:       cacheMaxEntries,
+			CacheTTLSeconds:       cacheTTLSeconds,
+			FetchTimeoutMs:        fetchTimeoutMs,
+			MaxResponseSizeKb:     maxResponseSizeKb,
+		}
+	}
 	var loginSettings *shared.LoginSettings
 	if r.LoginSettings != nil {
 		certificateBasedAuthEnabled := new(bool)
@@ -757,11 +866,11 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		} else {
 			identifierFirstEnabled = nil
 		}
-		inherited1 := new(bool)
+		inherited2 := new(bool)
 		if !r.LoginSettings.Inherited.IsUnknown() && !r.LoginSettings.Inherited.IsNull() {
-			*inherited1 = r.LoginSettings.Inherited.ValueBool()
+			*inherited2 = r.LoginSettings.Inherited.ValueBool()
 		} else {
-			inherited1 = nil
+			inherited2 = nil
 		}
 		magicLinkAuthEnabled := new(bool)
 		if !r.LoginSettings.MagicLinkAuthEnabled.IsUnknown() && !r.LoginSettings.MagicLinkAuthEnabled.IsNull() {
@@ -823,7 +932,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			ForgotPasswordEnabled:              forgotPasswordEnabled,
 			HideForm:                           hideForm,
 			IdentifierFirstEnabled:             identifierFirstEnabled,
-			Inherited:                          inherited1,
+			Inherited:                          inherited2,
 			MagicLinkAuthEnabled:               magicLinkAuthEnabled,
 			PasswordlessDeviceNamingEnabled:    passwordlessDeviceNamingEnabled,
 			PasswordlessEnabled:                passwordlessEnabled,
@@ -985,29 +1094,29 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		}
 		var workloadIdentitySettings *shared.SpiffeDomainSettings
 		if r.Oidc.WorkloadIdentitySettings != nil {
-			allowPrivateIPAddress := new(bool)
+			allowPrivateIPAddress1 := new(bool)
 			if !r.Oidc.WorkloadIdentitySettings.AllowPrivateIPAddress.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.AllowPrivateIPAddress.IsNull() {
-				*allowPrivateIPAddress = r.Oidc.WorkloadIdentitySettings.AllowPrivateIPAddress.ValueBool()
+				*allowPrivateIPAddress1 = r.Oidc.WorkloadIdentitySettings.AllowPrivateIPAddress.ValueBool()
 			} else {
-				allowPrivateIPAddress = nil
+				allowPrivateIPAddress1 = nil
 			}
-			allowUnsecuredHTTPURI := new(bool)
+			allowUnsecuredHttpuri1 := new(bool)
 			if !r.Oidc.WorkloadIdentitySettings.AllowUnsecuredHTTPURI.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.AllowUnsecuredHTTPURI.IsNull() {
-				*allowUnsecuredHTTPURI = r.Oidc.WorkloadIdentitySettings.AllowUnsecuredHTTPURI.ValueBool()
+				*allowUnsecuredHttpuri1 = r.Oidc.WorkloadIdentitySettings.AllowUnsecuredHTTPURI.ValueBool()
 			} else {
-				allowUnsecuredHTTPURI = nil
+				allowUnsecuredHttpuri1 = nil
 			}
-			cacheMaxEntries := new(int)
+			cacheMaxEntries1 := new(int)
 			if !r.Oidc.WorkloadIdentitySettings.CacheMaxEntries.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.CacheMaxEntries.IsNull() {
-				*cacheMaxEntries = int(r.Oidc.WorkloadIdentitySettings.CacheMaxEntries.ValueInt32())
+				*cacheMaxEntries1 = int(r.Oidc.WorkloadIdentitySettings.CacheMaxEntries.ValueInt32())
 			} else {
-				cacheMaxEntries = nil
+				cacheMaxEntries1 = nil
 			}
-			cacheTTLSeconds := new(int)
+			cacheTTLSeconds1 := new(int)
 			if !r.Oidc.WorkloadIdentitySettings.CacheTTLSeconds.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.CacheTTLSeconds.IsNull() {
-				*cacheTTLSeconds = int(r.Oidc.WorkloadIdentitySettings.CacheTTLSeconds.ValueInt32())
+				*cacheTTLSeconds1 = int(r.Oidc.WorkloadIdentitySettings.CacheTTLSeconds.ValueInt32())
 			} else {
-				cacheTTLSeconds = nil
+				cacheTTLSeconds1 = nil
 			}
 			clockSkewSeconds := new(int)
 			if !r.Oidc.WorkloadIdentitySettings.ClockSkewSeconds.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.ClockSkewSeconds.IsNull() {
@@ -1025,11 +1134,11 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			} else {
 				enabled3 = nil
 			}
-			fetchTimeoutMs := new(int)
+			fetchTimeoutMs1 := new(int)
 			if !r.Oidc.WorkloadIdentitySettings.FetchTimeoutMs.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.FetchTimeoutMs.IsNull() {
-				*fetchTimeoutMs = int(r.Oidc.WorkloadIdentitySettings.FetchTimeoutMs.ValueInt32())
+				*fetchTimeoutMs1 = int(r.Oidc.WorkloadIdentitySettings.FetchTimeoutMs.ValueInt32())
 			} else {
-				fetchTimeoutMs = nil
+				fetchTimeoutMs1 = nil
 			}
 			maxJwtLifetimeSeconds := new(int)
 			if !r.Oidc.WorkloadIdentitySettings.MaxJwtLifetimeSeconds.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.MaxJwtLifetimeSeconds.IsNull() {
@@ -1037,23 +1146,23 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			} else {
 				maxJwtLifetimeSeconds = nil
 			}
-			maxResponseSizeKb := new(int)
+			maxResponseSizeKb1 := new(int)
 			if !r.Oidc.WorkloadIdentitySettings.MaxResponseSizeKb.IsUnknown() && !r.Oidc.WorkloadIdentitySettings.MaxResponseSizeKb.IsNull() {
-				*maxResponseSizeKb = int(r.Oidc.WorkloadIdentitySettings.MaxResponseSizeKb.ValueInt32())
+				*maxResponseSizeKb1 = int(r.Oidc.WorkloadIdentitySettings.MaxResponseSizeKb.ValueInt32())
 			} else {
-				maxResponseSizeKb = nil
+				maxResponseSizeKb1 = nil
 			}
 			workloadIdentitySettings = &shared.SpiffeDomainSettings{
-				AllowPrivateIPAddress:    allowPrivateIPAddress,
-				AllowUnsecuredHTTPURI:    allowUnsecuredHTTPURI,
-				CacheMaxEntries:          cacheMaxEntries,
-				CacheTTLSeconds:          cacheTTLSeconds,
+				AllowPrivateIPAddress:    allowPrivateIPAddress1,
+				AllowUnsecuredHTTPURI:    allowUnsecuredHttpuri1,
+				CacheMaxEntries:          cacheMaxEntries1,
+				CacheTTLSeconds:          cacheTTLSeconds1,
 				ClockSkewSeconds:         clockSkewSeconds,
 				DefaultAllowedAlgorithms: defaultAllowedAlgorithms,
 				Enabled:                  enabled3,
-				FetchTimeoutMs:           fetchTimeoutMs,
+				FetchTimeoutMs:           fetchTimeoutMs1,
 				MaxJwtLifetimeSeconds:    maxJwtLifetimeSeconds,
-				MaxResponseSizeKb:        maxResponseSizeKb,
+				MaxResponseSizeKb:        maxResponseSizeKb1,
 			}
 		}
 		oidc = &shared.AutomationOidcSettings{
@@ -1098,11 +1207,11 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		} else {
 			includeSpecialCharacters = nil
 		}
-		inherited2 := new(bool)
+		inherited3 := new(bool)
 		if !r.PasswordSettings.Inherited.IsUnknown() && !r.PasswordSettings.Inherited.IsNull() {
-			*inherited2 = r.PasswordSettings.Inherited.ValueBool()
+			*inherited3 = r.PasswordSettings.Inherited.ValueBool()
 		} else {
-			inherited2 = nil
+			inherited3 = nil
 		}
 		lettersInMixedCase := new(bool)
 		if !r.PasswordSettings.LettersInMixedCase.IsUnknown() && !r.PasswordSettings.LettersInMixedCase.IsNull() {
@@ -1146,7 +1255,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			ExpiryDuration:                   expiryDuration,
 			IncludeNumbers:                   includeNumbers,
 			IncludeSpecialCharacters:         includeSpecialCharacters,
-			Inherited:                        inherited2,
+			Inherited:                        inherited3,
 			LettersInMixedCase:               lettersInMixedCase,
 			MaxConsecutiveLetters:            maxConsecutiveLetters,
 			MaxLength:                        maxLength,
@@ -1297,6 +1406,18 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		} else {
 			enabled8 = nil
 		}
+		var idJagSettings *shared.IDJagSettings
+		if r.TokenExchangeSettings.IDJagSettings != nil {
+			laxValidation := new(bool)
+			if !r.TokenExchangeSettings.IDJagSettings.LaxValidation.IsUnknown() && !r.TokenExchangeSettings.IDJagSettings.LaxValidation.IsNull() {
+				*laxValidation = r.TokenExchangeSettings.IDJagSettings.LaxValidation.ValueBool()
+			} else {
+				laxValidation = nil
+			}
+			idJagSettings = &shared.IDJagSettings{
+				LaxValidation: laxValidation,
+			}
+		}
 		maxDelegationDepth := new(int)
 		if !r.TokenExchangeSettings.MaxDelegationDepth.IsUnknown() && !r.TokenExchangeSettings.MaxDelegationDepth.IsNull() {
 			*maxDelegationDepth = int(r.TokenExchangeSettings.MaxDelegationDepth.ValueInt32())
@@ -1305,11 +1426,11 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		}
 		var tokenExchangeOAuthSettings *shared.TokenExchangeOAuthSettings
 		if r.TokenExchangeSettings.TokenExchangeOAuthSettings != nil {
-			inherited3 := new(bool)
+			inherited4 := new(bool)
 			if !r.TokenExchangeSettings.TokenExchangeOAuthSettings.Inherited.IsUnknown() && !r.TokenExchangeSettings.TokenExchangeOAuthSettings.Inherited.IsNull() {
-				*inherited3 = r.TokenExchangeSettings.TokenExchangeOAuthSettings.Inherited.ValueBool()
+				*inherited4 = r.TokenExchangeSettings.TokenExchangeOAuthSettings.Inherited.ValueBool()
 			} else {
-				inherited3 = nil
+				inherited4 = nil
 			}
 			scopeHandling := new(shared.ScopeHandling)
 			if !r.TokenExchangeSettings.TokenExchangeOAuthSettings.ScopeHandling.IsUnknown() && !r.TokenExchangeSettings.TokenExchangeOAuthSettings.ScopeHandling.IsNull() {
@@ -1318,7 +1439,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 				scopeHandling = nil
 			}
 			tokenExchangeOAuthSettings = &shared.TokenExchangeOAuthSettings{
-				Inherited:     inherited3,
+				Inherited:     inherited4,
 				ScopeHandling: scopeHandling,
 			}
 		}
@@ -1397,6 +1518,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			AllowedRequestedTokenTypes: allowedRequestedTokenTypes,
 			AllowedSubjectTokenTypes:   allowedSubjectTokenTypes,
 			Enabled:                    enabled8,
+			IDJagSettings:              idJagSettings,
 			MaxDelegationDepth:         maxDelegationDepth,
 			TokenExchangeOAuthSettings: tokenExchangeOAuthSettings,
 			TrustedIssuers:             trustedIssuers,
@@ -1529,6 +1651,104 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			UserVerification:                    userVerification,
 		}
 	}
+	var webProtectionSettings *shared.WebProtectionSettings
+	if r.WebProtectionSettings != nil {
+		var csp *shared.CspSettings
+		if r.WebProtectionSettings.Csp != nil {
+			directives := make([]string, 0, len(r.WebProtectionSettings.Csp.Directives))
+			for directivesIndex := range r.WebProtectionSettings.Csp.Directives {
+				directives = append(directives, r.WebProtectionSettings.Csp.Directives[directivesIndex].ValueString())
+			}
+			enabled10 := new(bool)
+			if !r.WebProtectionSettings.Csp.Enabled.IsUnknown() && !r.WebProtectionSettings.Csp.Enabled.IsNull() {
+				*enabled10 = r.WebProtectionSettings.Csp.Enabled.ValueBool()
+			} else {
+				enabled10 = nil
+			}
+			inherited5 := new(bool)
+			if !r.WebProtectionSettings.Csp.Inherited.IsUnknown() && !r.WebProtectionSettings.Csp.Inherited.IsNull() {
+				*inherited5 = r.WebProtectionSettings.Csp.Inherited.ValueBool()
+			} else {
+				inherited5 = nil
+			}
+			reportOnly := new(bool)
+			if !r.WebProtectionSettings.Csp.ReportOnly.IsUnknown() && !r.WebProtectionSettings.Csp.ReportOnly.IsNull() {
+				*reportOnly = r.WebProtectionSettings.Csp.ReportOnly.ValueBool()
+			} else {
+				reportOnly = nil
+			}
+			scriptInlineNonce := new(bool)
+			if !r.WebProtectionSettings.Csp.ScriptInlineNonce.IsUnknown() && !r.WebProtectionSettings.Csp.ScriptInlineNonce.IsNull() {
+				*scriptInlineNonce = r.WebProtectionSettings.Csp.ScriptInlineNonce.ValueBool()
+			} else {
+				scriptInlineNonce = nil
+			}
+			csp = &shared.CspSettings{
+				Directives:        directives,
+				Enabled:           enabled10,
+				Inherited:         inherited5,
+				ReportOnly:        reportOnly,
+				ScriptInlineNonce: scriptInlineNonce,
+			}
+		}
+		var xframe *shared.XFrameSettings
+		if r.WebProtectionSettings.Xframe != nil {
+			action := new(string)
+			if !r.WebProtectionSettings.Xframe.Action.IsUnknown() && !r.WebProtectionSettings.Xframe.Action.IsNull() {
+				*action = r.WebProtectionSettings.Xframe.Action.ValueString()
+			} else {
+				action = nil
+			}
+			enabled11 := new(bool)
+			if !r.WebProtectionSettings.Xframe.Enabled.IsUnknown() && !r.WebProtectionSettings.Xframe.Enabled.IsNull() {
+				*enabled11 = r.WebProtectionSettings.Xframe.Enabled.ValueBool()
+			} else {
+				enabled11 = nil
+			}
+			inherited6 := new(bool)
+			if !r.WebProtectionSettings.Xframe.Inherited.IsUnknown() && !r.WebProtectionSettings.Xframe.Inherited.IsNull() {
+				*inherited6 = r.WebProtectionSettings.Xframe.Inherited.ValueBool()
+			} else {
+				inherited6 = nil
+			}
+			xframe = &shared.XFrameSettings{
+				Action:    action,
+				Enabled:   enabled11,
+				Inherited: inherited6,
+			}
+		}
+		var xss *shared.XSSProtectionSettings
+		if r.WebProtectionSettings.XSS != nil {
+			action1 := new(string)
+			if !r.WebProtectionSettings.XSS.Action.IsUnknown() && !r.WebProtectionSettings.XSS.Action.IsNull() {
+				*action1 = r.WebProtectionSettings.XSS.Action.ValueString()
+			} else {
+				action1 = nil
+			}
+			enabled12 := new(bool)
+			if !r.WebProtectionSettings.XSS.Enabled.IsUnknown() && !r.WebProtectionSettings.XSS.Enabled.IsNull() {
+				*enabled12 = r.WebProtectionSettings.XSS.Enabled.ValueBool()
+			} else {
+				enabled12 = nil
+			}
+			inherited7 := new(bool)
+			if !r.WebProtectionSettings.XSS.Inherited.IsUnknown() && !r.WebProtectionSettings.XSS.Inherited.IsNull() {
+				*inherited7 = r.WebProtectionSettings.XSS.Inherited.ValueBool()
+			} else {
+				inherited7 = nil
+			}
+			xss = &shared.XSSProtectionSettings{
+				Action:    action1,
+				Enabled:   enabled12,
+				Inherited: inherited7,
+			}
+		}
+		webProtectionSettings = &shared.WebProtectionSettings{
+			Csp:    csp,
+			Xframe: xframe,
+			XSS:    xss,
+		}
+	}
 	out := shared.AutomationDomainInput{
 		AccountSettings:                      accountSettings,
 		AlertEnabled:                         alertEnabled,
@@ -1538,6 +1758,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		Description:                          description,
 		Enabled:                              enabled1,
 		Key:                                  key1,
+		KeyRetrievalSettings:                 keyRetrievalSettings,
 		LoginSettings:                        loginSettings,
 		Master:                               master,
 		Name:                                 name,
@@ -1554,6 +1775,7 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		VhostMode:                            vhostMode,
 		Vhosts:                               vhosts,
 		WebAuthnSettings:                     webAuthnSettings,
+		WebProtectionSettings:                webProtectionSettings,
 	}
 
 	return &out, diags

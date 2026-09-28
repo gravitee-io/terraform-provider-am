@@ -11,11 +11,13 @@ import (
 	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -84,9 +86,11 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Key of the domain: its stable, immutable Automation identifier within the environment.`,
 			},
 			"domain_whitelist": schema.ListAttribute{
+				Computed:    true,
 				Optional:    true,
+				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
-				Description: `Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected.`,
+				Description: `Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected. Default: []`,
 			},
 			"environment_id": schema.StringAttribute{
 				Computed:    true,

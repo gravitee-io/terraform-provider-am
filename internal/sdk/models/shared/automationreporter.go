@@ -20,6 +20,8 @@ type AutomationReporter struct {
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	// Category of data the reporter handles, derived from its type. Read-only.
 	DataType *string `json:"dataType,omitempty"`
+	// Validation errors returned when dryRun is true. Absent when validation succeeds.
+	DryRunErrors []DryRunError `json:"dryRunErrors,omitempty"`
 	// Whether the reporter is enabled.
 	Enabled *bool `default:"true" json:"enabled"`
 	// Stable, immutable identifier for the reporter within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the reporter on create-or-update.
@@ -78,6 +80,13 @@ func (a *AutomationReporter) GetDataType() *string {
 		return nil
 	}
 	return a.DataType
+}
+
+func (a *AutomationReporter) GetDryRunErrors() []DryRunError {
+	if a == nil {
+		return nil
+	}
+	return a.DryRunErrors
 }
 
 func (a *AutomationReporter) GetEnabled() *bool {

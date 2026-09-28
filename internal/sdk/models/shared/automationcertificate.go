@@ -14,6 +14,8 @@ type AutomationCertificate struct {
 	Configuration *string `json:"configuration,omitempty"`
 	// Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	// Validation errors returned when dryRun is true. Absent when validation succeeds.
+	DryRunErrors []DryRunError `json:"dryRunErrors,omitempty"`
 	// Expiry timestamp (ISO-8601 / RFC 3339, UTC), when known for the certificate type. Read-only.
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// Stable, immutable identifier for the certificate within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the certificate on create-or-update.
@@ -51,6 +53,13 @@ func (a *AutomationCertificate) GetCreatedAt() *time.Time {
 		return nil
 	}
 	return a.CreatedAt
+}
+
+func (a *AutomationCertificate) GetDryRunErrors() []DryRunError {
+	if a == nil {
+		return nil
+	}
+	return a.DryRunErrors
 }
 
 func (a *AutomationCertificate) GetExpiresAt() *time.Time {

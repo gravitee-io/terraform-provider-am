@@ -16,6 +16,8 @@ type AutomationIdentityProvider struct {
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	// Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected.
 	DomainWhitelist []string `json:"domainWhitelist,omitempty"`
+	// Validation errors returned when dryRun is true. Absent when validation succeeds.
+	DryRunErrors []DryRunError `json:"dryRunErrors,omitempty"`
 	// Group mapper: assigns AM groups based on provider attribute values. Each entry maps a group to the user attribute expressions that grant it.
 	GroupMapper map[string][]string `json:"groupMapper,omitempty"`
 	// Stable, immutable identifier for the identity provider within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the identity provider on create-or-update.
@@ -64,6 +66,13 @@ func (a *AutomationIdentityProvider) GetDomainWhitelist() []string {
 		return nil
 	}
 	return a.DomainWhitelist
+}
+
+func (a *AutomationIdentityProvider) GetDryRunErrors() []DryRunError {
+	if a == nil {
+		return nil
+	}
+	return a.DryRunErrors
 }
 
 func (a *AutomationIdentityProvider) GetGroupMapper() map[string][]string {

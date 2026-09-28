@@ -48,6 +48,8 @@ type AutomationCreateOrUpdateIdentityProviderRequest struct {
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
+	// When true, validates the payload without persisting. The returned identity provider includes a dryRunErrors field.
+	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
 	// Desired state of the identity provider. For a system identity provider, supply only system: true and key.
 	AutomationIdentityProvider shared.AutomationIdentityProviderInput `request:"mediaType=application/json"`
 }
@@ -84,6 +86,13 @@ func (a *AutomationCreateOrUpdateIdentityProviderRequest) GetDomainKey() string 
 	return a.DomainKey
 }
 
+func (a *AutomationCreateOrUpdateIdentityProviderRequest) GetDryRun() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.DryRun
+}
+
 func (a *AutomationCreateOrUpdateIdentityProviderRequest) GetAutomationIdentityProvider() shared.AutomationIdentityProviderInput {
 	if a == nil {
 		return shared.AutomationIdentityProviderInput{}
@@ -98,7 +107,7 @@ type AutomationCreateOrUpdateIdentityProviderResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// The created or updated identity provider
+	// The created or updated identity provider. When dryRun is true the identity provider includes a dryRunErrors field with any validation errors.
 	AutomationIdentityProvider *shared.AutomationIdentityProvider
 	// Invalid request: a key conflict, a missing required field (name or type) for a non-system identity provider, an attempt to change the immutable system flag, or a second system identity provider for the domain
 	Error *shared.Error

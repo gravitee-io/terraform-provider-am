@@ -48,6 +48,8 @@ type AutomationCreateOrUpdateReporterRequest struct {
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
+	// When true, validates the payload without persisting. The returned reporter includes a dryRunErrors field.
+	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
 	// Desired state of the reporter. For a system reporter, supply only system: true and key.
 	AutomationReporter shared.AutomationReporterInput `request:"mediaType=application/json"`
 }
@@ -84,6 +86,13 @@ func (a *AutomationCreateOrUpdateReporterRequest) GetDomainKey() string {
 	return a.DomainKey
 }
 
+func (a *AutomationCreateOrUpdateReporterRequest) GetDryRun() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.DryRun
+}
+
 func (a *AutomationCreateOrUpdateReporterRequest) GetAutomationReporter() shared.AutomationReporterInput {
 	if a == nil {
 		return shared.AutomationReporterInput{}
@@ -98,7 +107,7 @@ type AutomationCreateOrUpdateReporterResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// The created or updated reporter
+	// The created or updated reporter. When dryRun is true the reporter includes a dryRunErrors field with any validation errors.
 	AutomationReporter *shared.AutomationReporter
 	// Invalid request: a key conflict, a missing required field (name, type, or configuration) for a non-system reporter, an attempt to change the immutable system flag, or a second system reporter for the domain
 	Error *shared.Error

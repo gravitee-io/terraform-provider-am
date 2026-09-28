@@ -13,7 +13,7 @@ type AutomationDomain struct {
 	// User account settings for the domain: brute-force protection, registration, password reset, remember-me, and MFA challenge behavior.
 	AccountSettings *AutomationAccountSettings `json:"accountSettings,omitempty"`
 	// Whether alerting is enabled for the domain.
-	AlertEnabled *bool `json:"alertEnabled,omitempty"`
+	AlertEnabled *bool `default:"false" json:"alertEnabled"`
 	// Domain-level certificate settings.
 	CertificateSettings *AutomationCertificateSettings `json:"certificateSettings,omitempty"`
 	// Cross-Origin Resource Sharing configuration controlling which web origins may call the domain's endpoints from a browser.

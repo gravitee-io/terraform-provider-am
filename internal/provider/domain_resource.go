@@ -13,11 +13,13 @@ import (
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-am/internal/validators/objectvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -247,8 +249,10 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `User account settings for the domain: brute-force protection, registration, password reset, remember-me, and MFA challenge behavior.`,
 			},
 			"alert_enabled": schema.BoolAttribute{
+				Computed:    true,
 				Optional:    true,
-				Description: `Whether alerting is enabled for the domain.`,
+				Default:     booldefault.StaticBool(false),
+				Description: `Whether alerting is enabled for the domain. Default: false`,
 			},
 			"certificate_settings": schema.SingleNestedAttribute{
 				Computed: true,
@@ -879,9 +883,11 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Controls whether end users can manage their own account (for example, reset their password) and the rules that apply.`,
 			},
 			"tags": schema.ListAttribute{
+				Computed:    true,
 				Optional:    true,
+				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
-				Description: `Sharding tags that control which gateways deploy this domain.`,
+				Description: `Sharding tags that control which gateways deploy this domain. Default: []`,
 				Validators: []validator.List{
 					listvalidator.UniqueValues(),
 				},

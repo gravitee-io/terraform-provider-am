@@ -1064,6 +1064,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Whether the domain is exposed through its virtual hosts rather than the default context path. When true, vhosts must be supplied. Default: false`,
 			},
 			"vhosts": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{

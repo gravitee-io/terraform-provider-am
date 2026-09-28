@@ -88,20 +88,6 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 		r.CreatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CreatedAt))
 		r.DataPlaneID = types.StringPointerValue(resp.DataPlaneID)
 		r.Description = types.StringPointerValue(resp.Description)
-		r.DryRunErrors = []tfTypes.DryRunError{}
-
-		for _, dryRunErrorsItem := range resp.DryRunErrors {
-			var dryRunErrors tfTypes.DryRunError
-
-			dryRunErrors.Message = types.StringPointerValue(dryRunErrorsItem.Message)
-			if dryRunErrorsItem.Severity != nil {
-				dryRunErrors.Severity = types.StringValue(string(*dryRunErrorsItem.Severity))
-			} else {
-				dryRunErrors.Severity = types.StringNull()
-			}
-
-			r.DryRunErrors = append(r.DryRunErrors, dryRunErrors)
-		}
 		r.Enabled = types.BoolPointerValue(resp.Enabled)
 		r.Key = types.StringValue(resp.Key)
 		if resp.KeyRetrievalSettings == nil {
@@ -441,12 +427,6 @@ func (r *DomainResourceModel) ToOperationsAutomationCreateOrUpdateDomainRequest(
 	} else {
 		environmentID = nil
 	}
-	dryRun := new(bool)
-	if !r.DryRun.IsUnknown() && !r.DryRun.IsNull() {
-		*dryRun = r.DryRun.ValueBool()
-	} else {
-		dryRun = nil
-	}
 	automationDomain, automationDomainDiags := r.ToSharedAutomationDomainInput(ctx)
 	diags.Append(automationDomainDiags...)
 
@@ -457,7 +437,6 @@ func (r *DomainResourceModel) ToOperationsAutomationCreateOrUpdateDomainRequest(
 	out := operations.AutomationCreateOrUpdateDomainRequest{
 		OrganizationID:   organizationID,
 		EnvironmentID:    environmentID,
-		DryRun:           dryRun,
 		AutomationDomain: *automationDomain,
 	}
 

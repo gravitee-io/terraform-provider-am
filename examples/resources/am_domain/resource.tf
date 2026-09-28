@@ -57,7 +57,6 @@ resource "am_domain" "my_domain" {
   }
   data_plane_id  = "default"
   description    = "An example authentication domain"
-  dry_run        = false
   enabled        = true
   environment_id = "DEFAULT"
   key            = "example-domain"

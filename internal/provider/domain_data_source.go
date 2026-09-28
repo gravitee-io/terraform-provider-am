@@ -45,7 +45,6 @@ type DomainDataSourceModel struct {
 	CreatedAt                            types.String                                  `tfsdk:"created_at"`
 	DataPlaneID                          types.String                                  `tfsdk:"data_plane_id"`
 	Description                          types.String                                  `tfsdk:"description"`
-	DryRunErrors                         []tfTypes.DryRunError                         `tfsdk:"dry_run_errors"`
 	Enabled                              types.Bool                                    `tfsdk:"enabled"`
 	EnvironmentID                        types.String                                  `tfsdk:"environment_id"`
 	Key                                  types.String                                  `tfsdk:"key"`
@@ -266,20 +265,6 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: `Human-readable description of the domain.`,
-			},
-			"dry_run_errors": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"message": schema.StringAttribute{
-							Computed: true,
-						},
-						"severity": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
-				Description: `Validation errors returned when dryRun is true. Absent when validation succeeds.`,
 			},
 			"enabled": schema.BoolAttribute{
 				Computed:    true,

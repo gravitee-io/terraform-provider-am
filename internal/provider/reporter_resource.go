@@ -88,10 +88,12 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 					},
 					Attributes: map[string]schema.Attribute{
 						"exported_name": schema.StringAttribute{
+							Computed:    true,
 							Optional:    true,
 							Description: `The name the evaluated value takes on the exported payload.`,
 						},
 						"expression": schema.StringAttribute{
+							Computed:    true,
 							Optional:    true,
 							Description: `Expression evaluated against the audit context.`,
 						},

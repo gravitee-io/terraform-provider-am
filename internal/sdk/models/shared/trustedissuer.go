@@ -37,6 +37,8 @@ func (e *KeyResolutionMethod) UnmarshalJSON(data []byte) error {
 }
 
 // TrustedIssuer - An external token issuer whose JWTs are accepted as subject or actor tokens during token exchange, validated with the configured key material.
+//
+// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 type TrustedIssuer struct {
 	// PEM-encoded X.509 certificate. Required when keyResolutionMethod is PEM.
 	Certificate *string `json:"certificate,omitempty"`

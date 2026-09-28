@@ -10,12 +10,14 @@ import (
 
 // AutomationIdentityProvider - An identity provider managed under a domain by the Automation API. The key field is the stable, immutable identity used for idempotent create-or-update.
 type AutomationIdentityProvider struct {
-	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type.
+	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.
 	Configuration *string `json:"configuration,omitempty"`
 	// Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	// Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected.
 	DomainWhitelist []string `json:"domainWhitelist,omitempty"`
+	// Validation errors returned when dryRun is true. Absent when validation succeeds.
+	DryRunErrors []DryRunError `json:"dryRunErrors,omitempty"`
 	// Group mapper: assigns AM groups based on provider attribute values. Each entry maps a group to the user attribute expressions that grant it.
 	GroupMapper map[string][]string `json:"groupMapper,omitempty"`
 	// Stable, immutable identifier for the identity provider within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the identity provider on create-or-update.
@@ -64,6 +66,13 @@ func (a *AutomationIdentityProvider) GetDomainWhitelist() []string {
 		return nil
 	}
 	return a.DomainWhitelist
+}
+
+func (a *AutomationIdentityProvider) GetDryRunErrors() []DryRunError {
+	if a == nil {
+		return nil
+	}
+	return a.DryRunErrors
 }
 
 func (a *AutomationIdentityProvider) GetGroupMapper() map[string][]string {

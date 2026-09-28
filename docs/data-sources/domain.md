@@ -39,9 +39,10 @@ data "am_domain" "my_domain" {
 - `certificate_settings` (Attributes) Domain-level certificate settings. (see [below for nested schema](#nestedatt--certificate_settings))
 - `cors_settings` (Attributes) Cross-Origin Resource Sharing configuration controlling which web origins may call the domain's endpoints from a browser. (see [below for nested schema](#nestedatt--cors_settings))
 - `created_at` (String) Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
-- `data_plane_id` (String) Identifier of the data plane this domain is connected to. Required at creation and immutable afterwards; included in the desired-state document but never re-applied on update.
+- `data_plane_id` (String) Identifier of the data plane this domain is connected to. Optional at creation and resolved from the environment's data planes when omitted. Immutable afterwards: an apply that names a different one is rejected.
 - `description` (String) Human-readable description of the domain.
 - `enabled` (Boolean) Whether the domain handles incoming authentication and authorization requests.
+- `key_retrieval_settings` (Attributes) Fetch, SSRF and cache limits applied to every trusted domain in the security domain. (see [below for nested schema](#nestedatt--key_retrieval_settings))
 - `login_settings` (Attributes) Configuration of the domain's login flow and the features offered on the sign-in page. (see [below for nested schema](#nestedatt--login_settings))
 - `master` (Boolean) Whether this is the master domain of its environment. A master domain may perform cross-domain token introspection.
 - `name` (String) Human-readable name of the domain.
@@ -52,13 +53,14 @@ data "am_domain" "my_domain" {
 - `scim` (Attributes) Configuration of the domain's SCIM 2.0 provisioning endpoints. (see [below for nested schema](#nestedatt--scim))
 - `secret_expiration_settings` (Attributes) Controls whether client secrets in the domain expire and after how long. (see [below for nested schema](#nestedatt--secret_expiration_settings))
 - `self_service_account_management_settings` (Attributes) Controls whether end users can manage their own account (for example, reset their password) and the rules that apply. (see [below for nested schema](#nestedatt--self_service_account_management_settings))
-- `tags` (List of String) Sharding tags that control which gateways deploy this domain.
+- `tags` (Set of String) Sharding tags that control which gateways deploy this domain.
 - `token_exchange_settings` (Attributes) OAuth 2.0 Token Exchange (RFC 8693) configuration for the domain, covering impersonation and delegation. (see [below for nested schema](#nestedatt--token_exchange_settings))
 - `uma` (Attributes) Configuration of the domain's User-Managed Access (UMA 2.0) authorization features. (see [below for nested schema](#nestedatt--uma))
 - `updated_at` (String) Last-update timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 - `vhost_mode` (Boolean) Whether the domain is exposed through its virtual hosts rather than the default context path. When true, vhosts must be supplied.
 - `vhosts` (Attributes List) Virtual hosts the domain is exposed on, overriding the default context path. (see [below for nested schema](#nestedatt--vhosts))
 - `web_authn_settings` (Attributes) WebAuthn (FIDO2) relying-party configuration governing passwordless and multi-factor authentication for the domain. (see [below for nested schema](#nestedatt--web_authn_settings))
+- `web_protection_settings` (Attributes) HTTP security headers applied to the domain's login and consent pages. (see [below for nested schema](#nestedatt--web_protection_settings))
 
 <a id="nestedatt--account_settings"></a>
 ### Nested Schema for `account_settings`
@@ -116,11 +118,25 @@ Read-Only:
 Read-Only:
 
 - `allow_credentials` (Boolean) Whether the browser may send credentials (cookies, authorization headers) with cross-origin requests.
-- `allowed_headers` (List of String) Request headers permitted on cross-origin requests.
-- `allowed_methods` (List of String) HTTP methods permitted on cross-origin requests.
-- `allowed_origins` (List of String) Origins permitted to make cross-origin requests. Use "*" to allow any origin.
-- `enabled` (Boolean) Whether CORS handling is enabled for the domain.
+- `allowed_headers` (Set of String) Request headers permitted on cross-origin requests.
+- `allowed_methods` (Set of String) HTTP methods permitted on cross-origin requests.
+- `allowed_origins` (Set of String) Origins permitted to make cross-origin requests. Use "*" to allow any origin.
+- `enabled` (Boolean) Whether CORS handling is enabled for the domain when not inherited.
+- `inherited` (Boolean) Whether CORS settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
 - `max_age` (Number) How long, in seconds, a browser may cache the result of a preflight request.
+
+
+<a id="nestedatt--key_retrieval_settings"></a>
+### Nested Schema for `key_retrieval_settings`
+
+Read-Only:
+
+- `allow_private_ip_address` (Boolean) Whether key material can be fetched from private IP addresses.
+- `allow_unsecured_http_uri` (Boolean) Whether key material can be fetched over unsecured HTTP URIs.
+- `cache_max_entries` (Number) Maximum number of key material entries retained in the cache.
+- `cache_ttl_seconds` (Number) Time-to-live, in seconds, for cached key material.
+- `fetch_timeout_ms` (Number) Timeout, in milliseconds, for fetching key material.
+- `max_response_size_kb` (Number) Maximum key material response size, in kilobytes.
 
 
 <a id="nestedatt--login_settings"></a>
@@ -200,16 +216,16 @@ Read-Only:
 
 Read-Only:
 
-- `allow_private_ip_address` (Boolean) Whether trust bundles can be fetched from private IP addresses.
-- `allow_unsecured_http_uri` (Boolean) Whether trust bundles can be fetched over unsecured HTTP URIs.
-- `cache_max_entries` (Number) Maximum number of trust bundle entries retained in the cache.
-- `cache_ttl_seconds` (Number) Time-to-live, in seconds, for cached trust bundle entries.
+- `allow_private_ip_address` (Boolean, Deprecated) Deprecated: moved to keyRetrievalSettings.allowPrivateIpAddress.
+- `allow_unsecured_http_uri` (Boolean, Deprecated) Deprecated: moved to keyRetrievalSettings.allowUnsecuredHttpUri.
+- `cache_max_entries` (Number, Deprecated) Deprecated: moved to keyRetrievalSettings.cacheMaxEntries.
+- `cache_ttl_seconds` (Number, Deprecated) Deprecated: moved to keyRetrievalSettings.cacheTtlSeconds.
 - `clock_skew_seconds` (Number) Allowed clock skew, in seconds, when validating JWT temporal claims.
 - `default_allowed_algorithms` (List of String) Default allowlist of signature algorithms accepted for SPIFFE JWT validation.
 - `enabled` (Boolean) Whether SPIFFE workload identity support is enabled for the domain.
-- `fetch_timeout_ms` (Number) Timeout, in milliseconds, for fetching trust bundles.
+- `fetch_timeout_ms` (Number, Deprecated) Deprecated: moved to keyRetrievalSettings.fetchTimeoutMs.
 - `max_jwt_lifetime_seconds` (Number) Maximum accepted JWT lifetime, in seconds, computed as exp minus iat.
-- `max_response_size_kb` (Number) Maximum trust bundle response size, in kilobytes.
+- `max_response_size_kb` (Number, Deprecated) Deprecated: moved to keyRetrievalSettings.maxResponseSizeKb.
 
 
 
@@ -290,9 +306,18 @@ Read-Only:
 - `allowed_requested_token_types` (List of String) Token types that may be requested as the result of an exchange.
 - `allowed_subject_token_types` (List of String) Token types accepted as the subject token in an exchange.
 - `enabled` (Boolean) Whether token exchange is enabled for the domain.
+- `id_jag_settings` (Attributes) ID-JAG issuance behavior of token exchange. (see [below for nested schema](#nestedatt--token_exchange_settings--id_jag_settings))
 - `max_delegation_depth` (Number) Maximum depth of the delegation chain (nested "act" claims). Clamped to the range 1–100.
 - `token_exchange_o_auth_settings` (Attributes) OAuth-specific token-exchange behavior, such as how scopes are handled, with optional inheritance from domain defaults. (see [below for nested schema](#nestedatt--token_exchange_settings--token_exchange_o_auth_settings))
-- `trusted_issuers` (Attributes List) External issuers whose JWTs may be accepted as subject or actor tokens. When unset, only domain-issued tokens are accepted. (see [below for nested schema](#nestedatt--token_exchange_settings--trusted_issuers))
+- `trusted_issuers` (Attributes List, Deprecated) Deprecated: use the trusted-domains API instead. External issuers whose JWTs may be accepted as subject or actor tokens. A projection over the security domain's token-exchange trusted domains; a write replaces the list, so an omitted issuer is no longer trusted. (see [below for nested schema](#nestedatt--token_exchange_settings--trusted_issuers))
+
+<a id="nestedatt--token_exchange_settings--id_jag_settings"></a>
+### Nested Schema for `token_exchange_settings.id_jag_settings`
+
+Read-Only:
+
+- `lax_validation` (Boolean) Lax validation: also accept an access token issued to the requesting client as the subject token. By default only an ID token is accepted.
+
 
 <a id="nestedatt--token_exchange_settings--token_exchange_o_auth_settings"></a>
 ### Nested Schema for `token_exchange_settings.token_exchange_o_auth_settings`
@@ -361,3 +386,44 @@ Read-Only:
 - `relying_party_name` (String) Human-readable relying-party name shown to users during ceremonies.
 - `require_resident_key` (Boolean) Whether the authenticator must create a client-side resident (discoverable) credential.
 - `user_verification` (String) Relying-party requirement regarding user verification during a ceremony. REQUIRED enforces verification, PREFERRED requests it when available, and DISCOURAGED avoids it.
+
+
+<a id="nestedatt--web_protection_settings"></a>
+### Nested Schema for `web_protection_settings`
+
+Read-Only:
+
+- `csp` (Attributes) Content Security Policy configuration for the domain's login and consent pages. (see [below for nested schema](#nestedatt--web_protection_settings--csp))
+- `xframe` (Attributes) Controls whether the domain's pages may be embedded in frames on other origins. (see [below for nested schema](#nestedatt--web_protection_settings--xframe))
+- `xss` (Attributes) Controls the legacy X-XSS-Protection response header. (see [below for nested schema](#nestedatt--web_protection_settings--xss))
+
+<a id="nestedatt--web_protection_settings--csp"></a>
+### Nested Schema for `web_protection_settings.csp`
+
+Read-Only:
+
+- `directives` (List of String) CSP directives, one per entry, in the form "directive-name value". A trailing semicolon is optional. Directive names must be valid CSP tokens and must not repeat; values are not interpreted. Directives that take no value, such as "upgrade-insecure-requests", may be supplied on their own. When reportOnly is enabled, a "report-uri" or "report-to" directive is required.
+- `enabled` (Boolean) Whether CSP is enabled for the domain when not inherited.
+- `inherited` (Boolean) Whether CSP settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
+- `report_only` (Boolean) When true, the policy is delivered as Content-Security-Policy-Report-Only.
+- `script_inline_nonce` (Boolean) Whether inline scripts are allowed via a per-request nonce.
+
+
+<a id="nestedatt--web_protection_settings--xframe"></a>
+### Nested Schema for `web_protection_settings.xframe`
+
+Read-Only:
+
+- `action` (String) X-Frame-Options action. Supported values: DENY, SAMEORIGIN. Leave empty to omit the header.
+- `enabled` (Boolean) Whether X-Frame-Options is enabled for the domain when not inherited.
+- `inherited` (Boolean) Whether X-Frame-Options settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
+
+
+<a id="nestedatt--web_protection_settings--xss"></a>
+### Nested Schema for `web_protection_settings.xss`
+
+Read-Only:
+
+- `action` (String) Value of the X-XSS-Protection header.
+- `enabled` (Boolean) Whether X-XSS-Protection is enabled for the domain when not inherited.
+- `inherited` (Boolean) Whether X-XSS-Protection settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.

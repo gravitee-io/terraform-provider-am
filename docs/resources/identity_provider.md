@@ -47,12 +47,12 @@ resource "am_identity_provider" "my_identityprovider" {
 ### Required
 
 - `domain_key` (String) Key of the domain: its stable, immutable Automation identifier within the environment.
-- `key` (String) Stable, immutable identifier for the identity provider within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the identity provider on create-or-update.
+- `key` (String) Stable, immutable identifier for the identity provider within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the identity provider on create-or-update. Requires replacement if changed.
 
 ### Optional
 
-- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type.
-- `domain_whitelist` (List of String) Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected.
+- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.
+- `domain_whitelist` (List of String) Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected. Default: []
 - `environment_id` (String) Identifier of the environment.
 - `group_mapper` (Map of List of String) Group mapper: assigns AM groups based on provider attribute values. Each entry maps a group to the user attribute expressions that grant it.
 - `mappers` (Map of String) Attribute mappers: maps provider claims to AM user profile attributes.

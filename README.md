@@ -12,12 +12,13 @@
 Gravitee: Gravitee Access Management Terraform Provider (alpha)
 
 You can manage with Terraform the following:
+* Data Planes
 * Domains
 * Certificates
 * Identity Providers
 * Reporters
 
-Compatible with Gravitee Access Management 4.12.0.
+Compatible with Gravitee Access Management 4.13.0.
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
@@ -74,6 +75,7 @@ Available configuration:
 ### Managed Resources
 
 * [am_certificate](docs/resources/certificate.md)
+* [am_data_plane](docs/resources/data_plane.md)
 * [am_domain](docs/resources/domain.md)
 * [am_identity_provider](docs/resources/identity_provider.md)
 * [am_reporter](docs/resources/reporter.md)
@@ -81,6 +83,7 @@ Available configuration:
 ### Data Sources
 
 * [am_certificate](docs/data-sources/certificate.md)
+* [am_data_plane](docs/data-sources/data_plane.md)
 * [am_domain](docs/data-sources/domain.md)
 * [am_identity_provider](docs/data-sources/identity_provider.md)
 * [am_reporter](docs/data-sources/reporter.md)

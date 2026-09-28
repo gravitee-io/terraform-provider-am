@@ -4,8 +4,8 @@ page_title: "am Provider"
 description: |-
   Gravitee: Gravitee Access Management Terraform Provider (alpha)
   You can manage with Terraform the following:
-  DomainsCertificatesIdentity ProvidersReporters
-  Compatible with Gravitee Access Management 4.12.0.
+  Data PlanesDomainsCertificatesIdentity ProvidersReporters
+  Compatible with Gravitee Access Management 4.13.0.
 ---
 
 # am Provider
@@ -13,12 +13,13 @@ description: |-
 Gravitee: Gravitee Access Management Terraform Provider (alpha)
 
 You can manage with Terraform the following:
+* Data Planes
 * Domains
 * Certificates
 * Identity Providers
 * Reporters
 
-Compatible with Gravitee Access Management 4.12.0.
+Compatible with Gravitee Access Management 4.13.0.
 
 ## Example Usage
 

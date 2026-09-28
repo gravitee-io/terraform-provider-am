@@ -48,6 +48,8 @@ type AutomationCreateOrUpdateCertificateRequest struct {
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Key of the domain: its stable, immutable Automation identifier within the environment.
 	DomainKey string `pathParam:"style=simple,explode=false,name=domainKey"`
+	// When true, validates the payload without persisting. The returned certificate includes a dryRunErrors field.
+	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
 	// Desired state of the certificate. For a system certificate, supply only system: true and key.
 	AutomationCertificate shared.AutomationCertificateInput `request:"mediaType=application/json"`
 }
@@ -84,6 +86,13 @@ func (a *AutomationCreateOrUpdateCertificateRequest) GetDomainKey() string {
 	return a.DomainKey
 }
 
+func (a *AutomationCreateOrUpdateCertificateRequest) GetDryRun() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.DryRun
+}
+
 func (a *AutomationCreateOrUpdateCertificateRequest) GetAutomationCertificate() shared.AutomationCertificateInput {
 	if a == nil {
 		return shared.AutomationCertificateInput{}
@@ -98,7 +107,7 @@ type AutomationCreateOrUpdateCertificateResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// The created or updated certificate
+	// The created or updated certificate. When dryRun is true the certificate includes a dryRunErrors field with any validation errors.
 	AutomationCertificate *shared.AutomationCertificate
 	// Invalid request: a key conflict, a missing required field for a non-system certificate, an attempt to change the immutable system flag, or a second system certificate for the domain
 	Error *shared.Error

@@ -10,10 +10,12 @@ import (
 
 // AutomationCertificate - A certificate managed under a domain by the Automation API. The key field is the stable, immutable identity used for idempotent create-or-update.
 type AutomationCertificate struct {
-	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type.
+	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected. The uploaded keystore file is masked too; sending ******** back keeps it.
 	Configuration *string `json:"configuration,omitempty"`
 	// Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	// Validation errors returned when dryRun is true. Absent when validation succeeds.
+	DryRunErrors []DryRunError `json:"dryRunErrors,omitempty"`
 	// Expiry timestamp (ISO-8601 / RFC 3339, UTC), when known for the certificate type. Read-only.
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// Stable, immutable identifier for the certificate within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the certificate on create-or-update.
@@ -51,6 +53,13 @@ func (a *AutomationCertificate) GetCreatedAt() *time.Time {
 		return nil
 	}
 	return a.CreatedAt
+}
+
+func (a *AutomationCertificate) GetDryRunErrors() []DryRunError {
+	if a == nil {
+		return nil
+	}
+	return a.DryRunErrors
 }
 
 func (a *AutomationCertificate) GetExpiresAt() *time.Time {

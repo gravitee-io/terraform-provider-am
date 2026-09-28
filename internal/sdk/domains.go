@@ -273,7 +273,7 @@ func (s *Domains) AutomationListDomains(ctx context.Context, request operations.
 }
 
 // AutomationCreateOrUpdateDomain - Create or update a domain
-// Idempotent create-or-update. Uses the key field in the body to identify the domain. On first apply the domain is created; subsequent applies update it. dataPlaneId is required at creation and immutable afterwards.
+// Idempotent create-or-update. Uses the key field in the body to identify the domain. On first apply the domain is created; subsequent applies update it. dataPlaneId is optional at creation, resolved from the environment's data planes when omitted, and immutable afterwards. When dryRun is true, the endpoint validates the payload without persisting; the returned domain carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
 func (s *Domains) AutomationCreateOrUpdateDomain(ctx context.Context, request operations.AutomationCreateOrUpdateDomainRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateDomainResponse, error) {
 	globals := operations.AutomationCreateOrUpdateDomainGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -336,6 +336,10 @@ func (s *Domains) AutomationCreateOrUpdateDomain(ctx context.Context, request op
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	if reqContentType != "" {
 		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateQueryParams(ctx, req, request, globals, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
@@ -1184,7 +1188,7 @@ func (s *Domains) AutomationListCertificates(ctx context.Context, request operat
 }
 
 // AutomationCreateOrUpdateCertificate - Create or update a certificate
-// Idempotent create-or-update. Uses the key field in the body to identify the certificate within the domain. Re-applying an unchanged definition is a no-op. The system flag is immutable; changing it requires deleting and recreating the certificate.
+// Idempotent create-or-update. Uses the key field in the body to identify the certificate within the domain. Re-applying an unchanged definition is a no-op. The system flag is immutable; changing it requires deleting and recreating the certificate. When dryRun is true, the endpoint validates the payload without persisting; the returned certificate carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
 func (s *Domains) AutomationCreateOrUpdateCertificate(ctx context.Context, request operations.AutomationCreateOrUpdateCertificateRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateCertificateResponse, error) {
 	globals := operations.AutomationCreateOrUpdateCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -1247,6 +1251,10 @@ func (s *Domains) AutomationCreateOrUpdateCertificate(ctx context.Context, reque
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	if reqContentType != "" {
 		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateQueryParams(ctx, req, request, globals, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
@@ -2097,7 +2105,7 @@ func (s *Domains) AutomationListIdentityProviders(ctx context.Context, request o
 }
 
 // AutomationCreateOrUpdateIdentityProvider - Create or update an identity provider
-// Idempotent create-or-update. Uses the key field in the body to identify the identity provider within the domain. On first apply the identity provider is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the identity provider.
+// Idempotent create-or-update. Uses the key field in the body to identify the identity provider within the domain. On first apply the identity provider is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the identity provider. When dryRun is true, the endpoint validates the payload without persisting; the returned identity provider carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
 func (s *Domains) AutomationCreateOrUpdateIdentityProvider(ctx context.Context, request operations.AutomationCreateOrUpdateIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateIdentityProviderResponse, error) {
 	globals := operations.AutomationCreateOrUpdateIdentityProviderGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -2160,6 +2168,10 @@ func (s *Domains) AutomationCreateOrUpdateIdentityProvider(ctx context.Context, 
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	if reqContentType != "" {
 		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateQueryParams(ctx, req, request, globals, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
@@ -3010,7 +3022,7 @@ func (s *Domains) AutomationListReporters(ctx context.Context, request operation
 }
 
 // AutomationCreateOrUpdateReporter - Create or update a reporter
-// Idempotent create-or-update. Uses the key field in the body to identify the reporter within the domain. On first apply the reporter is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the reporter.
+// Idempotent create-or-update. Uses the key field in the body to identify the reporter within the domain. On first apply the reporter is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the reporter. When dryRun is true, the endpoint validates the payload without persisting; the returned reporter carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
 func (s *Domains) AutomationCreateOrUpdateReporter(ctx context.Context, request operations.AutomationCreateOrUpdateReporterRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateReporterResponse, error) {
 	globals := operations.AutomationCreateOrUpdateReporterGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -3073,6 +3085,10 @@ func (s *Domains) AutomationCreateOrUpdateReporter(ctx context.Context, request 
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 	if reqContentType != "" {
 		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateQueryParams(ctx, req, request, globals, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {

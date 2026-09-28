@@ -36,7 +36,7 @@ data "am_certificate" "my_certificate" {
 
 ### Read-Only
 
-- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type.
+- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected. The uploaded keystore file is masked too; sending ******** back keeps it.
 - `created_at` (String) Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 - `expires_at` (String) Expiry timestamp (ISO-8601 / RFC 3339, UTC), when known for the certificate type. Read-only.
 - `name` (String) Human-readable name of the certificate.

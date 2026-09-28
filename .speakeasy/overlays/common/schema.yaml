@@ -5,16 +5,22 @@ info:
   version: 0.0.1
 actions:
 
-  ## Nothing is computed by default (mirrors APIM convention)
-  ## Keeps Terraform plans clean — un-configured attributes stay null,
-  ## not Unknown, avoiding spurious diffs.
+  ## Nested settings are computed: AM fills in the ones a configuration leaves
+  ## unset, and Terraform resets a non-computed nested attribute to null when
+  ## its parent is unset, so the plan would never converge.
   - target: $.components.schemas.*.properties.*
-    description: Prevent unknown values if unconfigured
+    description: Keep AM's values for unconfigured nested settings
     update:
-      x-speakeasy-param-computed: false
+      x-speakeasy-param-computed: true
 
   ## Drop the Error schema from generated Terraform state shape.
   - target: $.components.schemas.Error
     description: Intentionally ignored for Terraform state
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  ## Only returned by dry runs, which the provider does not use.
+  - target: $.components.schemas.*.properties.dryRunErrors
+    description: Not necessary in Terraform context
     update:
       x-speakeasy-terraform-ignore: true

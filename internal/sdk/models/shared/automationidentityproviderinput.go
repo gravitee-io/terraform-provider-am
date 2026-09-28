@@ -9,7 +9,7 @@ import (
 
 // AutomationIdentityProviderInput - An identity provider managed under a domain by the Automation API. The key field is the stable, immutable identity used for idempotent create-or-update.
 type AutomationIdentityProviderInput struct {
-	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type.
+	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.
 	Configuration *string `json:"configuration,omitempty"`
 	// Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected.
 	DomainWhitelist []string `json:"domainWhitelist,omitempty"`

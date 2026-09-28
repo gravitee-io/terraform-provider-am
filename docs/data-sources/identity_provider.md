@@ -36,7 +36,7 @@ data "am_identity_provider" "my_identityprovider" {
 
 ### Read-Only
 
-- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type.
+- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.
 - `created_at` (String) Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 - `domain_whitelist` (List of String) Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected.
 - `group_mapper` (Map of List of String) Group mapper: assigns AM groups based on provider attribute values. Each entry maps a group to the user attribute expressions that grant it.

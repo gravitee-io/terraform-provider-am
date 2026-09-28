@@ -5,6 +5,7 @@ package provider
 
 import (
 	"context"
+	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-am/internal/provider/typeconvert"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/shared"
@@ -16,7 +17,9 @@ func (r *IdentityProviderDataSourceModel) RefreshFromSharedAutomationIdentityPro
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Configuration = types.StringPointerValue(resp.Configuration)
+		configurationValuable, configurationDiags := customtypes.MaskedJSONType{}.ValueFromString(ctx, types.StringPointerValue(resp.Configuration))
+		diags.Append(configurationDiags...)
+		r.Configuration = configurationValuable.(customtypes.MaskedJSON)
 		r.CreatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CreatedAt))
 		r.DomainWhitelist = make([]types.String, 0, len(resp.DomainWhitelist))
 		for _, v := range resp.DomainWhitelist {

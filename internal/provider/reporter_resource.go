@@ -8,14 +8,20 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-am/internal/planmodifiers/stringplanmodifier"
+	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
+	tfTypes "github.com/gravitee-io/terraform-provider-am/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
+	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-am/internal/validators/objectvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/setdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -44,18 +50,20 @@ type ReporterResource struct {
 
 // ReporterResourceModel describes the resource data model.
 type ReporterResourceModel struct {
-	Configuration  types.String `tfsdk:"configuration"`
-	CreatedAt      types.String `tfsdk:"created_at"`
-	DataType       types.String `tfsdk:"data_type"`
-	DomainKey      types.String `tfsdk:"domain_key"`
-	Enabled        types.Bool   `tfsdk:"enabled"`
-	EnvironmentID  types.String `tfsdk:"environment_id"`
-	Key            types.String `tfsdk:"key"`
-	Name           types.String `tfsdk:"name"`
-	OrganizationID types.String `tfsdk:"organization_id"`
-	System         types.Bool   `tfsdk:"system"`
-	Type           types.String `tfsdk:"type"`
-	UpdatedAt      types.String `tfsdk:"updated_at"`
+	AttributeMappingEventTypes []types.String                     `tfsdk:"attribute_mapping_event_types"`
+	AttributeMappings          []tfTypes.ReporterAttributeMapping `tfsdk:"attribute_mappings"`
+	Configuration              customtypes.MaskedJSON             `tfsdk:"configuration"`
+	CreatedAt                  types.String                       `tfsdk:"created_at"`
+	DataType                   types.String                       `tfsdk:"data_type"`
+	DomainKey                  types.String                       `tfsdk:"domain_key"`
+	Enabled                    types.Bool                         `tfsdk:"enabled"`
+	EnvironmentID              types.String                       `tfsdk:"environment_id"`
+	Key                        types.String                       `tfsdk:"key"`
+	Name                       types.String                       `tfsdk:"name"`
+	OrganizationID             types.String                       `tfsdk:"organization_id"`
+	System                     types.Bool                         `tfsdk:"system"`
+	Type                       types.String                       `tfsdk:"type"`
+	UpdatedAt                  types.String                       `tfsdk:"updated_at"`
 }
 
 func (r *ReporterResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -66,10 +74,41 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Reporter Resource",
 		Attributes: map[string]schema.Attribute{
+			"attribute_mapping_event_types": schema.SetAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     setdefault.StaticValue(types.SetValueMust(types.StringType, []attr.Value{})),
+				ElementType: types.StringType,
+				Description: `Audit event types the attribute mappings apply to. Empty means every event type. Ignored when system is true. Default: []`,
+			},
+			"attribute_mappings": schema.ListNestedAttribute{
+				Computed: true,
+				Optional: true,
+				NestedObject: schema.NestedAttributeObject{
+					Validators: []validator.Object{
+						speakeasy_objectvalidators.NotNull(),
+					},
+					Attributes: map[string]schema.Attribute{
+						"exported_name": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Description: `The name the evaluated value takes on the exported payload.`,
+						},
+						"expression": schema.StringAttribute{
+							Computed:    true,
+							Optional:    true,
+							Description: `Expression evaluated against the audit context.`,
+						},
+					},
+				},
+				Description: `Additional attributes exported alongside the regular audit payload. Each entry pairs an expression read from the audit context with the field name its value is exported under. Ignored when system is true; a system reporter exports no additional attributes.`,
+			},
 			"configuration": schema.StringAttribute{
+				CustomType:  customtypes.MaskedJSONType{},
+				Computed:    true,
 				Optional:    true,
 				Sensitive:   true,
-				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type.`,
+				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -95,13 +134,17 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Identifier of the environment.`,
 			},
 			"key": schema.StringAttribute{
-				Required:    true,
-				Description: `Stable, immutable identifier for the reporter within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the reporter on create-or-update.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Stable, immutable identifier for the reporter within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the reporter on create-or-update. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
 				},
 			},
 			"name": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Human-readable name of the reporter.`,
 				Validators: []validator.String{
@@ -120,12 +163,14 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, and configuration fields are ignored. Default: false; Requires replacement if changed.`,
+				Description: `Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, configuration, attributeMappings and attributeMappingEventTypes fields are ignored. Default: false; Requires replacement if changed.`,
 			},
 			"type": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Reporter plugin type identifier. Immutable after creation. Requires replacement if changed.`,
 			},
@@ -428,8 +473,8 @@ func (r *ReporterResource) ImportState(ctx context.Context, req resource.ImportS
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -443,8 +488,8 @@ func (r *ReporterResource) ImportState(ctx context.Context, req resource.ImportS
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

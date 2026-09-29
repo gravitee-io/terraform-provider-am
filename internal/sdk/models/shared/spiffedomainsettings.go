@@ -11,19 +11,19 @@ import (
 type SpiffeDomainSettings struct {
 	// Deprecated: moved to keyRetrievalSettings.allowPrivateIpAddress.
 	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	// Deprecated: Use key_retrieval_settings.allow_private_ip_address instead..
 	AllowPrivateIPAddress *bool `json:"allowPrivateIpAddress,omitempty"`
 	// Deprecated: moved to keyRetrievalSettings.allowUnsecuredHttpUri.
 	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	// Deprecated: Use key_retrieval_settings.allow_unsecured_http_uri instead..
 	AllowUnsecuredHTTPURI *bool `json:"allowUnsecuredHttpUri,omitempty"`
 	// Deprecated: moved to keyRetrievalSettings.cacheMaxEntries.
 	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	// Deprecated: Use key_retrieval_settings.cache_max_entries instead..
 	CacheMaxEntries *int `json:"cacheMaxEntries,omitempty"`
 	// Deprecated: moved to keyRetrievalSettings.cacheTtlSeconds.
 	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	// Deprecated: Use key_retrieval_settings.cache_ttl_seconds instead..
 	CacheTTLSeconds *int `json:"cacheTtlSeconds,omitempty"`
 	// Allowed clock skew, in seconds, when validating JWT temporal claims.
 	ClockSkewSeconds *int `default:"30" json:"clockSkewSeconds"`
@@ -33,13 +33,13 @@ type SpiffeDomainSettings struct {
 	Enabled *bool `default:"false" json:"enabled"`
 	// Deprecated: moved to keyRetrievalSettings.fetchTimeoutMs.
 	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	// Deprecated: Use key_retrieval_settings.fetch_timeout_ms instead..
 	FetchTimeoutMs *int `json:"fetchTimeoutMs,omitempty"`
 	// Maximum accepted JWT lifetime, in seconds, computed as exp minus iat.
 	MaxJwtLifetimeSeconds *int `default:"300" json:"maxJwtLifetimeSeconds"`
 	// Deprecated: moved to keyRetrievalSettings.maxResponseSizeKb.
 	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	// Deprecated: Use key_retrieval_settings.max_response_size_kb instead..
 	MaxResponseSizeKb *int `json:"maxResponseSizeKb,omitempty"`
 }
 

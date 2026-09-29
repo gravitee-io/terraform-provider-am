@@ -10,7 +10,7 @@ import (
 // AutomationReporterInput - A reporter managed under a domain by the Automation API. Reporters persist audit events to a backend. The key field is the stable, immutable identity used for idempotent create-or-update.
 type AutomationReporterInput struct {
 	// Audit event types the attribute mappings apply to. Empty means every event type. Ignored when system is true.
-	AttributeMappingEventTypes []string `json:"attributeMappingEventTypes,omitempty"`
+	AttributeMappingEventTypes []string `json:"attributeMappingEventTypes"`
 	// Additional attributes exported alongside the regular audit payload. Each entry pairs an expression read from the audit context with the field name its value is exported under. Ignored when system is true; a system reporter exports no additional attributes.
 	AttributeMappings []ReporterAttributeMapping `json:"attributeMappings,omitempty"`
 	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.

@@ -66,7 +66,7 @@ func (r *ReporterDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 		MarkdownDescription: "Reporter DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"attribute_mapping_event_types": schema.ListAttribute{
+			"attribute_mapping_event_types": schema.SetAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
 				Description: `Audit event types the attribute mappings apply to. Empty means every event type. Ignored when system is true.`,

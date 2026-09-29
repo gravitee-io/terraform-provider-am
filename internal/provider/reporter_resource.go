@@ -8,11 +8,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-am/internal/planmodifiers/stringplanmodifier"
 	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	tfTypes "github.com/gravitee-io/terraform-provider-am/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-am/internal/validators/objectvalidators"
-	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -20,8 +20,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/setdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -74,15 +74,12 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Reporter Resource",
 		Attributes: map[string]schema.Attribute{
-			"attribute_mapping_event_types": schema.ListAttribute{
+			"attribute_mapping_event_types": schema.SetAttribute{
 				Computed:    true,
 				Optional:    true,
-				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+				Default:     setdefault.StaticValue(types.SetValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
 				Description: `Audit event types the attribute mappings apply to. Empty means every event type. Ignored when system is true. Default: []`,
-				Validators: []validator.List{
-					listvalidator.UniqueValues(),
-				},
 			},
 			"attribute_mappings": schema.ListNestedAttribute{
 				Computed: true,
@@ -108,6 +105,7 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 			},
 			"configuration": schema.StringAttribute{
 				CustomType:  customtypes.MaskedJSONType{},
+				Computed:    true,
 				Optional:    true,
 				Sensitive:   true,
 				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.`,
@@ -146,6 +144,7 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"name": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Human-readable name of the reporter.`,
 				Validators: []validator.String{
@@ -167,9 +166,11 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, configuration, attributeMappings and attributeMappingEventTypes fields are ignored. Default: false; Requires replacement if changed.`,
 			},
 			"type": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Reporter plugin type identifier. Immutable after creation. Requires replacement if changed.`,
 			},
@@ -472,8 +473,8 @@ func (r *ReporterResource) ImportState(ctx context.Context, req resource.ImportS
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -487,8 +488,8 @@ func (r *ReporterResource) ImportState(ctx context.Context, req resource.ImportS
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

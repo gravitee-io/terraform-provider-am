@@ -48,7 +48,7 @@ type AutomationDomainInput struct {
 	// Controls whether end users can manage their own account (for example, reset their password) and the rules that apply.
 	SelfServiceAccountManagementSettings *SelfServiceAccountManagementSettings `json:"selfServiceAccountManagementSettings,omitempty"`
 	// Sharding tags that control which gateways deploy this domain.
-	Tags []string `json:"tags,omitempty"`
+	Tags []string `json:"tags"`
 	// OAuth 2.0 Token Exchange (RFC 8693) configuration for the domain, covering impersonation and delegation.
 	TokenExchangeSettings *TokenExchangeSettings `json:"tokenExchangeSettings,omitempty"`
 	// Configuration of the domain's User-Managed Access (UMA 2.0) authorization features.

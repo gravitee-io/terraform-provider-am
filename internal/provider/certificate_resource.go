@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-am/internal/planmodifiers/stringplanmodifier"
 	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -68,6 +69,7 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 		Attributes: map[string]schema.Attribute{
 			"configuration": schema.StringAttribute{
 				CustomType:  customtypes.MaskedJSONType{},
+				Computed:    true,
 				Optional:    true,
 				Sensitive:   true,
 				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected. The uploaded keystore file is masked too; sending ******** back keeps it.`,
@@ -100,6 +102,7 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"name": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Human-readable name of the certificate.`,
 				Validators: []validator.String{
@@ -121,9 +124,11 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Whether this is the domain's system certificate. Immutable after creation. When true, only key is required; the certificate is built from the domains.certificates.default.* system settings and the name, type, and configuration fields are ignored. Default: false; Requires replacement if changed.`,
 			},
 			"type": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Certificate plugin type identifier. Immutable after creation. Requires replacement if changed.`,
 				Validators: []validator.String{
@@ -429,8 +434,8 @@ func (r *CertificateResource) ImportState(ctx context.Context, req resource.Impo
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -444,8 +449,8 @@ func (r *CertificateResource) ImportState(ctx context.Context, req resource.Impo
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

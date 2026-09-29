@@ -224,17 +224,17 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						Computed:    true,
 						Description: `Whether the browser may send credentials (cookies, authorization headers) with cross-origin requests.`,
 					},
-					"allowed_headers": schema.ListAttribute{
+					"allowed_headers": schema.SetAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
 						Description: `Request headers permitted on cross-origin requests.`,
 					},
-					"allowed_methods": schema.ListAttribute{
+					"allowed_methods": schema.SetAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
 						Description: `HTTP methods permitted on cross-origin requests.`,
 					},
-					"allowed_origins": schema.ListAttribute{
+					"allowed_origins": schema.SetAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
 						Description: `Origins permitted to make cross-origin requests. Use "*" to allow any origin.`,
@@ -680,7 +680,7 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				},
 				Description: `Controls whether end users can manage their own account (for example, reset their password) and the rules that apply.`,
 			},
-			"tags": schema.ListAttribute{
+			"tags": schema.SetAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
 				Description: `Sharding tags that control which gateways deploy this domain.`,

@@ -11,7 +11,6 @@ import (
 	tfTypes "github.com/gravitee-io/terraform-provider-am/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-am/internal/validators/objectvalidators"
-	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -21,6 +20,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/setdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -287,32 +287,23 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(false),
 						Description: `Whether the browser may send credentials (cookies, authorization headers) with cross-origin requests. Default: false`,
 					},
-					"allowed_headers": schema.ListAttribute{
+					"allowed_headers": schema.SetAttribute{
 						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Request headers permitted on cross-origin requests.`,
-						Validators: []validator.List{
-							listvalidator.UniqueValues(),
-						},
 					},
-					"allowed_methods": schema.ListAttribute{
+					"allowed_methods": schema.SetAttribute{
 						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `HTTP methods permitted on cross-origin requests.`,
-						Validators: []validator.List{
-							listvalidator.UniqueValues(),
-						},
 					},
-					"allowed_origins": schema.ListAttribute{
+					"allowed_origins": schema.SetAttribute{
 						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Origins permitted to make cross-origin requests. Use "*" to allow any origin.`,
-						Validators: []validator.List{
-							listvalidator.UniqueValues(),
-						},
 					},
 					"enabled": schema.BoolAttribute{
 						Computed:    true,
@@ -920,15 +911,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 				Description: `Controls whether end users can manage their own account (for example, reset their password) and the rules that apply.`,
 			},
-			"tags": schema.ListAttribute{
+			"tags": schema.SetAttribute{
 				Computed:    true,
 				Optional:    true,
-				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+				Default:     setdefault.StaticValue(types.SetValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
 				Description: `Sharding tags that control which gateways deploy this domain. Default: []`,
-				Validators: []validator.List{
-					listvalidator.UniqueValues(),
-				},
 			},
 			"token_exchange_settings": schema.SingleNestedAttribute{
 				Computed: true,
@@ -1610,8 +1598,8 @@ func (r *DomainResource) ImportState(ctx context.Context, req resource.ImportSta
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -1625,8 +1613,8 @@ func (r *DomainResource) ImportState(ctx context.Context, req resource.ImportSta
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"DEFAULT"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

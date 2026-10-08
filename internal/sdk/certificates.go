@@ -500,7 +500,7 @@ func (s *Certificates) AutomationCreateOrUpdateCertificate(ctx context.Context, 
 }
 
 // AutomationDeleteCertificate - Delete a certificate
-// Deletes an Automation-managed certificate by its key. Deleting a certificate that does not exist also returns 204.
+// Deletes an Automation-managed certificate by its key. A domain that names it by key in saml.certificate or certificateSettings.fallbackCertificate keeps the reference, which resolves again once a certificate with the same key is created. Deleting a certificate that does not exist also returns 204.
 func (s *Certificates) AutomationDeleteCertificate(ctx context.Context, request operations.AutomationDeleteCertificateRequest, opts ...operations.Option) (*operations.AutomationDeleteCertificateResponse, error) {
 	globals := operations.AutomationDeleteCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,

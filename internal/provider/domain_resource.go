@@ -11,6 +11,7 @@ import (
 	tfTypes "github.com/gravitee-io/terraform-provider-am/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-am/internal/validators/objectvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -26,6 +27,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -120,7 +122,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"default_identity_provider_for_registration": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Key of an identity provider that exists under this domain, used as the default for user registration. Resolved against the domain's identity providers when applied; a value that does not match an existing identity provider is rejected with a 400 response.`,
+						Description: `Key of an identity provider managed under this domain, used as the default for user registration. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever an identity provider with that key exists.`,
 					},
 					"delete_passwordless_devices_after_reset_password": schema.BoolAttribute{
 						Computed:    true,
@@ -272,7 +274,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"fallback_certificate": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. Must reference a certificate created via the domain's certificate endpoints.`,
+						Description: `Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.`,
 					},
 				},
 				Description: `Domain-level certificate settings.`,
@@ -814,6 +816,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Context path the domain is served under, relative to the gateway. Must start with a slash.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 255),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^/.*`), "must match pattern "+regexp.MustCompile(`^/.*`).String()),
 				},
 			},
 			"saml": schema.SingleNestedAttribute{
@@ -823,7 +826,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"certificate": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Key of a certificate managed under this domain, used to sign SAML responses. Must reference a certificate created via the domain's certificate endpoints.`,
+						Description: `Key of a certificate managed under this domain, used to sign SAML responses. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.`,
 					},
 					"enabled": schema.BoolAttribute{
 						Computed:    true,
@@ -966,7 +969,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(false),
-								Description: `Lax validation: also accept an access token issued to the requesting client as the subject token. By default only an ID token is accepted. Default: false`,
+								Description: `Lax validation: also accept an access token as the subject token. By default only an ID token is accepted. The access token must be issued to the requesting client or, when an MCP server requests, have that MCP server as audience. Default: false`,
 							},
 						},
 						Description: `ID-JAG issuance behavior of token exchange.`,
@@ -975,7 +978,10 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed:    true,
 						Optional:    true,
 						Default:     int32default.StaticInt32(25),
-						Description: `Maximum depth of the delegation chain (nested "act" claims). Clamped to the range 1–100. Default: 25`,
+						Description: `Maximum depth of the delegation chain (nested "act" claims). Range 1–100. Default: 25`,
+						Validators: []validator.Int32{
+							int32validator.Between(1, 100),
+						},
 					},
 					"token_exchange_o_auth_settings": schema.SingleNestedAttribute{
 						Computed: true,
@@ -1265,7 +1271,13 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"action": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `X-Frame-Options action. Supported values: DENY, SAMEORIGIN. Leave empty to omit the header.`,
+								Description: `X-Frame-Options action. Omit to leave the header out. must be one of ["DENY", "SAMEORIGIN"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"DENY",
+										"SAMEORIGIN",
+									),
+								},
 							},
 							"enabled": schema.BoolAttribute{
 								Computed:    true,

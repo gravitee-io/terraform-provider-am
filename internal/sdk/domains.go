@@ -1428,7 +1428,7 @@ func (s *Domains) AutomationCreateOrUpdateCertificate(ctx context.Context, reque
 }
 
 // AutomationDeleteCertificate - Delete a certificate
-// Deletes an Automation-managed certificate by its key. Deleting a certificate that does not exist also returns 204.
+// Deletes an Automation-managed certificate by its key. A domain that names it by key in saml.certificate or certificateSettings.fallbackCertificate keeps the reference, which resolves again once a certificate with the same key is created. Deleting a certificate that does not exist also returns 204.
 func (s *Domains) AutomationDeleteCertificate(ctx context.Context, request operations.AutomationDeleteCertificateRequest, opts ...operations.Option) (*operations.AutomationDeleteCertificateResponse, error) {
 	globals := operations.AutomationDeleteCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -2345,7 +2345,7 @@ func (s *Domains) AutomationCreateOrUpdateIdentityProvider(ctx context.Context, 
 }
 
 // AutomationDeleteIdentityProvider - Delete an identity provider
-// Deletes an Automation-managed identity provider by its key. Deleting an identity provider that does not exist also returns 204.
+// Deletes an Automation-managed identity provider by its key. A domain that names it in accountSettings.defaultIdentityProviderForRegistration keeps the reference, which resolves again once an identity provider with the same key is created. Deleting an identity provider that does not exist also returns 204.
 func (s *Domains) AutomationDeleteIdentityProvider(ctx context.Context, request operations.AutomationDeleteIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationDeleteIdentityProviderResponse, error) {
 	globals := operations.AutomationDeleteIdentityProviderGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,

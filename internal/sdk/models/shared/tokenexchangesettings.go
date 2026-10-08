@@ -23,7 +23,7 @@ type TokenExchangeSettings struct {
 	Enabled *bool `default:"false" json:"enabled"`
 	// ID-JAG issuance behavior of token exchange.
 	IDJagSettings *IDJagSettings `json:"idJagSettings,omitempty"`
-	// Maximum depth of the delegation chain (nested "act" claims). Clamped to the range 1–100.
+	// Maximum depth of the delegation chain (nested "act" claims). Range 1–100.
 	MaxDelegationDepth *int `default:"25" json:"maxDelegationDepth"`
 	// OAuth-specific token-exchange behavior, such as how scopes are handled, with optional inheritance from domain defaults.
 	TokenExchangeOAuthSettings *TokenExchangeOAuthSettings `json:"tokenExchangeOAuthSettings,omitempty"`

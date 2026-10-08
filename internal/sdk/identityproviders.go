@@ -500,7 +500,7 @@ func (s *IdentityProviders) AutomationCreateOrUpdateIdentityProvider(ctx context
 }
 
 // AutomationDeleteIdentityProvider - Delete an identity provider
-// Deletes an Automation-managed identity provider by its key. Deleting an identity provider that does not exist also returns 204.
+// Deletes an Automation-managed identity provider by its key. A domain that names it in accountSettings.defaultIdentityProviderForRegistration keeps the reference, which resolves again once an identity provider with the same key is created. Deleting an identity provider that does not exist also returns 204.
 func (s *IdentityProviders) AutomationDeleteIdentityProvider(ctx context.Context, request operations.AutomationDeleteIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationDeleteIdentityProviderResponse, error) {
 	globals := operations.AutomationDeleteIdentityProviderGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,

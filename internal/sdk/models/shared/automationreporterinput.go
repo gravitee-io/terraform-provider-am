@@ -13,7 +13,7 @@ type AutomationReporterInput struct {
 	AttributeMappingEventTypes []string `json:"attributeMappingEventTypes"`
 	// Additional attributes exported alongside the regular audit payload. Each entry pairs an expression read from the audit context with the field name its value is exported under. Ignored when system is true; a system reporter exports no additional attributes.
 	AttributeMappings []ReporterAttributeMapping `json:"attributeMappings,omitempty"`
-	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.
+	// Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response; an unset sensitive value is omitted. Sending ******** back on update keeps the stored value; sending it on create is rejected.
 	Configuration *string `json:"configuration,omitempty"`
 	// Whether the reporter is enabled.
 	Enabled *bool `default:"true" json:"enabled"`

@@ -4,13 +4,42 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 )
 
+// Action - X-Frame-Options action. Omit to leave the header out.
+type Action string
+
+const (
+	ActionDeny       Action = "DENY"
+	ActionSameorigin Action = "SAMEORIGIN"
+)
+
+func (e Action) ToPointer() *Action {
+	return &e
+}
+func (e *Action) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "DENY":
+		fallthrough
+	case "SAMEORIGIN":
+		*e = Action(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for Action: %v", v)
+	}
+}
+
 // XFrameSettings - Controls whether the domain's pages may be embedded in frames on other origins.
 type XFrameSettings struct {
-	// X-Frame-Options action. Supported values: DENY, SAMEORIGIN. Leave empty to omit the header.
-	Action *string `json:"action,omitempty"`
+	// X-Frame-Options action. Omit to leave the header out.
+	Action *Action `json:"action,omitempty"`
 	// Whether X-Frame-Options is enabled for the domain when not inherited.
 	Enabled *bool `default:"false" json:"enabled"`
 	// Whether X-Frame-Options settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
@@ -28,7 +57,7 @@ func (x *XFrameSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (x *XFrameSettings) GetAction() *string {
+func (x *XFrameSettings) GetAction() *Action {
 	if x == nil {
 		return nil
 	}

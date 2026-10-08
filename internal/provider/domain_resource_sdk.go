@@ -394,7 +394,11 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 				r.WebProtectionSettings.Xframe = nil
 			} else {
 				r.WebProtectionSettings.Xframe = &tfTypes.XFrameSettings{}
-				r.WebProtectionSettings.Xframe.Action = types.StringPointerValue(resp.WebProtectionSettings.Xframe.Action)
+				if resp.WebProtectionSettings.Xframe.Action != nil {
+					r.WebProtectionSettings.Xframe.Action = types.StringValue(string(*resp.WebProtectionSettings.Xframe.Action))
+				} else {
+					r.WebProtectionSettings.Xframe.Action = types.StringNull()
+				}
 				r.WebProtectionSettings.Xframe.Enabled = types.BoolPointerValue(resp.WebProtectionSettings.Xframe.Enabled)
 				r.WebProtectionSettings.Xframe.Inherited = types.BoolPointerValue(resp.WebProtectionSettings.Xframe.Inherited)
 			}
@@ -1693,9 +1697,9 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		}
 		var xframe *shared.XFrameSettings
 		if r.WebProtectionSettings.Xframe != nil {
-			action := new(string)
+			action := new(shared.Action)
 			if !r.WebProtectionSettings.Xframe.Action.IsUnknown() && !r.WebProtectionSettings.Xframe.Action.IsNull() {
-				*action = r.WebProtectionSettings.Xframe.Action.ValueString()
+				*action = shared.Action(r.WebProtectionSettings.Xframe.Action.ValueString())
 			} else {
 				action = nil
 			}

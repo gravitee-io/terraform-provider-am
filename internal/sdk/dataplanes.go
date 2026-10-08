@@ -17,7 +17,6 @@ import (
 	"net/http"
 )
 
-// DataPlanes - Data planes configured under an environment to store the runtime data of its domains.
 type DataPlanes struct {
 	rootSDK          *GraviteeAm
 	sdkConfiguration config.SDKConfiguration
@@ -32,9 +31,9 @@ func newDataPlanes(rootSDK *GraviteeAm, sdkConfig config.SDKConfiguration, hooks
 	}
 }
 
-// AutomationListDataPlanes - List an environment's data planes
+// List an environment's data planes
 // Returns all data planes managed by the Automation API in the environment. Data planes provisioned outside the Automation API are not returned.
-func (s *DataPlanes) AutomationListDataPlanes(ctx context.Context, request operations.AutomationListDataPlanesRequest, opts ...operations.Option) (*operations.AutomationListDataPlanesResponse, error) {
+func (s *DataPlanes) List(ctx context.Context, request operations.AutomationListDataPlanesRequest, opts ...operations.Option) (*operations.AutomationListDataPlanesResponse, error) {
 	globals := operations.AutomationListDataPlanesGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -272,9 +271,9 @@ func (s *DataPlanes) AutomationListDataPlanes(ctx context.Context, request opera
 
 }
 
-// AutomationCreateOrUpdateDataPlane - Create or update a data plane
+// CreateOrUpdate - Create or update a data plane
 // Idempotent create-or-update. Uses the id field in the body to identify the data plane within the environment. The type is immutable, and the organization and environment come from the path. An id: reference updates a data plane the Automation API does not manage, and cannot create one.
-func (s *DataPlanes) AutomationCreateOrUpdateDataPlane(ctx context.Context, request operations.AutomationCreateOrUpdateDataPlaneRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateDataPlaneResponse, error) {
+func (s *DataPlanes) CreateOrUpdate(ctx context.Context, request operations.AutomationCreateOrUpdateDataPlaneRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateDataPlaneResponse, error) {
 	globals := operations.AutomationCreateOrUpdateDataPlaneGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -510,9 +509,9 @@ func (s *DataPlanes) AutomationCreateOrUpdateDataPlane(ctx context.Context, requ
 
 }
 
-// AutomationDeleteDataPlane - Delete a data plane
+// Delete a data plane
 // Deletes an Automation-managed data plane by its id. Deleting a data plane that does not exist also returns 204.
-func (s *DataPlanes) AutomationDeleteDataPlane(ctx context.Context, request operations.AutomationDeleteDataPlaneRequest, opts ...operations.Option) (*operations.AutomationDeleteDataPlaneResponse, error) {
+func (s *DataPlanes) Delete(ctx context.Context, request operations.AutomationDeleteDataPlaneRequest, opts ...operations.Option) (*operations.AutomationDeleteDataPlaneResponse, error) {
 	globals := operations.AutomationDeleteDataPlaneGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -720,9 +719,9 @@ func (s *DataPlanes) AutomationDeleteDataPlane(ctx context.Context, request oper
 
 }
 
-// AutomationGetDataPlane - Get a data plane
+// Get a data plane
 // Retrieves a single Automation-managed data plane by its id.
-func (s *DataPlanes) AutomationGetDataPlane(ctx context.Context, request operations.AutomationGetDataPlaneRequest, opts ...operations.Option) (*operations.AutomationGetDataPlaneResponse, error) {
+func (s *DataPlanes) Get(ctx context.Context, request operations.AutomationGetDataPlaneRequest, opts ...operations.Option) (*operations.AutomationGetDataPlaneResponse, error) {
 	globals := operations.AutomationGetDataPlaneGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,

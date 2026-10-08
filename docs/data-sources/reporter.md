@@ -38,7 +38,7 @@ data "am_reporter" "my_reporter" {
 
 - `attribute_mapping_event_types` (Set of String) Audit event types the attribute mappings apply to. Empty means every event type. Ignored when system is true.
 - `attribute_mappings` (Attributes List) Additional attributes exported alongside the regular audit payload. Each entry pairs an expression read from the audit context with the field name its value is exported under. Ignored when system is true; a system reporter exports no additional attributes. (see [below for nested schema](#nestedatt--attribute_mappings))
-- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.
+- `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response; an unset sensitive value is omitted. Sending ******** back on update keeps the stored value; sending it on create is rejected.
 - `created_at` (String) Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.
 - `data_type` (String) Category of data the reporter handles, derived from its type. Read-only.
 - `enabled` (Boolean) Whether the reporter is enabled.

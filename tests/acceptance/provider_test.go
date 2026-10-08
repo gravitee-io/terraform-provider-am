@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -14,6 +15,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
@@ -132,4 +135,45 @@ resource "am_domain" "test" {
   data_plane_id = "default"
 }
 `, key, name)
+}
+
+// immutableFieldSteps changes type, then system, expecting an in-place update AM rejects and the resource left intact.
+func immutableFieldSteps(address, path, config, currentType, otherType string) []resource.TestStep {
+	typeLine := func(value string) string { return fmt.Sprintf("type       = %q", value) }
+	updateRejected := func(config, message string) resource.TestStep {
+		return resource.TestStep{
+			Config: config,
+			ConfigPlanChecks: resource.ConfigPlanChecks{
+				PreApply: []plancheck.PlanCheck{
+					plancheck.ExpectResourceAction(address, plancheck.ResourceActionUpdate),
+				},
+			},
+			ExpectError: regexp.MustCompile(message),
+		}
+	}
+	return []resource.TestStep{
+		{
+			Config: config,
+		},
+		updateRejected(strings.Replace(config, typeLine(currentType), typeLine(otherType), 1), `The 'type' is immutable`),
+		updateRejected(strings.Replace(config, typeLine(currentType), "system     = true\n  "+typeLine(currentType), 1), `The 'system' flag is immutable`),
+		{
+			Config: config,
+			ConfigPlanChecks: resource.ConfigPlanChecks{
+				PreApply: []plancheck.PlanCheck{
+					plancheck.ExpectEmptyPlan(),
+				},
+			},
+			Check: func(*terraform.State) error {
+				body, err := automationGet(path)
+				if err != nil {
+					return err
+				}
+				if body["type"] != currentType || body["system"] == true {
+					return fmt.Errorf("%s changed to type %v, system %v", path, body["type"], body["system"])
+				}
+				return nil
+			},
+		},
+	}
 }

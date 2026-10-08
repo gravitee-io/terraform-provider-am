@@ -52,8 +52,8 @@ resource "am_reporter" "my_reporter" {
 - `environment_id` (String) Identifier of the environment.
 - `name` (String) Human-readable name of the reporter.
 - `organization_id` (String) Identifier of the organization that owns the environment.
-- `system` (Boolean) Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, configuration, attributeMappings and attributeMappingEventTypes fields are ignored. Default: false; Requires replacement if changed.
-- `type` (String) Reporter plugin type identifier. Immutable after creation. Requires replacement if changed.
+- `system` (Boolean) Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, configuration, attributeMappings and attributeMappingEventTypes fields are ignored. Default: false
+- `type` (String) Reporter plugin type identifier. Immutable after creation.
 
 ### Read-Only
 

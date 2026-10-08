@@ -39,8 +39,8 @@ resource "am_certificate" "my_certificate" {
 - `environment_id` (String) Identifier of the environment.
 - `name` (String) Human-readable name of the certificate.
 - `organization_id` (String) Identifier of the organization that owns the environment.
-- `system` (Boolean) Whether this is the domain's system certificate. Immutable after creation. When true, only key is required; the certificate is built from the domains.certificates.default.* system settings and the name, type, and configuration fields are ignored. Default: false; Requires replacement if changed.
-- `type` (String) Certificate plugin type identifier. Immutable after creation. Requires replacement if changed.
+- `system` (Boolean) Whether this is the domain's system certificate. Immutable after creation. When true, only key is required; the certificate is built from the domains.certificates.default.* system settings and the name, type, and configuration fields are ignored. Default: false
+- `type` (String) Certificate plugin type identifier. Immutable after creation.
 
 ### Read-Only
 

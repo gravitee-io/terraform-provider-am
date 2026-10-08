@@ -59,8 +59,8 @@ resource "am_identity_provider" "my_identityprovider" {
 - `name` (String) Human-readable name of the identity provider.
 - `organization_id` (String) Identifier of the organization that owns the environment.
 - `role_mapper` (Map of List of String) Role mapper: assigns AM roles based on provider attribute values. Each entry maps a role to the user attribute expressions that grant it.
-- `system` (Boolean) Whether this is the domain's system identity provider. Immutable after creation. When true, only key is required; the identity provider is built from the domains.identities.default.* system settings and the name, type, and configuration fields are ignored. Default: false; Requires replacement if changed.
-- `type` (String) Identity provider plugin type identifier. Immutable after creation. Requires replacement if changed.
+- `system` (Boolean) Whether this is the domain's system identity provider. Immutable after creation. When true, only key is required; the identity provider is built from the domains.identities.default.* system settings and the name, type, and configuration fields are ignored. Default: false
+- `type` (String) Identity provider plugin type identifier. Immutable after creation.
 
 ### Read-Only
 

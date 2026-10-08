@@ -116,6 +116,19 @@ import {
 	})
 }
 
+func TestIdentityProvider_ImmutableFields(t *testing.T) {
+	domainKey := uniqueKey("tf-acc-idp")
+	key := uniqueKey("users")
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: immutableFieldSteps("am_identity_provider.test", fmt.Sprintf("/domains/%s/identities/%s", domainKey, key),
+			identityProviderConfig(domainKey, key, "Alice"), "inline-am-idp", "mongo-am-idp"),
+	})
+}
+
 func containsPassword(configuration string) error {
 	if !strings.Contains(configuration, inlineUserPassword) {
 		return fmt.Errorf("state holds %s instead of the configured password", configuration)

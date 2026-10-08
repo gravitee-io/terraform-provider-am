@@ -68,6 +68,19 @@ func TestCertificate_MaskedSecrets(t *testing.T) {
 	})
 }
 
+func TestCertificate_ImmutableFields(t *testing.T) {
+	domainKey := uniqueKey("tf-acc-cert")
+	key := uniqueKey("signing")
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: immutableFieldSteps("am_certificate.test", fmt.Sprintf("/domains/%s/certificates/%s", domainKey, key),
+			certificateConfig(t, domainKey, key, "Terraform acceptance"), "javakeystore-am-certificate", "pkcs12-am-certificate"),
+	})
+}
+
 func checkKeystoreMasked(path string) resource.TestCheckFunc {
 	return func(*terraform.State) error {
 		configuration, err := automationConfiguration(path)

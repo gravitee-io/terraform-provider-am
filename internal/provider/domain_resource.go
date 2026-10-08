@@ -1373,6 +1373,8 @@ func (r *DomainResource) Create(ctx context.Context, req resource.CreateRequest,
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1381,7 +1383,7 @@ func (r *DomainResource) Create(ctx context.Context, req resource.CreateRequest,
 	}
 	res, err := r.client.Domains.CreateOrUpdateDomain(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1433,6 +1435,8 @@ func (r *DomainResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationGetDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1441,7 +1445,7 @@ func (r *DomainResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 	res, err := r.client.Domains.GetDomain(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1495,6 +1499,8 @@ func (r *DomainResource) Update(ctx context.Context, req resource.UpdateRequest,
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1503,7 +1509,7 @@ func (r *DomainResource) Update(ctx context.Context, req resource.UpdateRequest,
 	}
 	res, err := r.client.Domains.CreateOrUpdateDomain(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1563,6 +1569,8 @@ func (r *DomainResource) Delete(ctx context.Context, req resource.DeleteRequest,
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationDeleteDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1571,7 +1579,7 @@ func (r *DomainResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	}
 	res, err := r.client.Domains.DeleteDomain(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

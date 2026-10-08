@@ -182,6 +182,8 @@ func (r *DataPlaneResource) Create(ctx context.Context, req resource.CreateReque
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateDataPlaneRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -190,7 +192,7 @@ func (r *DataPlaneResource) Create(ctx context.Context, req resource.CreateReque
 	}
 	res, err := r.client.DataPlanes.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -249,6 +251,8 @@ func (r *DataPlaneResource) Read(ctx context.Context, req resource.ReadRequest, 
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationGetDataPlaneRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -257,7 +261,7 @@ func (r *DataPlaneResource) Read(ctx context.Context, req resource.ReadRequest, 
 	}
 	res, err := r.client.DataPlanes.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -311,6 +315,8 @@ func (r *DataPlaneResource) Update(ctx context.Context, req resource.UpdateReque
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateDataPlaneRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -319,7 +325,7 @@ func (r *DataPlaneResource) Update(ctx context.Context, req resource.UpdateReque
 	}
 	res, err := r.client.DataPlanes.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -379,6 +385,8 @@ func (r *DataPlaneResource) Delete(ctx context.Context, req resource.DeleteReque
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationDeleteDataPlaneRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -387,7 +395,7 @@ func (r *DataPlaneResource) Delete(ctx context.Context, req resource.DeleteReque
 	}
 	res, err := r.client.DataPlanes.Delete(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

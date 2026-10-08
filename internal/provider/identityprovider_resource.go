@@ -206,6 +206,8 @@ func (r *IdentityProviderResource) Create(ctx context.Context, req resource.Crea
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateIdentityProviderRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -214,7 +216,7 @@ func (r *IdentityProviderResource) Create(ctx context.Context, req resource.Crea
 	}
 	res, err := r.client.IdentityProviders.CreateOrUpdateIdentity(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -266,6 +268,8 @@ func (r *IdentityProviderResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationGetIdentityProviderRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -274,7 +278,7 @@ func (r *IdentityProviderResource) Read(ctx context.Context, req resource.ReadRe
 	}
 	res, err := r.client.IdentityProviders.GetByID(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -328,6 +332,8 @@ func (r *IdentityProviderResource) Update(ctx context.Context, req resource.Upda
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateIdentityProviderRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -336,7 +342,7 @@ func (r *IdentityProviderResource) Update(ctx context.Context, req resource.Upda
 	}
 	res, err := r.client.IdentityProviders.CreateOrUpdateIdentity(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -396,6 +402,8 @@ func (r *IdentityProviderResource) Delete(ctx context.Context, req resource.Dele
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationDeleteIdentityProviderRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -404,7 +412,7 @@ func (r *IdentityProviderResource) Delete(ctx context.Context, req resource.Dele
 	}
 	res, err := r.client.IdentityProviders.DeleteByIdentity(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

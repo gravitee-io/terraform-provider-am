@@ -182,6 +182,8 @@ func (r *CertificateResource) Create(ctx context.Context, req resource.CreateReq
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateCertificateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -190,7 +192,7 @@ func (r *CertificateResource) Create(ctx context.Context, req resource.CreateReq
 	}
 	res, err := r.client.Certificates.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -242,6 +244,8 @@ func (r *CertificateResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationGetCertificateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -250,7 +254,7 @@ func (r *CertificateResource) Read(ctx context.Context, req resource.ReadRequest
 	}
 	res, err := r.client.Certificates.GetCertificate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -304,6 +308,8 @@ func (r *CertificateResource) Update(ctx context.Context, req resource.UpdateReq
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateCertificateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -312,7 +318,7 @@ func (r *CertificateResource) Update(ctx context.Context, req resource.UpdateReq
 	}
 	res, err := r.client.Certificates.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -372,6 +378,8 @@ func (r *CertificateResource) Delete(ctx context.Context, req resource.DeleteReq
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationDeleteCertificateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -380,7 +388,7 @@ func (r *CertificateResource) Delete(ctx context.Context, req resource.DeleteReq
 	}
 	res, err := r.client.Certificates.Delete(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

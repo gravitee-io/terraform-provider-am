@@ -221,6 +221,8 @@ func (r *ReporterResource) Create(ctx context.Context, req resource.CreateReques
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateReporterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -229,7 +231,7 @@ func (r *ReporterResource) Create(ctx context.Context, req resource.CreateReques
 	}
 	res, err := r.client.Reporters.UpsertReporter(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -281,6 +283,8 @@ func (r *ReporterResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationGetReporterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -289,7 +293,7 @@ func (r *ReporterResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 	res, err := r.client.Reporters.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -343,6 +347,8 @@ func (r *ReporterResource) Update(ctx context.Context, req resource.UpdateReques
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateReporterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -351,7 +357,7 @@ func (r *ReporterResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 	res, err := r.client.Reporters.UpsertReporter(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -411,6 +417,8 @@ func (r *ReporterResource) Delete(ctx context.Context, req resource.DeleteReques
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationDeleteReporterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -419,7 +427,7 @@ func (r *ReporterResource) Delete(ctx context.Context, req resource.DeleteReques
 	}
 	res, err := r.client.Reporters.DeleteByID(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

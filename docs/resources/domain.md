@@ -338,7 +338,7 @@ Optional:
 - `auto_login_after_registration` (Boolean) Whether the user is automatically logged in after completing registration. Default: false
 - `auto_login_after_reset_password` (Boolean) Whether the user is automatically logged in after a password reset. Default: false
 - `complete_registration_when_reset_password` (Boolean) Whether resetting a password also completes a pending registration. Default: false
-- `default_identity_provider_for_registration` (String) Key of an identity provider that exists under this domain, used as the default for user registration. Resolved against the domain's identity providers when applied; a value that does not match an existing identity provider is rejected with a 400 response.
+- `default_identity_provider_for_registration` (String) Key of an identity provider managed under this domain, used as the default for user registration. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever an identity provider with that key exists.
 - `delete_passwordless_devices_after_reset_password` (Boolean) Whether passwordless (WebAuthn) devices are deleted when the password is reset. Default: false
 - `dynamic_user_registration` (Boolean) Whether dynamic (self-service) user registration is enabled. Default: false
 - `inherited` (Boolean) Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains. Default: true
@@ -376,7 +376,7 @@ Optional:
 
 Optional:
 
-- `fallback_certificate` (String) Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. Must reference a certificate created via the domain's certificate endpoints.
+- `fallback_certificate` (String) Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.
 
 
 <a id="nestedatt--cors_settings"></a>
@@ -520,7 +520,7 @@ Optional:
 
 Optional:
 
-- `certificate` (String) Key of a certificate managed under this domain, used to sign SAML responses. Must reference a certificate created via the domain's certificate endpoints.
+- `certificate` (String) Key of a certificate managed under this domain, used to sign SAML responses. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.
 - `enabled` (Boolean) Whether the domain exposes the SAML 2.0 IdP protocol. Default: false
 - `entity_id` (String) URL or URN that uniquely identifies this IdP (the SAML entity ID).
 
@@ -574,7 +574,7 @@ Optional:
 - `allowed_subject_token_types` (List of String) Token types accepted as the subject token in an exchange.
 - `enabled` (Boolean) Whether token exchange is enabled for the domain. Default: false
 - `id_jag_settings` (Attributes) ID-JAG issuance behavior of token exchange. (see [below for nested schema](#nestedatt--token_exchange_settings--id_jag_settings))
-- `max_delegation_depth` (Number) Maximum depth of the delegation chain (nested "act" claims). Clamped to the range 1–100. Default: 25
+- `max_delegation_depth` (Number) Maximum depth of the delegation chain (nested "act" claims). Range 1–100. Default: 25
 - `token_exchange_o_auth_settings` (Attributes) OAuth-specific token-exchange behavior, such as how scopes are handled, with optional inheritance from domain defaults. (see [below for nested schema](#nestedatt--token_exchange_settings--token_exchange_o_auth_settings))
 - `trusted_issuers` (Attributes List, Deprecated) Deprecated: use the trusted-domains API instead. External issuers whose JWTs may be accepted as subject or actor tokens. A projection over the security domain's token-exchange trusted domains; a write replaces the list, so an omitted issuer is no longer trusted. (see [below for nested schema](#nestedatt--token_exchange_settings--trusted_issuers))
 
@@ -583,7 +583,7 @@ Optional:
 
 Optional:
 
-- `lax_validation` (Boolean) Lax validation: also accept an access token issued to the requesting client as the subject token. By default only an ID token is accepted. Default: false
+- `lax_validation` (Boolean) Lax validation: also accept an access token as the subject token. By default only an ID token is accepted. The access token must be issued to the requesting client or, when an MCP server requests, have that MCP server as audience. Default: false
 
 
 <a id="nestedatt--token_exchange_settings--token_exchange_o_auth_settings"></a>
@@ -681,7 +681,7 @@ Optional:
 
 Optional:
 
-- `action` (String) X-Frame-Options action. Supported values: DENY, SAMEORIGIN. Leave empty to omit the header.
+- `action` (String) X-Frame-Options action. Omit to leave the header out. must be one of ["DENY", "SAMEORIGIN"]
 - `enabled` (Boolean) Whether X-Frame-Options is enabled for the domain when not inherited. Default: false
 - `inherited` (Boolean) Whether X-Frame-Options settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits. Default: true
 

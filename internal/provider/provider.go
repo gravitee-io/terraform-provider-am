@@ -7,6 +7,7 @@ import (
 	"context"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk/models/shared"
+	"github.com/hashicorp/go-cleanhttp"
 	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
@@ -142,10 +143,11 @@ func (p *AmProvider) Configure(ctx context.Context, req provider.ConfigureReques
 			"Either the environment variable AM_SA_TOKEN or provider configuration bearer_auth attribute must be configured.",
 		)
 	}
+	registerSensitiveValues(security.BearerAuth)
 
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),
-		Transport:  http.DefaultTransport,
+		Transport:  cleanhttp.DefaultPooledTransport(),
 	}
 
 	resp.Diagnostics.Append(data.HTTPHeaders.ElementsAs(ctx, &providerHTTPTransportOpts.SetHeaders, false)...)
@@ -153,8 +155,7 @@ func (p *AmProvider) Configure(ctx context.Context, req provider.ConfigureReques
 		return
 	}
 
-	httpClient := http.DefaultClient
-	httpClient.Transport = NewProviderHTTPTransport(providerHTTPTransportOpts)
+	httpClient := &http.Client{Transport: NewProviderHTTPTransport(providerHTTPTransportOpts)}
 
 	opts := []sdk.SDKOption{
 		sdk.WithServerURL(serverUrl),

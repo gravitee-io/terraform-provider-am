@@ -102,7 +102,7 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 					"default_identity_provider_for_registration": schema.StringAttribute{
 						Computed:    true,
-						Description: `Key of an identity provider that exists under this domain, used as the default for user registration. Resolved against the domain's identity providers when applied; a value that does not match an existing identity provider is rejected with a 400 response.`,
+						Description: `Key of an identity provider managed under this domain, used as the default for user registration. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever an identity provider with that key exists.`,
 					},
 					"delete_passwordless_devices_after_reset_password": schema.BoolAttribute{
 						Computed:    true,
@@ -212,7 +212,7 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Attributes: map[string]schema.Attribute{
 					"fallback_certificate": schema.StringAttribute{
 						Computed:    true,
-						Description: `Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. Must reference a certificate created via the domain's certificate endpoints.`,
+						Description: `Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.`,
 					},
 				},
 				Description: `Domain-level certificate settings.`,
@@ -611,7 +611,7 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Attributes: map[string]schema.Attribute{
 					"certificate": schema.StringAttribute{
 						Computed:    true,
-						Description: `Key of a certificate managed under this domain, used to sign SAML responses. Must reference a certificate created via the domain's certificate endpoints.`,
+						Description: `Key of a certificate managed under this domain, used to sign SAML responses. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.`,
 					},
 					"enabled": schema.BoolAttribute{
 						Computed:    true,
@@ -720,14 +720,14 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						Attributes: map[string]schema.Attribute{
 							"lax_validation": schema.BoolAttribute{
 								Computed:    true,
-								Description: `Lax validation: also accept an access token issued to the requesting client as the subject token. By default only an ID token is accepted.`,
+								Description: `Lax validation: also accept an access token as the subject token. By default only an ID token is accepted. The access token must be issued to the requesting client or, when an MCP server requests, have that MCP server as audience.`,
 							},
 						},
 						Description: `ID-JAG issuance behavior of token exchange.`,
 					},
 					"max_delegation_depth": schema.Int32Attribute{
 						Computed:    true,
-						Description: `Maximum depth of the delegation chain (nested "act" claims). Clamped to the range 1–100.`,
+						Description: `Maximum depth of the delegation chain (nested "act" claims). Range 1–100.`,
 					},
 					"token_exchange_o_auth_settings": schema.SingleNestedAttribute{
 						Computed: true,
@@ -920,7 +920,7 @@ func (r *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						Attributes: map[string]schema.Attribute{
 							"action": schema.StringAttribute{
 								Computed:    true,
-								Description: `X-Frame-Options action. Supported values: DENY, SAMEORIGIN. Leave empty to omit the header.`,
+								Description: `X-Frame-Options action. Omit to leave the header out.`,
 							},
 							"enabled": schema.BoolAttribute{
 								Computed:    true,
@@ -1006,15 +1006,17 @@ func (r *DomainDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config)
+
 	request, requestDiags := data.ToOperationsAutomationGetDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Domains.AutomationGetDomain(ctx, *request)
+	res, err := r.client.Domains.GetDomain(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

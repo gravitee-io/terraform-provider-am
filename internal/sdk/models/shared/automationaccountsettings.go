@@ -17,7 +17,7 @@ type AutomationAccountSettings struct {
 	AutoLoginAfterResetPassword *bool `default:"false" json:"autoLoginAfterResetPassword"`
 	// Whether resetting a password also completes a pending registration.
 	CompleteRegistrationWhenResetPassword *bool `default:"false" json:"completeRegistrationWhenResetPassword"`
-	// Key of an identity provider that exists under this domain, used as the default for user registration. Resolved against the domain's identity providers when applied; a value that does not match an existing identity provider is rejected with a 400 response.
+	// Key of an identity provider managed under this domain, used as the default for user registration. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever an identity provider with that key exists.
 	DefaultIdentityProviderForRegistration *string `json:"defaultIdentityProviderForRegistration,omitempty"`
 	// Whether passwordless (WebAuthn) devices are deleted when the password is reset.
 	DeletePasswordlessDevicesAfterResetPassword *bool `default:"false" json:"deletePasswordlessDevicesAfterResetPassword"`

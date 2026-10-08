@@ -1,5 +1,5 @@
 workflowVersion: 1.0.0
-speakeasyVersion: 1.799.0
+speakeasyVersion: 1.801.0
 sources:
     am:
         inputs:
@@ -8,6 +8,7 @@ sources:
             - location: .speakeasy/overlays/common/oas.yaml
             - location: .speakeasy/overlays/common/param.yaml
             - location: .speakeasy/overlays/common/schema.yaml
+            - location: .speakeasy/overlays/common/operations.yaml
             - location: .speakeasy/overlays/domain.yaml
             - location: .speakeasy/overlays/dataplane.yaml
             - location: .speakeasy/overlays/certificate.yaml

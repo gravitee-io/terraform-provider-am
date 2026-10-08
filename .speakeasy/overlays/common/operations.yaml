@@ -1,0 +1,194 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Speakeasy terraform optimizations
+  version: 0.0.1
+actions:
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains"]["put"]
+    update:
+      x-speakeasy-name-override: createOrUpdateDomain
+    x-speakeasy-metadata:
+      after: sdk.domains.createOrUpdateDomain()
+      before: sdk.Domains.automationCreateOrUpdateDomain()
+      created_at: 1791474078185
+      reviewed_at: 1791474085070
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates"]["put"]
+    update:
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      after: sdk.certificates.createOrUpdate()
+      before: sdk.Certificates.automationCreateOrUpdateCertificate()
+      created_at: 1791474078185
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.reporters.get()
+      before: sdk.Reporters.automationGetReporter()
+      created_at: 1791474078185
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities"]["get"]
+    update:
+      x-speakeasy-group: identityProviders
+      x-speakeasy-name-override: getIdentityProviders
+    x-speakeasy-metadata:
+      after: sdk.identityProviders.getIdentityProviders()
+      before: sdk.Identity Providers.automationListIdentityProviders()
+      created_at: 1791474078185
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities"]["put"]
+    update:
+      x-speakeasy-group: identityProviders
+      x-speakeasy-name-override: createOrUpdateIdentity
+    x-speakeasy-metadata:
+      after: sdk.identityProviders.createOrUpdateIdentity()
+      before: sdk.Identity Providers.automationCreateOrUpdateIdentityProvider()
+      created_at: 1791474078185
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains"]["get"]
+    update:
+      x-speakeasy-name-override: getDomains
+    x-speakeasy-metadata:
+      after: sdk.domains.getDomains()
+      before: sdk.Domains.automationListDomains()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.certificates.list()
+      before: sdk.Certificates.automationListCertificates()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters"]["get"]
+    update:
+      x-speakeasy-name-override: getReporters
+    x-speakeasy-metadata:
+      after: sdk.reporters.getReporters()
+      before: sdk.Reporters.automationListReporters()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}"]["get"]
+    update:
+      x-speakeasy-name-override: getCertificate
+    x-speakeasy-metadata:
+      after: sdk.certificates.getCertificate()
+      before: sdk.Certificates.automationGetCertificate()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/dataplanes"]["put"]
+    update:
+      x-speakeasy-group: dataPlanes
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      after: sdk.dataPlanes.createOrUpdate()
+      before: sdk.Data Planes.automationCreateOrUpdateDataPlane()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}"]["get"]
+    update:
+      x-speakeasy-name-override: getDomain
+    x-speakeasy-metadata:
+      after: sdk.domains.getDomain()
+      before: sdk.Domains.automationGetDomain()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters/{reporterKey}"]["delete"]
+    update:
+      x-speakeasy-name-override: deleteById
+    x-speakeasy-metadata:
+      after: sdk.reporters.deleteById()
+      before: sdk.Reporters.automationDeleteReporter()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/reporters"]["put"]
+    update:
+      x-speakeasy-name-override: upsertReporter
+    x-speakeasy-metadata:
+      after: sdk.reporters.upsertReporter()
+      before: sdk.Reporters.automationCreateOrUpdateReporter()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.certificates.delete()
+      before: sdk.Certificates.automationDeleteCertificate()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/dataplanes"]["get"]
+    update:
+      x-speakeasy-group: dataPlanes
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.dataPlanes.list()
+      before: sdk.Data Planes.automationListDataPlanes()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}"]["delete"]
+    update:
+      x-speakeasy-name-override: deleteDomain
+    x-speakeasy-metadata:
+      after: sdk.domains.deleteDomain()
+      before: sdk.Domains.automationDeleteDomain()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities/{identityKey}"]["get"]
+    update:
+      x-speakeasy-group: identityProviders
+      x-speakeasy-name-override: getById
+    x-speakeasy-metadata:
+      after: sdk.identityProviders.getById()
+      before: sdk.Identity Providers.automationGetIdentityProvider()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/dataplanes/{dataPlaneId}"]["delete"]
+    update:
+      x-speakeasy-group: dataPlanes
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.dataPlanes.delete()
+      before: sdk.Data Planes.automationDeleteDataPlane()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities/{identityKey}"]["delete"]
+    update:
+      x-speakeasy-group: identityProviders
+      x-speakeasy-name-override: deleteByIdentity
+    x-speakeasy-metadata:
+      after: sdk.identityProviders.deleteByIdentity()
+      before: sdk.Identity Providers.automationDeleteIdentityProvider()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/dataplanes/{dataPlaneId}"]["get"]
+    update:
+      x-speakeasy-group: dataPlanes
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.dataPlanes.get()
+      before: sdk.Data Planes.automationGetDataPlane()
+      created_at: 1791474078186
+      reviewed_at: 1791474085071
+      type: method-name

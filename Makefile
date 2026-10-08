@@ -8,7 +8,7 @@
 #   AM_TEST_MONGODB_HOST - MongoDB host AM reaches for a test data plane (defaults to "mongodb")
 #   AM_TEST_MONGODB_PORT - its port (defaults to "27017")
 
-AM_OAS_BRANCH ?= master
+AM_OAS_BRANCH ?= 4.13.x
 
 .PHONY: sync-oas
 sync-oas: ## Download the AM Automation OAS from upstream into automation-api-oas.yaml
@@ -29,6 +29,7 @@ OVERLAY_FILES := \
     .speakeasy/overlays/common/oas.yaml \
     .speakeasy/overlays/common/param.yaml \
     .speakeasy/overlays/common/schema.yaml \
+    .speakeasy/overlays/common/operations.yaml \
     .speakeasy/overlays/domain.yaml \
     .speakeasy/overlays/dataplane.yaml \
     .speakeasy/overlays/certificate.yaml \

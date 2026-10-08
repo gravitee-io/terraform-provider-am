@@ -34,7 +34,7 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Gravitee.io AM - Automation API
-  version: 4.13.0
+  version: 4.13.0-alpha.8
 servers:
 - url: http://localhost:8093/automation
 security:
@@ -534,8 +534,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Invalid request: validation failure, an immutable field change,\
-            \ a key that already exists for a domain not managed by the Automation\
-            \ API, or an unknown defaultIdentityProviderForRegistration reference"
+            \ or a key that already exists for a domain not managed by the Automation\
+            \ API"
         "403":
           content:
             application/json:
@@ -886,8 +886,11 @@ paths:
       - Domains
   /organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates/{certKey}:
     delete:
-      description: Deletes an Automation-managed certificate by its key. Deleting
-        a certificate that does not exist also returns 204.
+      description: "Deletes an Automation-managed certificate by its key. A domain\
+        \ that names it by key in saml.certificate or certificateSettings.fallbackCertificate\
+        \ keeps the reference, which resolves again once a certificate with the same\
+        \ key is created. Deleting a certificate that does not exist also returns\
+        \ 204."
       operationId: automationDeleteCertificate
       parameters:
       - description: Identifier of the organization that owns the environment.
@@ -1266,8 +1269,11 @@ paths:
       - Domains
   /organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities/{identityKey}:
     delete:
-      description: Deletes an Automation-managed identity provider by its key. Deleting
-        an identity provider that does not exist also returns 204.
+      description: "Deletes an Automation-managed identity provider by its key. A\
+        \ domain that names it in accountSettings.defaultIdentityProviderForRegistration\
+        \ keeps the reference, which resolves again once an identity provider with\
+        \ the same key is created. Deleting an identity provider that does not exist\
+        \ also returns 204."
       operationId: automationDeleteIdentityProvider
       parameters:
       - description: Identifier of the organization that owns the environment.
@@ -1799,10 +1805,11 @@ components:
           description: Whether resetting a password also completes a pending registration.
         defaultIdentityProviderForRegistration:
           type: string
-          description: "Key of an identity provider that exists under this domain,\
-            \ used as the default for user registration. Resolved against the domain's\
-            \ identity providers when applied; a value that does not match an existing\
-            \ identity provider is rejected with a 400 response."
+          description: "Key of an identity provider managed under this domain, used\
+            \ as the default for user registration. The reference is not checked against\
+            \ existing identity providers: it can name one created after the domain\
+            \ or since deleted, and resolves whenever an identity provider with that\
+            \ key exists."
           example: users-idp
         deletePasswordlessDevicesAfterResetPassword:
           type: boolean
@@ -1944,10 +1951,10 @@ components:
           type: string
           description: "Plugin-specific configuration as a JSON-encoded string. Its\
             \ shape is defined by the selected certificate type. Sensitive values,\
-            \ as flagged by the plugin, are returned as ******** in every response.\
-            \ Sending ******** back on update keeps the stored value; sending it on\
-            \ create is rejected. The uploaded keystore file is masked too; sending\
-            \ ******** back keeps it."
+            \ as flagged by the plugin, are returned as ******** in every response;\
+            \ an unset sensitive value is omitted. Sending ******** back on update\
+            \ keeps the stored value; sending it on create is rejected. The uploaded\
+            \ keystore file is masked too; sending ******** back keeps it."
           example: "{\"jks\":{\"content\":\"...\",\"name\":\"keystore.jks\"},\"storepass\"\
             :\"secret\",\"alias\":\"mykey\",\"keypass\":\"secret\"}"
         createdAt:
@@ -2011,8 +2018,10 @@ components:
         fallbackCertificate:
           type: string
           description: "Key of a certificate managed under this domain, used as the\
-            \ fallback certificate when a client does not specify one. Must reference\
-            \ a certificate created via the domain's certificate endpoints."
+            \ fallback certificate when a client does not specify one. The reference\
+            \ is not checked against existing certificates: it can name one created\
+            \ after the domain or since deleted, and resolves whenever a certificate\
+            \ with that key exists."
           example: default
       title: Certificate settings
     AutomationClientRegistrationSettings:
@@ -2236,6 +2245,7 @@ components:
           example: /example-domain
           maxLength: 255
           minLength: 1
+          pattern: ^/.*
         saml:
           $ref: "#/components/schemas/AutomationSamlSettings"
         scim:
@@ -2294,9 +2304,9 @@ components:
           type: string
           description: "Plugin-specific configuration as a JSON-encoded string. Its\
             \ shape is defined by the selected identity provider type. Sensitive values,\
-            \ as flagged by the plugin, are returned as ******** in every response.\
-            \ Sending ******** back on update keeps the stored value; sending it on\
-            \ create is rejected."
+            \ as flagged by the plugin, are returned as ******** in every response;\
+            \ an unset sensitive value is omitted. Sending ******** back on update\
+            \ keeps the stored value; sending it on create is rejected."
           example: "{\"users\":[{\"username\":\"admin\",\"password\":\"...\"}]}"
         createdAt:
           type: string
@@ -2445,9 +2455,9 @@ components:
           type: string
           description: "Plugin-specific configuration as a JSON-encoded string. Its\
             \ shape is defined by the selected reporter type. Sensitive values, as\
-            \ flagged by the plugin, are returned as ******** in every response. Sending\
-            \ ******** back on update keeps the stored value; sending it on create\
-            \ is rejected."
+            \ flagged by the plugin, are returned as ******** in every response; an\
+            \ unset sensitive value is omitted. Sending ******** back on update keeps\
+            \ the stored value; sending it on create is rejected."
           example: "{\"bootstrapServers\":\"kafka:9092\",\"topic\":\"audit\"}"
         createdAt:
           type: string
@@ -2513,8 +2523,9 @@ components:
         certificate:
           type: string
           description: "Key of a certificate managed under this domain, used to sign\
-            \ SAML responses. Must reference a certificate created via the domain's\
-            \ certificate endpoints."
+            \ SAML responses. The reference is not checked against existing certificates:\
+            \ it can name one created after the domain or since deleted, and resolves\
+            \ whenever a certificate with that key exists."
           example: signing-cert
         enabled:
           type: boolean
@@ -2681,9 +2692,10 @@ components:
         laxValidation:
           type: boolean
           default: false
-          description: "Lax validation: also accept an access token issued to the\
-            \ requesting client as the subject token. By default only an ID token\
-            \ is accepted."
+          description: "Lax validation: also accept an access token as the subject\
+            \ token. By default only an ID token is accepted. The access token must\
+            \ be issued to the requesting client or, when an MCP server requests,\
+            \ have that MCP server as audience."
       title: ID-JAG settings
     KeyRetrievalSettings:
       type: object
@@ -3086,7 +3098,9 @@ components:
           format: int32
           default: 25
           description: Maximum depth of the delegation chain (nested "act" claims).
-            Clamped to the range 1–100.
+            Range 1–100.
+          maximum: 100
+          minimum: 1
         tokenExchangeOAuthSettings:
           $ref: "#/components/schemas/TokenExchangeOAuthSettings"
         trustedIssuers:
@@ -3285,8 +3299,10 @@ components:
       properties:
         action:
           type: string
-          description: "X-Frame-Options action. Supported values: DENY, SAMEORIGIN.\
-            \ Leave empty to omit the header."
+          description: X-Frame-Options action. Omit to leave the header out.
+          enum:
+          - DENY
+          - SAMEORIGIN
           example: DENY
         enabled:
           type: boolean

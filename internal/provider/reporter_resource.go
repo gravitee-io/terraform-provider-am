@@ -8,7 +8,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-am/internal/planmodifiers/stringplanmodifier"
 	"github.com/gravitee-io/terraform-provider-am/internal/provider/customtypes"
 	tfTypes "github.com/gravitee-io/terraform-provider-am/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-am/internal/sdk"
@@ -19,7 +18,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/setdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -108,7 +106,7 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed:    true,
 				Optional:    true,
 				Sensitive:   true,
-				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response. Sending ******** back on update keeps the stored value; sending it on create is rejected.`,
+				Description: `Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected reporter type. Sensitive values, as flagged by the plugin, are returned as ******** in every response; an unset sensitive value is omitted. Sending ******** back on update keeps the stored value; sending it on create is rejected.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -157,22 +155,15 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Identifier of the organization that owns the environment.`,
 			},
 			"system": schema.BoolAttribute{
-				Computed: true,
-				Optional: true,
-				Default:  booldefault.StaticBool(false),
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, configuration, attributeMappings and attributeMappingEventTypes fields are ignored. Default: false; Requires replacement if changed.`,
+				Computed:    true,
+				Optional:    true,
+				Default:     booldefault.StaticBool(false),
+				Description: `Whether this is the domain's system reporter. Immutable after creation. When true, only key is required; the reporter is built from the domains.reporters.default.* and repository system settings and the name, type, configuration, attributeMappings and attributeMappingEventTypes fields are ignored. Default: false`,
 			},
 			"type": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Reporter plugin type identifier. Immutable after creation. Requires replacement if changed.`,
+				Computed:    true,
+				Optional:    true,
+				Description: `Reporter plugin type identifier. Immutable after creation.`,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
@@ -230,15 +221,17 @@ func (r *ReporterResource) Create(ctx context.Context, req resource.CreateReques
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateReporterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Reporters.AutomationCreateOrUpdateReporter(ctx, *request)
+	res, err := r.client.Reporters.UpsertReporter(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -290,15 +283,17 @@ func (r *ReporterResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationGetReporterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Reporters.AutomationGetReporter(ctx, *request)
+	res, err := r.client.Reporters.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -352,15 +347,17 @@ func (r *ReporterResource) Update(ctx context.Context, req resource.UpdateReques
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateReporterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Reporters.AutomationCreateOrUpdateReporter(ctx, *request)
+	res, err := r.client.Reporters.UpsertReporter(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -420,15 +417,17 @@ func (r *ReporterResource) Delete(ctx context.Context, req resource.DeleteReques
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsAutomationDeleteReporterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Reporters.AutomationDeleteReporter(ctx, *request)
+	res, err := r.client.Reporters.DeleteByID(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

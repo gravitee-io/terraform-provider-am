@@ -100,7 +100,7 @@ type AutomationCreateOrUpdateDomainResponse struct {
 	RawResponse *http.Response
 	// The created or updated domain. When dryRun is true the domain includes a dryRunErrors field with any validation errors.
 	AutomationDomain *shared.AutomationDomain
-	// Invalid request: validation failure, an immutable field change, a key that already exists for a domain not managed by the Automation API, or an unknown defaultIdentityProviderForRegistration reference
+	// Invalid request: validation failure, an immutable field change, or a key that already exists for a domain not managed by the Automation API
 	Error *shared.Error
 }
 

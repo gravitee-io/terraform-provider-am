@@ -17,7 +17,6 @@ import (
 	"net/http"
 )
 
-// IdentityProviders - Identity providers configured under a domain to authenticate users.
 type IdentityProviders struct {
 	rootSDK          *GraviteeAm
 	sdkConfiguration config.SDKConfiguration
@@ -32,9 +31,9 @@ func newIdentityProviders(rootSDK *GraviteeAm, sdkConfig config.SDKConfiguration
 	}
 }
 
-// AutomationListIdentityProviders - List a domain's identity providers
+// GetIdentityProviders - List a domain's identity providers
 // Returns all identity providers managed by the Automation API under the domain. Identity providers created outside the Automation API are not returned.
-func (s *IdentityProviders) AutomationListIdentityProviders(ctx context.Context, request operations.AutomationListIdentityProvidersRequest, opts ...operations.Option) (*operations.AutomationListIdentityProvidersResponse, error) {
+func (s *IdentityProviders) GetIdentityProviders(ctx context.Context, request operations.AutomationListIdentityProvidersRequest, opts ...operations.Option) (*operations.AutomationListIdentityProvidersResponse, error) {
 	globals := operations.AutomationListIdentityProvidersGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -259,9 +258,9 @@ func (s *IdentityProviders) AutomationListIdentityProviders(ctx context.Context,
 
 }
 
-// AutomationCreateOrUpdateIdentityProvider - Create or update an identity provider
+// CreateOrUpdateIdentity - Create or update an identity provider
 // Idempotent create-or-update. Uses the key field in the body to identify the identity provider within the domain. On first apply the identity provider is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the identity provider. When dryRun is true, the endpoint validates the payload without persisting; the returned identity provider carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
-func (s *IdentityProviders) AutomationCreateOrUpdateIdentityProvider(ctx context.Context, request operations.AutomationCreateOrUpdateIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateIdentityProviderResponse, error) {
+func (s *IdentityProviders) CreateOrUpdateIdentity(ctx context.Context, request operations.AutomationCreateOrUpdateIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateIdentityProviderResponse, error) {
 	globals := operations.AutomationCreateOrUpdateIdentityProviderGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -499,9 +498,9 @@ func (s *IdentityProviders) AutomationCreateOrUpdateIdentityProvider(ctx context
 
 }
 
-// AutomationDeleteIdentityProvider - Delete an identity provider
+// DeleteByIdentity - Delete an identity provider
 // Deletes an Automation-managed identity provider by its key. A domain that names it in accountSettings.defaultIdentityProviderForRegistration keeps the reference, which resolves again once an identity provider with the same key is created. Deleting an identity provider that does not exist also returns 204.
-func (s *IdentityProviders) AutomationDeleteIdentityProvider(ctx context.Context, request operations.AutomationDeleteIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationDeleteIdentityProviderResponse, error) {
+func (s *IdentityProviders) DeleteByIdentity(ctx context.Context, request operations.AutomationDeleteIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationDeleteIdentityProviderResponse, error) {
 	globals := operations.AutomationDeleteIdentityProviderGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -722,9 +721,9 @@ func (s *IdentityProviders) AutomationDeleteIdentityProvider(ctx context.Context
 
 }
 
-// AutomationGetIdentityProvider - Get an identity provider
+// GetByID - Get an identity provider
 // Retrieves a single Automation-managed identity provider by its key.
-func (s *IdentityProviders) AutomationGetIdentityProvider(ctx context.Context, request operations.AutomationGetIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationGetIdentityProviderResponse, error) {
+func (s *IdentityProviders) GetByID(ctx context.Context, request operations.AutomationGetIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationGetIdentityProviderResponse, error) {
 	globals := operations.AutomationGetIdentityProviderGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,

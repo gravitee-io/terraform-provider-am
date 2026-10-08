@@ -32,9 +32,9 @@ func newReporters(rootSDK *GraviteeAm, sdkConfig config.SDKConfiguration, hooks 
 	}
 }
 
-// AutomationListReporters - List a domain's reporters
+// GetReporters - List a domain's reporters
 // Returns all reporters managed by the Automation API under the domain. Reporters created outside the Automation API are not returned.
-func (s *Reporters) AutomationListReporters(ctx context.Context, request operations.AutomationListReportersRequest, opts ...operations.Option) (*operations.AutomationListReportersResponse, error) {
+func (s *Reporters) GetReporters(ctx context.Context, request operations.AutomationListReportersRequest, opts ...operations.Option) (*operations.AutomationListReportersResponse, error) {
 	globals := operations.AutomationListReportersGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -259,9 +259,9 @@ func (s *Reporters) AutomationListReporters(ctx context.Context, request operati
 
 }
 
-// AutomationCreateOrUpdateReporter - Create or update a reporter
+// UpsertReporter - Create or update a reporter
 // Idempotent create-or-update. Uses the key field in the body to identify the reporter within the domain. On first apply the reporter is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the reporter. When dryRun is true, the endpoint validates the payload without persisting; the returned reporter carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
-func (s *Reporters) AutomationCreateOrUpdateReporter(ctx context.Context, request operations.AutomationCreateOrUpdateReporterRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateReporterResponse, error) {
+func (s *Reporters) UpsertReporter(ctx context.Context, request operations.AutomationCreateOrUpdateReporterRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateReporterResponse, error) {
 	globals := operations.AutomationCreateOrUpdateReporterGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -499,9 +499,9 @@ func (s *Reporters) AutomationCreateOrUpdateReporter(ctx context.Context, reques
 
 }
 
-// AutomationDeleteReporter - Delete a reporter
+// DeleteByID - Delete a reporter
 // Deletes an Automation-managed reporter by its key. Deleting a reporter that does not exist also returns 204.
-func (s *Reporters) AutomationDeleteReporter(ctx context.Context, request operations.AutomationDeleteReporterRequest, opts ...operations.Option) (*operations.AutomationDeleteReporterResponse, error) {
+func (s *Reporters) DeleteByID(ctx context.Context, request operations.AutomationDeleteReporterRequest, opts ...operations.Option) (*operations.AutomationDeleteReporterResponse, error) {
 	globals := operations.AutomationDeleteReporterGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -722,9 +722,9 @@ func (s *Reporters) AutomationDeleteReporter(ctx context.Context, request operat
 
 }
 
-// AutomationGetReporter - Get a reporter
+// Get a reporter
 // Retrieves a single Automation-managed reporter by its key.
-func (s *Reporters) AutomationGetReporter(ctx context.Context, request operations.AutomationGetReporterRequest, opts ...operations.Option) (*operations.AutomationGetReporterResponse, error) {
+func (s *Reporters) Get(ctx context.Context, request operations.AutomationGetReporterRequest, opts ...operations.Option) (*operations.AutomationGetReporterResponse, error) {
 	globals := operations.AutomationGetReporterGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,

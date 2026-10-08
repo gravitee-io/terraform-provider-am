@@ -32,9 +32,9 @@ func newCertificates(rootSDK *GraviteeAm, sdkConfig config.SDKConfiguration, hoo
 	}
 }
 
-// AutomationListCertificates - List a domain's certificates
+// List a domain's certificates
 // Returns all certificates managed by the Automation API under the domain. Certificates created outside the Automation API are not returned.
-func (s *Certificates) AutomationListCertificates(ctx context.Context, request operations.AutomationListCertificatesRequest, opts ...operations.Option) (*operations.AutomationListCertificatesResponse, error) {
+func (s *Certificates) List(ctx context.Context, request operations.AutomationListCertificatesRequest, opts ...operations.Option) (*operations.AutomationListCertificatesResponse, error) {
 	globals := operations.AutomationListCertificatesGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -259,9 +259,9 @@ func (s *Certificates) AutomationListCertificates(ctx context.Context, request o
 
 }
 
-// AutomationCreateOrUpdateCertificate - Create or update a certificate
+// CreateOrUpdate - Create or update a certificate
 // Idempotent create-or-update. Uses the key field in the body to identify the certificate within the domain. Re-applying an unchanged definition is a no-op. The system flag is immutable; changing it requires deleting and recreating the certificate. When dryRun is true, the endpoint validates the payload without persisting; the returned certificate carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
-func (s *Certificates) AutomationCreateOrUpdateCertificate(ctx context.Context, request operations.AutomationCreateOrUpdateCertificateRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateCertificateResponse, error) {
+func (s *Certificates) CreateOrUpdate(ctx context.Context, request operations.AutomationCreateOrUpdateCertificateRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateCertificateResponse, error) {
 	globals := operations.AutomationCreateOrUpdateCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -499,9 +499,9 @@ func (s *Certificates) AutomationCreateOrUpdateCertificate(ctx context.Context, 
 
 }
 
-// AutomationDeleteCertificate - Delete a certificate
+// Delete a certificate
 // Deletes an Automation-managed certificate by its key. A domain that names it by key in saml.certificate or certificateSettings.fallbackCertificate keeps the reference, which resolves again once a certificate with the same key is created. Deleting a certificate that does not exist also returns 204.
-func (s *Certificates) AutomationDeleteCertificate(ctx context.Context, request operations.AutomationDeleteCertificateRequest, opts ...operations.Option) (*operations.AutomationDeleteCertificateResponse, error) {
+func (s *Certificates) Delete(ctx context.Context, request operations.AutomationDeleteCertificateRequest, opts ...operations.Option) (*operations.AutomationDeleteCertificateResponse, error) {
 	globals := operations.AutomationDeleteCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -722,9 +722,9 @@ func (s *Certificates) AutomationDeleteCertificate(ctx context.Context, request 
 
 }
 
-// AutomationGetCertificate - Get a certificate
+// GetCertificate - Get a certificate
 // Retrieves a single Automation-managed certificate by its key.
-func (s *Certificates) AutomationGetCertificate(ctx context.Context, request operations.AutomationGetCertificateRequest, opts ...operations.Option) (*operations.AutomationGetCertificateResponse, error) {
+func (s *Certificates) GetCertificate(ctx context.Context, request operations.AutomationGetCertificateRequest, opts ...operations.Option) (*operations.AutomationGetCertificateResponse, error) {
 	globals := operations.AutomationGetCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,

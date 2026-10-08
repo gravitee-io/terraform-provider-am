@@ -194,7 +194,7 @@ func (r *IdentityProviderDataSource) Read(ctx context.Context, req datasource.Re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.IdentityProviders.AutomationGetIdentityProvider(ctx, *request)
+	res, err := r.client.IdentityProviders.GetByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

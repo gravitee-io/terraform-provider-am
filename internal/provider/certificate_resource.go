@@ -188,7 +188,7 @@ func (r *CertificateResource) Create(ctx context.Context, req resource.CreateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Certificates.AutomationCreateOrUpdateCertificate(ctx, *request)
+	res, err := r.client.Certificates.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -248,7 +248,7 @@ func (r *CertificateResource) Read(ctx context.Context, req resource.ReadRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Certificates.AutomationGetCertificate(ctx, *request)
+	res, err := r.client.Certificates.GetCertificate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -310,7 +310,7 @@ func (r *CertificateResource) Update(ctx context.Context, req resource.UpdateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Certificates.AutomationCreateOrUpdateCertificate(ctx, *request)
+	res, err := r.client.Certificates.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -378,7 +378,7 @@ func (r *CertificateResource) Delete(ctx context.Context, req resource.DeleteReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Certificates.AutomationDeleteCertificate(ctx, *request)
+	res, err := r.client.Certificates.Delete(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

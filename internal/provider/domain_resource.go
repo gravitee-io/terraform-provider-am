@@ -1379,7 +1379,7 @@ func (r *DomainResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Domains.AutomationCreateOrUpdateDomain(ctx, *request)
+	res, err := r.client.Domains.CreateOrUpdateDomain(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -1439,7 +1439,7 @@ func (r *DomainResource) Read(ctx context.Context, req resource.ReadRequest, res
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Domains.AutomationGetDomain(ctx, *request)
+	res, err := r.client.Domains.GetDomain(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -1501,7 +1501,7 @@ func (r *DomainResource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Domains.AutomationCreateOrUpdateDomain(ctx, *request)
+	res, err := r.client.Domains.CreateOrUpdateDomain(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -1569,7 +1569,7 @@ func (r *DomainResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Domains.AutomationDeleteDomain(ctx, *request)
+	res, err := r.client.Domains.DeleteDomain(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

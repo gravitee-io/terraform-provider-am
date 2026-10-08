@@ -227,7 +227,7 @@ func (r *ReporterResource) Create(ctx context.Context, req resource.CreateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Reporters.AutomationCreateOrUpdateReporter(ctx, *request)
+	res, err := r.client.Reporters.UpsertReporter(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -287,7 +287,7 @@ func (r *ReporterResource) Read(ctx context.Context, req resource.ReadRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Reporters.AutomationGetReporter(ctx, *request)
+	res, err := r.client.Reporters.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -349,7 +349,7 @@ func (r *ReporterResource) Update(ctx context.Context, req resource.UpdateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Reporters.AutomationCreateOrUpdateReporter(ctx, *request)
+	res, err := r.client.Reporters.UpsertReporter(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -417,7 +417,7 @@ func (r *ReporterResource) Delete(ctx context.Context, req resource.DeleteReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Reporters.AutomationDeleteReporter(ctx, *request)
+	res, err := r.client.Reporters.DeleteByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

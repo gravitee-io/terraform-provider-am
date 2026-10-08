@@ -32,9 +32,9 @@ func newDomains(rootSDK *GraviteeAm, sdkConfig config.SDKConfiguration, hooks *h
 	}
 }
 
-// AutomationListDomains - List all domains
+// GetDomains - List all domains
 // Returns all security domains within the specified environment.
-func (s *Domains) AutomationListDomains(ctx context.Context, request operations.AutomationListDomainsRequest, opts ...operations.Option) (*operations.AutomationListDomainsResponse, error) {
+func (s *Domains) GetDomains(ctx context.Context, request operations.AutomationListDomainsRequest, opts ...operations.Option) (*operations.AutomationListDomainsResponse, error) {
 	globals := operations.AutomationListDomainsGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -272,9 +272,9 @@ func (s *Domains) AutomationListDomains(ctx context.Context, request operations.
 
 }
 
-// AutomationCreateOrUpdateDomain - Create or update a domain
+// CreateOrUpdateDomain - Create or update a domain
 // Idempotent create-or-update. Uses the key field in the body to identify the domain. On first apply the domain is created; subsequent applies update it. dataPlaneId is optional at creation, resolved from the environment's data planes when omitted, and immutable afterwards. When dryRun is true, the endpoint validates the payload without persisting; the returned domain carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
-func (s *Domains) AutomationCreateOrUpdateDomain(ctx context.Context, request operations.AutomationCreateOrUpdateDomainRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateDomainResponse, error) {
+func (s *Domains) CreateOrUpdateDomain(ctx context.Context, request operations.AutomationCreateOrUpdateDomainRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateDomainResponse, error) {
 	globals := operations.AutomationCreateOrUpdateDomainGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -510,9 +510,9 @@ func (s *Domains) AutomationCreateOrUpdateDomain(ctx context.Context, request op
 
 }
 
-// AutomationDeleteDomain - Delete a domain
+// DeleteDomain - Delete a domain
 // Deletes an Automation-managed domain. Deletion cascades to the domain's sub-resources (certificates, identity providers, and reporters). Deleting a domain that does not exist also returns 204.
-func (s *Domains) AutomationDeleteDomain(ctx context.Context, request operations.AutomationDeleteDomainRequest, opts ...operations.Option) (*operations.AutomationDeleteDomainResponse, error) {
+func (s *Domains) DeleteDomain(ctx context.Context, request operations.AutomationDeleteDomainRequest, opts ...operations.Option) (*operations.AutomationDeleteDomainResponse, error) {
 	globals := operations.AutomationDeleteDomainGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -733,9 +733,9 @@ func (s *Domains) AutomationDeleteDomain(ctx context.Context, request operations
 
 }
 
-// AutomationGetDomain - Get a domain
+// GetDomain - Get a domain
 // Retrieves a single Automation-managed security domain by its key.
-func (s *Domains) AutomationGetDomain(ctx context.Context, request operations.AutomationGetDomainRequest, opts ...operations.Option) (*operations.AutomationGetDomainResponse, error) {
+func (s *Domains) GetDomain(ctx context.Context, request operations.AutomationGetDomainRequest, opts ...operations.Option) (*operations.AutomationGetDomainResponse, error) {
 	globals := operations.AutomationGetDomainGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -960,9 +960,9 @@ func (s *Domains) AutomationGetDomain(ctx context.Context, request operations.Au
 
 }
 
-// AutomationListCertificates - List a domain's certificates
+// List a domain's certificates
 // Returns all certificates managed by the Automation API under the domain. Certificates created outside the Automation API are not returned.
-func (s *Domains) AutomationListCertificates(ctx context.Context, request operations.AutomationListCertificatesRequest, opts ...operations.Option) (*operations.AutomationListCertificatesResponse, error) {
+func (s *Domains) List(ctx context.Context, request operations.AutomationListCertificatesRequest, opts ...operations.Option) (*operations.AutomationListCertificatesResponse, error) {
 	globals := operations.AutomationListCertificatesGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -1187,9 +1187,9 @@ func (s *Domains) AutomationListCertificates(ctx context.Context, request operat
 
 }
 
-// AutomationCreateOrUpdateCertificate - Create or update a certificate
+// CreateOrUpdate - Create or update a certificate
 // Idempotent create-or-update. Uses the key field in the body to identify the certificate within the domain. Re-applying an unchanged definition is a no-op. The system flag is immutable; changing it requires deleting and recreating the certificate. When dryRun is true, the endpoint validates the payload without persisting; the returned certificate carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
-func (s *Domains) AutomationCreateOrUpdateCertificate(ctx context.Context, request operations.AutomationCreateOrUpdateCertificateRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateCertificateResponse, error) {
+func (s *Domains) CreateOrUpdate(ctx context.Context, request operations.AutomationCreateOrUpdateCertificateRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateCertificateResponse, error) {
 	globals := operations.AutomationCreateOrUpdateCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -1427,9 +1427,9 @@ func (s *Domains) AutomationCreateOrUpdateCertificate(ctx context.Context, reque
 
 }
 
-// AutomationDeleteCertificate - Delete a certificate
+// Delete a certificate
 // Deletes an Automation-managed certificate by its key. A domain that names it by key in saml.certificate or certificateSettings.fallbackCertificate keeps the reference, which resolves again once a certificate with the same key is created. Deleting a certificate that does not exist also returns 204.
-func (s *Domains) AutomationDeleteCertificate(ctx context.Context, request operations.AutomationDeleteCertificateRequest, opts ...operations.Option) (*operations.AutomationDeleteCertificateResponse, error) {
+func (s *Domains) Delete(ctx context.Context, request operations.AutomationDeleteCertificateRequest, opts ...operations.Option) (*operations.AutomationDeleteCertificateResponse, error) {
 	globals := operations.AutomationDeleteCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -1650,9 +1650,9 @@ func (s *Domains) AutomationDeleteCertificate(ctx context.Context, request opera
 
 }
 
-// AutomationGetCertificate - Get a certificate
+// GetCertificate - Get a certificate
 // Retrieves a single Automation-managed certificate by its key.
-func (s *Domains) AutomationGetCertificate(ctx context.Context, request operations.AutomationGetCertificateRequest, opts ...operations.Option) (*operations.AutomationGetCertificateResponse, error) {
+func (s *Domains) GetCertificate(ctx context.Context, request operations.AutomationGetCertificateRequest, opts ...operations.Option) (*operations.AutomationGetCertificateResponse, error) {
 	globals := operations.AutomationGetCertificateGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -1877,926 +1877,9 @@ func (s *Domains) AutomationGetCertificate(ctx context.Context, request operatio
 
 }
 
-// AutomationListIdentityProviders - List a domain's identity providers
-// Returns all identity providers managed by the Automation API under the domain. Identity providers created outside the Automation API are not returned.
-func (s *Domains) AutomationListIdentityProviders(ctx context.Context, request operations.AutomationListIdentityProvidersRequest, opts ...operations.Option) (*operations.AutomationListIdentityProvidersResponse, error) {
-	globals := operations.AutomationListIdentityProvidersGlobals{
-		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
-		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
-	}
-
-	o := operations.Options{}
-	supportedOptions := []string{
-		operations.SupportedOptionRetries,
-		operations.SupportedOptionTimeout,
-	}
-
-	for _, opt := range opts {
-		if err := opt(&o, supportedOptions...); err != nil {
-			return nil, fmt.Errorf("error applying option: %w", err)
-		}
-	}
-
-	var baseURL string
-	if o.ServerURL == nil {
-		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	} else {
-		baseURL = *o.ServerURL
-	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities", request, globals)
-	if err != nil {
-		return nil, fmt.Errorf("error generating URL: %w", err)
-	}
-
-	hookCtx := hooks.HookContext{
-		SDK:              s.rootSDK,
-		SDKConfiguration: s.sdkConfiguration,
-		BaseURL:          baseURL,
-		Context:          ctx,
-		OperationID:      "automationListIdentityProviders",
-		OAuth2Scopes:     nil,
-		SecuritySource:   s.sdkConfiguration.Security,
-	}
-
-	timeout := o.Timeout
-	if timeout == nil {
-		timeout = s.sdkConfiguration.Timeout
-	}
-
-	if timeout != nil {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *timeout)
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
-		return nil, err
-	}
-
-	for k, v := range o.SetHeaders {
-		req.Header.Set(k, v)
-	}
-
-	globalRetryConfig := s.sdkConfiguration.RetryConfig
-	retryConfig := o.Retries
-	if retryConfig == nil {
-		if globalRetryConfig != nil {
-			retryConfig = globalRetryConfig
-		} else {
-			retryConfig = &retry.Config{
-				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
-					InitialInterval: 500,
-					MaxInterval:     30000,
-					Exponent:        1.5,
-					MaxElapsedTime:  60000,
-				},
-				RetryConnectionErrors: true,
-			}
-		}
-	}
-
-	var httpRes *http.Response
-	if retryConfig != nil {
-		httpRes, err = utils.Retry(ctx, utils.Retries{
-			Config: retryConfig,
-			StatusCodes: []string{
-				"5XX",
-			},
-		}, func() (*http.Response, error) {
-			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
-				copyBody, err := req.GetBody()
-
-				if err != nil {
-					return nil, err
-				}
-
-				req.Body = copyBody
-			}
-
-			req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-			if err != nil {
-				if retry.IsPermanentError(err) || retry.IsTemporaryError(err) {
-					return nil, err
-				}
-
-				return nil, retry.Permanent(err)
-			}
-
-			httpRes, err := s.sdkConfiguration.Client.Do(req)
-			if err != nil || httpRes == nil {
-				if err != nil {
-					err = fmt.Errorf("error sending request: %w", err)
-				} else {
-					err = fmt.Errorf("error sending request: no response")
-				}
-
-				_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-			}
-			return httpRes, err
-		})
-
-		if err != nil {
-			return nil, err
-		} else {
-			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-			if err != nil {
-				return nil, err
-			}
-		}
-	} else {
-		req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-		if err != nil {
-			return nil, err
-		}
-
-		httpRes, err = s.sdkConfiguration.Client.Do(req)
-		if err != nil || httpRes == nil {
-			if err != nil {
-				err = fmt.Errorf("error sending request: %w", err)
-			} else {
-				err = fmt.Errorf("error sending request: no response")
-			}
-
-			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-			return nil, err
-		} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
-			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
-			if err != nil {
-				return nil, err
-			} else if _httpRes != nil {
-				httpRes = _httpRes
-			}
-		} else {
-			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-			if err != nil {
-				return nil, err
-			}
-		}
-	}
-
-	res := &operations.AutomationListIdentityProvidersResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: httpRes.Header.Get("Content-Type"),
-		RawResponse: httpRes,
-	}
-
-	switch {
-	case httpRes.StatusCode == 200:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out []shared.AutomationIdentityProvider
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.AutomationIdentityProviders = out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
-	case httpRes.StatusCode == 403:
-		fallthrough
-	case httpRes.StatusCode == 404:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.Error
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Error = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
-	}
-
-	return res, nil
-
-}
-
-// AutomationCreateOrUpdateIdentityProvider - Create or update an identity provider
-// Idempotent create-or-update. Uses the key field in the body to identify the identity provider within the domain. On first apply the identity provider is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the identity provider. When dryRun is true, the endpoint validates the payload without persisting; the returned identity provider carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
-func (s *Domains) AutomationCreateOrUpdateIdentityProvider(ctx context.Context, request operations.AutomationCreateOrUpdateIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateIdentityProviderResponse, error) {
-	globals := operations.AutomationCreateOrUpdateIdentityProviderGlobals{
-		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
-		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
-	}
-
-	o := operations.Options{}
-	supportedOptions := []string{
-		operations.SupportedOptionRetries,
-		operations.SupportedOptionTimeout,
-	}
-
-	for _, opt := range opts {
-		if err := opt(&o, supportedOptions...); err != nil {
-			return nil, fmt.Errorf("error applying option: %w", err)
-		}
-	}
-
-	var baseURL string
-	if o.ServerURL == nil {
-		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	} else {
-		baseURL = *o.ServerURL
-	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities", request, globals)
-	if err != nil {
-		return nil, fmt.Errorf("error generating URL: %w", err)
-	}
-
-	hookCtx := hooks.HookContext{
-		SDK:              s.rootSDK,
-		SDKConfiguration: s.sdkConfiguration,
-		BaseURL:          baseURL,
-		Context:          ctx,
-		OperationID:      "automationCreateOrUpdateIdentityProvider",
-		OAuth2Scopes:     nil,
-		SecuritySource:   s.sdkConfiguration.Security,
-	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AutomationIdentityProvider", "json", `request:"mediaType=application/json"`)
-	if err != nil {
-		return nil, err
-	}
-
-	timeout := o.Timeout
-	if timeout == nil {
-		timeout = s.sdkConfiguration.Timeout
-	}
-
-	if timeout != nil {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *timeout)
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-	if reqContentType != "" {
-		req.Header.Set("Content-Type", reqContentType)
-	}
-
-	if err := utils.PopulateQueryParams(ctx, req, request, globals, nil); err != nil {
-		return nil, fmt.Errorf("error populating query params: %w", err)
-	}
-
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
-		return nil, err
-	}
-
-	for k, v := range o.SetHeaders {
-		req.Header.Set(k, v)
-	}
-
-	globalRetryConfig := s.sdkConfiguration.RetryConfig
-	retryConfig := o.Retries
-	if retryConfig == nil {
-		if globalRetryConfig != nil {
-			retryConfig = globalRetryConfig
-		} else {
-			retryConfig = &retry.Config{
-				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
-					InitialInterval: 500,
-					MaxInterval:     30000,
-					Exponent:        1.5,
-					MaxElapsedTime:  60000,
-				},
-				RetryConnectionErrors: true,
-			}
-		}
-	}
-
-	var httpRes *http.Response
-	if retryConfig != nil {
-		httpRes, err = utils.Retry(ctx, utils.Retries{
-			Config: retryConfig,
-			StatusCodes: []string{
-				"5XX",
-			},
-		}, func() (*http.Response, error) {
-			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
-				copyBody, err := req.GetBody()
-
-				if err != nil {
-					return nil, err
-				}
-
-				req.Body = copyBody
-			}
-
-			req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-			if err != nil {
-				if retry.IsPermanentError(err) || retry.IsTemporaryError(err) {
-					return nil, err
-				}
-
-				return nil, retry.Permanent(err)
-			}
-
-			httpRes, err := s.sdkConfiguration.Client.Do(req)
-			if err != nil || httpRes == nil {
-				if err != nil {
-					err = fmt.Errorf("error sending request: %w", err)
-				} else {
-					err = fmt.Errorf("error sending request: no response")
-				}
-
-				_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-			}
-			return httpRes, err
-		})
-
-		if err != nil {
-			return nil, err
-		} else {
-			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-			if err != nil {
-				return nil, err
-			}
-		}
-	} else {
-		req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-		if err != nil {
-			return nil, err
-		}
-
-		httpRes, err = s.sdkConfiguration.Client.Do(req)
-		if err != nil || httpRes == nil {
-			if err != nil {
-				err = fmt.Errorf("error sending request: %w", err)
-			} else {
-				err = fmt.Errorf("error sending request: no response")
-			}
-
-			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-			return nil, err
-		} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
-			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
-			if err != nil {
-				return nil, err
-			} else if _httpRes != nil {
-				httpRes = _httpRes
-			}
-		} else {
-			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-			if err != nil {
-				return nil, err
-			}
-		}
-	}
-
-	res := &operations.AutomationCreateOrUpdateIdentityProviderResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: httpRes.Header.Get("Content-Type"),
-		RawResponse: httpRes,
-	}
-
-	switch {
-	case httpRes.StatusCode == 200:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.AutomationIdentityProvider
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.AutomationIdentityProvider = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
-	case httpRes.StatusCode == 400:
-		fallthrough
-	case httpRes.StatusCode == 403:
-		fallthrough
-	case httpRes.StatusCode == 404:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.Error
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Error = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
-	}
-
-	return res, nil
-
-}
-
-// AutomationDeleteIdentityProvider - Delete an identity provider
-// Deletes an Automation-managed identity provider by its key. A domain that names it in accountSettings.defaultIdentityProviderForRegistration keeps the reference, which resolves again once an identity provider with the same key is created. Deleting an identity provider that does not exist also returns 204.
-func (s *Domains) AutomationDeleteIdentityProvider(ctx context.Context, request operations.AutomationDeleteIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationDeleteIdentityProviderResponse, error) {
-	globals := operations.AutomationDeleteIdentityProviderGlobals{
-		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
-		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
-	}
-
-	o := operations.Options{}
-	supportedOptions := []string{
-		operations.SupportedOptionRetries,
-		operations.SupportedOptionTimeout,
-	}
-
-	for _, opt := range opts {
-		if err := opt(&o, supportedOptions...); err != nil {
-			return nil, fmt.Errorf("error applying option: %w", err)
-		}
-	}
-
-	var baseURL string
-	if o.ServerURL == nil {
-		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	} else {
-		baseURL = *o.ServerURL
-	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities/{identityKey}", request, globals)
-	if err != nil {
-		return nil, fmt.Errorf("error generating URL: %w", err)
-	}
-
-	hookCtx := hooks.HookContext{
-		SDK:              s.rootSDK,
-		SDKConfiguration: s.sdkConfiguration,
-		BaseURL:          baseURL,
-		Context:          ctx,
-		OperationID:      "automationDeleteIdentityProvider",
-		OAuth2Scopes:     nil,
-		SecuritySource:   s.sdkConfiguration.Security,
-	}
-
-	timeout := o.Timeout
-	if timeout == nil {
-		timeout = s.sdkConfiguration.Timeout
-	}
-
-	if timeout != nil {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *timeout)
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "DELETE", opURL, nil)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
-		return nil, err
-	}
-
-	for k, v := range o.SetHeaders {
-		req.Header.Set(k, v)
-	}
-
-	globalRetryConfig := s.sdkConfiguration.RetryConfig
-	retryConfig := o.Retries
-	if retryConfig == nil {
-		if globalRetryConfig != nil {
-			retryConfig = globalRetryConfig
-		} else {
-			retryConfig = &retry.Config{
-				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
-					InitialInterval: 500,
-					MaxInterval:     30000,
-					Exponent:        1.5,
-					MaxElapsedTime:  60000,
-				},
-				RetryConnectionErrors: true,
-			}
-		}
-	}
-
-	var httpRes *http.Response
-	if retryConfig != nil {
-		httpRes, err = utils.Retry(ctx, utils.Retries{
-			Config: retryConfig,
-			StatusCodes: []string{
-				"5XX",
-			},
-		}, func() (*http.Response, error) {
-			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
-				copyBody, err := req.GetBody()
-
-				if err != nil {
-					return nil, err
-				}
-
-				req.Body = copyBody
-			}
-
-			req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-			if err != nil {
-				if retry.IsPermanentError(err) || retry.IsTemporaryError(err) {
-					return nil, err
-				}
-
-				return nil, retry.Permanent(err)
-			}
-
-			httpRes, err := s.sdkConfiguration.Client.Do(req)
-			if err != nil || httpRes == nil {
-				if err != nil {
-					err = fmt.Errorf("error sending request: %w", err)
-				} else {
-					err = fmt.Errorf("error sending request: no response")
-				}
-
-				_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-			}
-			return httpRes, err
-		})
-
-		if err != nil {
-			return nil, err
-		} else {
-			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-			if err != nil {
-				return nil, err
-			}
-		}
-	} else {
-		req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-		if err != nil {
-			return nil, err
-		}
-
-		httpRes, err = s.sdkConfiguration.Client.Do(req)
-		if err != nil || httpRes == nil {
-			if err != nil {
-				err = fmt.Errorf("error sending request: %w", err)
-			} else {
-				err = fmt.Errorf("error sending request: no response")
-			}
-
-			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-			return nil, err
-		} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
-			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
-			if err != nil {
-				return nil, err
-			} else if _httpRes != nil {
-				httpRes = _httpRes
-			}
-		} else {
-			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-			if err != nil {
-				return nil, err
-			}
-		}
-	}
-
-	res := &operations.AutomationDeleteIdentityProviderResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: httpRes.Header.Get("Content-Type"),
-		RawResponse: httpRes,
-	}
-
-	switch {
-	case httpRes.StatusCode == 204:
-		utils.DrainBody(httpRes)
-	case httpRes.StatusCode == 403:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.Error
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Error = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
-	default:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.Error
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Error = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
-	case httpRes.StatusCode == 404:
-		utils.DrainBody(httpRes)
-	}
-
-	return res, nil
-
-}
-
-// AutomationGetIdentityProvider - Get an identity provider
-// Retrieves a single Automation-managed identity provider by its key.
-func (s *Domains) AutomationGetIdentityProvider(ctx context.Context, request operations.AutomationGetIdentityProviderRequest, opts ...operations.Option) (*operations.AutomationGetIdentityProviderResponse, error) {
-	globals := operations.AutomationGetIdentityProviderGlobals{
-		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
-		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
-	}
-
-	o := operations.Options{}
-	supportedOptions := []string{
-		operations.SupportedOptionRetries,
-		operations.SupportedOptionTimeout,
-	}
-
-	for _, opt := range opts {
-		if err := opt(&o, supportedOptions...); err != nil {
-			return nil, fmt.Errorf("error applying option: %w", err)
-		}
-	}
-
-	var baseURL string
-	if o.ServerURL == nil {
-		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	} else {
-		baseURL = *o.ServerURL
-	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/domains/{domainKey}/identities/{identityKey}", request, globals)
-	if err != nil {
-		return nil, fmt.Errorf("error generating URL: %w", err)
-	}
-
-	hookCtx := hooks.HookContext{
-		SDK:              s.rootSDK,
-		SDKConfiguration: s.sdkConfiguration,
-		BaseURL:          baseURL,
-		Context:          ctx,
-		OperationID:      "automationGetIdentityProvider",
-		OAuth2Scopes:     nil,
-		SecuritySource:   s.sdkConfiguration.Security,
-	}
-
-	timeout := o.Timeout
-	if timeout == nil {
-		timeout = s.sdkConfiguration.Timeout
-	}
-
-	if timeout != nil {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *timeout)
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
-		return nil, err
-	}
-
-	for k, v := range o.SetHeaders {
-		req.Header.Set(k, v)
-	}
-
-	globalRetryConfig := s.sdkConfiguration.RetryConfig
-	retryConfig := o.Retries
-	if retryConfig == nil {
-		if globalRetryConfig != nil {
-			retryConfig = globalRetryConfig
-		} else {
-			retryConfig = &retry.Config{
-				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
-					InitialInterval: 500,
-					MaxInterval:     30000,
-					Exponent:        1.5,
-					MaxElapsedTime:  60000,
-				},
-				RetryConnectionErrors: true,
-			}
-		}
-	}
-
-	var httpRes *http.Response
-	if retryConfig != nil {
-		httpRes, err = utils.Retry(ctx, utils.Retries{
-			Config: retryConfig,
-			StatusCodes: []string{
-				"5XX",
-			},
-		}, func() (*http.Response, error) {
-			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
-				copyBody, err := req.GetBody()
-
-				if err != nil {
-					return nil, err
-				}
-
-				req.Body = copyBody
-			}
-
-			req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-			if err != nil {
-				if retry.IsPermanentError(err) || retry.IsTemporaryError(err) {
-					return nil, err
-				}
-
-				return nil, retry.Permanent(err)
-			}
-
-			httpRes, err := s.sdkConfiguration.Client.Do(req)
-			if err != nil || httpRes == nil {
-				if err != nil {
-					err = fmt.Errorf("error sending request: %w", err)
-				} else {
-					err = fmt.Errorf("error sending request: no response")
-				}
-
-				_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-			}
-			return httpRes, err
-		})
-
-		if err != nil {
-			return nil, err
-		} else {
-			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-			if err != nil {
-				return nil, err
-			}
-		}
-	} else {
-		req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-		if err != nil {
-			return nil, err
-		}
-
-		httpRes, err = s.sdkConfiguration.Client.Do(req)
-		if err != nil || httpRes == nil {
-			if err != nil {
-				err = fmt.Errorf("error sending request: %w", err)
-			} else {
-				err = fmt.Errorf("error sending request: no response")
-			}
-
-			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-			return nil, err
-		} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
-			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
-			if err != nil {
-				return nil, err
-			} else if _httpRes != nil {
-				httpRes = _httpRes
-			}
-		} else {
-			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-			if err != nil {
-				return nil, err
-			}
-		}
-	}
-
-	res := &operations.AutomationGetIdentityProviderResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: httpRes.Header.Get("Content-Type"),
-		RawResponse: httpRes,
-	}
-
-	switch {
-	case httpRes.StatusCode == 200:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.AutomationIdentityProvider
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.AutomationIdentityProvider = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
-	case httpRes.StatusCode == 403:
-		fallthrough
-	case httpRes.StatusCode == 404:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.Error
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Error = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
-	}
-
-	return res, nil
-
-}
-
-// AutomationListReporters - List a domain's reporters
+// GetReporters - List a domain's reporters
 // Returns all reporters managed by the Automation API under the domain. Reporters created outside the Automation API are not returned.
-func (s *Domains) AutomationListReporters(ctx context.Context, request operations.AutomationListReportersRequest, opts ...operations.Option) (*operations.AutomationListReportersResponse, error) {
+func (s *Domains) GetReporters(ctx context.Context, request operations.AutomationListReportersRequest, opts ...operations.Option) (*operations.AutomationListReportersResponse, error) {
 	globals := operations.AutomationListReportersGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -3021,9 +2104,9 @@ func (s *Domains) AutomationListReporters(ctx context.Context, request operation
 
 }
 
-// AutomationCreateOrUpdateReporter - Create or update a reporter
+// UpsertReporter - Create or update a reporter
 // Idempotent create-or-update. Uses the key field in the body to identify the reporter within the domain. On first apply the reporter is created; subsequent applies update it. The system flag is immutable; changing it requires deleting and recreating the reporter. When dryRun is true, the endpoint validates the payload without persisting; the returned reporter carries a dryRunErrors list (empty on success, populated with validation errors otherwise).
-func (s *Domains) AutomationCreateOrUpdateReporter(ctx context.Context, request operations.AutomationCreateOrUpdateReporterRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateReporterResponse, error) {
+func (s *Domains) UpsertReporter(ctx context.Context, request operations.AutomationCreateOrUpdateReporterRequest, opts ...operations.Option) (*operations.AutomationCreateOrUpdateReporterResponse, error) {
 	globals := operations.AutomationCreateOrUpdateReporterGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -3261,9 +2344,9 @@ func (s *Domains) AutomationCreateOrUpdateReporter(ctx context.Context, request 
 
 }
 
-// AutomationDeleteReporter - Delete a reporter
+// DeleteByID - Delete a reporter
 // Deletes an Automation-managed reporter by its key. Deleting a reporter that does not exist also returns 204.
-func (s *Domains) AutomationDeleteReporter(ctx context.Context, request operations.AutomationDeleteReporterRequest, opts ...operations.Option) (*operations.AutomationDeleteReporterResponse, error) {
+func (s *Domains) DeleteByID(ctx context.Context, request operations.AutomationDeleteReporterRequest, opts ...operations.Option) (*operations.AutomationDeleteReporterResponse, error) {
 	globals := operations.AutomationDeleteReporterGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -3484,9 +2567,9 @@ func (s *Domains) AutomationDeleteReporter(ctx context.Context, request operatio
 
 }
 
-// AutomationGetReporter - Get a reporter
+// Get a reporter
 // Retrieves a single Automation-managed reporter by its key.
-func (s *Domains) AutomationGetReporter(ctx context.Context, request operations.AutomationGetReporterRequest, opts ...operations.Option) (*operations.AutomationGetReporterResponse, error) {
+func (s *Domains) Get(ctx context.Context, request operations.AutomationGetReporterRequest, opts ...operations.Option) (*operations.AutomationGetReporterResponse, error) {
 	globals := operations.AutomationGetReporterGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,

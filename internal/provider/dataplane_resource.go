@@ -188,7 +188,7 @@ func (r *DataPlaneResource) Create(ctx context.Context, req resource.CreateReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.DataPlanes.AutomationCreateOrUpdateDataPlane(ctx, *request)
+	res, err := r.client.DataPlanes.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -255,7 +255,7 @@ func (r *DataPlaneResource) Read(ctx context.Context, req resource.ReadRequest, 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.DataPlanes.AutomationGetDataPlane(ctx, *request)
+	res, err := r.client.DataPlanes.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -317,7 +317,7 @@ func (r *DataPlaneResource) Update(ctx context.Context, req resource.UpdateReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.DataPlanes.AutomationCreateOrUpdateDataPlane(ctx, *request)
+	res, err := r.client.DataPlanes.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -385,7 +385,7 @@ func (r *DataPlaneResource) Delete(ctx context.Context, req resource.DeleteReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.DataPlanes.AutomationDeleteDataPlane(ctx, *request)
+	res, err := r.client.DataPlanes.Delete(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

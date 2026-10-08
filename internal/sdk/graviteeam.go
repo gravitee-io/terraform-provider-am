@@ -61,13 +61,11 @@ func Pointer[T any](v T) *T { return &v }
 // Compatible with Gravitee Access Management 4.13.0.
 type GraviteeAm struct {
 	SDKVersion string
-	// Data planes configured under an environment to store the runtime data of its domains.
 	DataPlanes *DataPlanes
 	// Security domains: the top-level container for an authentication and authorization configuration. Create, read, update, and delete domains, and reach their sub-resources.
 	Domains *Domains
 	// Certificates configured under a domain to sign and verify tokens.
-	Certificates *Certificates
-	// Identity providers configured under a domain to authenticate users.
+	Certificates      *Certificates
 	IdentityProviders *IdentityProviders
 	// Reporters configured under a domain to persist audit events to a backend.
 	Reporters *Reporters
@@ -160,10 +158,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *GraviteeAm {
 	sdk := &GraviteeAm{
-		SDKVersion: "0.0.2",
+		SDKVersion: "0.1.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/terraform 0.0.2 2.941.0 4.14.0 github.com/gravitee-io/terraform-provider-am/internal/sdk",
-			SDKVersion:        "0.0.2",
+			UserAgent:         "speakeasy-sdk/terraform 0.1.0 2.941.0 4.14.0 github.com/gravitee-io/terraform-provider-am/internal/sdk",
+			SDKVersion:        "0.1.0",
 			GenVersion:        "2.941.0",
 			OpenAPIDocVersion: "4.14.0",
 			Globals:           globals.Globals{},

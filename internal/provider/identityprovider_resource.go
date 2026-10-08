@@ -212,7 +212,7 @@ func (r *IdentityProviderResource) Create(ctx context.Context, req resource.Crea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.IdentityProviders.AutomationCreateOrUpdateIdentityProvider(ctx, *request)
+	res, err := r.client.IdentityProviders.CreateOrUpdateIdentity(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -272,7 +272,7 @@ func (r *IdentityProviderResource) Read(ctx context.Context, req resource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.IdentityProviders.AutomationGetIdentityProvider(ctx, *request)
+	res, err := r.client.IdentityProviders.GetByID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -334,7 +334,7 @@ func (r *IdentityProviderResource) Update(ctx context.Context, req resource.Upda
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.IdentityProviders.AutomationCreateOrUpdateIdentityProvider(ctx, *request)
+	res, err := r.client.IdentityProviders.CreateOrUpdateIdentity(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -402,7 +402,7 @@ func (r *IdentityProviderResource) Delete(ctx context.Context, req resource.Dele
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.IdentityProviders.AutomationDeleteIdentityProvider(ctx, *request)
+	res, err := r.client.IdentityProviders.DeleteByIdentity(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

@@ -1012,7 +1012,7 @@ func (r *DomainDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Domains.AutomationGetDomain(ctx, *request)
+	res, err := r.client.Domains.GetDomain(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

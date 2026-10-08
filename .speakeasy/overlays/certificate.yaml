@@ -51,15 +51,10 @@ actions:
         schemaType: customtypes.MaskedJSONType{}
         valueType: customtypes.MaskedJSON
 
-  # Immutable after creation — changing these forces resource recreation.
+  # key is the identity — changing it forces resource recreation. type and system stay in-place
+  # so AM rejects their change instead of the provider silently replacing the resource.
   # create/update share one PUT op, so ForceNew is not auto-inferred; set it explicitly.
   - target: $.components.schemas.AutomationCertificate.properties.key
-    update:
-      x-speakeasy-param-force-new: true
-  - target: $.components.schemas.AutomationCertificate.properties.type
-    update:
-      x-speakeasy-param-force-new: true
-  - target: $.components.schemas.AutomationCertificate.properties.system
     update:
       x-speakeasy-param-force-new: true
 

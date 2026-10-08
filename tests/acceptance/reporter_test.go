@@ -48,3 +48,16 @@ func TestReporter(t *testing.T) {
 		},
 	})
 }
+
+func TestReporter_ImmutableFields(t *testing.T) {
+	domainKey := uniqueKey("tf-acc-rep")
+	key := uniqueKey("audit")
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: immutableFieldSteps("am_reporter.test", fmt.Sprintf("/domains/%s/reporters/%s", domainKey, key),
+			reporterConfig(domainKey, key, true), "reporter-am-file", "reporter-am-kafka"),
+	})
+}

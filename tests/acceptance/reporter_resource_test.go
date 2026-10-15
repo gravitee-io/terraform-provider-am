@@ -4,26 +4,19 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
-func reporterConfig(domainKey, key string, enabled bool) string {
-	return domainConfig(domainKey, "Terraform acceptance") + fmt.Sprintf(`
-resource "am_reporter" "test" {
-  domain_key = am_domain.test.key
-  key        = %[1]q
-  name       = "Terraform acceptance audit"
-  type       = "reporter-am-file"
-  enabled    = %[2]t
-  configuration = jsonencode({
-    filename = %[1]q
-  })
-}
-`, key, enabled)
+// reporterVariables returns the variables of a reporter testdata config, merged with the test's own.
+func reporterVariables(domainKey, key string, own config.Variables) config.Variables {
+	variables := domainVariables(domainKey, own)
+	variables["key"] = config.StringVariable(key)
+	return variables
 }
 
-func TestReporter(t *testing.T) {
+func TestReporterResource_crud(t *testing.T) {
 	domainKey := uniqueKey("tf-acc-rep")
 	key := uniqueKey("audit")
 
@@ -33,11 +26,13 @@ func TestReporter(t *testing.T) {
 		CheckDestroy:             checkDomainsDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: reporterConfig(domainKey, key, true),
-				Check:  resource.TestCheckResourceAttr("am_reporter.test", "enabled", "true"),
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: reporterVariables(domainKey, key, config.Variables{"enabled": config.BoolVariable(true)}),
+				Check:           resource.TestCheckResourceAttr("am_reporter.test", "enabled", "true"),
 			},
 			{
-				Config: reporterConfig(domainKey, key, false),
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: reporterVariables(domainKey, key, config.Variables{"enabled": config.BoolVariable(false)}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("am_reporter.test", plancheck.ResourceActionUpdate),
@@ -49,7 +44,7 @@ func TestReporter(t *testing.T) {
 	})
 }
 
-func TestReporter_ImmutableFields(t *testing.T) {
+func TestReporterResource_immutableFields(t *testing.T) {
 	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-rep")
 	key := uniqueKey("audit")
@@ -59,6 +54,6 @@ func TestReporter_ImmutableFields(t *testing.T) {
 		ProtoV6ProviderFactories: testProviders(),
 		CheckDestroy:             checkDomainsDestroyed,
 		Steps: immutableFieldSteps("am_reporter.test", fmt.Sprintf("/domains/%s/reporters/%s", domainKey, key),
-			reporterConfig(domainKey, key, true), "reporter-am-file", "reporter-am-kafka"),
+			reporterVariables(domainKey, key, nil), "reporter-am-file", "reporter-am-kafka"),
 	})
 }

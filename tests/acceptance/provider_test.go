@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"maps"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -16,6 +17,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-am/internal/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
+	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
@@ -142,23 +144,31 @@ func automationConfiguration(path string) (map[string]any, error) {
 	return configuration, json.Unmarshal([]byte(raw), &configuration)
 }
 
-func domainConfig(key, name string) string {
-	return fmt.Sprintf(`
-resource "am_domain" "test" {
-  key           = %[1]q
-  name          = %[2]q
-  path          = "/%[1]s"
-  data_plane_id = %[3]q
+// domainVariables returns the variables of a testdata config holding the test domain, merged with the test's own.
+func domainVariables(domainKey string, own config.Variables) config.Variables {
+	variables := config.Variables{
+		"domain_key":    config.StringVariable(domainKey),
+		"data_plane_id": config.StringVariable(envOr("AM_TEST_DATA_PLANE_ID", "default")),
+	}
+	maps.Copy(variables, own)
+	return variables
 }
-`, key, name, envOr("AM_TEST_DATA_PLANE_ID", "default"))
+
+// with returns a copy of variables where name is set to value.
+func with(variables config.Variables, name string, value config.Variable) config.Variables {
+	changed := maps.Clone(variables)
+	changed[name] = value
+	return changed
 }
 
 // immutableFieldSteps changes type, then system, expecting an in-place update AM rejects and the resource left intact.
-func immutableFieldSteps(address, path, config, currentType, otherType string) []resource.TestStep {
-	typeLine := func(value string) string { return fmt.Sprintf("type       = %q", value) }
-	updateRejected := func(config, message string) resource.TestStep {
+// The test's config takes the resource's type and system from the "type" and "system" variables.
+func immutableFieldSteps(address, path string, variables config.Variables, currentType, otherType string) []resource.TestStep {
+	variables = with(variables, "type", config.StringVariable(currentType))
+	updateRejected := func(variables config.Variables, message string) resource.TestStep {
 		return resource.TestStep{
-			Config: config,
+			ConfigDirectory: config.TestNameDirectory(),
+			ConfigVariables: variables,
 			ConfigPlanChecks: resource.ConfigPlanChecks{
 				PreApply: []plancheck.PlanCheck{
 					plancheck.ExpectResourceAction(address, plancheck.ResourceActionUpdate),
@@ -169,12 +179,14 @@ func immutableFieldSteps(address, path, config, currentType, otherType string) [
 	}
 	return []resource.TestStep{
 		{
-			Config: config,
+			ConfigDirectory: config.TestNameDirectory(),
+			ConfigVariables: variables,
 		},
-		updateRejected(strings.Replace(config, typeLine(currentType), typeLine(otherType), 1), `The 'type' is immutable`),
-		updateRejected(strings.Replace(config, typeLine(currentType), "system     = true\n  "+typeLine(currentType), 1), `The 'system' flag is immutable`),
+		updateRejected(with(variables, "type", config.StringVariable(otherType)), `The 'type' is immutable`),
+		updateRejected(with(variables, "system", config.BoolVariable(true)), `The 'system' flag is immutable`),
 		{
-			Config: config,
+			ConfigDirectory: config.TestNameDirectory(),
+			ConfigVariables: variables,
 			ConfigPlanChecks: resource.ConfigPlanChecks{
 				PreApply: []plancheck.PlanCheck{
 					plancheck.ExpectEmptyPlan(),

@@ -6,39 +6,26 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
-func certificateConfig(t *testing.T, domainKey, key, name string) string {
+// certificateVariables returns the variables of a certificate testdata config, merged with the test's own.
+func certificateVariables(t *testing.T, domainKey, key string, own config.Variables) config.Variables {
 	keystore, err := os.ReadFile("testdata/server.jks.b64")
 	if err != nil {
 		t.Fatal(err)
 	}
-	return domainConfig(domainKey, "Terraform acceptance") + fmt.Sprintf(`
-resource "am_certificate" "test" {
-  domain_key = am_domain.test.key
-  key        = %[1]q
-  name       = %[2]q
-  type       = "javakeystore-am-certificate"
-  configuration = jsonencode({
-    jks = jsonencode({
-      name    = "server.jks"
-      type    = ""
-      size    = 2237
-      content = %[3]q
-    })
-    storepass = "letmein"
-    alias     = "mytestkey"
-    keypass   = "changeme"
-  })
-}
-`, key, name, strings.TrimSpace(string(keystore)))
+	variables := domainVariables(domainKey, own)
+	variables["key"] = config.StringVariable(key)
+	variables["keystore"] = config.StringVariable(strings.TrimSpace(string(keystore)))
+	return variables
 }
 
 // Converges although AM masks the keystore file and its passwords.
-func TestCertificate_MaskedSecrets(t *testing.T) {
+func TestCertificateResource_maskedSecrets(t *testing.T) {
 	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-cert")
 	key := uniqueKey("signing")
@@ -50,11 +37,13 @@ func TestCertificate_MaskedSecrets(t *testing.T) {
 		CheckDestroy:             checkDomainsDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: certificateConfig(t, domainKey, key, "Terraform acceptance"),
-				Check:  checkKeystoreMasked(path),
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: certificateVariables(t, domainKey, key, config.Variables{"name": config.StringVariable("Terraform acceptance")}),
+				Check:           checkKeystoreMasked(path),
 			},
 			{
-				Config: certificateConfig(t, domainKey, key, "Terraform acceptance renamed"),
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: certificateVariables(t, domainKey, key, config.Variables{"name": config.StringVariable("Terraform acceptance renamed")}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("am_certificate.test", plancheck.ResourceActionUpdate),
@@ -69,7 +58,7 @@ func TestCertificate_MaskedSecrets(t *testing.T) {
 	})
 }
 
-func TestCertificate_ImmutableFields(t *testing.T) {
+func TestCertificateResource_immutableFields(t *testing.T) {
 	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-cert")
 	key := uniqueKey("signing")
@@ -79,7 +68,7 @@ func TestCertificate_ImmutableFields(t *testing.T) {
 		ProtoV6ProviderFactories: testProviders(),
 		CheckDestroy:             checkDomainsDestroyed,
 		Steps: immutableFieldSteps("am_certificate.test", fmt.Sprintf("/domains/%s/certificates/%s", domainKey, key),
-			certificateConfig(t, domainKey, key, "Terraform acceptance"), "javakeystore-am-certificate", "pkcs12-am-certificate"),
+			certificateVariables(t, domainKey, key, nil), "javakeystore-am-certificate", "pkcs12-am-certificate"),
 	})
 }
 

@@ -150,6 +150,10 @@ so no AM instance or token is needed. The mock does not reproduce every AM
 behaviour (secret masking, computed data plane `database`), so the live run
 stays the reference.
 
+Each test's Terraform config lives in `tests/acceptance/testdata/<TestName>/main.tf`
+(or `<TestName>/<step>/main.tf` when steps need different configs); the test
+feeds it through `ConfigVariables`.
+
 ## Releasing
 
 Releases run from `.github/workflows/release.yaml`, triggered manually with

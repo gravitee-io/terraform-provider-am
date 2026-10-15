@@ -21,6 +21,45 @@ func identityProviderVariables(domainKey, key string, own config.Variables) conf
 	return variables
 }
 
+func TestIdentityProviderResource_crud(t *testing.T) {
+	domainKey := uniqueKey("tf-acc-idp")
+	key := uniqueKey("users")
+	path := fmt.Sprintf("/domains/%s/identities/%s", domainKey, key)
+	renamed := identityProviderVariables(domainKey, key, config.Variables{"name": config.StringVariable("Terraform acceptance users renamed")})
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: []resource.TestStep{
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: identityProviderVariables(domainKey, key, config.Variables{"name": config.StringVariable("Terraform acceptance users")}),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("am_identity_provider.test", "key", key),
+					resource.TestCheckResourceAttr("am_identity_provider.test", "type", "inline-am-idp"),
+					resource.TestCheckResourceAttrSet("am_identity_provider.test", "created_at"),
+					checkAM(path, "name", "Terraform acceptance users"),
+				),
+			},
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: renamed,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("am_identity_provider.test", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("am_identity_provider.test", "name", "Terraform acceptance users renamed"),
+					checkAM(path, "name", "Terraform acceptance users renamed"),
+				),
+			},
+			importStep("am_identity_provider.test", "key", renamed, "domain_key", "environment_id", "key", "organization_id"),
+		},
+	})
+}
+
 // Converges although AM masks the password in its responses.
 func TestIdentityProviderResource_maskedSecret(t *testing.T) {
 	requiresLiveAM(t)

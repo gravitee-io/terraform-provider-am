@@ -154,6 +154,35 @@ func domainVariables(domainKey string, own config.Variables) config.Variables {
 	return variables
 }
 
+// checkAM fails unless the Automation API returns field as value for path.
+func checkAM(path, field string, value any) resource.TestCheckFunc {
+	return func(*terraform.State) error {
+		body, err := automationGet(path)
+		if err != nil {
+			return err
+		}
+		if body[field] != value {
+			return fmt.Errorf("AM returned %s of %s as %v instead of %v", field, path, body[field], value)
+		}
+		return nil
+	}
+}
+
+// importStep imports address with the test's config and expects the state it had,
+// except configuration, which AM masks or never returns.
+func importStep(address, identifier string, variables config.Variables, idAttributes ...string) resource.TestStep {
+	return resource.TestStep{
+		ConfigDirectory:                      config.TestNameDirectory(),
+		ConfigVariables:                      variables,
+		ResourceName:                         address,
+		ImportState:                          true,
+		ImportStateIdFunc:                    importStateIDFunc(address, idAttributes...),
+		ImportStateVerify:                    true,
+		ImportStateVerifyIdentifierAttribute: identifier,
+		ImportStateVerifyIgnore:              []string{"configuration"},
+	}
+}
+
 // with returns a copy of variables where name is set to value.
 func with(variables config.Variables, name string, value config.Variable) config.Variables {
 	changed := maps.Clone(variables)

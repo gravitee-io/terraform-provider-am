@@ -19,6 +19,8 @@ func reporterVariables(domainKey, key string, own config.Variables) config.Varia
 func TestReporterResource_crud(t *testing.T) {
 	domainKey := uniqueKey("tf-acc-rep")
 	key := uniqueKey("audit")
+	path := fmt.Sprintf("/domains/%s/reporters/%s", domainKey, key)
+	disabled := reporterVariables(domainKey, key, config.Variables{"enabled": config.BoolVariable(false)})
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { preCheck(t) },
@@ -28,18 +30,27 @@ func TestReporterResource_crud(t *testing.T) {
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: reporterVariables(domainKey, key, config.Variables{"enabled": config.BoolVariable(true)}),
-				Check:           resource.TestCheckResourceAttr("am_reporter.test", "enabled", "true"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("am_reporter.test", "key", key),
+					resource.TestCheckResourceAttr("am_reporter.test", "type", "reporter-am-file"),
+					resource.TestCheckResourceAttrSet("am_reporter.test", "created_at"),
+					checkAM(path, "enabled", true),
+				),
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
-				ConfigVariables: reporterVariables(domainKey, key, config.Variables{"enabled": config.BoolVariable(false)}),
+				ConfigVariables: disabled,
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("am_reporter.test", plancheck.ResourceActionUpdate),
 					},
 				},
-				Check: resource.TestCheckResourceAttr("am_reporter.test", "enabled", "false"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("am_reporter.test", "enabled", "false"),
+					checkAM(path, "enabled", false),
+				),
 			},
+			importStep("am_reporter.test", "key", disabled, "domain_key", "environment_id", "key", "organization_id"),
 		},
 	})
 }

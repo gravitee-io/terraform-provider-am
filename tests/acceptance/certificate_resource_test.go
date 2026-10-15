@@ -24,6 +24,45 @@ func certificateVariables(t *testing.T, domainKey, key string, own config.Variab
 	return variables
 }
 
+func TestCertificateResource_crud(t *testing.T) {
+	domainKey := uniqueKey("tf-acc-cert")
+	key := uniqueKey("signing")
+	path := fmt.Sprintf("/domains/%s/certificates/%s", domainKey, key)
+	renamed := certificateVariables(t, domainKey, key, config.Variables{"name": config.StringVariable("Terraform acceptance renamed")})
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: []resource.TestStep{
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: certificateVariables(t, domainKey, key, config.Variables{"name": config.StringVariable("Terraform acceptance")}),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("am_certificate.test", "key", key),
+					resource.TestCheckResourceAttr("am_certificate.test", "type", "javakeystore-am-certificate"),
+					resource.TestCheckResourceAttrSet("am_certificate.test", "created_at"),
+					checkAM(path, "name", "Terraform acceptance"),
+				),
+			},
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: renamed,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("am_certificate.test", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("am_certificate.test", "name", "Terraform acceptance renamed"),
+					checkAM(path, "name", "Terraform acceptance renamed"),
+				),
+			},
+			importStep("am_certificate.test", "key", renamed, "domain_key", "environment_id", "key", "organization_id"),
+		},
+	})
+}
+
 // Converges although AM masks the keystore file and its passwords.
 func TestCertificateResource_maskedSecrets(t *testing.T) {
 	requiresLiveAM(t)

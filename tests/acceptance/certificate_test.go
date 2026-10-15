@@ -39,6 +39,7 @@ resource "am_certificate" "test" {
 
 // Converges although AM masks the keystore file and its passwords.
 func TestCertificate_MaskedSecrets(t *testing.T) {
+	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-cert")
 	key := uniqueKey("signing")
 	path := fmt.Sprintf("/domains/%s/certificates/%s", domainKey, key)
@@ -69,6 +70,7 @@ func TestCertificate_MaskedSecrets(t *testing.T) {
 }
 
 func TestCertificate_ImmutableFields(t *testing.T) {
+	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-cert")
 	key := uniqueKey("signing")
 

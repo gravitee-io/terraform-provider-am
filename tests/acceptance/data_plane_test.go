@@ -34,6 +34,7 @@ resource "am_domain" "on_data_plane" {
 
 // Converges although AM never returns a data plane's configuration.
 func TestDataPlane(t *testing.T) {
+	requiresLiveAM(t)
 	id := uniqueKey("tf-acc-dp")
 
 	resource.Test(t, resource.TestCase{

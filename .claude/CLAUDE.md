@@ -31,6 +31,9 @@ go build
 
 # Acceptance tests against a live AM (e.g. the local stack); needs a token
 AM_SA_TOKEN=<token> make acceptance-tests
+
+# Same acceptance tests against an in-process AM mock server (no AM instance required)
+make mock-tests
 ```
 
 The Speakeasy CLI must be authenticated (`speakeasy auth login`). The pinned

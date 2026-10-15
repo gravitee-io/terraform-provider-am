@@ -33,6 +33,7 @@ resource "am_identity_provider" "test" {
 
 // Converges although AM masks the password in its responses.
 func TestIdentityProvider_MaskedSecret(t *testing.T) {
+	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-idp")
 	key := uniqueKey("users")
 	path := fmt.Sprintf("/domains/%s/identities/%s", domainKey, key)
@@ -75,6 +76,7 @@ func TestIdentityProvider_MaskedSecret(t *testing.T) {
 
 // Adopts an identity provider created outside Terraform; the first apply sends the configured password.
 func TestIdentityProvider_ImportMaskedSecret(t *testing.T) {
+	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-idp")
 	key := uniqueKey("users")
 	importBlock := fmt.Sprintf(`
@@ -117,6 +119,7 @@ import {
 }
 
 func TestIdentityProvider_ImmutableFields(t *testing.T) {
+	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-idp")
 	key := uniqueKey("users")
 

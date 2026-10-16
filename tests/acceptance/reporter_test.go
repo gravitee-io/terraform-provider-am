@@ -50,6 +50,7 @@ func TestReporter(t *testing.T) {
 }
 
 func TestReporter_ImmutableFields(t *testing.T) {
+	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-rep")
 	key := uniqueKey("audit")
 

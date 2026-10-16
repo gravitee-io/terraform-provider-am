@@ -7,6 +7,8 @@
 # Consumed by the acceptance tests only:
 #   AM_TEST_MONGODB_HOST - MongoDB host AM reaches for a test data plane (defaults to "mongodb")
 #   AM_TEST_MONGODB_PORT - its port (defaults to "27017")
+#   AM_TEST_DATA_PLANE_ID - existing data plane the test domains live on (defaults to "default")
+#   AM_MOCK              - "true" runs them against an in-process AM mock server instead (set by mock-tests)
 
 AM_OAS_BRANCH ?= 4.13.x
 
@@ -60,6 +62,10 @@ unit-tests: ## Run unit tests (no AM instance required)
 .PHONY: acceptance-tests
 acceptance-tests: ## Run acceptance tests against a live AM; needs AM_SA_TOKEN (AM_SERVER_URL defaults to the local stack)
 	@TF_ACC=1 go test -count=1 -v ./tests/acceptance
+
+.PHONY: mock-tests
+mock-tests: ## Run acceptance tests against an in-process AM mock server (no AM instance required)
+	@AM_MOCK=true TF_ACC=1 go test -count=1 -v ./tests/acceptance
 
 .PHONY: help
 help: ## Display this help.

@@ -141,7 +141,14 @@ For raw Automation API context (request/response shapes, the `key` model, the
 
 ## Acceptance testing
 
-`make acceptance-tests` is a placeholder.
+`make acceptance-tests` runs `tests/acceptance` against a live AM
+(`AM_SERVER_URL`, defaulting to the local stack, and `AM_SA_TOKEN`).
+
+`make mock-tests` runs the same tests against an in-process
+[AM mock server](https://github.com/gravitee-io/gravitee-automation-sdk/tree/main/am-mock-server),
+so no AM instance or token is needed. The mock does not reproduce every AM
+behaviour (secret masking, computed data plane `database`), so the live run
+stays the reference.
 
 ## Releasing
 

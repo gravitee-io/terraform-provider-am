@@ -36,7 +36,8 @@ terraform:
   version: 0.0.1
   additionalActions: []
   additionalDataSources: []
-  additionalDependencies: {}
+  additionalDependencies:
+    github.com/gravitee-io/gravitee-automation-sdk/am-mock-server: v1.3.3
   additionalEphemeralResources: []
   additionalFunctions: []
   additionalListResources: []

@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"regexp"
 	"strings"
 	"testing"
 
+	"github.com/gravitee-io/gravitee-automation-sdk/am-mock-server/server"
 	"github.com/gravitee-io/terraform-provider-am/internal/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
@@ -24,11 +26,25 @@ const defaultServerURL = "http://localhost:8093/automation"
 
 const mask = "********"
 
+const mockTestEnv = "AM_MOCK"
+
 func TestMain(m *testing.M) {
+	if os.Getenv(mockTestEnv) == "true" {
+		os.Exit(runOnMock(m))
+	}
 	if os.Getenv("AM_SERVER_URL") == "" {
 		os.Setenv("AM_SERVER_URL", defaultServerURL)
 	}
 	os.Exit(m.Run())
+}
+
+// runOnMock runs the tests against an in-memory AM Automation API, closed once they are done.
+func runOnMock(m *testing.M) int {
+	mock := httptest.NewServer(server.New(server.NewMockAM()))
+	defer mock.Close()
+	os.Setenv("AM_SERVER_URL", mock.URL+server.BasePath)
+	os.Setenv("AM_SA_TOKEN", "mock")
+	return m.Run()
 }
 
 // testProviders serves the provider in-process for resource.TestCase.ProtoV6ProviderFactories.
@@ -132,9 +148,9 @@ resource "am_domain" "test" {
   key           = %[1]q
   name          = %[2]q
   path          = "/%[1]s"
-  data_plane_id = "default"
+  data_plane_id = %[3]q
 }
-`, key, name)
+`, key, name, envOr("AM_TEST_DATA_PLANE_ID", "default"))
 }
 
 // immutableFieldSteps changes type, then system, expecting an in-place update AM rejects and the resource left intact.
@@ -175,5 +191,11 @@ func immutableFieldSteps(address, path, config, currentType, otherType string) [
 				return nil
 			},
 		},
+	}
+}
+
+func requiresLiveAM(t *testing.T) {
+	if os.Getenv(mockTestEnv) == "true" {
+		t.Skip("Acceptance tests skipped as it requires a live AM instance")
 	}
 }

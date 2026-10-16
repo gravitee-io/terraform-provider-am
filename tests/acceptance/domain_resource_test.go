@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
-func TestDomain(t *testing.T) {
+func TestDomainResource_crud(t *testing.T) {
 	key := uniqueKey("tf-acc-domain")
 	renamedKey := uniqueKey("tf-acc-domain")
+	name := config.StringVariable("Terraform acceptance")
+	renamed := config.StringVariable("Terraform acceptance renamed")
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { preCheck(t) },
@@ -19,7 +22,8 @@ func TestDomain(t *testing.T) {
 		CheckDestroy:             checkDomainsDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: domainConfig(key, "Terraform acceptance"),
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: domainVariables(key, config.Variables{"name": name}),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("am_domain.test", "key", key),
 					resource.TestCheckResourceAttr("am_domain.test", "name", "Terraform acceptance"),
@@ -30,7 +34,8 @@ func TestDomain(t *testing.T) {
 				),
 			},
 			{
-				Config: domainConfig(key, "Terraform acceptance renamed"),
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: domainVariables(key, config.Variables{"name": renamed}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("am_domain.test", plancheck.ResourceActionUpdate),
@@ -39,6 +44,8 @@ func TestDomain(t *testing.T) {
 				Check: resource.TestCheckResourceAttr("am_domain.test", "name", "Terraform acceptance renamed"),
 			},
 			{
+				ConfigDirectory:                      config.TestNameDirectory(),
+				ConfigVariables:                      domainVariables(key, config.Variables{"name": renamed}),
 				ResourceName:                         "am_domain.test",
 				ImportState:                          true,
 				ImportStateIdFunc:                    importStateIDFunc("am_domain.test", "environment_id", "key", "organization_id"),
@@ -46,7 +53,8 @@ func TestDomain(t *testing.T) {
 				ImportStateVerifyIdentifierAttribute: "key",
 			},
 			{
-				Config: domainConfig(renamedKey, "Terraform acceptance renamed"),
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: domainVariables(renamedKey, config.Variables{"name": renamed}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("am_domain.test", plancheck.ResourceActionReplace),

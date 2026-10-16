@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
@@ -12,27 +13,55 @@ import (
 
 const inlineUserPassword = "Tf-Acc-P@ssw0rd"
 
-func identityProviderConfig(domainKey, key, firstname string) string {
-	return domainConfig(domainKey, "Terraform acceptance") + fmt.Sprintf(`
-resource "am_identity_provider" "test" {
-  domain_key = am_domain.test.key
-  key        = %[1]q
-  name       = "Terraform acceptance users"
-  type       = "inline-am-idp"
-  configuration = jsonencode({
-    users = [{
-      firstname = %[2]q
-      lastname  = "Acceptance"
-      username  = "alice"
-      password  = %[3]q
-    }]
-  })
+// identityProviderVariables returns the variables of an identity provider testdata config, merged with the test's own.
+func identityProviderVariables(domainKey, key string, own config.Variables) config.Variables {
+	variables := domainVariables(domainKey, own)
+	variables["key"] = config.StringVariable(key)
+	variables["password"] = config.StringVariable(inlineUserPassword)
+	return variables
 }
-`, key, firstname, inlineUserPassword)
+
+func TestIdentityProviderResource_crud(t *testing.T) {
+	domainKey := uniqueKey("tf-acc-idp")
+	key := uniqueKey("users")
+	path := fmt.Sprintf("/domains/%s/identities/%s", domainKey, key)
+	renamed := identityProviderVariables(domainKey, key, config.Variables{"name": config.StringVariable("Terraform acceptance users renamed")})
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: []resource.TestStep{
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: identityProviderVariables(domainKey, key, config.Variables{"name": config.StringVariable("Terraform acceptance users")}),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("am_identity_provider.test", "key", key),
+					resource.TestCheckResourceAttr("am_identity_provider.test", "type", "inline-am-idp"),
+					resource.TestCheckResourceAttrSet("am_identity_provider.test", "created_at"),
+					checkAM(path, "name", "Terraform acceptance users"),
+				),
+			},
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: renamed,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("am_identity_provider.test", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("am_identity_provider.test", "name", "Terraform acceptance users renamed"),
+					checkAM(path, "name", "Terraform acceptance users renamed"),
+				),
+			},
+			importStep("am_identity_provider.test", "key", renamed, "domain_key", "environment_id", "key", "organization_id"),
+		},
+	})
 }
 
 // Converges although AM masks the password in its responses.
-func TestIdentityProvider_MaskedSecret(t *testing.T) {
+func TestIdentityProviderResource_maskedSecret(t *testing.T) {
 	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-idp")
 	key := uniqueKey("users")
@@ -44,14 +73,16 @@ func TestIdentityProvider_MaskedSecret(t *testing.T) {
 		CheckDestroy:             checkDomainsDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: identityProviderConfig(domainKey, key, "Alice"),
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: identityProviderVariables(domainKey, key, config.Variables{"firstname": config.StringVariable("Alice")}),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttrWith("am_identity_provider.test", "configuration", containsPassword),
 					checkInlinePasswordMasked(path),
 				),
 			},
 			{
-				Config: identityProviderConfig(domainKey, key, "Alicia"),
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: identityProviderVariables(domainKey, key, config.Variables{"firstname": config.StringVariable("Alicia")}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("am_identity_provider.test", plancheck.ResourceActionUpdate),
@@ -63,6 +94,8 @@ func TestIdentityProvider_MaskedSecret(t *testing.T) {
 				),
 			},
 			{
+				ConfigDirectory:                      config.TestNameDirectory(),
+				ConfigVariables:                      identityProviderVariables(domainKey, key, config.Variables{"firstname": config.StringVariable("Alicia")}),
 				ResourceName:                         "am_identity_provider.test",
 				ImportState:                          true,
 				ImportStateIdFunc:                    importStateIDFunc("am_identity_provider.test", "domain_key", "environment_id", "key", "organization_id"),
@@ -75,16 +108,15 @@ func TestIdentityProvider_MaskedSecret(t *testing.T) {
 }
 
 // Adopts an identity provider created outside Terraform; the first apply sends the configured password.
-func TestIdentityProvider_ImportMaskedSecret(t *testing.T) {
+// Step 1 creates the domain only, step 2 imports the identity provider created in between.
+func TestIdentityProviderResource_importMaskedSecret(t *testing.T) {
 	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-idp")
 	key := uniqueKey("users")
-	importBlock := fmt.Sprintf(`
-import {
-  to = am_identity_provider.test
-  id = jsonencode({ domain_key = %q, environment_id = %q, key = %q, organization_id = %q })
-}
-`, domainKey, envOr("AM_ENV_ID", "DEFAULT"), key, envOr("AM_ORG_ID", "DEFAULT"))
+	importVariables := identityProviderVariables(domainKey, key, config.Variables{
+		"organization_id": config.StringVariable(envOr("AM_ORG_ID", "DEFAULT")),
+		"environment_id":  config.StringVariable(envOr("AM_ENV_ID", "DEFAULT")),
+	})
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { preCheck(t) },
@@ -92,7 +124,8 @@ import {
 		CheckDestroy:             checkDomainsDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: domainConfig(domainKey, "Terraform acceptance"),
+				ConfigDirectory: config.TestStepDirectory(),
+				ConfigVariables: domainVariables(domainKey, nil),
 			},
 			{
 				PreConfig: func() {
@@ -108,7 +141,8 @@ import {
 						t.Fatal(err)
 					}
 				},
-				Config: identityProviderConfig(domainKey, key, "Alice") + importBlock,
+				ConfigDirectory: config.TestStepDirectory(),
+				ConfigVariables: importVariables,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttrWith("am_identity_provider.test", "configuration", containsPassword),
 					checkInlinePasswordMasked(fmt.Sprintf("/domains/%s/identities/%s", domainKey, key)),
@@ -118,7 +152,7 @@ import {
 	})
 }
 
-func TestIdentityProvider_ImmutableFields(t *testing.T) {
+func TestIdentityProviderResource_immutableFields(t *testing.T) {
 	requiresLiveAM(t)
 	domainKey := uniqueKey("tf-acc-idp")
 	key := uniqueKey("users")
@@ -128,7 +162,7 @@ func TestIdentityProvider_ImmutableFields(t *testing.T) {
 		ProtoV6ProviderFactories: testProviders(),
 		CheckDestroy:             checkDomainsDestroyed,
 		Steps: immutableFieldSteps("am_identity_provider.test", fmt.Sprintf("/domains/%s/identities/%s", domainKey, key),
-			identityProviderConfig(domainKey, key, "Alice"), "inline-am-idp", "mongo-am-idp"),
+			identityProviderVariables(domainKey, key, nil), "inline-am-idp", "mongo-am-idp"),
 	})
 }
 

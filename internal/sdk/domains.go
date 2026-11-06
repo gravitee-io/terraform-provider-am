@@ -1012,6 +1012,7 @@ func (s *Domains) List(ctx context.Context, request operations.AutomationListCer
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationListCertificates")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -1243,6 +1244,7 @@ func (s *Domains) CreateOrUpdate(ctx context.Context, request operations.Automat
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationCreateOrUpdateCertificate")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -1702,6 +1704,7 @@ func (s *Domains) GetCertificate(ctx context.Context, request operations.Automat
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationGetCertificate")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -1929,6 +1932,7 @@ func (s *Domains) GetReporters(ctx context.Context, request operations.Automatio
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationListReporters")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -2160,6 +2164,7 @@ func (s *Domains) UpsertReporter(ctx context.Context, request operations.Automat
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationCreateOrUpdateReporter")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -2619,6 +2624,7 @@ func (s *Domains) Get(ctx context.Context, request operations.AutomationGetRepor
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationGetReporter")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

@@ -1,6 +1,6 @@
 module github.com/gravitee-io/terraform-provider-am
 
-go 1.26.8
+go 1.26.10
 
 require (
 	github.com/gravitee-io/gravitee-automation-sdk/am-mock-server v1.3.3
@@ -86,7 +86,7 @@ require (
 	golang.org/x/crypto v0.57.0 // indirect
 	golang.org/x/exp v0.0.0-20240404231335-c0f41cb1a7a0 // indirect
 	golang.org/x/mod v0.41.0 // indirect
-	golang.org/x/net v0.59.0 // indirect
+	golang.org/x/net v0.60.0 // indirect
 	golang.org/x/sync v0.23.0 // indirect
 	golang.org/x/sys v0.48.0 // indirect
 	golang.org/x/text v0.42.0 // indirect

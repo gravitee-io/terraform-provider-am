@@ -1373,8 +1373,6 @@ func (r *DomainResource) Create(ctx context.Context, req resource.CreateRequest,
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1434,8 +1432,6 @@ func (r *DomainResource) Read(ctx context.Context, req resource.ReadRequest, res
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsAutomationGetDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -1498,8 +1494,6 @@ func (r *DomainResource) Update(ctx context.Context, req resource.UpdateRequest,
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -1568,8 +1562,6 @@ func (r *DomainResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsAutomationDeleteDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

@@ -3,7 +3,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 4.13.0-alpha.8 and generator version 2.946.0
+// Generated from OpenAPI doc version 4.13.0-alpha.8 and generator version 2.956.1
 
 import (
 	"context"
@@ -160,9 +160,9 @@ func New(opts ...SDKOption) *GraviteeAm {
 	sdk := &GraviteeAm{
 		SDKVersion: "0.0.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/terraform 0.0.1 2.946.0 4.13.0-alpha.8 github.com/gravitee-io/terraform-provider-am/internal/sdk",
+			UserAgent:         "speakeasy-sdk/terraform 0.0.1 2.956.1 4.13.0-alpha.8 github.com/gravitee-io/terraform-provider-am/internal/sdk",
 			SDKVersion:        "0.0.1",
-			GenVersion:        "2.946.0",
+			GenVersion:        "2.956.1",
 			OpenAPIDocVersion: "4.13.0-alpha.8",
 			Globals:           globals.Globals{},
 			ServerList:        ServerList,

@@ -1006,8 +1006,6 @@ func (r *DomainDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsAutomationGetDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

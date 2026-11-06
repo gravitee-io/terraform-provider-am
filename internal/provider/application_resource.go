@@ -121,6 +121,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Identifier of the environment.`,
 			},
 			"identity_providers": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{

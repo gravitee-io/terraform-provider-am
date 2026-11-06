@@ -66,7 +66,7 @@ func (r *ApplicationDataSource) Metadata(ctx context.Context, req datasource.Met
 // Schema defines the schema for the data source.
 func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "An application (OAuth 2.0 / OIDC client) of a domain.\n\nThe application has no client secret until an `am_client_secret` is created for it.",
+		MarkdownDescription: "An application (OAuth 2.0 / OIDC client) of a domain.\n\nThe application has no client secret until an `am_client_secret` is created for it.\n\nThe `settings.login`, `settings.account` and `settings.cookie_settings` blocks are inherited from the domain when omitted, and override it when declared with `inherited = false`. Removing a declared block keeps the current settings: set `inherited = true` to inherit again.",
 
 		Attributes: map[string]schema.Attribute{
 			"certificate": schema.StringAttribute{

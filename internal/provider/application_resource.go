@@ -723,10 +723,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Description: `Access token validity, in seconds. Computed (7200) when omitted. Default: 7200`,
 							},
 							"application_type": schema.StringAttribute{
-								Computed: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
+								Computed:    true,
 								Description: `OIDC application type, computed from the application type: native for native applications, web for web, browser and service applications. Read-only.`,
 							},
 							"authorization_encrypted_response_alg": schema.StringAttribute{
@@ -745,10 +742,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Description: `JWS algorithm signing the authorization responses (JARM).`,
 							},
 							"client_name": schema.StringAttribute{
-								Computed: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
+								Computed:    true,
 								Description: `Name of the client presented to users. Always the application name. Read-only.`,
 							},
 							"client_type": schema.StringAttribute{

@@ -122,7 +122,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"default_identity_provider_for_registration": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Key of an identity provider managed under this domain, used as the default for user registration. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever an identity provider with that key exists.`,
+						Description: `Default identity provider for user registration: the key of an identity provider of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever that identity provider exists.`,
 					},
 					"delete_passwordless_devices_after_reset_password": schema.BoolAttribute{
 						Computed:    true,
@@ -274,7 +274,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"fallback_certificate": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.`,
+						Description: `Fallback certificate used when a client does not specify one: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.`,
 					},
 				},
 				Description: `Domain-level certificate settings.`,
@@ -826,7 +826,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"certificate": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Key of a certificate managed under this domain, used to sign SAML responses. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.`,
+						Description: `Certificate signing SAML responses: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.`,
 					},
 					"enabled": schema.BoolAttribute{
 						Computed:    true,

@@ -195,6 +195,7 @@ func (p *AmProvider) Actions(_ context.Context) []func() action.Action {
 
 func (p *AmProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
+		NewApplicationResource,
 		NewCertificateResource,
 		NewDataPlaneResource,
 		NewDomainResource,
@@ -205,6 +206,7 @@ func (p *AmProvider) Resources(ctx context.Context) []func() resource.Resource {
 
 func (p *AmProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
+		NewApplicationDataSource,
 		NewCertificateDataSource,
 		NewDataPlaneDataSource,
 		NewDomainDataSource,

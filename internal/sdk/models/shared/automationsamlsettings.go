@@ -9,7 +9,7 @@ import (
 
 // AutomationSamlSettings - Settings for the domain acting as a SAML 2.0 identity provider (IdP).
 type AutomationSamlSettings struct {
-	// Key of a certificate managed under this domain, used to sign SAML responses. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.
+	// Certificate signing SAML responses: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.
 	Certificate *string `json:"certificate,omitempty"`
 	// Whether the domain exposes the SAML 2.0 IdP protocol.
 	Enabled *bool `default:"false" json:"enabled"`

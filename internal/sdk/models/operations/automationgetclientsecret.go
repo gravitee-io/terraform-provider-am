@@ -51,7 +51,7 @@ type AutomationGetClientSecretRequest struct {
 	// Key of the application within the domain, or id:<uuid>.
 	ApplicationKey string `pathParam:"style=simple,explode=false,name=applicationKey"`
 	// Key of the client secret within the application, or id:<uuid>.
-	SecretKey string `pathParam:"style=simple,explode=false,name=secretKey"`
+	Key string `pathParam:"style=simple,explode=false,name=secretKey"`
 }
 
 func (a AutomationGetClientSecretRequest) MarshalJSON() ([]byte, error) {
@@ -93,11 +93,11 @@ func (a *AutomationGetClientSecretRequest) GetApplicationKey() string {
 	return a.ApplicationKey
 }
 
-func (a *AutomationGetClientSecretRequest) GetSecretKey() string {
+func (a *AutomationGetClientSecretRequest) GetKey() string {
 	if a == nil {
 		return ""
 	}
-	return a.SecretKey
+	return a.Key
 }
 
 type AutomationGetClientSecretResponse struct {

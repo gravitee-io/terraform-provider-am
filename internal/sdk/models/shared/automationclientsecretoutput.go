@@ -8,11 +8,7 @@ import (
 	"time"
 )
 
-// AutomationClientSecretOutput - A client secret of an application. A secret is immutable: every attribute forces a replacement, and the provider never updates a secret in place.
-//
-// Requires Terraform 1.11 or later: the value is the write-only attribute `value_wo`, never stored in the plan or the state.
-//
-// To rotate a secret, use two applies: declare a second `am_client_secret` with a new `key` and apply, let the clients switch to the new value, then remove the old resource and apply again. Changing the `key` of an existing secret is not a rotation: it replaces the secret in a single apply, and deleting the old secret revokes it immediately.
+// AutomationClientSecretOutput - A client secret of an application, managed by the Automation API. A secret is immutable: to rotate it, create a secret with a new key, then delete the old one.
 type AutomationClientSecretOutput struct {
 	// Validation errors returned when dryRun is true. Absent when validation succeeds.
 	DryRunErrors []DryRunError `json:"dryRunErrors,omitempty"`

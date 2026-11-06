@@ -79,7 +79,7 @@ func (r *ApplicationResource) Metadata(ctx context.Context, req resource.Metadat
 
 func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Application Resource",
+		MarkdownDescription: "An application (OAuth 2.0 / OIDC client) of a domain.\n\nThe application has no client secret until an `am_client_secret` is created for it.",
 		Attributes: map[string]schema.Attribute{
 			"certificate": schema.StringAttribute{
 				Required:    true,

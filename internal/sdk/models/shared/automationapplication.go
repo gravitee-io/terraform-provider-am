@@ -80,8 +80,6 @@ func (e *AutomationApplicationType) UnmarshalJSON(data []byte) error {
 }
 
 // AutomationApplication - An application (OAuth 2.0 / OIDC client) managed under a domain by the Automation API. The key field is the stable, immutable identity used for idempotent create-or-update.
-//
-// The application has no client secret until an `am_client_secret` is created for it.
 type AutomationApplication struct {
 	// Certificate signing the tokens: the key of a certificate of the domain, or id:<uuid>. The reference is not checked against existing certificates: it can name one created after the application or since deleted, and resolves whenever that certificate exists.
 	Certificate string `json:"certificate"`
@@ -232,8 +230,6 @@ func (a *AutomationApplication) GetUpdatedAt() *time.Time {
 }
 
 // AutomationApplicationInput - An application (OAuth 2.0 / OIDC client) managed under a domain by the Automation API. The key field is the stable, immutable identity used for idempotent create-or-update.
-//
-// The application has no client secret until an `am_client_secret` is created for it.
 type AutomationApplicationInput struct {
 	// Certificate signing the tokens: the key of a certificate of the domain, or id:<uuid>. The reference is not checked against existing certificates: it can name one created after the application or since deleted, and resolves whenever that certificate exists.
 	Certificate string `json:"certificate"`

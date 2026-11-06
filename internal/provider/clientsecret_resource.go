@@ -57,7 +57,7 @@ func (r *ClientSecretResource) Metadata(ctx context.Context, req resource.Metada
 
 func (r *ClientSecretResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "A client secret of an application. A secret is immutable: every attribute forces a replacement, and the provider never updates a secret in place.\n\nRequires Terraform 1.11 or later: the value is the write-only attribute `value_wo`, never stored in the plan or the state.\n\nTo rotate a secret, use two applies: declare a second `am_client_secret` with a new `key` and apply, let the clients switch to the new value, then remove the old resource and apply again. Changing the `key` of an existing secret is not a rotation: it replaces the secret in a single apply, and deleting the old secret revokes it immediately.",
+		MarkdownDescription: "A client secret of an application. A secret is immutable: changing `key`, `domain_key` or `application_key` replaces it, and the provider never updates a secret in place.\n\nRequires Terraform 1.11 or later: the value is the write-only attribute `value_wo`, never stored in the plan or the state.\n\nTo rotate a secret, use two applies: declare a second `am_client_secret` with a new `key` and apply, let the clients switch to the new value, then remove the old resource and apply again. Changing the `key` of an existing secret is not a rotation: it replaces the secret in a single apply, and deleting the old secret revokes it immediately.",
 		Attributes: map[string]schema.Attribute{
 			"application_key": schema.StringAttribute{
 				Required: true,

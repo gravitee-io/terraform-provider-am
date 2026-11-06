@@ -13,6 +13,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -46,7 +48,7 @@ type ClientSecretResourceModel struct {
 	ExpiresAt      types.String `tfsdk:"expires_at"`
 	Key            types.String `tfsdk:"key"`
 	OrganizationID types.String `tfsdk:"organization_id"`
-	Value          types.String `tfsdk:"value"`
+	ValueWo        types.String `tfsdk:"value_wo"`
 }
 
 func (r *ClientSecretResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -58,12 +60,18 @@ func (r *ClientSecretResource) Schema(ctx context.Context, req resource.SchemaRe
 		MarkdownDescription: "ClientSecret Resource",
 		Attributes: map[string]schema.Attribute{
 			"application_key": schema.StringAttribute{
-				Required:    true,
-				Description: `Key of the application within the domain, or id:<uuid>.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Key of the application within the domain, or id:<uuid>. Requires replacement if changed.`,
 			},
 			"domain_key": schema.StringAttribute{
-				Required:    true,
-				Description: `Key of the domain: its stable, immutable Automation identifier within the environment.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Key of the domain: its stable, immutable Automation identifier within the environment. Requires replacement if changed.`,
 			},
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
@@ -75,8 +83,11 @@ func (r *ClientSecretResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `Expiration timestamp (ISO-8601 / RFC 3339, UTC), set from the secret expiration settings of the application, else of the domain. Absent when the secret does not expire. Read-only.`,
 			},
 			"key": schema.StringAttribute{
-				Required:    true,
-				Description: `Stable, immutable identifier for the secret within its application, also used as the read-only name of the secret. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. At most 64 characters. A secret created outside the Automation API is addressed as id:<uuid>.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Stable, immutable identifier for the secret within its application, also used as the read-only name of the secret. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character, at most 64 characters. Changing it replaces the secret: the old one is revoked immediately (see the rotation steps above). Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 64),
 				},
@@ -86,10 +97,11 @@ func (r *ClientSecretResource) Schema(ctx context.Context, req resource.SchemaRe
 				Optional:    true,
 				Description: `Identifier of the organization that owns the environment.`,
 			},
-			"value": schema.StringAttribute{
+			"value_wo": schema.StringAttribute{
 				Required:    true,
+				Sensitive:   true,
 				WriteOnly:   true,
-				Description: `Value of the secret. Write-only: never returned. Required on every request: sending the stored value again is a no-op, a different value is rejected with 400. At least 43 characters; generate it from a cryptographically secure random source with at least 32 bytes of entropy (for example 32 random bytes, base64url-encoded), and never reuse it across applications. With BCrypt hashing, at most 72 bytes in UTF-8 (BCrypt ignores the rest); with no hashing, at most 374 characters. An application using client_secret_jwt stores the secret without hashing, since the gateway needs the value to verify the JWT signature. Switching an application that holds hashed secrets to client_secret_jwt is rejected with 400: delete its secrets, apply the application, then apply the secrets again.`,
+				Description: `Value of the secret, write-only: sent on creation only, never stored in the plan or the state, and never returned by AM. Typically fed from an ephemeral resource such as ` + "`" + `ephemeral "random_password"` + "`" + `. At least 43 characters, from a cryptographically secure random source (at least 32 bytes of entropy), never reused across applications. With BCrypt hashing, at most 72 bytes in UTF-8 (BCrypt ignores the rest); with no hashing, at most 374 characters. Changing only this value on an existing secret has no effect: no diff and no API call. To change the value, rotate the secret with a new ` + "`" + `key` + "`" + `.`,
 			},
 		},
 	}

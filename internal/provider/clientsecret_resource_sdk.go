@@ -144,12 +144,12 @@ func (r *ClientSecretResourceModel) ToSharedAutomationClientSecretInput(ctx cont
 	var key string
 	key = r.Key.ValueString()
 
-	var value string
-	value = opts.Config.Value.ValueString()
+	var valueWo string
+	valueWo = opts.Config.ValueWo.ValueString()
 
 	out := shared.AutomationClientSecretInput{
-		Key:   key,
-		Value: value,
+		Key:     key,
+		ValueWo: valueWo,
 	}
 
 	return &out, diags

@@ -3,12 +3,16 @@
 
 package shared
 
-// AutomationClientSecretInput - A client secret of an application, managed by the Automation API. A secret is immutable: to rotate it, create a secret with a new key, then delete the old one.
+// AutomationClientSecretInput - A client secret of an application. A secret is immutable: every attribute forces a replacement, and the provider never updates a secret in place.
+//
+// Requires Terraform 1.11 or later: the value is the write-only attribute `value_wo`, never stored in the plan or the state.
+//
+// To rotate a secret, use two applies: declare a second `am_client_secret` with a new `key` and apply, let the clients switch to the new value, then remove the old resource and apply again. Changing the `key` of an existing secret is not a rotation: it replaces the secret in a single apply, and deleting the old secret revokes it immediately.
 type AutomationClientSecretInput struct {
-	// Stable, immutable identifier for the secret within its application, also used as the read-only name of the secret. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. At most 64 characters. A secret created outside the Automation API is addressed as id:<uuid>.
+	// Stable, immutable identifier for the secret within its application, also used as the read-only name of the secret. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character, at most 64 characters. Changing it replaces the secret: the old one is revoked immediately (see the rotation steps above).
 	Key string `json:"key"`
-	// Value of the secret. Write-only: never returned. Required on every request: sending the stored value again is a no-op, a different value is rejected with 400. At least 43 characters; generate it from a cryptographically secure random source with at least 32 bytes of entropy (for example 32 random bytes, base64url-encoded), and never reuse it across applications. With BCrypt hashing, at most 72 bytes in UTF-8 (BCrypt ignores the rest); with no hashing, at most 374 characters. An application using client_secret_jwt stores the secret without hashing, since the gateway needs the value to verify the JWT signature. Switching an application that holds hashed secrets to client_secret_jwt is rejected with 400: delete its secrets, apply the application, then apply the secrets again.
-	Value string `json:"value"`
+	// Value of the secret, write-only: sent on creation only, never stored in the plan or the state, and never returned by AM. Typically fed from an ephemeral resource such as `ephemeral "random_password"`. At least 43 characters, from a cryptographically secure random source (at least 32 bytes of entropy), never reused across applications. With BCrypt hashing, at most 72 bytes in UTF-8 (BCrypt ignores the rest); with no hashing, at most 374 characters. Changing only this value on an existing secret has no effect: no diff and no API call. To change the value, rotate the secret with a new `key`.
+	ValueWo string `json:"value"`
 }
 
 func (a *AutomationClientSecretInput) GetKey() string {
@@ -18,9 +22,9 @@ func (a *AutomationClientSecretInput) GetKey() string {
 	return a.Key
 }
 
-func (a *AutomationClientSecretInput) GetValue() string {
+func (a *AutomationClientSecretInput) GetValueWo() string {
 	if a == nil {
 		return ""
 	}
-	return a.Value
+	return a.ValueWo
 }

@@ -209,7 +209,6 @@ func (p *AmProvider) DataSources(ctx context.Context) []func() datasource.DataSo
 	return []func() datasource.DataSource{
 		NewApplicationDataSource,
 		NewCertificateDataSource,
-		NewClientSecretDataSource,
 		NewDataPlaneDataSource,
 		NewDomainDataSource,
 		NewIdentityProviderDataSource,

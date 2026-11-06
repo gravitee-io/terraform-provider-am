@@ -1235,6 +1235,7 @@ func (s *Applications) AutomationCreateOrUpdateClientSecret(ctx context.Context,
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationCreateOrUpdateClientSecret")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -1281,6 +1282,7 @@ func (s *Applications) AutomationCreateOrUpdateClientSecret(ctx context.Context,
 			Config: retryConfig,
 			StatusCodes: []string{
 				"5XX",
+				"409",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -1512,6 +1514,7 @@ func (s *Applications) AutomationDeleteClientSecret(ctx context.Context, request
 			Config: retryConfig,
 			StatusCodes: []string{
 				"5XX",
+				"409",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {

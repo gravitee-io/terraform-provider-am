@@ -8,8 +8,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	speakeasy_boolplanmodifier "github.com/gravitee-io/terraform-provider-am/internal/planmodifiers/boolplanmodifier"
-	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-am/internal/planmodifiers/listplanmodifier"
 	custom_stringplanmodifier "github.com/gravitee-io/terraform-provider-am/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-am/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-am/internal/provider/types"
@@ -746,10 +744,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Description: `Name of the client presented to users. Always the application name. Read-only.`,
 							},
 							"client_type": schema.StringAttribute{
-								Computed: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
+								Computed:    true,
 								Description: `OAuth 2.0 client type, computed from the application type: confidential for web and service applications, public for browser and native applications and user_embedded agents. Read-only.`,
 							},
 							"client_uri": schema.StringAttribute{
@@ -836,29 +831,18 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Description: `Whether the permissions of the user roles are added to the scopes of the issued tokens. Default: false`,
 							},
 							"force_pkce": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-								Default:  booldefault.StaticBool(false),
-								PlanModifiers: []planmodifier.Bool{
-									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-								},
-								Description: `Whether the authorization code flow requires PKCE. Computed (true) for browser and native applications created without grantTypes, and for user_embedded agents. Default: false`,
+								Computed:    true,
+								Optional:    true,
+								Description: `Whether the authorization code flow requires PKCE. Computed (true) for browser and native applications created without grantTypes, and for user_embedded agents.`,
 							},
 							"force_s256_code_challenge_method": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-								Default:  booldefault.StaticBool(false),
-								PlanModifiers: []planmodifier.Bool{
-									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-								},
-								Description: `Whether PKCE requires the S256 code challenge method. Computed (true) for browser applications created without grantTypes, and for user_embedded agents. Default: false`,
+								Computed:    true,
+								Optional:    true,
+								Description: `Whether PKCE requires the S256 code challenge method. Computed (true) for browser applications created without grantTypes, and for user_embedded agents.`,
 							},
 							"grant_types": schema.ListAttribute{
-								Computed: true,
-								Optional: true,
-								PlanModifiers: []planmodifier.List{
-									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-								},
+								Computed:    true,
+								Optional:    true,
 								ElementType: types.StringType,
 								Description: `OAuth 2.0 grant types the application may use. Computed when omitted, from the application type: web authorization_code and password; browser and native authorization_code; service client_credentials; resource_server adds client_credentials; agent per kind (user_embedded authorization_code; hosted_delegated authorization_code, client_credentials and token exchange; autonomous client_credentials and token exchange).`,
 							},
@@ -1001,11 +985,8 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Description: `Whether the auth_time claim is required in the ID token. Default: false`,
 							},
 							"response_types": schema.ListAttribute{
-								Computed: true,
-								Optional: true,
-								PlanModifiers: []planmodifier.List{
-									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-								},
+								Computed:    true,
+								Optional:    true,
 								ElementType: types.StringType,
 								Description: `OAuth 2.0 / OIDC response types the application may use. Computed from grantTypes when omitted: authorization_code adds code, implicit adds token and id_token.`,
 							},
@@ -1142,11 +1123,8 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Description: `Custom claims added to the issued tokens.`,
 							},
 							"token_endpoint_auth_method": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
+								Computed:    true,
+								Optional:    true,
 								Description: `Client authentication method at the token endpoint: client_secret_basic, client_secret_post, client_secret_jwt, private_key_jwt, tls_client_auth, self_signed_tls_client_auth or none. Computed when omitted: client_secret_basic on creation, none for browser and native applications created without grantTypes, per kind for agents (user_embedded none; hosted_delegated and autonomous private_key_jwt).`,
 							},
 							"token_endpoint_auth_signing_alg": schema.StringAttribute{

@@ -40,9 +40,9 @@ type AutomationApplicationOAuthSettings struct {
 	// Whether the permissions of the user roles are added to the scopes of the issued tokens.
 	EnhanceScopesWithUserPermissions *bool `default:"false" json:"enhanceScopesWithUserPermissions"`
 	// Whether the authorization code flow requires PKCE. Computed (true) for browser and native applications created without grantTypes, and for user_embedded agents.
-	ForcePKCE *bool `default:"false" json:"forcePKCE"`
+	ForcePKCE *bool `json:"forcePKCE,omitempty"`
 	// Whether PKCE requires the S256 code challenge method. Computed (true) for browser applications created without grantTypes, and for user_embedded agents.
-	ForceS256CodeChallengeMethod *bool `default:"false" json:"forceS256CodeChallengeMethod"`
+	ForceS256CodeChallengeMethod *bool `json:"forceS256CodeChallengeMethod,omitempty"`
 	// OAuth 2.0 grant types the application may use. Computed when omitted, from the application type: web authorization_code and password; browser and native authorization_code; service client_credentials; resource_server adds client_credentials; agent per kind (user_embedded authorization_code; hosted_delegated authorization_code, client_credentials and token exchange; autonomous client_credentials and token exchange).
 	GrantTypes []string `json:"grantTypes,omitempty"`
 	// Validity, in seconds, of the identity assertion authorization grants (ID-JAG) issued to the application. Computed (300) when omitted.

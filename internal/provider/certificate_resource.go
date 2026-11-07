@@ -77,8 +77,11 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 			"domain_key": schema.StringAttribute{
-				Required:    true,
-				Description: `Key of the domain: its stable, immutable Automation identifier within the environment.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Key of the domain: its stable, immutable Automation identifier within the environment. Requires replacement if changed.`,
 			},
 			"environment_id": schema.StringAttribute{
 				Computed:    true,

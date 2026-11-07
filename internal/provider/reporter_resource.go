@@ -117,8 +117,11 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Category of data the reporter handles, derived from its type. Read-only.`,
 			},
 			"domain_key": schema.StringAttribute{
-				Required:    true,
-				Description: `Key of the domain: its stable, immutable Automation identifier within the environment.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Key of the domain: its stable, immutable Automation identifier within the environment. Requires replacement if changed.`,
 			},
 			"enabled": schema.BoolAttribute{
 				Computed:    true,

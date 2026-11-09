@@ -3,7 +3,7 @@
 
 package shared
 
-// AutomationApplicationSettingsInput - Settings of the application. The login, account and cookieSettings blocks, when omitted, are inherited from the domain; any other omitted block is unset.
+// AutomationApplicationSettingsInput - Settings of the application. On creation, an omitted block is unset, except login, account and cookie_settings, which are inherited from the domain. Once applied, removing a block or an attribute from the configuration keeps its current value: set it explicitly to change it.
 type AutomationApplicationSettingsInput struct {
 	// User account settings for the domain: brute-force protection, registration, password reset, remember-me, and MFA challenge behavior.
 	Account *AutomationAccountSettings `json:"account,omitempty"`

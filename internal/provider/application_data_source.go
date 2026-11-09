@@ -1042,7 +1042,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `SPIFFE workload identity the application authenticates with (JWT-SVID client authentication).`,
 					},
 				},
-				Description: `Settings of the application. The login, account and cookieSettings blocks, when omitted, are inherited from the domain; any other omitted block is unset.`,
+				Description: `Settings of the application. On creation, an omitted block is unset, except login, account and cookie_settings, which are inherited from the domain. Once applied, removing a block or an attribute from the configuration keeps its current value: set it explicitly to change it.`,
 			},
 			"template": schema.BoolAttribute{
 				Computed:    true,

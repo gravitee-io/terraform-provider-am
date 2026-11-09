@@ -103,7 +103,7 @@ type AutomationApplication struct {
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// Human-readable name of the application. Also used as the OAuth 2.0 client name.
 	Name string `json:"name"`
-	// Settings of the application. The login, account and cookieSettings blocks, when omitted, are inherited from the domain; any other omitted block is unset.
+	// Settings of the application. On creation, an omitted block is unset, except login, account and cookie_settings, which are inherited from the domain. Once applied, removing a block or an attribute from the configuration keeps its current value: set it explicitly to change it.
 	Settings *AutomationApplicationSettings `json:"settings,omitempty"`
 	// Whether the application is a registration template for dynamic client registration rather than an active application.
 	Template *bool `default:"false" json:"template"`
@@ -249,7 +249,7 @@ type AutomationApplicationInput struct {
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// Human-readable name of the application. Also used as the OAuth 2.0 client name.
 	Name string `json:"name"`
-	// Settings of the application. The login, account and cookieSettings blocks, when omitted, are inherited from the domain; any other omitted block is unset.
+	// Settings of the application. On creation, an omitted block is unset, except login, account and cookie_settings, which are inherited from the domain. Once applied, removing a block or an attribute from the configuration keeps its current value: set it explicitly to change it.
 	Settings *AutomationApplicationSettingsInput `json:"settings,omitempty"`
 	// Whether the application is a registration template for dynamic client registration rather than an active application.
 	Template *bool `default:"false" json:"template"`

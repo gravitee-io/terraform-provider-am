@@ -1,0 +1,147 @@
+---
+page_title: "Single-page and mobile applications with PKCE"
+subcategory: "Applications"
+---
+
+# Single-page and mobile applications with PKCE
+
+A single-page application or a mobile application cannot keep a secret. This guide creates both as public
+clients, signing users in with the authorization code flow protected by PKCE.
+
+## Before you start
+
+* The provider reaches the AM Automation API with `AM_SERVER_URL` and a service-account token in `AM_SA_TOKEN`.
+* A Java keystore holding the RSA key that signs the tokens, next to the configuration:
+
+```shell
+keytool -genkeypair -alias signing -keyalg RSA -keysize 2048 -validity 365 -dname CN=acme-app \
+  -storetype JKS -keystore keystore.jks -storepass "$TF_VAR_keystore_password" -keypass "$TF_VAR_key_password"
+```
+
+## Configuration
+
+```terraform
+# A single-page application and a mobile application: public clients, which cannot keep a secret, so
+# they sign users in with the authorization code flow and PKCE.
+
+resource "am_domain" "app" {
+  key           = "acme-app"
+  name          = "ACME app"
+  description   = "Users of the ACME web and mobile apps"
+  path          = "/acme-app"
+  data_plane_id = "default"
+}
+
+# Signs the ID and access tokens. keystore.jks holds an RSA key pair under the alias "signing".
+resource "am_certificate" "signing" {
+  domain_key = am_domain.app.key
+  key        = "app-signing"
+  name       = "App signing key"
+  type       = "javakeystore-am-certificate"
+  configuration = jsonencode({
+    jks = jsonencode({
+      name    = "keystore.jks"
+      content = filebase64("${path.module}/keystore.jks")
+    })
+    storepass = var.keystore_password
+    alias     = "signing"
+    keypass   = var.key_password
+  })
+}
+
+resource "am_identity_provider" "users" {
+  domain_key = am_domain.app.key
+  key        = "app-users"
+  name       = "App users"
+  type       = "inline-am-idp"
+  configuration = jsonencode({
+    users = [{
+      firstname = "Alice"
+      lastname  = "Example"
+      username  = "alice"
+      password  = var.alice_password
+    }]
+  })
+}
+
+# browser and native applications created without grant_types get the authorization code flow, PKCE
+# with S256 and no client authentication (token_endpoint_auth_method = "none").
+resource "am_application" "spa" {
+  domain_key  = am_domain.app.key
+  key         = "app-spa"
+  name        = "ACME single-page app"
+  type        = "browser"
+  certificate = am_certificate.signing.key
+
+  identity_providers = [
+    { identity = am_identity_provider.users.key }
+  ]
+
+  settings = {
+    oauth = {
+      redirect_uris             = ["https://app.example.com/callback"]
+      post_logout_redirect_uris = ["https://app.example.com/"]
+      scope_settings = [
+        { scope = "openid", default_scope = true },
+        { scope = "profile", default_scope = true },
+      ]
+    }
+  }
+}
+
+resource "am_application" "mobile" {
+  domain_key  = am_domain.app.key
+  key         = "app-mobile"
+  name        = "ACME mobile app"
+  type        = "native"
+  certificate = am_certificate.signing.key
+
+  identity_providers = [
+    { identity = am_identity_provider.users.key }
+  ]
+
+  settings = {
+    oauth = {
+      redirect_uris = ["com.example.app:/oauth2/callback"]
+      scope_settings = [
+        { scope = "openid", default_scope = true },
+        { scope = "profile", default_scope = true },
+      ]
+    }
+  }
+}
+
+output "spa_client_id" {
+  value = am_application.spa.client_id
+}
+
+output "mobile_client_id" {
+  value = am_application.mobile.client_id
+}
+
+variable "keystore_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "key_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "alice_password" {
+  type      = string
+  sensitive = true
+}
+
+```
+
+## How it works
+
+* The `browser` (single-page) and `native` (mobile) types are public clients. Created without `grant_types`,
+  they get the `authorization_code` grant, `force_pkce` and `force_s256_code_challenge_method` set to `true`,
+  and `token_endpoint_auth_method = "none"`: no client secret, so no `am_client_secret`.
+* These values are computed by AM and kept in the state. Declaring `grant_types` turns these defaults off:
+  set `force_pkce` and `token_endpoint_auth_method` yourself in that case.
+* The mobile application redirects to a URI with its own scheme, which the app registers on the device.
+* Read the computed settings with `am_application.spa.settings.oauth`, or with the `am_application` data source.

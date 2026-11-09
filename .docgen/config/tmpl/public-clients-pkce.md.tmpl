@@ -15,7 +15,7 @@ clients, signing users in with the authorization code flow protected by PKCE.
 
 ```shell
 keytool -genkeypair -alias signing -keyalg RSA -keysize 2048 -validity 365 -dname CN=acme-app \
-  -storetype JKS -keystore keystore.jks -storepass "$TF_VAR_keystore_password" -keypass "$TF_VAR_key_password"
+  -storetype JKS -keystore keystore.jks -storepass:env TF_VAR_keystore_password -keypass:env TF_VAR_key_password
 ```
 
 ## Configuration
@@ -32,4 +32,6 @@ keytool -genkeypair -alias signing -keyalg RSA -keysize 2048 -validity 365 -dnam
 * These values are computed by AM and kept in the state. Declaring `grant_types` turns these defaults off:
   set `force_pkce` and `token_endpoint_auth_method` yourself in that case.
 * The mobile application redirects to a URI with its own scheme, which the app registers on the device.
+* The mobile application sets its `client_id`, which ships in the app binary: it stays the same if the
+  application is ever recreated. The single-page application leaves it out, so AM generates it.
 * Read the computed settings with `am_application.spa.settings.oauth`, or with the `am_application` data source.

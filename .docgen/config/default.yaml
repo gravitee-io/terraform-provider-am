@@ -29,6 +29,12 @@ chunks:
   - template: examples/use-cases/application-service_secret_rotation/service-app.tf
     exportedAs: ServiceAppSecretRotation
     required: true
+  - template: examples/use-cases/application-service_secret_rotation/client-secret.tf
+    exportedAs: ServiceAppClientSecret
+    required: true
+  - template: examples/use-cases/application-service_secret_rotation/rotation/next-client-secret.tf
+    exportedAs: ServiceAppNextClientSecret
+    required: true
   - template: examples/use-cases/application-public_clients_pkce/public-apps.tf
     exportedAs: PublicClientsPKCE
     required: true

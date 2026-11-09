@@ -130,9 +130,12 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Whether the reporter is enabled. Default: true`,
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the environment. Requires replacement if changed.`,
 			},
 			"key": schema.StringAttribute{
 				Required: true,
@@ -153,9 +156,12 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the organization that owns the environment. Requires replacement if changed.`,
 			},
 			"system": schema.BoolAttribute{
 				Computed:    true,

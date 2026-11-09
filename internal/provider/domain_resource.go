@@ -353,9 +353,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Whether the domain handles incoming authentication and authorization requests. Default: true`,
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the environment. Requires replacement if changed.`,
 			},
 			"key": schema.StringAttribute{
 				Required: true,
@@ -736,9 +739,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `OpenID Connect settings for the domain. CIMD (client identity metadata document) settings are not exposed by the Automation API and are reset on update.`,
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the organization that owns the environment. Requires replacement if changed.`,
 			},
 			"password_settings": schema.SingleNestedAttribute{
 				Computed: true,

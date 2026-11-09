@@ -74,9 +74,12 @@ func (r *ClientSecretResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `Key of the domain: its stable, immutable Automation identifier within the environment. Requires replacement if changed.`,
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the environment. Requires replacement if changed.`,
 			},
 			"expires_at": schema.StringAttribute{
 				Computed:    true,
@@ -93,9 +96,12 @@ func (r *ClientSecretResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the organization that owns the environment. Requires replacement if changed.`,
 			},
 			"value_wo": schema.StringAttribute{
 				Required:    true,
@@ -186,13 +192,6 @@ func (r *ClientSecretResource) Create(ctx context.Context, req resource.CreateRe
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
-	}
-	if res.StatusCode == 409 {
-		resp.Diagnostics.AddError(
-			"Resource Already Exists",
-			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
-		)
 		return
 	}
 	if res.StatusCode != 200 {

@@ -80,9 +80,12 @@ func (r *DataPlaneResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Name of the database the configuration points at. Read-only.`,
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the environment. Requires replacement if changed.`,
 			},
 			"gateway_url": schema.StringAttribute{
 				Optional:    true,
@@ -115,9 +118,12 @@ func (r *DataPlaneResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the organization that owns the environment. Requires replacement if changed.`,
 			},
 			"type": schema.StringAttribute{
 				Required: true,

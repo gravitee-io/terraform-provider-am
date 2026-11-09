@@ -116,9 +116,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Whether the application is enabled. Setting it to false revokes the application's tokens. Default: true`,
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the environment. Requires replacement if changed.`,
 			},
 			"identity_providers": schema.ListNestedAttribute{
 				Computed: true,
@@ -188,9 +191,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the organization that owns the environment. Requires replacement if changed.`,
 			},
 			"settings": schema.SingleNestedAttribute{
 				Computed: true,
@@ -1541,13 +1547,6 @@ func (r *ApplicationResource) Create(ctx context.Context, req resource.CreateReq
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
-	}
-	if res.StatusCode == 409 {
-		resp.Diagnostics.AddError(
-			"Resource Already Exists",
-			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
-		)
 		return
 	}
 	if res.StatusCode != 200 {

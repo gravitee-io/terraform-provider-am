@@ -1396,8 +1396,6 @@ func (s *Domains) AutomationCreateOrUpdateApplication(ctx context.Context, reque
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
-		fallthrough
-	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -2317,8 +2315,6 @@ func (s *Domains) AutomationCreateOrUpdateClientSecret(ctx context.Context, requ
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
-		fallthrough
-	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)

@@ -614,7 +614,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 							},
 							"force_s256_code_challenge_method": schema.BoolAttribute{
 								Computed:    true,
-								Description: `Whether PKCE requires the S256 code challenge method. Computed (true) for browser applications created without grantTypes, and for user_embedded agents.`,
+								Description: `Whether PKCE requires the S256 code challenge method. Computed (true) for browser and native applications created without grantTypes, and for user_embedded agents.`,
 							},
 							"grant_types": schema.ListAttribute{
 								Computed:    true,

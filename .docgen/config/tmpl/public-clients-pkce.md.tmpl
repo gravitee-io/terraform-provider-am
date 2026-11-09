@@ -1,0 +1,35 @@
+---
+page_title: "Single-page and mobile applications with PKCE"
+subcategory: "Applications"
+---
+
+# Single-page and mobile applications with PKCE
+
+A single-page application or a mobile application cannot keep a secret. This guide creates both as public
+clients, signing users in with the authorization code flow protected by PKCE.
+
+## Before you start
+
+* The provider reaches the AM Automation API with `AM_SERVER_URL` and a service-account token in `AM_SA_TOKEN`.
+* A Java keystore holding the RSA key that signs the tokens, next to the configuration:
+
+```shell
+keytool -genkeypair -alias signing -keyalg RSA -keysize 2048 -validity 365 -dname CN=acme-app \
+  -storetype JKS -keystore keystore.jks -storepass "$TF_VAR_keystore_password" -keypass "$TF_VAR_key_password"
+```
+
+## Configuration
+
+```terraform
+{{ .PublicClientsPKCE.Content }}
+```
+
+## How it works
+
+* The `browser` (single-page) and `native` (mobile) types are public clients. Created without `grant_types`,
+  they get the `authorization_code` grant, `force_pkce` and `force_s256_code_challenge_method` set to `true`,
+  and `token_endpoint_auth_method = "none"`: no client secret, so no `am_client_secret`.
+* These values are computed by AM and kept in the state. Declaring `grant_types` turns these defaults off:
+  set `force_pkce` and `token_endpoint_auth_method` yourself in that case.
+* The mobile application redirects to a URI with its own scheme, which the app registers on the device.
+* Read the computed settings with `am_application.spa.settings.oauth`, or with the `am_application` data source.

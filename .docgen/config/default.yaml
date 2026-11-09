@@ -1,0 +1,34 @@
+# Copyright (C) 2015 The Gravitee team (http://gravitee.io)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+outputs:
+ - template: {{ .RootDir }}/tmpl/web-app-login.md.tmpl
+   target: templates/guides/docgen_web-app-login.md
+ - template: {{ .RootDir }}/tmpl/service-app-secret-rotation.md.tmpl
+   target: templates/guides/docgen_service-app-secret-rotation.md
+ - template: {{ .RootDir }}/tmpl/public-clients-pkce.md.tmpl
+   target: templates/guides/docgen_public-clients-pkce.md
+chunks:
+  - template: examples/use-cases/application-web_login/provider.tf
+    exportedAs: Provider
+    required: true
+  - template: examples/use-cases/application-web_login/web-app.tf
+    exportedAs: WebAppLogin
+    required: true
+  - template: examples/use-cases/application-service_secret_rotation/service-app.tf
+    exportedAs: ServiceAppSecretRotation
+    required: true
+  - template: examples/use-cases/application-public_clients_pkce/public-apps.tf
+    exportedAs: PublicClientsPKCE
+    required: true

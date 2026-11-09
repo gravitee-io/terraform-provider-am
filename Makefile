@@ -21,6 +21,7 @@ speakeasy: ## Generate the provider from automation-api-oas.yaml
 	@rm -f terraform-provider-am
 	@mv ~/.terraformrc ~/.terraformrc.keep 2>/dev/null || true
 	@terraform fmt -recursive > /dev/null 2>&1 || true
+	@$(MAKE) doc-gen
 	speakeasy run --output console --skip-versioning --skip-upload-spec
 	@mv ~/.terraformrc.keep ~/.terraformrc 2>/dev/null || true
 	@go build
@@ -69,6 +70,10 @@ acceptance-tests: ## Run acceptance tests against a live AM; needs AM_SA_TOKEN (
 .PHONY: mock-tests
 mock-tests: ## Run acceptance tests against an in-process AM mock server (no AM instance required)
 	@AM_MOCK=true TF_ACC=1 go test -count=1 -v ./tests/acceptance
+
+.PHONY: doc-gen
+doc-gen: ## Generate the registry guides (templates/guides/docgen_*.md) from .docgen/config and the use-cases
+	@docker run --rm -u $$(id -u) -v ./.docgen/config:/config -v ./:/plugin graviteeio/doc-gen
 
 .PHONY: help
 help: ## Display this help.

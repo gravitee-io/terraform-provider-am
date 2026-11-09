@@ -5,7 +5,7 @@ subcategory: ""
 description: |-
   An application (OAuth 2.0 / OIDC client) of a domain.
   The application has no client secret until an am_client_secret is created for it.
-  The settings.login, settings.account and settings.cookie_settings blocks are inherited from the domain when omitted, and override it when declared with inherited = false. Removing a declared block keeps the current settings: set inherited = true to inherit again.
+  The settings.login, settings.account and settings.cookie_settings blocks are inherited from the domain when omitted, and override the domain's settings when declared with inherited = false. Removing a declared block keeps the current settings: set inherited = true to inherit again.
   Changing type or kind recomputes the OAuth settings AM derives from them (grant_types, response_types, token_endpoint_auth_method, force_pkce, force_s256_code_challenge_method), except the ones the configuration declares.
 ---
 
@@ -15,7 +15,7 @@ An application (OAuth 2.0 / OIDC client) of a domain.
 
 The application has no client secret until an `am_client_secret` is created for it.
 
-The `settings.login`, `settings.account` and `settings.cookie_settings` blocks are inherited from the domain when omitted, and override it when declared with `inherited = false`. Removing a declared block keeps the current settings: set `inherited = true` to inherit again.
+The `settings.login`, `settings.account` and `settings.cookie_settings` blocks are inherited from the domain when omitted, and override the domain's settings when declared with `inherited = false`. Removing a declared block keeps the current settings: set `inherited = true` to inherit again.
 
 Changing `type` or `kind` recomputes the OAuth settings AM derives from them (`grant_types`, `response_types`, `token_endpoint_auth_method`, `force_pkce`, `force_s256_code_challenge_method`), except the ones the configuration declares.
 

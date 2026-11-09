@@ -19,9 +19,9 @@ sync-oas: ## Download the AM Automation OAS from upstream into automation-api-oa
 .PHONY: speakeasy
 speakeasy: ## Generate the provider from automation-api-oas.yaml
 	@rm -f terraform-provider-am
-	@mv ~/.terraformrc ~/.terraformrc.keep 2>/dev/null || true
 	@terraform fmt -recursive > /dev/null 2>&1 || true
 	@$(MAKE) doc-gen
+	@mv ~/.terraformrc ~/.terraformrc.keep 2>/dev/null || true
 	speakeasy run --output console --skip-versioning --skip-upload-spec
 	@mv ~/.terraformrc.keep ~/.terraformrc 2>/dev/null || true
 	@go build
@@ -79,9 +79,13 @@ examples-tests: ## Apply the examples and use-cases on a live AM; needs AM_SA_TO
 examples-mock-tests: ## Apply the examples and use-cases on an in-process AM mock server (no AM instance required)
 	@AM_MOCK=true TF_ACC=1 go test -count=1 -v ./tests/examples
 
+# doc-gen runs third-party code on the checkout: pinned, and given only the files it reads and writes.
+DOC_GEN_IMAGE := graviteeio/doc-gen:v0.1.11@sha256:df2f106fc3e752334ac9625c5b07c7d5875b1f7e3a1a59c32cc47dd39a54b72d
+
 .PHONY: doc-gen
 doc-gen: ## Generate the registry guides (templates/guides/docgen_*.md) from .docgen/config and the use-cases
-	@docker run --rm -u $$(id -u) -v ./.docgen/config:/config -v ./:/plugin graviteeio/doc-gen
+	@docker run --rm -u $$(id -u) -v ./.docgen/config:/config:ro -v ./examples:/plugin/examples:ro \
+		-v ./templates/guides:/plugin/templates/guides $(DOC_GEN_IMAGE)
 
 .PHONY: help
 help: ## Display this help.

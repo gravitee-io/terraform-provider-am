@@ -43,3 +43,6 @@ jobs:
 
       - name: Run acceptance tests on AM mock
         run: make mock-tests
+
+      - name: Run example tests on AM mock
+        run: make examples-mock-tests

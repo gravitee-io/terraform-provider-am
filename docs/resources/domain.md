@@ -13,276 +13,32 @@ Domain Resource
 ## Example Usage
 
 ```terraform
-resource "am_domain" "my_domain" {
-  account_settings = {
-    account_blocked_duration                         = 7200
-    auto_login_after_registration                    = false
-    auto_login_after_reset_password                  = false
-    complete_registration_when_reset_password        = false
-    default_identity_provider_for_registration       = "users-idp"
-    delete_passwordless_devices_after_reset_password = false
-    dynamic_user_registration                        = false
-    inherited                                        = true
-    login_attempts_detection_enabled                 = false
-    login_attempts_reset_time                        = 600
-    max_login_attempts                               = 10
-    mfa_challenge_attempts_detection_enabled         = false
-    mfa_challenge_attempts_reset_time                = 600
-    mfa_challenge_max_attempts                       = 3
-    mfa_challenge_send_verify_alert_email            = false
-    redirect_uri_after_registration                  = "https://app.example.com/welcome"
-    redirect_uri_after_reset_password                = "https://app.example.com/signin"
-    remember_me                                      = false
-    remember_me_duration                             = 604800
-    reset_password_confirm_identity                  = false
-    reset_password_custom_form                       = false
-    reset_password_custom_form_fields = [
-      {
-        key   = "email"
-        label = "Email"
-        type  = "email"
-      }
-    ]
-    reset_password_invalidate_tokens       = false
-    send_recover_account_email             = false
-    send_verify_registration_account_email = false
-  }
-  alert_enabled = false
-  certificate_settings = {
-    fallback_certificate = "default"
-  }
-  cors_settings = {
-    allow_credentials = false
-    allowed_headers = [
-      "Authorization",
-      "Content-Type",
-    ]
-    allowed_methods = [
-      "GET",
-      "POST",
-      "PUT",
-      "DELETE",
-    ]
-    allowed_origins = [
-      "https://app.example.com",
-    ]
-    enabled   = false
-    inherited = true
-    max_age   = 86400
-  }
-  data_plane_id  = "default"
-  description    = "An example authentication domain"
-  enabled        = true
-  environment_id = "DEFAULT"
-  key            = "example-domain"
-  key_retrieval_settings = {
-    allow_private_ip_address = false
-    allow_unsecured_http_uri = false
-    cache_max_entries        = 50
-    cache_ttl_seconds        = 300
-    fetch_timeout_ms         = 5000
-    max_response_size_kb     = 32
-  }
+# A domain on the default data plane. Omitted settings blocks keep AM's defaults or inherit the
+# organization's; a declared block with inherited = false overrides them.
+resource "am_domain" "example" {
+  key           = "example-domain"
+  name          = "Example domain"
+  description   = "An example authentication domain"
+  path          = "/example-domain"
+  data_plane_id = "default"
+
   login_settings = {
-    certificate_based_auth_enabled        = false
-    certificate_based_auth_url            = "...my_certificate_based_auth_url..."
-    forgot_password_enabled               = false
-    hide_form                             = false
-    identifier_first_enabled              = false
-    inherited                             = true
-    magic_link_auth_enabled               = false
-    passwordless_device_naming_enabled    = false
-    passwordless_enabled                  = false
-    passwordless_enforce_password_enabled = false
-    passwordless_enforce_password_max_age = 6
-    passwordless_remember_device_enabled  = false
-    register_enabled                      = false
-    remember_me_enabled                   = false
-    reset_password_on_expiration          = true
+    inherited               = false
+    forgot_password_enabled = true
+    register_enabled        = true
   }
-  master = false
-  name   = "Example domain"
-  oidc = {
-    ciba_settings = {
-      auth_req_expiry        = 600
-      binding_message_length = 256
-      enabled                = false
-      token_req_interval     = 5
-    }
-    client_registration_settings = {
-      allow_http_scheme_redirect_uri                = false
-      allow_localhost_redirect_uri                  = false
-      allow_redirect_uri_params_expression_language = false
-      allow_wild_card_redirect_uri                  = false
-      allowed_scopes = [
-        "..."
-      ]
-      allowed_scopes_enabled  = false
-      client_template_enabled = false
-      default_scopes = [
-        "..."
-      ]
-      dynamic_client_registration_enabled      = false
-      open_dynamic_client_registration_enabled = false
-    }
-    post_logout_redirect_uris = [
-      "..."
-    ]
-    redirect_uri_strict_matching = false
-    request_uris = [
-      "..."
-    ]
-    security_profile_settings = {
-      enable_fapi_brazil = false
-      enable_plain_fapi  = false
-    }
-    workload_identity_settings = {
-      allow_private_ip_address = false
-      allow_unsecured_http_uri = true
-      cache_max_entries        = 0
-      cache_ttl_seconds        = 10
-      clock_skew_seconds       = 30
-      default_allowed_algorithms = [
-        "..."
-      ]
-      enabled                  = false
-      fetch_timeout_ms         = 8
-      max_jwt_lifetime_seconds = 300
-      max_response_size_kb     = 7
-    }
-  }
-  organization_id = "DEFAULT"
+
   password_settings = {
-    exclude_passwords_in_dictionary       = true
-    exclude_user_profile_info_in_password = true
-    expiry_duration                       = 6
-    include_numbers                       = true
-    include_special_characters            = true
-    inherited                             = true
-    letters_in_mixed_case                 = false
-    max_consecutive_letters               = 7
-    max_length                            = 128
-    min_length                            = 8
-    old_passwords                         = 6
-    password_history_enabled              = false
+    inherited                  = false
+    min_length                 = 12
+    include_numbers            = true
+    include_special_characters = true
+    letters_in_mixed_case      = true
   }
-  path = "/example-domain"
-  saml = {
-    certificate = "signing-cert"
-    enabled     = false
-    entity_id   = "https://auth.example.com/saml2/idp/entity"
-  }
-  scim = {
-    enabled               = false
-    idp_selection_enabled = false
-    idp_selection_rule    = "...my_idp_selection_rule..."
-  }
+
   secret_expiration_settings = {
-    enabled             = false
-    expiry_time_seconds = 7776000
-  }
-  self_service_account_management_settings = {
-    enabled = false
-    reset_password = {
-      old_password_required = false
-      token_age             = 2
-    }
-  }
-  tags = [
-    "eu",
-    "production",
-  ]
-  token_exchange_settings = {
-    allow_delegation    = false
-    allow_impersonation = true
-    allowed_actor_token_types = [
-      "urn:ietf:params:oauth:token-type:access_token",
-      "urn:ietf:params:oauth:token-type:id_token",
-    ]
-    allowed_requested_token_types = [
-      "urn:ietf:params:oauth:token-type:access_token",
-      "urn:ietf:params:oauth:token-type:id_token",
-    ]
-    allowed_subject_token_types = [
-      "urn:ietf:params:oauth:token-type:access_token",
-      "urn:ietf:params:oauth:token-type:id_token",
-    ]
-    enabled = false
-    id_jag_settings = {
-      lax_validation = false
-    }
-    max_delegation_depth = 25
-    token_exchange_o_auth_settings = {
-      inherited      = true
-      scope_handling = "downscoping"
-    }
-    trusted_issuers = [
-      {
-        certificate           = "...my_certificate..."
-        issuer                = "https://issuer.example.com"
-        jwks_uri              = "https://issuer.example.com/.well-known/jwks.json"
-        key_resolution_method = "pem"
-        scope_mappings = {
-          key = "value"
-        }
-        user_binding_criteria = [
-          {
-            attribute  = "emails.value"
-            expression = "{#token['email']}"
-          }
-        ]
-        user_binding_enabled = false
-      }
-    ]
-  }
-  uma = {
-    enabled = false
-  }
-  vhost_mode = false
-  vhosts = [
-    {
-      host                = "auth.example.com"
-      override_entrypoint = false
-      path                = "/customers"
-    }
-  ]
-  web_authn_settings = {
-    attestation_conveyance_preference = "none"
-    authenticator_attachment          = "cross_platform"
-    certificates = {
-      key = "value"
-    }
-    enforce_authenticator_integrity         = false
-    enforce_authenticator_integrity_max_age = 10
-    force_registration                      = false
-    origin                                  = "https://auth.example.com"
-    relying_party_id                        = "auth.example.com"
-    relying_party_name                      = "Example Inc."
-    require_resident_key                    = false
-    user_verification                       = "preferred"
-  }
-  web_protection_settings = {
-    csp = {
-      directives = [
-        "default-src 'self'",
-        "script-src 'self'",
-        "upgrade-insecure-requests",
-      ]
-      enabled             = false
-      inherited           = true
-      report_only         = false
-      script_inline_nonce = true
-    }
-    xframe = {
-      action    = "DENY"
-      enabled   = false
-      inherited = true
-    }
-    xss = {
-      action    = "1; mode=block"
-      enabled   = false
-      inherited = true
-    }
+    enabled             = true
+    expiry_time_seconds = 7776000 # 90 days
   }
 }
 ```
@@ -305,12 +61,12 @@ resource "am_domain" "my_domain" {
 - `data_plane_id` (String) Identifier of the data plane this domain is connected to. Optional at creation and resolved from the environment's data planes when omitted. Immutable afterwards: an apply that names a different one is rejected. Requires replacement if changed.
 - `description` (String) Human-readable description of the domain.
 - `enabled` (Boolean) Whether the domain handles incoming authentication and authorization requests. Default: true
-- `environment_id` (String) Identifier of the environment.
+- `environment_id` (String) Identifier of the environment. Requires replacement if changed.
 - `key_retrieval_settings` (Attributes) Fetch, SSRF and cache limits applied to every trusted domain in the security domain. (see [below for nested schema](#nestedatt--key_retrieval_settings))
 - `login_settings` (Attributes) Configuration of the domain's login flow and the features offered on the sign-in page. (see [below for nested schema](#nestedatt--login_settings))
 - `master` (Boolean) Whether this is the master domain of its environment. A master domain may perform cross-domain token introspection. Default: false
 - `oidc` (Attributes) OpenID Connect settings for the domain. CIMD (client identity metadata document) settings are not exposed by the Automation API and are reset on update. (see [below for nested schema](#nestedatt--oidc))
-- `organization_id` (String) Identifier of the organization that owns the environment.
+- `organization_id` (String) Identifier of the organization that owns the environment. Requires replacement if changed.
 - `password_settings` (Attributes) Password policy applied to users of the domain: complexity requirements, expiry, and history. (see [below for nested schema](#nestedatt--password_settings))
 - `saml` (Attributes) Settings for the domain acting as a SAML 2.0 identity provider (IdP). (see [below for nested schema](#nestedatt--saml))
 - `scim` (Attributes) Configuration of the domain's SCIM 2.0 provisioning endpoints. (see [below for nested schema](#nestedatt--scim))
@@ -338,7 +94,7 @@ Optional:
 - `auto_login_after_registration` (Boolean) Whether the user is automatically logged in after completing registration. Default: false
 - `auto_login_after_reset_password` (Boolean) Whether the user is automatically logged in after a password reset. Default: false
 - `complete_registration_when_reset_password` (Boolean) Whether resetting a password also completes a pending registration. Default: false
-- `default_identity_provider_for_registration` (String) Key of an identity provider managed under this domain, used as the default for user registration. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever an identity provider with that key exists.
+- `default_identity_provider_for_registration` (String) Default identity provider for user registration: the key of an identity provider of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever that identity provider exists.
 - `delete_passwordless_devices_after_reset_password` (Boolean) Whether passwordless (WebAuthn) devices are deleted when the password is reset. Default: false
 - `dynamic_user_registration` (Boolean) Whether dynamic (self-service) user registration is enabled. Default: false
 - `inherited` (Boolean) Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains. Default: true
@@ -376,7 +132,7 @@ Optional:
 
 Optional:
 
-- `fallback_certificate` (String) Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.
+- `fallback_certificate` (String) Fallback certificate used when a client does not specify one: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.
 
 
 <a id="nestedatt--cors_settings"></a>
@@ -520,7 +276,7 @@ Optional:
 
 Optional:
 
-- `certificate` (String) Key of a certificate managed under this domain, used to sign SAML responses. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.
+- `certificate` (String) Certificate signing SAML responses: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.
 - `enabled` (Boolean) Whether the domain exposes the SAML 2.0 IdP protocol. Default: false
 - `entity_id` (String) URL or URN that uniquely identifies this IdP (the SAML entity ID).
 
@@ -703,7 +459,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 
 ```terraform
 import {
-  to = am_domain.my_am_domain
+  to = am_domain.example
   id = jsonencode({
     environment_id  = "DEFAULT"
     key             = "example-domain"
@@ -715,5 +471,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import am_domain.my_am_domain '{"environment_id": "DEFAULT", "key": "example-domain", "organization_id": "DEFAULT"}'
+terraform import am_domain.example '{"environment_id": "DEFAULT", "key": "example-domain", "organization_id": "DEFAULT"}'
 ```

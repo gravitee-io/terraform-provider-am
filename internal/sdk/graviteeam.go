@@ -3,7 +3,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 4.13.0-alpha.8 and generator version 2.946.0
+// Generated from OpenAPI doc version 4.14.0 and generator version 2.956.1
 
 import (
 	"context"
@@ -64,6 +64,10 @@ type GraviteeAm struct {
 	DataPlanes *DataPlanes
 	// Security domains: the top-level container for an authentication and authorization configuration. Create, read, update, and delete domains, and reach their sub-resources.
 	Domains *Domains
+	// Applications (OAuth 2.0 / OpenID Connect clients) configured under a domain.
+	Applications *Applications
+	// Client secrets of an application. A secret is immutable: rotate it by creating a new one, then deleting the old one.
+	ClientSecrets *ClientSecrets
 	// Certificates configured under a domain to sign and verify tokens.
 	Certificates      *Certificates
 	IdentityProviders *IdentityProviders
@@ -160,10 +164,10 @@ func New(opts ...SDKOption) *GraviteeAm {
 	sdk := &GraviteeAm{
 		SDKVersion: "0.0.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/terraform 0.0.1 2.946.0 4.13.0-alpha.8 github.com/gravitee-io/terraform-provider-am/internal/sdk",
+			UserAgent:         "speakeasy-sdk/terraform 0.0.1 2.956.1 4.14.0 github.com/gravitee-io/terraform-provider-am/internal/sdk",
 			SDKVersion:        "0.0.1",
-			GenVersion:        "2.946.0",
-			OpenAPIDocVersion: "4.13.0-alpha.8",
+			GenVersion:        "2.956.1",
+			OpenAPIDocVersion: "4.14.0",
 			Globals:           globals.Globals{},
 			ServerList:        ServerList,
 		},
@@ -187,6 +191,8 @@ func New(opts ...SDKOption) *GraviteeAm {
 
 	sdk.DataPlanes = newDataPlanes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Domains = newDomains(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Applications = newApplications(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.ClientSecrets = newClientSecrets(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Certificates = newCertificates(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.IdentityProviders = newIdentityProviders(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Reporters = newReporters(sdk, sdk.sdkConfiguration, sdk.hooks)

@@ -13,31 +13,25 @@ IdentityProvider Resource
 ## Example Usage
 
 ```terraform
-resource "am_identity_provider" "my_identityprovider" {
-  configuration = "{\"users\":[{\"username\":\"admin\",\"password\":\"...\"}]}"
-  domain_key    = "example-domain"
-  domain_whitelist = [
-    "example.com",
-  ]
-  environment_id = "DEFAULT"
-  group_mapper = {
-    key = [
-      # ...
-    ]
-  }
-  key = "corporate-ldap"
-  mappers = {
-    key = "value"
-  }
-  name            = "Corporate LDAP"
-  organization_id = "DEFAULT"
-  role_mapper = {
-    key = [
-      # ...
-    ]
-  }
-  system = false
-  type   = "inline-am-idp"
+# An inline identity provider: users declared in the configuration, handy for tests and demos.
+resource "am_identity_provider" "customers" {
+  domain_key = "example-domain"
+  key        = "customer-users"
+  name       = "Customer users"
+  type       = "inline-am-idp"
+  configuration = jsonencode({
+    users = [{
+      firstname = "Alice"
+      lastname  = "Example"
+      username  = "alice"
+      password  = var.alice_password
+    }]
+  })
+}
+
+variable "alice_password" {
+  type      = string
+  sensitive = true
 }
 ```
 
@@ -46,18 +40,18 @@ resource "am_identity_provider" "my_identityprovider" {
 
 ### Required
 
-- `domain_key` (String) Key of the domain: its stable, immutable Automation identifier within the environment.
+- `domain_key` (String) Key of the domain: its stable, immutable Automation identifier within the environment. Requires replacement if changed.
 - `key` (String) Stable, immutable identifier for the identity provider within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the identity provider on create-or-update. Requires replacement if changed.
 
 ### Optional
 
 - `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected identity provider type. Sensitive values, as flagged by the plugin, are returned as ******** in every response; an unset sensitive value is omitted. Sending ******** back on update keeps the stored value; sending it on create is rejected.
 - `domain_whitelist` (List of String) Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected. Default: []
-- `environment_id` (String) Identifier of the environment.
+- `environment_id` (String) Identifier of the environment. Requires replacement if changed.
 - `group_mapper` (Map of List of String) Group mapper: assigns AM groups based on provider attribute values. Each entry maps a group to the user attribute expressions that grant it.
 - `mappers` (Map of String) Attribute mappers: maps provider claims to AM user profile attributes.
 - `name` (String) Human-readable name of the identity provider.
-- `organization_id` (String) Identifier of the organization that owns the environment.
+- `organization_id` (String) Identifier of the organization that owns the environment. Requires replacement if changed.
 - `role_mapper` (Map of List of String) Role mapper: assigns AM roles based on provider attribute values. Each entry maps a role to the user attribute expressions that grant it.
 - `system` (Boolean) Whether this is the domain's system identity provider. Immutable after creation. When true, only key is required; the identity provider is built from the domains.identities.default.* system settings and the name, type, and configuration fields are ignored. Default: false
 - `type` (String) Identity provider plugin type identifier. Immutable after creation.
@@ -75,11 +69,11 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 
 ```terraform
 import {
-  to = am_identity_provider.my_am_identity_provider
+  to = am_identity_provider.customers
   id = jsonencode({
     domain_key      = "example-domain"
     environment_id  = "DEFAULT"
-    key             = "corporate-ldap"
+    key             = "customer-users"
     organization_id = "DEFAULT"
   })
 }
@@ -88,5 +82,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import am_identity_provider.my_am_identity_provider '{"domain_key": "example-domain", "environment_id": "DEFAULT", "key": "corporate-ldap", "organization_id": "DEFAULT"}'
+terraform import am_identity_provider.customers '{"domain_key": "example-domain", "environment_id": "DEFAULT", "key": "customer-users", "organization_id": "DEFAULT"}'
 ```

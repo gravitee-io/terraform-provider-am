@@ -122,7 +122,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"default_identity_provider_for_registration": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Key of an identity provider managed under this domain, used as the default for user registration. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever an identity provider with that key exists.`,
+						Description: `Default identity provider for user registration: the key of an identity provider of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever that identity provider exists.`,
 					},
 					"delete_passwordless_devices_after_reset_password": schema.BoolAttribute{
 						Computed:    true,
@@ -274,7 +274,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"fallback_certificate": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.`,
+						Description: `Fallback certificate used when a client does not specify one: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.`,
 					},
 				},
 				Description: `Domain-level certificate settings.`,
@@ -353,9 +353,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Whether the domain handles incoming authentication and authorization requests. Default: true`,
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the environment. Requires replacement if changed.`,
 			},
 			"key": schema.StringAttribute{
 				Required: true,
@@ -736,9 +739,12 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `OpenID Connect settings for the domain. CIMD (client identity metadata document) settings are not exposed by the Automation API and are reset on update.`,
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the organization that owns the environment. Requires replacement if changed.`,
 			},
 			"password_settings": schema.SingleNestedAttribute{
 				Computed: true,
@@ -826,7 +832,7 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"certificate": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Key of a certificate managed under this domain, used to sign SAML responses. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.`,
+						Description: `Certificate signing SAML responses: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.`,
 					},
 					"enabled": schema.BoolAttribute{
 						Computed:    true,
@@ -1373,8 +1379,6 @@ func (r *DomainResource) Create(ctx context.Context, req resource.CreateRequest,
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1434,8 +1438,6 @@ func (r *DomainResource) Read(ctx context.Context, req resource.ReadRequest, res
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsAutomationGetDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -1498,8 +1500,6 @@ func (r *DomainResource) Update(ctx context.Context, req resource.UpdateRequest,
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsAutomationCreateOrUpdateDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -1568,8 +1568,6 @@ func (r *DomainResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsAutomationDeleteDomainRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

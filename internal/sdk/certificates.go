@@ -84,6 +84,7 @@ func (s *Certificates) List(ctx context.Context, request operations.AutomationLi
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationListCertificates")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -315,6 +316,7 @@ func (s *Certificates) CreateOrUpdate(ctx context.Context, request operations.Au
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationCreateOrUpdateCertificate")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -774,6 +776,7 @@ func (s *Certificates) GetCertificate(ctx context.Context, request operations.Au
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationGetCertificate")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

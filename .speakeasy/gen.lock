@@ -1,21 +1,21 @@
 lockVersion: ""
 id: ""
 management:
-  docChecksum: 50962a6e04cff6d33511300a5f83d210
-  docVersion: 4.13.0-alpha.8
-  speakeasyVersion: 1.801.0
-  generationVersion: 2.946.0
+  docChecksum: d3c4986cfd11485525892c578d6ee4bd
+  docVersion: 4.14.0
+  speakeasyVersion: 1.806.0
+  generationVersion: 2.956.1
   releaseVersion: 0.0.1
-  configChecksum: d73873255a2804204ad8dfa79207aa31
+  configChecksum: 424490c479d549d0423227d7d1be8c5c
 persistentEdits:
-  generation_id: d68df5c6-e4e7-4a71-af0e-8bc1900d363c
-  pristine_commit_hash: 871d184a8e361b802e7ad0572a95b18fb51cc6bf
-  pristine_tree_hash: c425fb0679f0e2605f395376d9f676db7ded8396
+  generation_id: b0ebd207-0feb-4429-94e7-088b84972cb0
+  pristine_commit_hash: 473bb66d57ae52a1925014a9e34ecb08fed8bc3b
+  pristine_tree_hash: ae346f0b94d783640de1c493940b408cbcce0d28
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.48.4
+    core: 3.50.3
     deprecations: 2.82.0
     globalSecurity: 2.82.3
     globalServerURLs: 2.83.2
@@ -31,94 +31,14 @@ trackedFiles:
     id: 24139dae6567
     last_write_checksum: sha1:84b0115789fc3ea52e31df701d8a27f76077e29f
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
-  examples/data-sources/am_certificate/data-source.tf:
-    id: 22ef8e2b19d6
-    last_write_checksum: sha1:a4ab29d4806c8b89306e8c79e992f73f64fb83d7
-    pristine_git_object: 4e51b9efb1af041360c473af1c7eed28994c1ff1
-  examples/data-sources/am_data_plane/data-source.tf:
-    id: 47104fbf86b8
-    last_write_checksum: sha1:f037e8fe7bd22ffaa29a4c34b584a4c6e4a0cf8b
-    pristine_git_object: 76998be290b4b9134faa4319905a00719609064e
-  examples/data-sources/am_domain/data-source.tf:
-    id: 34ee41b4000a
-    last_write_checksum: sha1:0f1aea69ff168f556e0489cd67ac345a0d7b7d8d
-    pristine_git_object: 7383b9d95d09881824be87c48e3dc775f025fcc2
-  examples/data-sources/am_identity_provider/data-source.tf:
-    id: 6cb408947fcb
-    last_write_checksum: sha1:bf2a1212042502c71ba50a6bb7ee74ffc880f6c3
-    pristine_git_object: 4a80a28af509fadc9a261836c4943a3ba6efa106
-  examples/data-sources/am_reporter/data-source.tf:
-    id: 1a48dfeaf007
-    last_write_checksum: sha1:6eb9e221b01424d2bfb87358638c5ac53156df01
-    pristine_git_object: 57b1ed2f74b9b67c88493d533efaf29478b320fc
   examples/provider/provider.tf:
     id: 954e955c0240
     last_write_checksum: sha1:15766b97183be97ccffdacfb20d4e6b86faeb098
     pristine_git_object: 5c014c6084a4339e21fe006e2642a254de6f8d3a
-  examples/resources/am_certificate/import-by-string-id.tf:
-    id: 9a8a5f293818
-    last_write_checksum: sha1:0b56236f269cfa9b4720418e1883ad051a1fbc85
-    pristine_git_object: 8f2e918e04bf33bb568c18844fd34aeb4a611415
-  examples/resources/am_certificate/import.sh:
-    id: dd253b3e8304
-    last_write_checksum: sha1:5173cad52f6210f9444fbf91c0a798eaabb6fd70
-    pristine_git_object: b542061d6997e15874f8fcb18dc83960faa23e73
-  examples/resources/am_certificate/resource.tf:
-    id: f5941b99b61d
-    last_write_checksum: sha1:3a4b51a42aa83ed10dba4ff6e89402b777ebcd5a
-    pristine_git_object: c15c4869b4b1c01975633ff16757f028e2fedfb8
-  examples/resources/am_data_plane/import-by-string-id.tf:
-    id: 8d005dc59b83
-    last_write_checksum: sha1:99c14e0563564d471a68ed6b01eeb246662e1a3e
-    pristine_git_object: 2d45c73a61cafdfa7cc92756c156631638169342
-  examples/resources/am_data_plane/import.sh:
-    id: ca7a7554b4c1
-    last_write_checksum: sha1:257d3488bdf737568c8d6de24e178e96f8178589
-    pristine_git_object: f58dc8f1959da9dcab8c38ce73f372888af8c2d1
-  examples/resources/am_data_plane/resource.tf:
-    id: 32e922156e1b
-    last_write_checksum: sha1:49ca320d344e78330ed2ce0b5a1e0f4d73458255
-    pristine_git_object: d01fc2ff64d1686f76895d66a57de3c125f1818d
-  examples/resources/am_domain/import-by-string-id.tf:
-    id: 7eb2f7088839
-    last_write_checksum: sha1:9a679be5677bf5041524e638a463a1235beb0144
-    pristine_git_object: 70f6043811366c94f7dd4847275b176884036cdf
-  examples/resources/am_domain/import.sh:
-    id: 48d053965b2e
-    last_write_checksum: sha1:aa71cae34c55ef47856532a5cdfba6a0fc74ae3a
-    pristine_git_object: d4f0a13001d142c5aad051cd598c2787eb714a23
-  examples/resources/am_domain/resource.tf:
-    id: bcb737681ae6
-    last_write_checksum: sha1:15c0135ee6383e995ffeced9c1e5077ef5ebd917
-    pristine_git_object: d41764356ca74fecd03d05c3cd0a4b83ad961626
-  examples/resources/am_identity_provider/import-by-string-id.tf:
-    id: 6f2b44ca45af
-    last_write_checksum: sha1:e855d7225b81206f63110bd54b25bb4024fee543
-    pristine_git_object: ac223bc3f8bb158bf5e14d5c4bf5dfc13f722184
-  examples/resources/am_identity_provider/import.sh:
-    id: b00f8e6f999f
-    last_write_checksum: sha1:1211d7ce95a30cbb3e8561670789df1f3a7cf733
-    pristine_git_object: b666c3e373b55a77fd143cf9ece53225b3318e7d
-  examples/resources/am_identity_provider/resource.tf:
-    id: f4a4cc8dd1fd
-    last_write_checksum: sha1:ecd19eefcb908159a6f8340adfba103c9a5afeb3
-    pristine_git_object: a2a660c10b0f986f8b1fa232a743fb19f7fbd71d
-  examples/resources/am_reporter/import-by-string-id.tf:
-    id: a232568c218b
-    last_write_checksum: sha1:2429590a9c16c9ef58bd4080e6f194e7fa3570a4
-    pristine_git_object: 715a77a33140c30e9ea16c83950a7e3cf2403aba
-  examples/resources/am_reporter/import.sh:
-    id: 1f5a75e270b3
-    last_write_checksum: sha1:e91524a0253d47fb0efa7fd4e005bf820909858b
-    pristine_git_object: 2ad13f3057e00997203d0750f545e3cd35fc28c6
-  examples/resources/am_reporter/resource.tf:
-    id: 696c5e0c5a6c
-    last_write_checksum: sha1:a6ea37154e7c7da4f00bf39bfcf49314b754e3ab
-    pristine_git_object: 9b4f4d6020a884fa9b665c8dff9ff45261cedac8
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:d813d1d9591c33e568923ca2c3eb25f0c80cad47
-    pristine_git_object: 16d8d48400d29a92bd3250cec16c13dd6922ad79
+    last_write_checksum: sha1:22fe962491e80f51dbaf286403300bd8d3f80297
+    pristine_git_object: d71e5089002bbe89be5ab06f504daae32514e4be
   internal/planmodifiers/boolplanmodifier/suppress_diff.go:
     id: 3cf85b98963e
     last_write_checksum: sha1:6c02a234374809043626322723e572dc8551c62a
@@ -259,6 +179,22 @@ trackedFiles:
     id: ead742412d0f
     last_write_checksum: sha1:53d2e642818b17940e17ed5310f2f3ff541c492e
     pristine_git_object: cd0dbf813362d30f2c7b2f489f99a65ea2d528e0
+  internal/provider/application_data_source.go:
+    id: bc1a3e0c6e41
+    last_write_checksum: sha1:81ab922fad2e84e0be84fabe2efad599494c264b
+    pristine_git_object: 4244bff15e70b91862c7a7bfd62de62a73fe47c1
+  internal/provider/application_data_source_sdk.go:
+    id: c8d852b89fb1
+    last_write_checksum: sha1:8cfa11233cc30d14f6b290705ed71cab84508b23
+    pristine_git_object: fd7ad5b054b96f8e296f9d7f4a7d1e25923863bc
+  internal/provider/application_resource.go:
+    id: 7f6eb7925aae
+    last_write_checksum: sha1:c3e08de157691fb47d868117bb5768560cd0d542
+    pristine_git_object: 1eb379d76dfda49406045391fbba097aac3bf1fc
+  internal/provider/application_resource_sdk.go:
+    id: e222f1f0cfa7
+    last_write_checksum: sha1:e29add61fc708d86e79c61762485063f35175c28
+    pristine_git_object: cc2ea1bc680b5d20f771c3d1390472207e190698
   internal/provider/certificate_data_source.go:
     id: 3cc801066939
     last_write_checksum: sha1:8d154a7df506b614fa26ff6851cfedf8a36331e7
@@ -269,40 +205,48 @@ trackedFiles:
     pristine_git_object: 87e676a233f9588dd9dc9ab81db9e0f6148b4c34
   internal/provider/certificate_resource.go:
     id: bdfa827216a2
-    last_write_checksum: sha1:cdb408efb4247c3ddab255d92d0e28ca16d6ec25
-    pristine_git_object: a9974fd2c391392f86e20f0b3f19d22566022777
+    last_write_checksum: sha1:756a3dc75c7296dbcc79ba73d40ee40af8d26da1
+    pristine_git_object: fbe5a3a9369c5778858ac34624294fb81ffb632a
   internal/provider/certificate_resource_sdk.go:
     id: df2508cad27a
     last_write_checksum: sha1:af1c6f47372e2d89f9b78a273e6c742d1a776a39
     pristine_git_object: ce4c988d6d77cdc3057367fbcb0d4631201d011d
+  internal/provider/clientsecret_resource.go:
+    id: 508b0e70bcd9
+    last_write_checksum: sha1:755c37f6fef3074650c14883ea39571dec350bbd
+    pristine_git_object: b16f071a05c6b54a9c5580186c9cf817b1eccf57
+  internal/provider/clientsecret_resource_sdk.go:
+    id: 523cd5b77db1
+    last_write_checksum: sha1:f9b1fd63454832f8618dde181814a6d827035949
+    pristine_git_object: 98eb724b775df2cbdd99aede8273c076506871f8
   internal/provider/dataplane_data_source.go:
     id: 9711b064b1f2
-    last_write_checksum: sha1:bab3cfe9574eeb7fe22fd94e14b34b89f28d13c2
-    pristine_git_object: 7c6f458d3d3da69e8f2dab3f96758d4dc8907f84
+    last_write_checksum: sha1:56e2c51e715301d03b406ee16e9556deb7b0f9d6
+    pristine_git_object: 2fe5696b669479ae3047abe6f79fb1b29251dd69
   internal/provider/dataplane_data_source_sdk.go:
     id: a94ce61290bb
     last_write_checksum: sha1:eac6631311890224e1a25f33f7555372cbc97684
     pristine_git_object: 8825ec28a4bc4c056549d02e6afe3c751adce0d8
   internal/provider/dataplane_resource.go:
     id: 29fb39c99b4d
-    last_write_checksum: sha1:985b929d058e6b65d6fb5b39a7376a692631c33d
-    pristine_git_object: 90ad0d33ee4d85e6187462f877623408f6a991bf
+    last_write_checksum: sha1:d8a0fb90420ae63d42eaccb602d77031d14932ec
+    pristine_git_object: 62c4874bab3c22d5397c37f52bab4a52609ad590
   internal/provider/dataplane_resource_sdk.go:
     id: f79994bba231
     last_write_checksum: sha1:ba2a1374813c766f45b2b1f61e55e26566d17cc5
     pristine_git_object: 801b940e2ed27816efb02db0317f08ed6da491d5
   internal/provider/domain_data_source.go:
     id: bb66d8949357
-    last_write_checksum: sha1:3f3c664c4b4b740d6c28038a9b44da3724be529a
-    pristine_git_object: 8e029580f1f123195fdfda377d78da5cd75b2199
+    last_write_checksum: sha1:f7277b5d174f9590e031763ef496df687d61915d
+    pristine_git_object: 93a23cf66311168a6fb9d1fc2e8639a9aec39b55
   internal/provider/domain_data_source_sdk.go:
     id: be578134c22d
     last_write_checksum: sha1:a6645ffd54a91a6185f17d7b09a04c1df16353ab
     pristine_git_object: 06cec506b8e9ef8cbe67e2c990d8593e8fc1a8bc
   internal/provider/domain_resource.go:
     id: 5a818b70c107
-    last_write_checksum: sha1:e89b651b3a2d49849c6e44a2cf5a6b95bb2bfa54
-    pristine_git_object: 4811461940f59331a162519865b019b1a99f7de7
+    last_write_checksum: sha1:8e432601f93e3502d3708aa5d77441fdf8531d09
+    pristine_git_object: ced051097e741d22557b2d849e290acdbbb2b1f4
   internal/provider/domain_resource_sdk.go:
     id: 4942f28340ad
     last_write_checksum: sha1:93d69a1ec87775207d54f0e11cab779716e390c0
@@ -317,16 +261,16 @@ trackedFiles:
     pristine_git_object: 91b5d1d130ae4ef9e931f29935a87110dcd307b7
   internal/provider/identityprovider_resource.go:
     id: 58c5a9b0f23d
-    last_write_checksum: sha1:cb2614d9a05f05e0e44a9c62ae96e8bd4896f2ec
-    pristine_git_object: 42bc6abbcf758e788b00b76d4c4252ef8b698977
+    last_write_checksum: sha1:31e18a46a3d22ed3dd1cf3ab0fca23cb8245c675
+    pristine_git_object: 3ef95644b3b8024fcc108ab063a440c7addc60d0
   internal/provider/identityprovider_resource_sdk.go:
     id: 2716363f6d1b
     last_write_checksum: sha1:a6f73f6fcde598d2cb454e32c5a538cff23bfbda
     pristine_git_object: f13133315a0ba7f4a32994b6f4ce5c9a9c479c72
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:2f1d3a68325a1c33ce7b07de26fd022527ffbff2
-    pristine_git_object: d3019bbb9effbf1160de9ef47c6469904dafd68c
+    last_write_checksum: sha1:a2fe9af1e8f069b8352775d05f6748e0d6e8aa6b
+    pristine_git_object: 0af7858ad965b126e3a1287d2ee72ef924612900
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
     last_write_checksum: sha1:42e02d5e7e31b0a5d4e14deb739cf5020c79f2e0
@@ -393,16 +337,16 @@ trackedFiles:
     pristine_git_object: 8d5dfa42afb3f0e4f0943df4004a7d15b2270402
   internal/provider/reporter_resource.go:
     id: 07e2ce9a2d7e
-    last_write_checksum: sha1:c31779de50c43c50099332e2014f9eab9681bfbf
-    pristine_git_object: fe323e029c7d7a656f630f904c7848a10afae6dc
+    last_write_checksum: sha1:10b20c41e72e52db4ba5aff6e101d727b7f34836
+    pristine_git_object: c1a62973ba37936bab9ec7ac8f51b2c22233cbc2
   internal/provider/reporter_resource_sdk.go:
     id: 6aa5cc34a3da
     last_write_checksum: sha1:7b35dbbeaa79bdeea1496a912f107595f468933c
     pristine_git_object: 1e34aee043d9c6c7f9a735d3067ec225c9355b7c
   internal/provider/sensitive_values.go:
     id: ce92270ff162
-    last_write_checksum: sha1:c5a5a3b9332d533fec1cb8dce599770f612ec459
-    pristine_git_object: 379b56ceb929d5640b71358c99c6fa906d2e8e24
+    last_write_checksum: sha1:877f5f091430747776f6fb14a91c5f2e168bacb2
+    pristine_git_object: f8fe6e0d2ee93c3aaf7d690e8ffa901d80997d63
   internal/provider/typeconvert/date.go:
     id: dfe2bc95ad1b
     last_write_checksum: sha1:3010826bc710cb1068692f62736c7b82f46aa142
@@ -415,14 +359,50 @@ trackedFiles:
     id: c44fcd78fccc
     last_write_checksum: sha1:24698cc95c172a2525d1002d44d99cd9c6e0a17d
     pristine_git_object: 85e79406782c5e6fb67d15b25784be652dc08478
+  internal/provider/types/application_lightweight_jwt_settings.go:
+    id: 518dc161387f
+    last_write_checksum: sha1:2cd0fe0cab62677f3b66c04f9dacec0e96ae35fc
+    pristine_git_object: d909741686dd39203084391ee6c0c3cfe592ceff
   internal/provider/types/automation_account_settings.go:
     id: 53660f187554
     last_write_checksum: sha1:16a8ebe0a13cfadcf544b0a7dd5a59f4f070dbbf
     pristine_git_object: b8c0547b21cafcee587c4269024b17c5af93da2d
+  internal/provider/types/automation_advanced_settings.go:
+    id: 3fa79b85cdb8
+    last_write_checksum: sha1:950dc061e0cebc708c9b1ee359b1c437c90ba8fa
+    pristine_git_object: f9ee859396631ce0ed65b235481ff26a9a41de43
+  internal/provider/types/automation_application_factor_settings.go:
+    id: 17f7c0825e2b
+    last_write_checksum: sha1:7012e5981fd1a3f91dc3ccf0c9a68be0243bbd67
+    pristine_git_object: dbfc3b449ca846f70f49c2959c8469d6afc3bb39
+  internal/provider/types/automation_application_identity_provider.go:
+    id: d1168bb2a656
+    last_write_checksum: sha1:09d1a32c4eaac004834aec0147d53f9455190db5
+    pristine_git_object: ca19e44565b64e3314150bf983fcc2df5ed11a48
+  internal/provider/types/automation_application_o_auth_settings.go:
+    id: e2434eb6edb8
+    last_write_checksum: sha1:6be7a92a8d5273afa2f10c909e5901cf1ac06806
+    pristine_git_object: 948bf3fb6b59602d9263261e8c6d5c92d88cb567
+  internal/provider/types/automation_application_saml_settings.go:
+    id: eb0695abc3a1
+    last_write_checksum: sha1:2c228384b347520fb80fd360c52c960ef20e4a76
+    pristine_git_object: 8f9947a58d5ff16fabcb9586d82c667c0bf67360
+  internal/provider/types/automation_application_settings.go:
+    id: 82b351c12f52
+    last_write_checksum: sha1:b8cd49f56b9434b3686712de366b98d52455c1fb
+    pristine_git_object: cc57ce9eec6da3de77fc00ddab3ae1ca257f0781
+  internal/provider/types/automation_assessment_settings.go:
+    id: 8e67a87570f1
+    last_write_checksum: sha1:8827497a0fea2e4008dd9f811210fdbc90bb8c79
+    pristine_git_object: 744489f589d1f35498a08ea535b794ca32a0ef1e
   internal/provider/types/automation_certificate_settings.go:
     id: 330898f8d300
     last_write_checksum: sha1:576a85632f50dddc77bbb34cc909f8ab423f2be0
     pristine_git_object: a395f43ffabd4e059352a11518eb02dd0a1adb88
+  internal/provider/types/automation_challenge_settings.go:
+    id: 4186dba8da0d
+    last_write_checksum: sha1:5e0a56a559dee5a4f228a72d30b023f60eff2971
+    pristine_git_object: 93ef974145828dee26effb51f72766a3383494f7
   internal/provider/types/automation_ciba_settings.go:
     id: e361b9bdc5c7
     last_write_checksum: sha1:4596b364e430843d5918e3473b864c0fdd4a0cf5
@@ -431,14 +411,78 @@ trackedFiles:
     id: 7a6836caefaf
     last_write_checksum: sha1:a6a4d349a659c49c8bde073123537c969925a739
     pristine_git_object: 135960416cc3b02cd56f9fa45fc57898fd38a359
+  internal/provider/types/automation_cookie_settings.go:
+    id: b97a5534f759
+    last_write_checksum: sha1:467a12759ac7ef7d6ccbbb5a0fddd029dac6cc72
+    pristine_git_object: d84d15bb82bd5a2ffd522f53374730fc18eebf24
+  internal/provider/types/automation_cross_app_access_resource_server.go:
+    id: 70a8c824176f
+    last_write_checksum: sha1:b59cfeccb75f80c50e065bd2a01122179f8946d3
+    pristine_git_object: d23e7ce9fd140f6096d09ac009143919953cc943
+  internal/provider/types/automation_cross_app_access_settings.go:
+    id: 37b0e3371be7
+    last_write_checksum: sha1:900e62c52706073b16efb5c246b6a091e0579324
+    pristine_git_object: 6be13cb5b4ce6d7ba43312954fc6307d1f25856f
+  internal/provider/types/automation_enroll_settings.go:
+    id: d3c951f907cf
+    last_write_checksum: sha1:1e32a897a2add69a7163aeca041d7d736eef7d11
+    pristine_git_object: ee7b72e1e1958e423f547939e48ee17e7a8e19dc
+  internal/provider/types/automation_enrollment_settings.go:
+    id: 501a2f34a15e
+    last_write_checksum: sha1:6ca89203dc2b8f3eb3a0442b6cbbeb71803f428a
+    pristine_git_object: 6d9720fbb9c13c8d60311179fa5c3c41b2e20371
+  internal/provider/types/automation_factor_settings.go:
+    id: "185454216035"
+    last_write_checksum: sha1:0c4085c84e1ea9be6f85570852d2acd15ae92c4e
+    pristine_git_object: acde53a0fed67170b6eacb828cf0502aa5d8dfe4
+  internal/provider/types/automation_mfa_settings.go:
+    id: c9d7a13f224c
+    last_write_checksum: sha1:b905d12e37caec03fd95dcf6db3b4ac368a05ae8
+    pristine_git_object: 4e8bdf1117254720a9e6ce368ec000a45458ce10
   internal/provider/types/automation_oidc_settings.go:
     id: d9cefbf21e15
     last_write_checksum: sha1:dbcd8db90345a4d3fbaa6de96bb95fed28032767
     pristine_git_object: 2be2cd925b3fe4c23485fa3e24f3f6d22e460f55
+  internal/provider/types/automation_remember_device_settings.go:
+    id: 2428fab40913
+    last_write_checksum: sha1:819676ff481ce0e4a34dcf1ea000827aeef5cc6d
+    pristine_git_object: 8ee251653e1ed1875a2476571e7635b4aa5a7999
+  internal/provider/types/automation_risk_assessment_settings.go:
+    id: f76b13350325
+    last_write_checksum: sha1:2709b80d172b8c9cb622fd9b7b66c45c6f356bd1
+    pristine_git_object: 999948a28a248eb88ea1dc433ffc8eb16446d093
+  internal/provider/types/automation_saml_assertion_attribute.go:
+    id: 687d8600e323
+    last_write_checksum: sha1:26e3d595500c2b460fc185d4ed3385a3b7adbbbc
+    pristine_git_object: 3263e6caf8d726b25ab89f56a50e49df3f16516a
   internal/provider/types/automation_saml_settings.go:
     id: 1a7d62becc7a
     last_write_checksum: sha1:0408dc7b8ecdfce2dbfa326749ceff37c5cbb333
     pristine_git_object: a264b1b2372c8392127d9488bf34bfca979fafa5
+  internal/provider/types/automation_scope_settings.go:
+    id: 96340597a599
+    last_write_checksum: sha1:2c62fc4200716ad140db410d7481ccdeac881734
+    pristine_git_object: e91e9ababc9ca078750065a6123d3284922f93f3
+  internal/provider/types/automation_session_settings.go:
+    id: c5e1f2d4c25e
+    last_write_checksum: sha1:9e343ea6c29c9f3e97633bf34d910dc90788172d
+    pristine_git_object: cd2d5335a027b1669770b522a2ed77c76291891e
+  internal/provider/types/automation_step_up_authentication_settings.go:
+    id: f4a6d218221c
+    last_write_checksum: sha1:9487c1fe41bd0978c02c718c102c8b49f7d8f801
+    pristine_git_object: 2d4f9ab027855cb6f58808e84a78a736cbd00b0a
+  internal/provider/types/automation_token_claim.go:
+    id: ca04bb840f9a
+    last_write_checksum: sha1:7ab1ff9e589a4b8229450191bb1b7af2b70953ec
+    pristine_git_object: dc65a3ac379a329060df9b0e75ee6e6fe3963647
+  internal/provider/types/automation_user_info_claim.go:
+    id: 4947c3963804
+    last_write_checksum: sha1:f455c0b872a54f4783e7037f5d94d672da6453d2
+    pristine_git_object: e3bcbb045c4c951df9dbaa3d9b5202a225a7ecf6
+  internal/provider/types/automation_workload_identity_settings.go:
+    id: 8c4258abfcbf
+    last_write_checksum: sha1:d823146f3dd52835cebd909bab965143d1c0183f
+    pristine_git_object: b4109c91f3b87cdf7d4ece1d8954f98a4e8517b6
   internal/provider/types/cors_settings.go:
     id: 7299c421ace8
     last_write_checksum: sha1:062d4d5724d2c3bdb00ca506bbf12ed9fce01fd9
@@ -537,36 +581,44 @@ trackedFiles:
     pristine_git_object: 18e799a8d8c9d14fc6d08f7338c4227383d535d9
   internal/provider/utils.go:
     id: 312d50f148af
-    last_write_checksum: sha1:ec0c27e43d97665961a8d34e8faebc2085f86d54
-    pristine_git_object: e0f824349dba16d6afb6cb57dc433136ba589e19
+    last_write_checksum: sha1:9ed0e18846006502824c023ee10818d294821092
+    pristine_git_object: 3395aa28abd6f45564754c02173e461be8c13f0f
   internal/sdk/.gitattributes:
     id: 1ea4c4e0a39d
     last_write_checksum: sha1:84b0115789fc3ea52e31df701d8a27f76077e29f
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
+  internal/sdk/applications.go:
+    id: 5006ded62046
+    last_write_checksum: sha1:a09f23761fa647b5fa3cbf5d3384c6f0d3f2af91
+    pristine_git_object: 133f722eb9fdc742366ea865df704ee5c0d9456a
   internal/sdk/certificates.go:
     id: 046da0c60b45
-    last_write_checksum: sha1:12e58b549ac7fd04d8bd21d3b1b34aea4bf2ff1e
-    pristine_git_object: 123ce6181c91224e4023977afefac152b1b6b662
+    last_write_checksum: sha1:5e54fdcb9a52f38ef57e066840de5374bbb3a4e5
+    pristine_git_object: bbbc8b2b9ec50b9686e57d102aeef94e5c540817
+  internal/sdk/clientsecrets.go:
+    id: 48eaa416572e
+    last_write_checksum: sha1:59c01507ad9cbcf5556016a55ed6a39737b50e81
+    pristine_git_object: 45f547f42f30c1557b0e70b73e7daaf7c23e64d0
   internal/sdk/dataplanes.go:
     id: ffc1afe49a55
-    last_write_checksum: sha1:159dc4e7d91babc9a89df90023d60653f52d9da3
-    pristine_git_object: e1ee20ff2b3ba2d5430f0a7a5ec4d556cc4ec283
+    last_write_checksum: sha1:8049333b8e964638d4debb6b30cd1fa169c51e76
+    pristine_git_object: 0194c80c5da7374b44a47d5eda3c6780766e95df
   internal/sdk/docs/models/operations/option.md:
     id: a35737eb2e35
     last_write_checksum: sha1:0ddac2141a14720a53ad8a9d0ce242ab4d9a742c
     pristine_git_object: 6d873950cb9496df59bf1faa53b866b16f5ed4eb
   internal/sdk/domains.go:
     id: b0cb4c52ef7b
-    last_write_checksum: sha1:ebf68d718090ed6eca62a42fc693c2406d1eae6a
-    pristine_git_object: 8c7de62de84d5dd33b7ba81f851bcf94668a767d
+    last_write_checksum: sha1:03d26a2f33355fa4c347fe2222b7973e2fb3d2a2
+    pristine_git_object: f0de73308acad56d3241a6ffcaa904e411b3186c
   internal/sdk/graviteeam.go:
     id: 58538b569570
-    last_write_checksum: sha1:ced5ef3c8605365865d50c1a2158714a2c06da5c
-    pristine_git_object: 0f8243098b1f5b42ae9d3eaa6ba9d2233626190d
+    last_write_checksum: sha1:1f473d4abd35a4a4201927d192cddd22cbf1e210
+    pristine_git_object: b5363a44e3aec60c82c27a713de2774590425a9f
   internal/sdk/identityproviders.go:
     id: c0aab467e537
-    last_write_checksum: sha1:4541e9b70de77f70fc2f848e4ebcceb3959730a0
-    pristine_git_object: 8debf198066885c870e0e982a9198aac6c6b969c
+    last_write_checksum: sha1:aa4ef76df1eb6bb7c16d5a7b05cabe079283f32e
+    pristine_git_object: 48d119204867695188dabbe9ab3cb7942226ad59
   internal/sdk/internal/config/sdkconfiguration.go:
     id: 6af0bc8635d9
     last_write_checksum: sha1:d28c16bfd3c29bcfabda228c843b802881e5d1e9
@@ -629,20 +681,28 @@ trackedFiles:
     pristine_git_object: 5909f771617dd6a5d16165d6f999ef5727cf49ac
   internal/sdk/internal/utils/utils.go:
     id: feefcdf75dbd
-    last_write_checksum: sha1:3520bafe186e4466b73a1b62c20c7cdd1058c2e3
-    pristine_git_object: ebf79447fd8c1690421e0a9769526a7e84722c7e
+    last_write_checksum: sha1:855100b8cb8d33f484d8429e629d089dab384a17
+    pristine_git_object: a7bcf8e223fcc03c344e1b3c7dd1d455e8209240
   internal/sdk/models/errors/apierror.go:
     id: bf281d768352
-    last_write_checksum: sha1:48baa200e233c2bfe77fb5b39ab9bbd257e9c36d
-    pristine_git_object: aac3bd31bc35ca9cfa535f71be8a234594bd6762
+    last_write_checksum: sha1:9f1c0727382e49e57d3f779acbcada4c2d02c29c
+    pristine_git_object: fe938190ed9742ab2734eef48af9f335027abfc5
   internal/sdk/models/errors/responsevalidationerror.go:
     id: e68fc4339a19
     last_write_checksum: sha1:4e532213085184642e545f5794b19b7d8a76eeac
     pristine_git_object: e6484923daa30356417dc199e1850462d73c01e7
+  internal/sdk/models/operations/automationcreateorupdateapplication.go:
+    id: b940fa327e1a
+    last_write_checksum: sha1:4f59451c276dd5073b63f650c44a3660539032ca
+    pristine_git_object: 489d166e0cf0ed3da5cb3420c32a161b3a1788fd
   internal/sdk/models/operations/automationcreateorupdatecertificate.go:
     id: b8c970d7b9ed
     last_write_checksum: sha1:898d8a321ecfaa2f7bd3bcd361bb0c51ec026625
     pristine_git_object: 5576d4f388f3668bbddd00ca9b34ef8f919ff428
+  internal/sdk/models/operations/automationcreateorupdateclientsecret.go:
+    id: 17d3bfd57a2f
+    last_write_checksum: sha1:4bfea5f3da9797f6b4980e9103210dab839b8811
+    pristine_git_object: a8c303480840c4216000bfcd262bcb1b52f30f7d
   internal/sdk/models/operations/automationcreateorupdatedataplane.go:
     id: 8f2bffabf93f
     last_write_checksum: sha1:17fb92c0620eebceedf945727ebe13a89a8a43e9
@@ -659,10 +719,18 @@ trackedFiles:
     id: 7819a96c14ba
     last_write_checksum: sha1:1922eefc07d70cad9c44d089fb2dc4dd4a76c324
     pristine_git_object: 4dec2f22ccca860ab4c4bcb36324b786500a13dd
+  internal/sdk/models/operations/automationdeleteapplication.go:
+    id: 642006d2156a
+    last_write_checksum: sha1:8318fd50aa4889b8e47d5c08bf012788edee928a
+    pristine_git_object: 22d23087bfc43ae78128332def38a7d943d1caee
   internal/sdk/models/operations/automationdeletecertificate.go:
     id: d95207d3c9d0
     last_write_checksum: sha1:8fb35fadde24b7c6bce36816b2e50930ec418bfe
     pristine_git_object: 98e249368462c94ea01a4260b4c8d5ed42a7f845
+  internal/sdk/models/operations/automationdeleteclientsecret.go:
+    id: 808015ba6ea5
+    last_write_checksum: sha1:3acc6840ed54b73d9e8cf41bc0f7834121da769b
+    pristine_git_object: fd87ebf096b1912a3eae26e0426cc7e3bc46bf40
   internal/sdk/models/operations/automationdeletedataplane.go:
     id: df66afa20f26
     last_write_checksum: sha1:88bcbe6a13a8f268e5333085c44cd3ae71a2483d
@@ -679,10 +747,18 @@ trackedFiles:
     id: cd9074ca96bc
     last_write_checksum: sha1:650e57056b2c74376aa624a7dddbb0b1ecd8efc8
     pristine_git_object: b344bd768b9f91179e65a53b17cfb9d3a99a9b75
+  internal/sdk/models/operations/automationgetapplication.go:
+    id: 748c4af557a0
+    last_write_checksum: sha1:e38e4b34beec68f2a6ac610d978932be04dba6ec
+    pristine_git_object: adeab2644ab1b65c7117a85dfdd8015137a0900c
   internal/sdk/models/operations/automationgetcertificate.go:
     id: dd9377c8a477
     last_write_checksum: sha1:3569dc05ab18af9192970710827563f4c156518b
     pristine_git_object: f32293cf7b6cbd1cebddbfc7bee62089ec71af56
+  internal/sdk/models/operations/automationgetclientsecret.go:
+    id: e3c200d57c5e
+    last_write_checksum: sha1:41e1180b3f73abf95d4f4f826c178a2d6a411b5c
+    pristine_git_object: 75e2436e253d8674a55068c3e197d2c89d220ee7
   internal/sdk/models/operations/automationgetdataplane.go:
     id: f84513d4857e
     last_write_checksum: sha1:c252420027df3139d49187c670d16ab9808220f8
@@ -699,10 +775,18 @@ trackedFiles:
     id: 75609643a5f7
     last_write_checksum: sha1:8091a3b8e29530ec8c0d5563df81f16fbbda8deb
     pristine_git_object: 20bfa480f295ae0e38a3ae661431ccd4b6b1041c
+  internal/sdk/models/operations/automationlistapplications.go:
+    id: 0a7218039aa9
+    last_write_checksum: sha1:4438e53c43d88c4a874ce203e725cb46feb6bf1c
+    pristine_git_object: 0b1409cdb21d25a8e387cc95f49b02ce9c33c6dc
   internal/sdk/models/operations/automationlistcertificates.go:
     id: 59467d0a475b
     last_write_checksum: sha1:64f64317024bc01785b4e6b6c62e93b358457321
     pristine_git_object: 689d1096ce67802bca53bffd3ed1e0eed1e20997
+  internal/sdk/models/operations/automationlistclientsecrets.go:
+    id: a5a88fda5278
+    last_write_checksum: sha1:506051b858cc64a3c95186d55b36d87fed83c49a
+    pristine_git_object: 3ca95980985a6acb76ae017f3a71898afceec08d
   internal/sdk/models/operations/automationlistdataplanes.go:
     id: 15518e7b417d
     last_write_checksum: sha1:511a0af4bd26663b490f2f71d0dfa5181b0d9a0f
@@ -723,10 +807,54 @@ trackedFiles:
     id: 6d0d29414e00
     last_write_checksum: sha1:e0def2e37d27eae230672448d7d898b3a9fc4045
     pristine_git_object: f7ca82a853190d8128328038a3be46b8b5330f22
+  internal/sdk/models/shared/applicationlightweightjwtsettings.go:
+    id: add431d6fd6e
+    last_write_checksum: sha1:cb525a4133f952c015077f6bad27f7ff687fcd15
+    pristine_git_object: 1caf0e7f9c12951f37d4609f29d16e85afe409b9
   internal/sdk/models/shared/automationaccountsettings.go:
     id: 0c5730d31fae
-    last_write_checksum: sha1:5cc04cc44a71f6a2e1155a0c8d38906f36a369c3
-    pristine_git_object: 94659285d9249f432c58d141d46ecebf93553e5b
+    last_write_checksum: sha1:7643001121b15f0aaa59140344fbcd31abcb0fa3
+    pristine_git_object: 24b8b1ac8c09c7e9735e60736f8f8e95f4aff44b
+  internal/sdk/models/shared/automationadvancedsettings.go:
+    id: 0e559089b99d
+    last_write_checksum: sha1:345e813a4d0f94f68a97d5ba27aeb1bc40739a31
+    pristine_git_object: bbff92edd6e4cf123157b0fd9bf792973b5dd8ac
+  internal/sdk/models/shared/automationapplication.go:
+    id: 3263ff3c45b0
+    last_write_checksum: sha1:f45cc9263e00f616c5eb58ac14dfeda0c0b6f48d
+    pristine_git_object: 3feb30854539c1b9254c962bf69573183e11bbb7
+  internal/sdk/models/shared/automationapplicationfactorsettings.go:
+    id: 37e1f1473460
+    last_write_checksum: sha1:2252b8550ed1fb3dd9446bccfa4a8de0474321b2
+    pristine_git_object: b7f546f87b17cf6d322bb34799eca3c74ccf27a6
+  internal/sdk/models/shared/automationapplicationidentityprovider.go:
+    id: 23953877459c
+    last_write_checksum: sha1:e586147f44a79273b81648791786a268b97a4963
+    pristine_git_object: 4de81d60e6ffcc02a751c8a4f6e32e6335b45cfc
+  internal/sdk/models/shared/automationapplicationoauthsettings.go:
+    id: 73257a0a7576
+    last_write_checksum: sha1:8bfcf0f3b2979d98ad9ce182d407432c7d5c9111
+    pristine_git_object: 204108de8c3c6eb5e94730ee4195067fc91ea1ab
+  internal/sdk/models/shared/automationapplicationoauthsettingsinput.go:
+    id: 9570a3f0a3a2
+    last_write_checksum: sha1:2cff6f81eddfa083da40befba54fe8d01631a341
+    pristine_git_object: d52caf8f0ceba2d83735170c3ce66bfebab9087f
+  internal/sdk/models/shared/automationapplicationsamlsettings.go:
+    id: eb6665d31c62
+    last_write_checksum: sha1:12d84cbf4f9937d4dcf838ccfe05e8399364812a
+    pristine_git_object: 94c555280849aaaaf4a082b1848a67eb5dedec7f
+  internal/sdk/models/shared/automationapplicationsettings.go:
+    id: cb29ad4f0561
+    last_write_checksum: sha1:f11872fa0eec4959d45343974f736144b1147ffd
+    pristine_git_object: 39dd1ad7a59b10e0ad985d1018ad3a64bb2404aa
+  internal/sdk/models/shared/automationapplicationsettingsinput.go:
+    id: df5caf417071
+    last_write_checksum: sha1:5234faf59d8c04c40ed220a2f3821cba8a6e2844
+    pristine_git_object: bea0c93a96bcf7c78ebc9c78ec69c13709661270
+  internal/sdk/models/shared/automationassessmentsettings.go:
+    id: 6ad2dac4f980
+    last_write_checksum: sha1:9ebf20594cb016e52c664f71bea92aa24c3a8699
+    pristine_git_object: ee417afbe519b6cf80efcd903f9e0cfbf020ee59
   internal/sdk/models/shared/automationcertificate.go:
     id: 0d5bf1f72801
     last_write_checksum: sha1:9688789105e24d7ab87719ac59c231e77bf240fc
@@ -737,8 +865,12 @@ trackedFiles:
     pristine_git_object: 80bb7936ba32c1b2fc9b162539d911800b91aaf1
   internal/sdk/models/shared/automationcertificatesettings.go:
     id: 6ce39e02283f
-    last_write_checksum: sha1:4f42e338cb9b950fa2c8fd7d965de6a96a46b7c9
-    pristine_git_object: 1091be8c05ad93244de026d9725ee7bab3758b0a
+    last_write_checksum: sha1:e007e8bd20acd8eabb12c019399ac040799a0ae9
+    pristine_git_object: 63e117bc4a2e4c52a2856239f6e754fcaaddf102
+  internal/sdk/models/shared/automationchallengesettings.go:
+    id: 3cc9f013324b
+    last_write_checksum: sha1:28de2c039b8b47c132de67169582162e025a894b
+    pristine_git_object: 95bf4f4ab96b3e6a87649db80bb0df8ada79d238
   internal/sdk/models/shared/automationcibasettings.go:
     id: f590f07038fe
     last_write_checksum: sha1:0c1911a6345ad030b6d7768c24b55edecf0f600c
@@ -747,6 +879,26 @@ trackedFiles:
     id: eac811c36090
     last_write_checksum: sha1:22b0aa2578c7609b57ad85b4e9c9c3f5745db405
     pristine_git_object: 67ad341cd5118a1f0ac9c0aaa4a71ce633e729e8
+  internal/sdk/models/shared/automationclientsecretinput.go:
+    id: 1e3dc3a0ac6c
+    last_write_checksum: sha1:249bec2f216a4689ff80431aba7dd6814237e11f
+    pristine_git_object: b2e5912f136d8bdfc177ed0b0537c6b88ab73250
+  internal/sdk/models/shared/automationclientsecretoutput.go:
+    id: 354c0f432b86
+    last_write_checksum: sha1:b4837e2dd1bedcfbbc648b83f228fc0287494da4
+    pristine_git_object: ede42ab537efcb7d2d9f2534111cad907a18d9d3
+  internal/sdk/models/shared/automationcookiesettings.go:
+    id: 4340463e1d4f
+    last_write_checksum: sha1:9dc7ccc71c4ff8e5427d74330844ea57ff5915e1
+    pristine_git_object: ed36713727b6fe1423ec5e987c51b9e1f7588f28
+  internal/sdk/models/shared/automationcrossappaccessresourceserver.go:
+    id: 672503fb2ae5
+    last_write_checksum: sha1:f7dff5daa98c2c02f5c7d125fe9e24cadbe7500d
+    pristine_git_object: e82b7a828267278bf82723a39ce7e310d7593979
+  internal/sdk/models/shared/automationcrossappaccesssettings.go:
+    id: 633068d471b6
+    last_write_checksum: sha1:5b44499476e8666627630f76372beba2ad51d435
+    pristine_git_object: bbe6bfae5274523c7b304994604d03477d0ed2fe
   internal/sdk/models/shared/automationdataplaneinput.go:
     id: 0f1df3a78b3f
     last_write_checksum: sha1:5347424750016914d391dc719b21a8adee3988e2
@@ -763,6 +915,18 @@ trackedFiles:
     id: 45b604b6b01c
     last_write_checksum: sha1:f27eedd77a8cc4b6810dec0a5ef9f8556fb9cf30
     pristine_git_object: 2082fb7e3e6c5938d71d3d928c9adff5f73add7e
+  internal/sdk/models/shared/automationenrollmentsettings.go:
+    id: 25a20a71486a
+    last_write_checksum: sha1:2688ddc063415c71c46870310860dbe79c93e07e
+    pristine_git_object: e6666ce193f5b15025777db1549eb4a9bb927dd8
+  internal/sdk/models/shared/automationenrollsettings.go:
+    id: 168d9314c1d3
+    last_write_checksum: sha1:1cc9c66b47d83f97d047b2a2d3f21a4a87fb4f79
+    pristine_git_object: ce7e52d57b2162efe02864de9bd4b562868490f9
+  internal/sdk/models/shared/automationfactorsettings.go:
+    id: 43aa3c6f6499
+    last_write_checksum: sha1:2d293504aebc8db9492dda2eb400503043fa40ca
+    pristine_git_object: 9625e8511a37a88ea8f9c9c27c937e9c0620f1e9
   internal/sdk/models/shared/automationidentityprovider.go:
     id: c242bb567c49
     last_write_checksum: sha1:a421f2291814f3d21f91aa446ab05d4411d95b25
@@ -771,10 +935,18 @@ trackedFiles:
     id: d25aaa8f7ca7
     last_write_checksum: sha1:9ddeb440ba1f667f589e4b3a9380650c1848db97
     pristine_git_object: 503d9dc96529bcfe80ca8a7800a195136cc2148a
+  internal/sdk/models/shared/automationmfasettings.go:
+    id: 77d27f2e2e05
+    last_write_checksum: sha1:714b711e48c6bbc8ef7df11449fc9de131deff6c
+    pristine_git_object: ca4a831dc851ba2b691084f011fd370b44dcf93c
   internal/sdk/models/shared/automationoidcsettings.go:
     id: 5f62505f1197
     last_write_checksum: sha1:dedd3d19f3f3a1b53773791817d7914260e3ee41
     pristine_git_object: 7893f48c11f5b5e2af115423bedcbe73e2fc56ce
+  internal/sdk/models/shared/automationrememberdevicesettings.go:
+    id: 85ff135b9351
+    last_write_checksum: sha1:3c2f0033f6d580e6d2087a24d401b2fad7e4817a
+    pristine_git_object: ea10c6ceff132c227d9e8bb95887d07ca40ebcac
   internal/sdk/models/shared/automationreporter.go:
     id: 068380aea7dd
     last_write_checksum: sha1:e05fc4bc8277ec9c51b73c19e9fb933dca614ff7
@@ -783,10 +955,42 @@ trackedFiles:
     id: 0be99a997035
     last_write_checksum: sha1:304c48561b01a731b9af98509146c54eb5e9b245
     pristine_git_object: 1a6e607d551680d4d401fccb24f696e5e2f21b0e
+  internal/sdk/models/shared/automationriskassessmentsettings.go:
+    id: 44aeec81beea
+    last_write_checksum: sha1:5a31915289e29f8e14ba25dfdb25b93f73bf0a1a
+    pristine_git_object: 3902c842d173d036e5a7d9936c84156cc9a132a4
+  internal/sdk/models/shared/automationsamlassertionattribute.go:
+    id: 18befad6913b
+    last_write_checksum: sha1:6d593cadc7617432d3a0a2743179adb8bf2f33b3
+    pristine_git_object: 5bca987c389eb7a11a6122ef0688b56b7523b8e2
   internal/sdk/models/shared/automationsamlsettings.go:
     id: dc2d2f7e9cea
-    last_write_checksum: sha1:819aff88e27bc8807e26e259c00b1f215c16aac3
-    pristine_git_object: 1fc1d49d672313b1b66a47d259c7389f75b886eb
+    last_write_checksum: sha1:99e05949b4c6f2ad51cb424f5ddf0d4a99e98574
+    pristine_git_object: 7607bb40236b3accf5a8c1cea20ac965ed0fb945
+  internal/sdk/models/shared/automationscopesettings.go:
+    id: b9c504b56f05
+    last_write_checksum: sha1:85b6a944a9aa824b41899051ae942a2c878ecdc2
+    pristine_git_object: e5a86a33cd53764df55e81dacb1ec0388dea370d
+  internal/sdk/models/shared/automationsessionsettings.go:
+    id: 9979a2de8185
+    last_write_checksum: sha1:989385d78bf49eae3f9de1a18d2fcc8512be8323
+    pristine_git_object: 2fc72bde2e60e3b5f646c54724209e9993d14085
+  internal/sdk/models/shared/automationstepupauthenticationsettings.go:
+    id: 54cbbb3afa78
+    last_write_checksum: sha1:cab76ffc8c3fa6db7edb480745880dda3e5b4bf2
+    pristine_git_object: 2703cdd38d9a9d636801f29c9a35aea2e521fd45
+  internal/sdk/models/shared/automationtokenclaim.go:
+    id: a8d58181cbe4
+    last_write_checksum: sha1:5a992114fea3c774f9d3bcc89b4a59594ead2408
+    pristine_git_object: 40479a3c802bff602832d4240e9e13c1f7a26353
+  internal/sdk/models/shared/automationuserinfoclaim.go:
+    id: 8a48a207a255
+    last_write_checksum: sha1:afbe0bdf6b1ff78e5618782f5478bf85e12ce388
+    pristine_git_object: 6acdd8becf58437d7e5b012828bc0e54985d2adc
+  internal/sdk/models/shared/automationworkloadidentitysettings.go:
+    id: 6ef8b61ae88e
+    last_write_checksum: sha1:140a65ce12ed8131753fa077351a0afe00c38545
+    pristine_git_object: 8ed4d9fc7d14540f685f3b6789ef6b774cccfe03
   internal/sdk/models/shared/corssettings.go:
     id: b3dd5116ab76
     last_write_checksum: sha1:793e9b8e2e4130d391aff06376cb5a00bc6a39f4
@@ -907,10 +1111,14 @@ trackedFiles:
     id: 3920a41dfc4c
     last_write_checksum: sha1:d76c8ae51fd82ba31d57a7f57cd2e9b83d7bbb34
     pristine_git_object: 3851483e03ce4e6b06c6c61fd82d1a735032739c
+  internal/sdk/redact/redact.go:
+    id: c1be9124d2ee
+    last_write_checksum: sha1:660494a0d8d5ab34b7c4090daa297481056973ea
+    pristine_git_object: 7f5ba0c879b19729e404127f61ac2d031b9f3c83
   internal/sdk/reporters.go:
     id: 73b3a565b2bb
-    last_write_checksum: sha1:f005701dde3ccc78206cdce60acdf7e65c414e46
-    pristine_git_object: 3e0b569193dd8c630f8434b2458d735445010f70
+    last_write_checksum: sha1:2f4763e9bbff20963eaa2081b0b948b9a1a68000
+    pristine_git_object: eea87486d4a1af0290de35ffc5bd2b25f16ddb16
   internal/sdk/retry/config.go:
     id: 7ea5fa9128b6
     last_write_checksum: sha1:22068a7fd6e154053ff85678a7fdb6a0d02ac790
@@ -1646,6 +1854,273 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           dataPlaneId: "acme-eu"
+      responses:
+        "403":
+          application/json: {"http_status": 403, "message": "A human-readable description of the error"}
+  automationListApplications:
+    speakeasy-default-automation-list-applications:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+      responses:
+        "200":
+          application/json: [{"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "mfa": {"challenge": {"active": false, "challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"active": false, "enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "enrollmentSkipActive": false, "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"active": false, "deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000, "skipRememberDevice": false}, "stepUpAuthentication": {"active": false, "stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"accessTokenValiditySeconds": 7200, "contacts": ["ops@example.com"], "crossAppAccessSettings": {"enabled": false, "resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "forcePKCE": false, "forceS256CodeChallengeMethod": false, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "optInScopeSelection": true, "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "silentReAuthentication": false, "singleSignOut": false, "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tlsClientCertificateBoundAccessTokens": false, "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "enabled": false, "geoVelocityAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "includeAssertionConditions": false, "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "responseBinding": "urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request", "singleLogoutServiceUrl": "https://app.example.com/saml/logout", "wantAssertionsEncrypted": false, "wantAssertionsSigned": false, "wantResponseSigned": true}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "subjectMatchMode": "exact", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}]
+        "403":
+          application/json: {"http_status": 400}
+    AutomationApplicationList:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+      responses:
+        "200":
+          application/json: [{"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"accessTokenValiditySeconds": 7200, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "optInScopeSelection": true, "redirectUris": ["com.example.app:/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "silentReAuthentication": false, "singleSignOut": false, "tlsClientCertificateBoundAccessTokens": false, "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}]
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+      responses:
+        "403":
+          application/json: {"http_status": 403, "message": "A human-readable description of the error"}
+  automationCreateOrUpdateApplication:
+    Mobile application:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+        query:
+          dryRun: false
+      requestBody:
+        application/json: {"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"accessTokenValiditySeconds": 7200, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "optInScopeSelection": true, "redirectUris": ["com.example.app:/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "silentReAuthentication": false, "singleSignOut": false, "tlsClientCertificateBoundAccessTokens": false, "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}
+      responses:
+        "200":
+          application/json: {"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"accessTokenValiditySeconds": 7200, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "optInScopeSelection": true, "redirectUris": ["com.example.app:/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "silentReAuthentication": false, "singleSignOut": false, "tlsClientCertificateBoundAccessTokens": false, "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}
+    speakeasy-default-automation-create-or-update-application:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+        query:
+          dryRun: false
+      requestBody:
+        application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "mfa": {"challenge": {"active": false, "challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"active": false, "enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "enrollmentSkipActive": false, "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"active": false, "deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000, "skipRememberDevice": false}, "stepUpAuthentication": {"active": false, "stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"accessTokenValiditySeconds": 7200, "contacts": ["ops@example.com"], "crossAppAccessSettings": {"enabled": false, "resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "optInScopeSelection": true, "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "silentReAuthentication": false, "singleSignOut": false, "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tlsClientCertificateBoundAccessTokens": false, "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "enabled": false, "geoVelocityAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "includeAssertionConditions": false, "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "responseBinding": "urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request", "singleLogoutServiceUrl": "https://app.example.com/saml/logout", "wantAssertionsEncrypted": false, "wantAssertionsSigned": false, "wantResponseSigned": true}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "subjectMatchMode": "exact", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
+      responses:
+        "200":
+          application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "mfa": {"challenge": {"active": false, "challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"active": false, "enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "enrollmentSkipActive": false, "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"active": false, "deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000, "skipRememberDevice": false}, "stepUpAuthentication": {"active": false, "stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"accessTokenValiditySeconds": 7200, "contacts": ["ops@example.com"], "crossAppAccessSettings": {"enabled": false, "resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "optInScopeSelection": true, "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "silentReAuthentication": false, "singleSignOut": false, "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tlsClientCertificateBoundAccessTokens": false, "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "enabled": false, "geoVelocityAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "includeAssertionConditions": false, "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "responseBinding": "urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request", "singleLogoutServiceUrl": "https://app.example.com/saml/logout", "wantAssertionsEncrypted": false, "wantAssertionsSigned": false, "wantResponseSigned": true}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "subjectMatchMode": "exact", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
+        "400":
+          application/json: {"http_status": 400}
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+        query:
+          dryRun: false
+      requestBody:
+        application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "mfa": {"challenge": {"active": false, "challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"active": false, "enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "enrollmentSkipActive": false, "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"active": false, "deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000, "skipRememberDevice": false}, "stepUpAuthentication": {"active": false, "stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"accessTokenValiditySeconds": 7200, "contacts": ["ops@example.com"], "crossAppAccessSettings": {"enabled": false, "resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "optInScopeSelection": true, "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "silentReAuthentication": false, "singleSignOut": false, "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tlsClientCertificateBoundAccessTokens": false, "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "enabled": false, "geoVelocityAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "includeAssertionConditions": false, "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "responseBinding": "urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request", "singleLogoutServiceUrl": "https://app.example.com/saml/logout", "wantAssertionsEncrypted": false, "wantAssertionsSigned": false, "wantResponseSigned": true}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "subjectMatchMode": "exact", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
+      responses:
+        "400":
+          application/json: {"http_status": 400, "message": "A human-readable description of the error"}
+  automationDeleteApplication:
+    speakeasy-default-automation-delete-application:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+      responses:
+        "403":
+          application/json: {"http_status": 400}
+        default:
+          application/json: {"http_status": 400}
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+      responses:
+        "403":
+          application/json: {"http_status": 403, "message": "A human-readable description of the error"}
+        default:
+          application/json: {"http_status": 403, "message": "A human-readable description of the error"}
+  automationGetApplication:
+    speakeasy-default-automation-get-application:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+      responses:
+        "200":
+          application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "mfa": {"challenge": {"active": false, "challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"active": false, "enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "enrollmentSkipActive": false, "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"active": false, "deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000, "skipRememberDevice": false}, "stepUpAuthentication": {"active": false, "stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"accessTokenValiditySeconds": 7200, "contacts": ["ops@example.com"], "crossAppAccessSettings": {"enabled": false, "resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "optInScopeSelection": true, "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "silentReAuthentication": false, "singleSignOut": false, "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tlsClientCertificateBoundAccessTokens": false, "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "enabled": false, "geoVelocityAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "includeAssertionConditions": false, "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "responseBinding": "urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request", "singleLogoutServiceUrl": "https://app.example.com/saml/logout", "wantAssertionsEncrypted": false, "wantAssertionsSigned": false, "wantResponseSigned": true}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "subjectMatchMode": "exact", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
+        "403":
+          application/json: {"http_status": 400}
+    Mobile application:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+      responses:
+        "200":
+          application/json: {"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"accessTokenValiditySeconds": 7200, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "optInScopeSelection": true, "redirectUris": ["com.example.app:/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "silentReAuthentication": false, "singleSignOut": false, "tlsClientCertificateBoundAccessTokens": false, "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+      responses:
+        "403":
+          application/json: {"http_status": 403, "message": "A human-readable description of the error"}
+  automationListClientSecrets:
+    speakeasy-default-automation-list-client-secrets:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+      responses:
+        "200":
+          application/json: [{"key": "ci-2026-10"}]
+        "403":
+          application/json: {"http_status": 400}
+    ClientSecretList:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+      responses:
+        "200":
+          application/json: [{"expiresAt": "2027-04-27T09:30:00.000Z", "key": "ci-2026-10"}]
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+      responses:
+        "403":
+          application/json: {"http_status": 403, "message": "A human-readable description of the error"}
+  automationCreateOrUpdateClientSecret:
+    CI secret:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+        query:
+          dryRun: false
+      requestBody:
+        application/json: {"key": "ci-2026-10", "value": "q8Zk3vN2xT7pR1mW9yB4cD6fH0jL5sA8eG2iK7oU3wQ"}
+      responses:
+        "200":
+          application/json: {"expiresAt": "2027-04-27T09:30:00.000Z", "key": "ci-2026-10"}
+    speakeasy-default-automation-create-or-update-client-secret:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+        query:
+          dryRun: false
+      requestBody:
+        application/json: {"key": "ci-2026-10", "value": "q8Zk3vN2xT7pR1mW9yB4cD6fH0jL5sA8eG2iK7oU3wQ"}
+      responses:
+        "200":
+          application/json: {"key": "ci-2026-10"}
+        "400":
+          application/json: {"http_status": 400}
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+        query:
+          dryRun: false
+      requestBody:
+        application/json: {"key": "ci-2026-10", "value": "q8Zk3vN2xT7pR1mW9yB4cD6fH0jL5sA8eG2iK7oU3wQ"}
+      responses:
+        "400":
+          application/json: {"http_status": 400, "message": "A human-readable description of the error"}
+  automationDeleteClientSecret:
+    speakeasy-default-automation-delete-client-secret:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+          secretKey: "ci-2026-10"
+      responses:
+        "403":
+          application/json: {"http_status": 400}
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+          secretKey: "ci-2026-10"
+      responses:
+        "403":
+          application/json: {"http_status": 403, "message": "A human-readable description of the error"}
+  automationGetClientSecret:
+    speakeasy-default-automation-get-client-secret:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+          secretKey: "ci-2026-10"
+      responses:
+        "200":
+          application/json: {"key": "ci-2026-10"}
+        "403":
+          application/json: {"http_status": 400}
+    CI secret:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+          secretKey: "ci-2026-10"
+      responses:
+        "200":
+          application/json: {"expiresAt": "2027-04-27T09:30:00.000Z", "key": "ci-2026-10"}
+    error:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          domainKey: "example-domain"
+          applicationKey: "mobile-app"
+          secretKey: "ci-2026-10"
       responses:
         "403":
           application/json: {"http_status": 403, "message": "A human-readable description of the error"}

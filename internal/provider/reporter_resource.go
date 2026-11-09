@@ -117,8 +117,11 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Category of data the reporter handles, derived from its type. Read-only.`,
 			},
 			"domain_key": schema.StringAttribute{
-				Required:    true,
-				Description: `Key of the domain: its stable, immutable Automation identifier within the environment.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Key of the domain: its stable, immutable Automation identifier within the environment. Requires replacement if changed.`,
 			},
 			"enabled": schema.BoolAttribute{
 				Computed:    true,
@@ -127,9 +130,12 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Whether the reporter is enabled. Default: true`,
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the environment. Requires replacement if changed.`,
 			},
 			"key": schema.StringAttribute{
 				Required: true,
@@ -150,9 +156,12 @@ func (r *ReporterResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the organization that owns the environment. Requires replacement if changed.`,
 			},
 			"system": schema.BoolAttribute{
 				Computed:    true,

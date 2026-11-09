@@ -74,7 +74,9 @@ Available configuration:
 
 ### Managed Resources
 
+* [am_application](docs/resources/application.md)
 * [am_certificate](docs/resources/certificate.md)
+* [am_client_secret](docs/resources/client_secret.md)
 * [am_data_plane](docs/resources/data_plane.md)
 * [am_domain](docs/resources/domain.md)
 * [am_identity_provider](docs/resources/identity_provider.md)
@@ -82,6 +84,7 @@ Available configuration:
 
 ### Data Sources
 
+* [am_application](docs/data-sources/application.md)
 * [am_certificate](docs/data-sources/certificate.md)
 * [am_data_plane](docs/data-sources/data_plane.md)
 * [am_domain](docs/data-sources/domain.md)

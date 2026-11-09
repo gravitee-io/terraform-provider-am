@@ -13,15 +13,32 @@ Certificate Resource
 ## Example Usage
 
 ```terraform
-resource "am_certificate" "my_certificate" {
-  configuration   = "{\"jks\":{\"content\":\"...\",\"name\":\"keystore.jks\"},\"storepass\":\"secret\",\"alias\":\"mykey\",\"keypass\":\"secret\"}"
-  domain_key      = "example-domain"
-  environment_id  = "DEFAULT"
-  key             = "signing-cert"
-  name            = "Signing certificate"
-  organization_id = "DEFAULT"
-  system          = false
-  type            = "javakeystore-am-certificate"
+# A Java keystore holding the key that signs the domain's tokens. AM masks the keystore and its
+# passwords in its responses; the provider keeps the configured values.
+resource "am_certificate" "signing" {
+  domain_key = "example-domain"
+  key        = "signing-cert"
+  name       = "Signing certificate"
+  type       = "javakeystore-am-certificate"
+  configuration = jsonencode({
+    jks = jsonencode({
+      name    = "keystore.jks"
+      content = filebase64("${path.module}/keystore.jks")
+    })
+    storepass = var.keystore_password
+    alias     = "signing"
+    keypass   = var.key_password
+  })
+}
+
+variable "keystore_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "key_password" {
+  type      = string
+  sensitive = true
 }
 ```
 
@@ -30,15 +47,15 @@ resource "am_certificate" "my_certificate" {
 
 ### Required
 
-- `domain_key` (String) Key of the domain: its stable, immutable Automation identifier within the environment.
+- `domain_key` (String) Key of the domain: its stable, immutable Automation identifier within the environment. Requires replacement if changed.
 - `key` (String) Stable, immutable identifier for the certificate within its domain. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character. Used to identify the certificate on create-or-update. Requires replacement if changed.
 
 ### Optional
 
 - `configuration` (String, Sensitive) Plugin-specific configuration as a JSON-encoded string. Its shape is defined by the selected certificate type. Sensitive values, as flagged by the plugin, are returned as ******** in every response; an unset sensitive value is omitted. Sending ******** back on update keeps the stored value; sending it on create is rejected. The uploaded keystore file is masked too; sending ******** back keeps it.
-- `environment_id` (String) Identifier of the environment.
+- `environment_id` (String) Identifier of the environment. Requires replacement if changed.
 - `name` (String) Human-readable name of the certificate.
-- `organization_id` (String) Identifier of the organization that owns the environment.
+- `organization_id` (String) Identifier of the organization that owns the environment. Requires replacement if changed.
 - `system` (Boolean) Whether this is the domain's system certificate. Immutable after creation. When true, only key is required; the certificate is built from the domains.certificates.default.* system settings and the name, type, and configuration fields are ignored. Default: false
 - `type` (String) Certificate plugin type identifier. Immutable after creation.
 
@@ -56,7 +73,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 
 ```terraform
 import {
-  to = am_certificate.my_am_certificate
+  to = am_certificate.signing
   id = jsonencode({
     domain_key      = "example-domain"
     environment_id  = "DEFAULT"
@@ -69,5 +86,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import am_certificate.my_am_certificate '{"domain_key": "example-domain", "environment_id": "DEFAULT", "key": "signing-cert", "organization_id": "DEFAULT"}'
+terraform import am_certificate.signing '{"domain_key": "example-domain", "environment_id": "DEFAULT", "key": "signing-cert", "organization_id": "DEFAULT"}'
 ```

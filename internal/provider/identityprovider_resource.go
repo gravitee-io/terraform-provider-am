@@ -82,8 +82,11 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Creation timestamp (ISO-8601 / RFC 3339, UTC). Read-only.`,
 			},
 			"domain_key": schema.StringAttribute{
-				Required:    true,
-				Description: `Key of the domain: its stable, immutable Automation identifier within the environment.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Key of the domain: its stable, immutable Automation identifier within the environment. Requires replacement if changed.`,
 			},
 			"domain_whitelist": schema.ListAttribute{
 				Computed:    true,
@@ -93,9 +96,12 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Email domains allowed to authenticate through this identity provider. When set, users whose email domain is not listed are rejected. Default: []`,
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the environment. Requires replacement if changed.`,
 			},
 			"group_mapper": schema.MapAttribute{
 				Optional: true,
@@ -128,9 +134,12 @@ func (r *IdentityProviderResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Identifier of the organization that owns the environment.`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Identifier of the organization that owns the environment. Requires replacement if changed.`,
 			},
 			"role_mapper": schema.MapAttribute{
 				Optional: true,

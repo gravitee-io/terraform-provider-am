@@ -84,6 +84,7 @@ func (s *Reporters) GetReporters(ctx context.Context, request operations.Automat
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationListReporters")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -315,6 +316,7 @@ func (s *Reporters) UpsertReporter(ctx context.Context, request operations.Autom
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationCreateOrUpdateReporter")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -774,6 +776,7 @@ func (s *Reporters) Get(ctx context.Context, request operations.AutomationGetRep
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationGetReporter")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

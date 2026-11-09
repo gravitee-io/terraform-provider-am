@@ -5,7 +5,7 @@ package shared
 
 // AutomationCertificateSettings - Domain-level certificate settings.
 type AutomationCertificateSettings struct {
-	// Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.
+	// Fallback certificate used when a client does not specify one: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.
 	FallbackCertificate *string `json:"fallbackCertificate,omitempty"`
 }
 

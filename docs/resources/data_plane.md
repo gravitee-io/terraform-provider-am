@@ -13,14 +13,19 @@ DataPlane Resource
 ## Example Usage
 
 ```terraform
-resource "am_data_plane" "my_dataplane" {
-  configuration   = "{ \"see\": \"documentation\" }"
-  environment_id  = "DEFAULT"
-  gateway_url     = "https://gateway-eu.example.com"
-  id              = "acme-eu"
-  name            = "ACME EU data plane"
-  organization_id = "DEFAULT"
-  type            = "mongodb"
+# A data plane on its own MongoDB database. The configuration is write-only: AM never returns it.
+resource "am_data_plane" "eu" {
+  id          = "acme-eu"
+  name        = "ACME EU data plane"
+  type        = "mongodb"
+  gateway_url = "https://gateway-eu.example.com"
+  configuration = jsonencode({
+    mongodb = {
+      host   = "mongodb"
+      port   = 27017
+      dbname = "gravitee-am-eu"
+    }
+  })
 }
 ```
 
@@ -36,9 +41,9 @@ resource "am_data_plane" "my_dataplane" {
 
 ### Optional
 
-- `environment_id` (String) Identifier of the environment.
+- `environment_id` (String) Identifier of the environment. Requires replacement if changed.
 - `gateway_url` (String) Base URL of the gateway serving the domains bound to this data plane. Must be an absolute http(s) URL with a lowercase scheme; omitted or empty leaves it unset.
-- `organization_id` (String) Identifier of the organization that owns the environment.
+- `organization_id` (String) Identifier of the organization that owns the environment. Requires replacement if changed.
 
 ### Read-Only
 
@@ -55,7 +60,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 
 ```terraform
 import {
-  to = am_data_plane.my_am_data_plane
+  to = am_data_plane.eu
   id = jsonencode({
     environment_id  = "DEFAULT"
     id              = "acme-eu"
@@ -67,5 +72,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import am_data_plane.my_am_data_plane '{"environment_id": "DEFAULT", "id": "acme-eu", "organization_id": "DEFAULT"}'
+terraform import am_data_plane.eu '{"environment_id": "DEFAULT", "id": "acme-eu", "organization_id": "DEFAULT"}'
 ```

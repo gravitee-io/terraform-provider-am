@@ -3,7 +3,7 @@ module github.com/gravitee-io/terraform-provider-am
 go 1.26.10
 
 require (
-	github.com/gravitee-io/gravitee-automation-sdk/am-mock-server v1.3.3
+	github.com/gravitee-io/gravitee-automation-sdk/am-mock-server v1.5.1
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-docs v0.25.0

@@ -36,7 +36,8 @@ OVERLAY_FILES := \
     .speakeasy/overlays/dataplane.yaml \
     .speakeasy/overlays/certificate.yaml \
     .speakeasy/overlays/identities.yaml \
-    .speakeasy/overlays/reporter.yaml
+    .speakeasy/overlays/reporter.yaml \
+    .speakeasy/overlays/application.yaml
 
 .PHONY: merge-overlays
 merge-overlays: ## Apply all overlays to the raw OAS, write to .speakeasy/output/computed.json
@@ -48,11 +49,12 @@ merge-overlays: ## Apply all overlays to the raw OAS, write to .speakeasy/output
 	done
 
 .PHONY: lint
-lint: merge-overlays ## Validate overlays + lint the merged OAS + check Terraform fmt
+lint: merge-overlays ## Validate overlays + lint the merged OAS + check custom regions + check Terraform fmt
 	@for o in $(OVERLAY_FILES); do \
 		speakeasy overlay validate --overlay $$o || exit 1; \
 	done
 	@speakeasy lint openapi --schema $(MERGED) --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
+	@hack/scripts/check-gravitee-custom-regions.sh
 	@terraform fmt -recursive -check || (echo "Error: Above terraform files are not properly formatted. Please run 'terraform fmt -recursive' to fix formatting issues" && exit 1)
 
 .PHONY: unit-tests

@@ -71,6 +71,14 @@ acceptance-tests: ## Run acceptance tests against a live AM; needs AM_SA_TOKEN (
 mock-tests: ## Run acceptance tests against an in-process AM mock server (no AM instance required)
 	@AM_MOCK=true TF_ACC=1 go test -count=1 -v ./tests/acceptance
 
+.PHONY: examples-tests
+examples-tests: ## Apply the examples and use-cases on a live AM; needs AM_SA_TOKEN (AM_SERVER_URL defaults to the local stack)
+	@TF_ACC=1 go test -count=1 -v ./tests/examples
+
+.PHONY: examples-mock-tests
+examples-mock-tests: ## Apply the examples and use-cases on an in-process AM mock server (no AM instance required)
+	@AM_MOCK=true TF_ACC=1 go test -count=1 -v ./tests/examples
+
 .PHONY: doc-gen
 doc-gen: ## Generate the registry guides (templates/guides/docgen_*.md) from .docgen/config and the use-cases
 	@docker run --rm -u $$(id -u) -v ./.docgen/config:/config -v ./:/plugin graviteeio/doc-gen

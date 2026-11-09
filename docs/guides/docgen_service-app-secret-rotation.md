@@ -16,7 +16,7 @@ with a client secret that expires, and shows how to rotate that secret without d
 
 ```shell
 keytool -genkeypair -alias signing -keyalg RSA -keysize 2048 -validity 365 -dname CN=acme-apis \
-  -storetype JKS -keystore keystore.jks -storepass "$TF_VAR_keystore_password" -keypass "$TF_VAR_key_password"
+  -storetype JKS -keystore keystore.jks -storepass:env TF_VAR_keystore_password -keypass:env TF_VAR_key_password
 ```
 
 ## Configuration
@@ -69,21 +69,8 @@ resource "am_application" "billing" {
   }
 }
 
-# A secret is immutable. To rotate it, add a second am_client_secret with a new key, apply, move the
-# service to the new value, then remove this one and apply again.
-resource "am_client_secret" "billing_2026_11" {
-  domain_key      = am_domain.apis.key
-  application_key = am_application.billing.key
-  key             = "billing-2026-11"
-  value_wo        = var.client_secret
-}
-
 output "client_id" {
   value = am_application.billing.client_id
-}
-
-output "client_secret_expires_at" {
-  value = am_client_secret.billing_2026_11.expires_at
 }
 
 variable "keystore_password" {
@@ -96,6 +83,24 @@ variable "key_password" {
   sensitive = true
 }
 
+```
+
+The client secret, in `client-secret.tf`:
+
+```terraform
+# A secret is immutable. To rotate it, add a second am_client_secret with a new key, apply, move the
+# service to the new value, then remove this file and apply again.
+resource "am_client_secret" "billing_2026_11" {
+  domain_key      = am_domain.apis.key
+  application_key = am_application.billing.key
+  key             = "billing-2026-11"
+  value_wo        = var.client_secret
+}
+
+output "billing_2026_11_expires_at" {
+  value = am_client_secret.billing_2026_11.expires_at
+}
+
 # Read from your secret store and given to the service too, for example with TF_VAR_client_secret.
 variable "client_secret" {
   type      = string
@@ -105,10 +110,11 @@ variable "client_secret" {
 
 ```
 
-Once applied, the service gets a token from the AM gateway:
+Once applied, the service gets a token from the AM gateway; curl prompts for the client secret, which keeps it
+out of the command line:
 
 ```shell
-curl -u "$(terraform output -raw client_id):$TF_VAR_client_secret" \
+curl -u "$(terraform output -raw client_id)" \
   -d grant_type=client_credentials <gateway URL>/acme-apis/oauth/token
 ```
 
@@ -117,22 +123,36 @@ curl -u "$(terraform output -raw client_id):$TF_VAR_client_secret" \
 A client secret is immutable and `value_wo` is only sent on creation: changing the value of an existing
 `am_client_secret` has no effect. Rotate it with two applies instead.
 
-1. Add a secret with a new `key` and its own value, then apply. Both secrets are valid.
+1. Add a secret with a new `key` and its own value in a new file, for example `next-client-secret.tf`, then
+   apply with `TF_VAR_next_client_secret` set. Both secrets are valid.
 
-   ```terraform
-   resource "am_client_secret" "billing_2027_02" {
-     domain_key      = am_domain.apis.key
-     application_key = am_application.billing.key
-     key             = "billing-2027-02"
-     value_wo        = var.next_client_secret
-   }
-   ```
+```terraform
+# The secret that replaces billing_2026_11: applied next to it, so both are valid until the service moves.
+resource "am_client_secret" "billing_2027_02" {
+  domain_key      = am_domain.apis.key
+  application_key = am_application.billing.key
+  key             = "billing-2027-02"
+  value_wo        = var.next_client_secret
+}
+
+output "billing_2027_02_expires_at" {
+  value = am_client_secret.billing_2027_02.expires_at
+}
+
+variable "next_client_secret" {
+  type      = string
+  sensitive = true
+  ephemeral = true
+}
+
+```
 
 2. Move the service to the new value.
-3. Remove `am_client_secret.billing_2026_11` from the configuration and apply: AM revokes the old secret.
+3. Delete `client-secret.tf`, which holds the old secret, its output and its variable, and apply: AM revokes the
+   old secret.
 
 Changing the `key` of an existing secret is not a rotation: Terraform replaces the secret in a single apply and
 the old value stops working at once.
 
-The `expires_at` attribute and output tell when a secret expires, from the `secret_expiration_settings` of the
+The `expires_at` attribute and the outputs tell when a secret expires, from the `secret_expiration_settings` of the
 application, else of the domain.

@@ -86,7 +86,14 @@ func importFiles() map[string]string {
 func dataSourcesStep(t *testing.T, resources map[string]string) resource.TestStep {
 	files := map[string]string{}
 	var checks []resource.TestCheckFunc
-	paths, _ := filepath.Glob(filepath.Join(examplesPath, "data-sources", "*", "data-source.tf"))
+	pattern := filepath.Join(examplesPath, "data-sources", "*", "data-source.tf")
+	paths, err := filepath.Glob(pattern)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(paths) == 0 {
+		t.Fatalf("no data-source example matches %s", pattern)
+	}
 	for _, path := range paths {
 		resourceType := filepath.Base(filepath.Dir(path))
 		files[resourceType+"_data.tf"] = path

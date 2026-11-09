@@ -37,7 +37,8 @@ OVERLAY_FILES := \
     .speakeasy/overlays/certificate.yaml \
     .speakeasy/overlays/identities.yaml \
     .speakeasy/overlays/reporter.yaml \
-    .speakeasy/overlays/application.yaml
+    .speakeasy/overlays/application.yaml \
+    .speakeasy/overlays/client_secret.yaml
 
 .PHONY: merge-overlays
 merge-overlays: ## Apply all overlays to the raw OAS, write to .speakeasy/output/computed.json

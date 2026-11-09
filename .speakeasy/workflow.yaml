@@ -15,6 +15,7 @@ sources:
             - location: .speakeasy/overlays/identities.yaml
             - location: .speakeasy/overlays/reporter.yaml
             - location: .speakeasy/overlays/application.yaml
+            - location: .speakeasy/overlays/client_secret.yaml
         output: .speakeasy/output/computed.json
         registry:
             location: registry.speakeasyapi.dev/gravitee/gravitee/am-automation-api

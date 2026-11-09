@@ -72,7 +72,7 @@ func TestProviderResourcesAndDataSources(t *testing.T) {
 	p := newProvider()
 	ctx := context.Background()
 
-	if got, want := len(p.Resources(ctx)), 6; got != want {
+	if got, want := len(p.Resources(ctx)), 7; got != want {
 		t.Errorf("expected %d managed resources, got %d", want, got)
 	}
 	if got, want := len(p.DataSources(ctx)), 6; got != want {

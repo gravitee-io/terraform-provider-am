@@ -128,3 +128,16 @@ func checkKeystoreMasked(path string) resource.TestCheckFunc {
 		return nil
 	}
 }
+
+func TestCertificateResource_domainChange(t *testing.T) {
+	firstDomain, secondDomain := uniqueKey("tf-acc-cert"), uniqueKey("tf-acc-cert")
+	key := uniqueKey("signing")
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: domainChangeSteps("am_certificate.test", firstDomain, secondDomain, "/certificates/"+key,
+			certificateVariables(t, firstDomain, key, config.Variables{"name": config.StringVariable("Terraform acceptance")})),
+	})
+}

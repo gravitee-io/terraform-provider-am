@@ -51,10 +51,13 @@ actions:
         schemaType: customtypes.MaskedJSONType{}
         valueType: customtypes.MaskedJSON
 
-  # key is the identity — changing it forces resource recreation. type and system stay in-place
-  # so AM rejects their change instead of the provider silently replacing the resource.
+  # key and the domain are the identity — changing either forces resource recreation. type and
+  # system stay in-place so AM rejects their change instead of the provider silently replacing it.
   # create/update share one PUT op, so ForceNew is not auto-inferred; set it explicitly.
   - target: $.components.schemas.AutomationCertificate.properties.key
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/certificates"].put.parameters[?@.name=='domainKey']
     update:
       x-speakeasy-param-force-new: true
 

@@ -8,11 +8,14 @@ package provider_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/gravitee-io/terraform-provider-am/internal/provider"
-	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	tfprovider "github.com/hashicorp/terraform-plugin-framework/provider"
+	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	resourceschema "github.com/hashicorp/terraform-plugin-framework/resource/schema"
 )
 
 // newProvider returns the same provider instance the binary serves.
@@ -75,4 +78,39 @@ func TestProviderResourcesAndDataSources(t *testing.T) {
 	if got, want := len(p.DataSources(ctx)), 5; got != want {
 		t.Errorf("expected %d data sources, got %d", want, got)
 	}
+}
+
+// Every attribute that lands in a resource's URL path is its identity: changing it must replace
+// the resource, not write a copy at the new path and leave the old one behind.
+func TestResourceIdentityForcesReplacement(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	identity := []string{"organization_id", "environment_id", "domain_key", "application_key", "key", "id"}
+
+	for _, newResource := range newProvider().Resources(ctx) {
+		r := newResource()
+		var metadata resource.MetadataResponse
+		r.Metadata(ctx, resource.MetadataRequest{ProviderTypeName: "am"}, &metadata)
+		var resp resource.SchemaResponse
+		r.Schema(ctx, resource.SchemaRequest{}, &resp)
+
+		for _, name := range identity {
+			attribute, ok := resp.Schema.Attributes[name].(resourceschema.StringAttribute)
+			if !ok || attribute.Computed && !attribute.Optional {
+				continue
+			}
+			if !forcesReplacement(ctx, attribute) {
+				t.Errorf("%s.%s does not force replacement", metadata.TypeName, name)
+			}
+		}
+	}
+}
+
+func forcesReplacement(ctx context.Context, attribute resourceschema.StringAttribute) bool {
+	for _, modifier := range attribute.PlanModifiers {
+		if strings.Contains(modifier.Description(ctx), "destroy and recreate") {
+			return true
+		}
+	}
+	return false
 }

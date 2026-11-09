@@ -82,3 +82,39 @@ func checkDomainsDestroyed(s *terraform.State) error {
 	}
 	return nil
 }
+
+// domainChangeSteps creates the resource at address in firstDomain, then moves it to secondDomain:
+// the plan replaces it, and AM then holds it at resourcePath in secondDomain only.
+// The test's config declares both domains and picks the resource's from the "in_second_domain" variable.
+func domainChangeSteps(address, firstDomain, secondDomain, resourcePath string, variables config.Variables) []resource.TestStep {
+	variables = with(variables, "second_domain_key", config.StringVariable(secondDomain))
+	return []resource.TestStep{
+		{
+			ConfigDirectory: config.TestNameDirectory(),
+			ConfigVariables: with(variables, "in_second_domain", config.BoolVariable(false)),
+		},
+		{
+			ConfigDirectory: config.TestNameDirectory(),
+			ConfigVariables: with(variables, "in_second_domain", config.BoolVariable(true)),
+			ConfigPlanChecks: resource.ConfigPlanChecks{
+				PreApply: []plancheck.PlanCheck{
+					plancheck.ExpectResourceAction(address, plancheck.ResourceActionReplace),
+				},
+			},
+			Check: checkAMMoved("/domains/"+firstDomain+resourcePath, "/domains/"+secondDomain+resourcePath),
+		},
+	}
+}
+
+// checkAMMoved fails unless the Automation API returns to and no longer returns from.
+func checkAMMoved(from, to string) resource.TestCheckFunc {
+	return func(*terraform.State) error {
+		if _, err := automationGet(to); err != nil {
+			return err
+		}
+		if _, err := automationGet(from); err == nil {
+			return fmt.Errorf("%s still exists", from)
+		}
+		return nil
+	}
+}

@@ -1,5 +1,5 @@
 import {
-  to = am_certificate.my_am_certificate
+  to = am_certificate.signing
   id = jsonencode({
     domain_key      = "example-domain"
     environment_id  = "DEFAULT"

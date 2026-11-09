@@ -189,3 +189,16 @@ func checkInlinePasswordMasked(path string) resource.TestCheckFunc {
 		return nil
 	}
 }
+
+func TestIdentityProviderResource_domainChange(t *testing.T) {
+	firstDomain, secondDomain := uniqueKey("tf-acc-idp"), uniqueKey("tf-acc-idp")
+	key := uniqueKey("users")
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: domainChangeSteps("am_identity_provider.test", firstDomain, secondDomain, "/identities/"+key,
+			identityProviderVariables(firstDomain, key, config.Variables{"name": config.StringVariable("Terraform acceptance users")})),
+	})
+}

@@ -68,3 +68,16 @@ func TestReporterResource_immutableFields(t *testing.T) {
 			reporterVariables(domainKey, key, nil), "reporter-am-file", "reporter-am-kafka"),
 	})
 }
+
+func TestReporterResource_domainChange(t *testing.T) {
+	firstDomain, secondDomain := uniqueKey("tf-acc-rep"), uniqueKey("tf-acc-rep")
+	key := uniqueKey("audit")
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: domainChangeSteps("am_reporter.test", firstDomain, secondDomain, "/reporters/"+key,
+			reporterVariables(firstDomain, key, config.Variables{"enabled": config.BoolVariable(true)})),
+	})
+}

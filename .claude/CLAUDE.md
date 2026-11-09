@@ -37,6 +37,13 @@ AM_SA_TOKEN=<token> make acceptance-tests
 
 # Same acceptance tests against an in-process AM mock server (no AM instance required)
 make mock-tests
+
+# Apply the documented examples and use-cases (AM mock / live AM)
+make examples-mock-tests
+AM_SA_TOKEN=<token> make examples-tests
+
+# Regenerate the registry guides from .docgen/ (Docker; also run by make speakeasy)
+make doc-gen
 ```
 
 The Speakeasy CLI must be authenticated (`speakeasy auth login`). The pinned

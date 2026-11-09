@@ -10,8 +10,11 @@ import (
 	"net/http/httptest"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
+	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/gravitee-io/gravitee-automation-sdk/am-mock-server/server"
 	"github.com/gravitee-io/terraform-provider-am/internal/provider"
@@ -168,6 +171,98 @@ func checkAM(path, field string, value any) resource.TestCheckFunc {
 	}
 }
 
+// checkAMNested fails unless the Automation API returns value at the nested fields of path
+// (a list index is a field too, e.g. "redirectUris", "0").
+func checkAMNested(path string, value any, fields ...string) resource.TestCheckFunc {
+	return func(*terraform.State) error {
+		body, err := automationGet(path)
+		if err != nil {
+			return err
+		}
+		var got any = body
+		for _, field := range fields {
+			switch node := got.(type) {
+			case map[string]any:
+				got = node[field]
+			case []any:
+				index, err := strconv.Atoi(field)
+				if err != nil || index >= len(node) {
+					return fmt.Errorf("AM returned no %s in %s", strings.Join(fields, "."), path)
+				}
+				got = node[index]
+			default:
+				return fmt.Errorf("AM returned no %s in %s", strings.Join(fields, "."), path)
+			}
+		}
+		if got != value {
+			return fmt.Errorf("AM returned %s of %s as %v instead of %v", strings.Join(fields, "."), path, got, value)
+		}
+		return nil
+	}
+}
+
+// checkAMMatchesState fails unless the Automation API returns field of path as the state holds attribute of address.
+// Timestamps match when they are the same instant, whatever their RFC 3339 precision.
+func checkAMMatchesState(path, field, address, attribute string) resource.TestCheckFunc {
+	return func(s *terraform.State) error {
+		body, err := automationGet(path)
+		if err != nil {
+			return err
+		}
+		got, _ := body[field].(string)
+		want := s.RootModule().Resources[address].Primary.Attributes[attribute]
+		if got == want || sameInstant(got, want) {
+			return nil
+		}
+		return fmt.Errorf("AM returned %s of %s as %q, state holds %q", field, path, got, want)
+	}
+}
+
+func sameInstant(a, b string) bool {
+	ta, errA := time.Parse(time.RFC3339Nano, a)
+	tb, errB := time.Parse(time.RFC3339Nano, b)
+	return errA == nil && errB == nil && ta.Equal(tb)
+}
+
+// checkOutputMatchesAttribute fails unless the output holds the state value of attribute of address.
+func checkOutputMatchesAttribute(output, address, attribute string) resource.TestCheckFunc {
+	return func(s *terraform.State) error {
+		want := s.RootModule().Resources[address].Primary.Attributes[attribute]
+		return resource.TestCheckOutput(output, want)(s)
+	}
+}
+
+// conflictingMock serves a fresh AM mock that answers the first method request on a path ending with suffix with 409 Conflict,
+// as AM does when concurrent writes on an application keep colliding. It returns the mock's URL and the 409 count.
+// The test needs no live AM, so it is skipped unless the tests run on the mock.
+func conflictingMock(t *testing.T, method, suffix string) (string, *atomic.Int32) {
+	if os.Getenv(mockTestEnv) != "true" {
+		t.Skip("409 retries are tested on the AM mock only")
+	}
+	mock := server.New(server.NewMockAM())
+	var conflicts atomic.Int32
+	conflicting := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == method && strings.HasSuffix(r.URL.Path, suffix) && conflicts.CompareAndSwap(0, 1) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusConflict)
+			fmt.Fprint(w, `{"message":"Concurrent modification, retry the request","http_status":409}`)
+			return
+		}
+		mock.ServeHTTP(w, r)
+	}))
+	t.Cleanup(conflicting.Close)
+	return conflicting.URL + server.BasePath, &conflicts
+}
+
+func checkConflictsAnswered(conflicts *atomic.Int32, want int32) resource.TestCheckFunc {
+	return func(*terraform.State) error {
+		if got := conflicts.Load(); got != want {
+			return fmt.Errorf("the mock answered %d requests with 409 instead of %d", got, want)
+		}
+		return nil
+	}
+}
+
 // importStep imports address with the test's config and expects the state it had,
 // except configuration, which AM masks or never returns.
 func importStep(address, identifier string, variables config.Variables, idAttributes ...string) resource.TestStep {
@@ -233,6 +328,14 @@ func immutableFieldSteps(address, path string, variables config.Variables, curre
 			},
 		},
 	}
+}
+
+// onLiveAM runs check on a live AM only, for a behaviour the mock does not reproduce.
+func onLiveAM(check resource.TestCheckFunc) resource.TestCheckFunc {
+	if os.Getenv(mockTestEnv) == "true" {
+		return func(*terraform.State) error { return nil }
+	}
+	return check
 }
 
 func requiresLiveAM(t *testing.T) {

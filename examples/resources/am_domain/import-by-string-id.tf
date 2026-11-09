@@ -1,5 +1,5 @@
 import {
-  to = am_domain.my_am_domain
+  to = am_domain.example
   id = jsonencode({
     environment_id  = "DEFAULT"
     key             = "example-domain"

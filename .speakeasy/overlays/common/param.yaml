@@ -102,3 +102,9 @@ actions:
     description: Not necessary in Terraform context
     update:
       x-speakeasy-terraform-ignore: true
+
+  # The organization and the environment are part of every resource's identity: changing either
+  # forces recreation, like a key change, instead of writing a copy in the new environment.
+  - target: $.components.parameters["orgIdParam","envIdParam"]
+    update:
+      x-speakeasy-param-force-new: true

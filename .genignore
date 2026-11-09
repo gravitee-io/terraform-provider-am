@@ -2,3 +2,8 @@ CONTRIBUTING.md
 COMPATIBILITY.md
 USAGE.md
 examples/README.md
+# Examples are hand-written so they apply as is on AM.
+examples/resources/*/resource.tf
+examples/resources/*/import-by-string-id.tf
+examples/resources/*/import.sh
+examples/data-sources/*/data-source.tf

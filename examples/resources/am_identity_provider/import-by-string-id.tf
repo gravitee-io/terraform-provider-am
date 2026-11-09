@@ -1,9 +1,9 @@
 import {
-  to = am_identity_provider.my_am_identity_provider
+  to = am_identity_provider.customers
   id = jsonencode({
     domain_key      = "example-domain"
     environment_id  = "DEFAULT"
-    key             = "corporate-ldap"
+    key             = "customer-users"
     organization_id = "DEFAULT"
   })
 }

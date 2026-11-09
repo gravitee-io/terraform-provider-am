@@ -71,7 +71,7 @@ Read-Only:
 - `auto_login_after_registration` (Boolean) Whether the user is automatically logged in after completing registration.
 - `auto_login_after_reset_password` (Boolean) Whether the user is automatically logged in after a password reset.
 - `complete_registration_when_reset_password` (Boolean) Whether resetting a password also completes a pending registration.
-- `default_identity_provider_for_registration` (String) Key of an identity provider managed under this domain, used as the default for user registration. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever an identity provider with that key exists.
+- `default_identity_provider_for_registration` (String) Default identity provider for user registration: the key of an identity provider of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever that identity provider exists.
 - `delete_passwordless_devices_after_reset_password` (Boolean) Whether passwordless (WebAuthn) devices are deleted when the password is reset.
 - `dynamic_user_registration` (Boolean) Whether dynamic (self-service) user registration is enabled.
 - `inherited` (Boolean) Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains.
@@ -109,7 +109,7 @@ Read-Only:
 
 Read-Only:
 
-- `fallback_certificate` (String) Key of a certificate managed under this domain, used as the fallback certificate when a client does not specify one. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.
+- `fallback_certificate` (String) Fallback certificate used when a client does not specify one: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.
 
 
 <a id="nestedatt--cors_settings"></a>
@@ -253,7 +253,7 @@ Read-Only:
 
 Read-Only:
 
-- `certificate` (String) Key of a certificate managed under this domain, used to sign SAML responses. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever a certificate with that key exists.
+- `certificate` (String) Certificate signing SAML responses: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.
 - `enabled` (Boolean) Whether the domain exposes the SAML 2.0 IdP protocol.
 - `entity_id` (String) URL or URN that uniquely identifies this IdP (the SAML entity ID).
 

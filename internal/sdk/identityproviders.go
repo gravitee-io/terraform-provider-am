@@ -83,6 +83,7 @@ func (s *IdentityProviders) GetIdentityProviders(ctx context.Context, request op
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationListIdentityProviders")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -314,6 +315,7 @@ func (s *IdentityProviders) CreateOrUpdateIdentity(ctx context.Context, request 
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationCreateOrUpdateIdentityProvider")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -773,6 +775,7 @@ func (s *IdentityProviders) GetByID(ctx context.Context, request operations.Auto
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "automationGetIdentityProvider")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

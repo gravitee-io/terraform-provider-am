@@ -158,8 +158,6 @@ func (r *DataPlaneDataSource) Read(ctx context.Context, req datasource.ReadReque
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsAutomationGetDataPlaneRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

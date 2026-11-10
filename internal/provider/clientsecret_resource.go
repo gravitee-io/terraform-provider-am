@@ -107,7 +107,7 @@ func (r *ClientSecretResource) Schema(ctx context.Context, req resource.SchemaRe
 				Required:    true,
 				Sensitive:   true,
 				WriteOnly:   true,
-				Description: `Value of the secret, write-only: sent on creation only, never stored in the plan or the state, and never returned by AM. Typically fed from an ephemeral resource such as ` + "`" + `ephemeral "random_password"` + "`" + `. At least 43 characters, from a cryptographically secure random source (at least 32 bytes of entropy), never reused across applications. With BCrypt hashing, at most 72 bytes in UTF-8 (BCrypt ignores the rest); with no hashing, at most 374 characters. Changing only this value on an existing secret has no effect: no diff and no API call. To change the value, rotate the secret with a new ` + "`" + `key` + "`" + `.`,
+				Description: `Value of the secret, write-only: sent on creation only, never stored in the plan or the state, and never returned by AM: feed it from where the clients read it too, for example an ephemeral variable filled from your secret store. At least 43 characters, from a cryptographically secure random source (at least 32 bytes of entropy), never reused across applications. With BCrypt hashing, at most 72 bytes in UTF-8 (BCrypt ignores the rest); with no hashing, at most 374 characters. Changing only this value on an existing secret has no effect: no diff and no API call. To change the value, rotate the secret with a new ` + "`" + `key` + "`" + `.`,
 			},
 		},
 	}

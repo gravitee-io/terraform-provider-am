@@ -57,8 +57,10 @@ func Pointer[T any](v T) *T { return &v }
 // * Certificates
 // * Identity Providers
 // * Reporters
+// * Applications
+// * Client Secrets
 //
-// Compatible with Gravitee Access Management 4.13.0.
+// Compatible with Gravitee Access Management 4.13.0 and later; applications and client secrets need 4.14.0.
 type GraviteeAm struct {
 	SDKVersion string
 	DataPlanes *DataPlanes

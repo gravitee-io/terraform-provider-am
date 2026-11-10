@@ -3,8 +3,5 @@ terraform {
     am = {
       source = "gravitee-io/am"
     }
-    random = {
-      source = "hashicorp/random"
-    }
   }
 }

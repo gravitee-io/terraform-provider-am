@@ -5,8 +5,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/config"
-	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -25,6 +23,11 @@ var useCaseChecks = map[string]resource.TestCheckFunc{
 			resource.TestCheckResourceAttr("am_application.mobile", "settings.oauth.force_pkce", "true"),
 			resource.TestCheckResourceAttr("am_application.mobile", "settings.oauth.token_endpoint_auth_method", "none"),
 		),
+	),
+	// The guide reads hosts and database back to check what AM connects to.
+	"data_plane-dedicated_database": onLiveAM(
+		resource.TestCheckResourceAttr("am_data_plane.eu", "hosts.#", "1"),
+		resource.TestCheckResourceAttr("am_data_plane.eu", "database", "acme-eu"),
 	),
 }
 
@@ -62,12 +65,12 @@ func TestSecretRotation(t *testing.T) {
 		PreCheck: func() { preCheck(t) },
 		Steps: []resource.TestStep{
 			applyStep(t, current),
-			rotationStep(t, both, onLiveAM(
+			checkedStep(t, both, onLiveAM(
 				resource.TestCheckResourceAttrSet("am_client_secret.billing_2026_11", "expires_at"),
 				resource.TestCheckResourceAttrSet("am_client_secret.billing_2027_02", "expires_at"),
 			)),
 			// Terraform deletes billing_2026_11, which fails the step if AM does not.
-			rotationStep(t, withoutCurrent, onLiveAM(
+			checkedStep(t, withoutCurrent, onLiveAM(
 				resource.TestCheckResourceAttrSet("am_client_secret.billing_2027_02", "expires_at"),
 			)),
 		},
@@ -113,13 +116,6 @@ func checkedStep(t *testing.T, files map[string]string, check resource.TestCheck
 
 func rotationFile(useCase, name string) string {
 	return filepath.Join(examplesPath, "use-cases", useCase, "rotation", name)
-}
-
-func rotationStep(t *testing.T, files map[string]string, check resource.TestCheckFunc) resource.TestStep {
-	step := applyStep(t, files)
-	step.ConfigVariables["next_client_secret"] = config.StringVariable(acctest.RandString(64))
-	step.Check = check
-	return step
 }
 
 // onLiveAM runs the checks of values the mock does not compute (OAuth defaults, secret expiry) on a live AM only.

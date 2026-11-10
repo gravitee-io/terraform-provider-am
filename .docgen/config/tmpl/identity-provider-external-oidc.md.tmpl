@@ -1,0 +1,36 @@
+---
+page_title: "Sign in with an external OpenID Connect provider"
+subcategory: "Identity providers"
+---
+
+# Sign in with an external OpenID Connect provider
+
+This guide lets the employees of a company sign in to an internal application with the company's own OpenID
+Connect provider: AM is a client of that provider, and the application only talks to AM.
+
+## Before you start
+
+* The provider reaches the AM Automation API with `AM_SERVER_URL` and a service-account token in `AM_SA_TOKEN`.
+* AM registered as a client at the company's provider, with the redirect URI
+  `<gateway URL>/acme-intranet/login/callback`; its secret in `TF_VAR_corporate_client_secret`.
+
+## Configuration
+
+```terraform
+{{ .IdentityProviderExternalOIDC.Content }}
+```
+
+## How it differs from the console
+
+* AM returns the secrets of a plugin configuration as `********`. The provider compares the configuration
+  with that masking taken into account and keeps the configured values in the state: a secret changed in the
+  console does not show in the plan. Change the variable instead, and apply.
+* After an import, the state holds only `********`: the first plan shows the configuration as changed, and the
+  apply sends the configured secrets again.
+* `configuration` is the JSON of the `oauth2-generic-am-idp` plugin, with the field names of the plugin, not the
+  labels of the console form.
+* `mappers` maps an AM user profile attribute (the key) to a claim of the provider (the value).
+* `role_mapper` and `group_mapper` name AM roles and groups by their ID: Terraform does not manage roles and
+  groups, so read their IDs in the console.
+* `type` cannot change once created: AM rejects the apply.
+* The application shows the identity providers listed in its `identity_providers` on its login page.

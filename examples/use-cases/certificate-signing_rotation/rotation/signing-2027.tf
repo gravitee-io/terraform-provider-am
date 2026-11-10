@@ -10,7 +10,7 @@ resource "am_certificate" "signing_2027" {
       content = filebase64("${path.module}/keystore-2027.jks")
     })
     storepass = var.keystore_2027_password
-    alias     = "signing"
+    alias     = "signing-2027"
     keypass   = var.key_2027_password
   })
 }

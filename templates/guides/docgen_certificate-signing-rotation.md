@@ -11,11 +11,11 @@ tokens it already signed.
 ## Before you start
 
 * The provider reaches the AM Automation API with `AM_SERVER_URL` and a service-account token in `AM_SA_TOKEN`.
-* A Java keystore holding the RSA key that signs the tokens, next to the configuration, its passwords in
-  `TF_VAR_keystore_2026_password` and `TF_VAR_key_2026_password`:
+* A Java keystore holding the RSA key that signs the tokens, under the alias `signing-2026`, next to the
+  configuration, its passwords in `TF_VAR_keystore_2026_password` and `TF_VAR_key_2026_password`:
 
 ```shell
-keytool -genkeypair -alias signing -keyalg RSA -keysize 2048 -validity 365 -dname CN=acme-accounts \
+keytool -genkeypair -alias signing-2026 -keyalg RSA -keysize 2048 -validity 365 -dname CN=acme-accounts \
   -storetype JKS -keystore keystore-2026.jks \
   -storepass:env TF_VAR_keystore_2026_password -keypass:env TF_VAR_key_2026_password
 ```
@@ -75,7 +75,7 @@ resource "am_certificate" "signing_2026" {
       content = filebase64("${path.module}/keystore-2026.jks")
     })
     storepass = var.keystore_2026_password
-    alias     = "signing"
+    alias     = "signing-2026"
     keypass   = var.key_2026_password
   })
 }
@@ -108,11 +108,11 @@ locals {
 
 ## Rotate the certificate
 
-1. Create the next keystore with its own passwords, in `TF_VAR_keystore_2027_password` and
-   `TF_VAR_key_2027_password`:
+1. Create the next keystore with its own alias, `signing-2027`, and its own passwords, in
+   `TF_VAR_keystore_2027_password` and `TF_VAR_key_2027_password`:
 
 ```shell
-keytool -genkeypair -alias signing -keyalg RSA -keysize 2048 -validity 365 -dname CN=acme-accounts \
+keytool -genkeypair -alias signing-2027 -keyalg RSA -keysize 2048 -validity 365 -dname CN=acme-accounts \
   -storetype JKS -keystore keystore-2027.jks \
   -storepass:env TF_VAR_keystore_2027_password -keypass:env TF_VAR_key_2027_password
 ```
@@ -132,7 +132,7 @@ resource "am_certificate" "signing_2027" {
       content = filebase64("${path.module}/keystore-2027.jks")
     })
     storepass = var.keystore_2027_password
-    alias     = "signing"
+    alias     = "signing-2027"
     keypass   = var.key_2027_password
   })
 }
@@ -177,6 +177,9 @@ resource servers verify the tokens signed by either.
   switches them all. AM does not check the reference: it resolves whenever a certificate with that key exists.
 * AM does not stop you from deleting a certificate that the domain or an application still names: their
   reference stays, and resolves again once a certificate with that key exists. Switch them first, as in step 2.
+* Give each keystore its own alias: AM uses the alias as the `kid` of the tokens and of the keys in the JWKS.
+  With both keystores under `signing`, the JWKS publishes two keys under one `kid` until step 3, and a resource
+  server that picks the key by `kid` can verify a token against the wrong key and reject it.
 * Changing the keystore of an existing certificate is not a rotation: the new key signs at once, and the
   tokens signed by the old one fail to verify.
 * AM returns the keystore and its passwords as `********`; the provider keeps the configured values.

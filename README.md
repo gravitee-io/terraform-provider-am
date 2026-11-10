@@ -17,8 +17,10 @@ You can manage with Terraform the following:
 * Certificates
 * Identity Providers
 * Reporters
+* Applications
+* Client Secrets
 
-Compatible with Gravitee Access Management 4.13.0.
+Compatible with Gravitee Access Management 4.13.0 and later; applications and client secrets need 4.14.0.
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->

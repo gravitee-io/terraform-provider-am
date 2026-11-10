@@ -19,16 +19,19 @@ To rotate a secret, use two applies: declare a second `am_client_secret` with a 
 ## Example Usage
 
 ```terraform
-ephemeral "random_password" "mobile_app_2026_10" {
-  length  = 64
-  special = false
-}
-
 resource "am_client_secret" "mobile_app_2026_10" {
   domain_key      = "example-domain"
   application_key = "mobile-app"
   key             = "secret-2026-10"
-  value_wo        = ephemeral.random_password.mobile_app_2026_10.result
+  value_wo        = var.client_secret
+}
+
+# AM never returns the value: read it from the secret store the clients read it from, for example with
+# TF_VAR_client_secret.
+variable "client_secret" {
+  type      = string
+  sensitive = true
+  ephemeral = true
 }
 ```
 
@@ -42,7 +45,7 @@ resource "am_client_secret" "mobile_app_2026_10" {
 - `application_key` (String) Key of the application within the domain, or id:<uuid>. Requires replacement if changed.
 - `domain_key` (String) Key of the domain: its stable, immutable Automation identifier within the environment. Requires replacement if changed.
 - `key` (String) Stable, immutable identifier for the secret within its application, also used as the read-only name of the secret. Lowercase alphanumeric and hyphens, starting and ending with an alphanumeric character, at most 64 characters. Changing it replaces the secret: the old one is revoked immediately (see the rotation steps above). Requires replacement if changed.
-- `value_wo` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Value of the secret, write-only: sent on creation only, never stored in the plan or the state, and never returned by AM. Typically fed from an ephemeral resource such as `ephemeral "random_password"`. At least 43 characters, from a cryptographically secure random source (at least 32 bytes of entropy), never reused across applications. With BCrypt hashing, at most 72 bytes in UTF-8 (BCrypt ignores the rest); with no hashing, at most 374 characters. Changing only this value on an existing secret has no effect: no diff and no API call. To change the value, rotate the secret with a new `key`.
+- `value_wo` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Value of the secret, write-only: sent on creation only, never stored in the plan or the state, and never returned by AM: feed it from where the clients read it too, for example an ephemeral variable filled from your secret store. At least 43 characters, from a cryptographically secure random source (at least 32 bytes of entropy), never reused across applications. With BCrypt hashing, at most 72 bytes in UTF-8 (BCrypt ignores the rest); with no hashing, at most 374 characters. Changing only this value on an existing secret has no effect: no diff and no API call. To change the value, rotate the secret with a new `key`.
 
 ### Optional
 

@@ -7,7 +7,7 @@ resource "am_domain" "intranet" {
   data_plane_id = "default"
 }
 
-# Signs the tokens, built from AM's default certificate settings.
+# Signs the tokens, built from AM's default certificate settings (see the domain with the console defaults guide).
 resource "am_certificate" "default" {
   domain_key = am_domain.intranet.key
   key        = "default"
@@ -33,11 +33,14 @@ resource "am_identity_provider" "corporate" {
   # Only accounts of these email domains can sign in.
   domain_whitelist = ["example.com"]
 
-  # AM user profile attribute = claim of the corporate provider.
+  # AM user profile attribute = claim of the corporate provider, or an expression on the claims (profile).
+  # Once set, AM keeps only the mapped attributes: map the standard claims too.
   mappers = {
     email       = "email"
     given_name  = "given_name"
     family_name = "family_name"
+    department  = "dept"
+    cost_center = "{#profile['org']['cost_center']}"
   }
 }
 

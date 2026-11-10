@@ -12,8 +12,12 @@ domain bound to it.
 ## Before you start
 
 * The provider reaches the AM Automation API with `AM_SERVER_URL` and a service-account token in `AM_SA_TOKEN`.
-* A MongoDB database the AM management API and the gateways reach, its host given in `TF_VAR_mongodb_host`.
-* Gateways configured for this data plane, served at its `gateway_url`.
+* A MongoDB the AM management API and the gateways reach: its host in `TF_VAR_mongodb_host`, and the user AM
+  connects with in `TF_VAR_mongodb_username` and `TF_VAR_mongodb_password`, authenticated against the `admin`
+  database (`authSource`).
+* Gateways bound to this data plane: started with `repositories.gateway.dataPlane.id: acme-eu` in their
+  `gravitee.yml` (or `GRAVITEE_REPOSITORIES_GATEWAY_DATAPLANE_ID=acme-eu`), and served at
+  `https://auth-eu.example.com`. `gateway_url` only tells AM where they are: AM does not deploy them.
 
 ## Configuration
 
@@ -27,12 +31,15 @@ resource "am_data_plane" "eu" {
   type        = "mongodb"
   gateway_url = "https://auth-eu.example.com"
 
-  # Write-only: AM stores it but never returns it. Add username and password here when the database needs them.
+  # Write-only: AM stores it but never returns it. The fields are those of the dataplane-am-mongodb plugin.
   configuration = jsonencode({
     mongodb = {
-      host   = var.mongodb_host
-      port   = var.mongodb_port
-      dbname = "acme-eu"
+      host       = var.mongodb_host
+      port       = var.mongodb_port
+      dbname     = "acme-eu"
+      username   = var.mongodb_username
+      password   = var.mongodb_password
+      authSource = "admin"
     }
   })
 }
@@ -59,6 +66,18 @@ variable "mongodb_port" {
   default = 27017
 }
 
+# Left unset (null) for a MongoDB without authentication.
+variable "mongodb_username" {
+  type    = string
+  default = null
+}
+
+variable "mongodb_password" {
+  type      = string
+  sensitive = true
+  default   = null
+}
+
 ```
 
 ## How it differs from the console and the Management API
@@ -68,7 +87,7 @@ variable "mongodb_port" {
   the configuration in Terraform sends it back as declared.
 * After an import, the state has no configuration: the first plan shows it as changed, and the apply sends it.
 * `hosts` and `database` are read back from AM, from the configuration it stores: use them to check what AM
-  connects to.
+  connects to, since a misspelled field of `configuration` is not reported. The credentials are never read back.
 * `type` cannot change once created: AM rejects the apply.
 * A domain chooses its data plane on creation only: an apply that changes `data_plane_id` is rejected. To move
   users to another data plane, create a new domain. A domain created without `data_plane_id` gets one of the

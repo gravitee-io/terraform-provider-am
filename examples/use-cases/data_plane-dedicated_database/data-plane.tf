@@ -7,12 +7,15 @@ resource "am_data_plane" "eu" {
   type        = "mongodb"
   gateway_url = "https://auth-eu.example.com"
 
-  # Write-only: AM stores it but never returns it. Add username and password here when the database needs them.
+  # Write-only: AM stores it but never returns it. The fields are those of the dataplane-am-mongodb plugin.
   configuration = jsonencode({
     mongodb = {
-      host   = var.mongodb_host
-      port   = var.mongodb_port
-      dbname = "acme-eu"
+      host       = var.mongodb_host
+      port       = var.mongodb_port
+      dbname     = "acme-eu"
+      username   = var.mongodb_username
+      password   = var.mongodb_password
+      authSource = "admin"
     }
   })
 }
@@ -37,4 +40,16 @@ variable "mongodb_host" {
 variable "mongodb_port" {
   type    = number
   default = 27017
+}
+
+# Left unset (null) for a MongoDB without authentication.
+variable "mongodb_username" {
+  type    = string
+  default = null
+}
+
+variable "mongodb_password" {
+  type      = string
+  sensitive = true
+  default   = null
 }

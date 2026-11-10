@@ -51,14 +51,15 @@ func TestSecretRotation(t *testing.T) {
 	next := map[string]string{
 		"next-client-secret.tf": filepath.Join(examplesPath, "use-cases", rotationUseCase, "rotation", "next-client-secret.tf"),
 	}
-	withoutCurrent := with(current, next)
+	both := with(current, next)
+	withoutCurrent := with(both, nil)
 	delete(withoutCurrent, "client-secret.tf")
 
 	resource.Test(t, resource.TestCase{
 		PreCheck: func() { preCheck(t) },
 		Steps: []resource.TestStep{
 			applyStep(t, current),
-			rotationStep(t, with(current, next), onLiveAM(
+			rotationStep(t, both, onLiveAM(
 				resource.TestCheckResourceAttrSet("am_client_secret.billing_2026_11", "expires_at"),
 				resource.TestCheckResourceAttrSet("am_client_secret.billing_2027_02", "expires_at"),
 			)),
@@ -89,6 +90,9 @@ func useCaseFiles(t *testing.T, name string) map[string]string {
 	paths, err := filepath.Glob(filepath.Join(examplesPath, "use-cases", name, "*.tf"))
 	if err != nil {
 		t.Fatal(err)
+	}
+	if len(paths) == 0 {
+		t.Fatalf("use-case %s holds no .tf file", name)
 	}
 	files := map[string]string{}
 	for _, path := range paths {

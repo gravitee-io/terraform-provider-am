@@ -49,7 +49,7 @@ actions:
         * Applications
         * Client Secrets
 
-        Compatible with Gravitee Access Management 4.13.0 and later; applications and client secrets need 4.14.0.
+        Compatible with Gravitee Access Management 4.14.0.
   - target: $.components.securitySchemes.BearerAuth
     description: Remove trailing period for generated env-var suffix
     update:

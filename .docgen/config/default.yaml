@@ -19,6 +19,16 @@ outputs:
    target: templates/guides/docgen_service-app-secret-rotation.md
  - template: {{ .RootDir }}/tmpl/public-clients-pkce.md.tmpl
    target: templates/guides/docgen_public-clients-pkce.md
+ - template: {{ .RootDir }}/tmpl/domain-console-defaults.md.tmpl
+   target: templates/guides/docgen_domain-console-defaults.md
+ - template: {{ .RootDir }}/tmpl/data-plane-dedicated-database.md.tmpl
+   target: templates/guides/docgen_data-plane-dedicated-database.md
+ - template: {{ .RootDir }}/tmpl/identity-provider-external-oidc.md.tmpl
+   target: templates/guides/docgen_identity-provider-external-oidc.md
+ - template: {{ .RootDir }}/tmpl/reporter-audit-to-kafka.md.tmpl
+   target: templates/guides/docgen_reporter-audit-to-kafka.md
+ - template: {{ .RootDir }}/tmpl/certificate-signing-rotation.md.tmpl
+   target: templates/guides/docgen_certificate-signing-rotation.md
 chunks:
   - template: examples/use-cases/application-web_login/provider.tf
     exportedAs: Provider
@@ -37,4 +47,31 @@ chunks:
     required: true
   - template: examples/use-cases/application-public_clients_pkce/public-apps.tf
     exportedAs: PublicClientsPKCE
+    required: true
+  - template: examples/use-cases/domain-console_defaults/domain.tf
+    exportedAs: DomainConsoleDefaults
+    required: true
+  - template: examples/use-cases/data_plane-dedicated_database/data-plane.tf
+    exportedAs: DataPlaneDedicatedDatabase
+    required: true
+  - template: examples/use-cases/identity_provider-external_oidc/external-idp.tf
+    exportedAs: IdentityProviderExternalOIDC
+    required: true
+  - template: examples/use-cases/reporter-audit_to_kafka/reporters.tf
+    exportedAs: ReporterAuditToKafka
+    required: true
+  - template: examples/use-cases/certificate-signing_rotation/domain.tf
+    exportedAs: CertificateRotationDomain
+    required: true
+  - template: examples/use-cases/certificate-signing_rotation/signing-2026.tf
+    exportedAs: CertificateRotationCurrent
+    required: true
+  - template: examples/use-cases/certificate-signing_rotation/current-certificate.tf
+    exportedAs: CertificateRotationCurrentKey
+    required: true
+  - template: examples/use-cases/certificate-signing_rotation/rotation/signing-2027.tf
+    exportedAs: CertificateRotationNext
+    required: true
+  - template: examples/use-cases/certificate-signing_rotation/rotation/current-certificate.tf
+    exportedAs: CertificateRotationNextKey
     required: true

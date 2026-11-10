@@ -10,7 +10,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-const rotationUseCase = "application-service_secret_rotation"
+const (
+	secretRotationUseCase      = "application-service_secret_rotation"
+	certificateRotationUseCase = "certificate-signing_rotation"
+)
 
 // useCaseChecks holds what a guide promises beyond convergence, by use-case.
 var useCaseChecks = map[string]resource.TestCheckFunc{
@@ -47,9 +50,9 @@ func TestUseCases(t *testing.T) {
 // Follows the rotation of the service guide: add the next secret next to the current one, then delete
 // client-secret.tf, which holds the current one.
 func TestSecretRotation(t *testing.T) {
-	current := useCaseFiles(t, rotationUseCase)
+	current := useCaseFiles(t, secretRotationUseCase)
 	next := map[string]string{
-		"next-client-secret.tf": filepath.Join(examplesPath, "use-cases", rotationUseCase, "rotation", "next-client-secret.tf"),
+		"next-client-secret.tf": rotationFile(secretRotationUseCase, "next-client-secret.tf"),
 	}
 	both := with(current, next)
 	withoutCurrent := with(both, nil)
@@ -69,6 +72,47 @@ func TestSecretRotation(t *testing.T) {
 			)),
 		},
 	})
+}
+
+// Follows the rotation of the certificate guide: add the next certificate, switch the domain and the
+// application to it, then delete the current one.
+func TestCertificateRotation(t *testing.T) {
+	current := useCaseFiles(t, certificateRotationUseCase)
+	withNext := with(current, map[string]string{
+		"signing-2027.tf": rotationFile(certificateRotationUseCase, "signing-2027.tf"),
+	})
+	switched := with(withNext, map[string]string{
+		"current-certificate.tf": rotationFile(certificateRotationUseCase, "current-certificate.tf"),
+	})
+	withoutCurrent := with(switched, nil)
+	delete(withoutCurrent, "signing-2026.tf")
+
+	signedBy := func(key string) resource.TestCheckFunc {
+		return resource.ComposeAggregateTestCheckFunc(
+			resource.TestCheckResourceAttr("am_domain.accounts", "certificate_settings.fallback_certificate", key),
+			resource.TestCheckResourceAttr("am_application.account_portal", "certificate", key),
+		)
+	}
+	resource.Test(t, resource.TestCase{
+		PreCheck: func() { preCheck(t) },
+		Steps: []resource.TestStep{
+			checkedStep(t, current, signedBy("signing-2026")),
+			checkedStep(t, withNext, signedBy("signing-2026")),
+			checkedStep(t, switched, signedBy("signing-2027")),
+			// Terraform deletes signing_2026, which fails the step if AM does not.
+			checkedStep(t, withoutCurrent, signedBy("signing-2027")),
+		},
+	})
+}
+
+func checkedStep(t *testing.T, files map[string]string, check resource.TestCheckFunc) resource.TestStep {
+	step := applyStep(t, files)
+	step.Check = check
+	return step
+}
+
+func rotationFile(useCase, name string) string {
+	return filepath.Join(examplesPath, "use-cases", useCase, "rotation", name)
 }
 
 func rotationStep(t *testing.T, files map[string]string, check resource.TestCheckFunc) resource.TestStep {

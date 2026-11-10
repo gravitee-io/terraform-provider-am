@@ -162,15 +162,19 @@ feeds it through `ConfigVariables`.
   they name each other by key; then the data-source examples, an import with each
   `import.sh` ID, and a re-import of every resource with the
   `import-by-string-id.tf` blocks;
-- each use-case under `examples/use-cases/`, and the secret rotation of the service
-  guide (`rotation/next-client-secret.tf` added, then `client-secret.tf` removed).
+- each use-case under `examples/use-cases/`, and the rotations of the client secret
+  and certificate guides, step by step with the files under each `rotation/`.
 
 Every apply must converge (empty next plan). `make examples-mock-tests` runs them
 on the AM mock (in CI), `make examples-tests` on a live AM (`AM_SA_TOKEN`). The
 live run uses the examples' literal keys (`example-domain`, `acme-shop`…): don't
 run it twice at once on the same AM. The certificate examples read
 `tests/examples/testdata/keystore.jks`. The mock does not compute the OAuth
-defaults nor the secret expiry: the checks on them run on a live AM only.
+defaults nor the secret expiry: the checks on them run on a live AM only. The
+data plane use-case reaches MongoDB at `AM_TEST_MONGODB_HOST` / `AM_TEST_MONGODB_PORT`,
+as the acceptance tests do; the identity provider and Kafka reporter use-cases
+point at hosts that don't exist: a live run checks AM accepts their
+configuration, not that it connects.
 
 The resource examples, imports and data-source examples are hand-written and
 listed in `.genignore`: keep them in sync with the schema by hand.

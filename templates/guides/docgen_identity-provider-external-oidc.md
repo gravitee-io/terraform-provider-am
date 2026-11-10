@@ -26,7 +26,7 @@ resource "am_domain" "intranet" {
   data_plane_id = "default"
 }
 
-# Signs the tokens, built from AM's default certificate settings.
+# Signs the tokens, built from AM's default certificate settings (see the domain with the console defaults guide).
 resource "am_certificate" "default" {
   domain_key = am_domain.intranet.key
   key        = "default"
@@ -52,11 +52,14 @@ resource "am_identity_provider" "corporate" {
   # Only accounts of these email domains can sign in.
   domain_whitelist = ["example.com"]
 
-  # AM user profile attribute = claim of the corporate provider.
+  # AM user profile attribute = claim of the corporate provider, or an expression on the claims (profile).
+  # Once set, AM keeps only the mapped attributes: map the standard claims too.
   mappers = {
     email       = "email"
     given_name  = "given_name"
     family_name = "family_name"
+    department  = "dept"
+    cost_center = "{#profile['org']['cost_center']}"
   }
 }
 
@@ -104,7 +107,9 @@ variable "corporate_client_secret" {
   apply sends the configured secrets again.
 * `configuration` is the JSON of the `oauth2-generic-am-idp` plugin, with the field names of the plugin, not the
   labels of the console form.
-* `mappers` maps an AM user profile attribute (the key) to a claim of the provider (the value).
+* `mappers` maps an AM user profile attribute (the key) to a claim of the provider, or to an expression on its
+  claims such as `{#profile['org']['cost_center']}` (the value). Once `mappers` is set, AM keeps only the
+  mapped attributes, not the default mapping of the plugin: map `email` and the names too, as here.
 * `role_mapper` and `group_mapper` name AM roles and groups by their ID: Terraform does not manage roles and
   groups, so read their IDs in the console.
 * `type` cannot change once created: AM rejects the apply.

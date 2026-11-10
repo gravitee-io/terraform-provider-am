@@ -11,11 +11,13 @@ tokens it already signed.
 ## Before you start
 
 * The provider reaches the AM Automation API with `AM_SERVER_URL` and a service-account token in `AM_SA_TOKEN`.
-* Java keystores holding the RSA keys that sign the tokens, next to the configuration:
+* A Java keystore holding the RSA key that signs the tokens, next to the configuration, its passwords in
+  `TF_VAR_keystore_2026_password` and `TF_VAR_key_2026_password`:
 
 ```shell
 keytool -genkeypair -alias signing -keyalg RSA -keysize 2048 -validity 365 -dname CN=acme-accounts \
-  -storetype JKS -keystore keystore-2026.jks -storepass:env TF_VAR_keystore_password -keypass:env TF_VAR_key_password
+  -storetype JKS -keystore keystore-2026.jks \
+  -storepass:env TF_VAR_keystore_2026_password -keypass:env TF_VAR_key_2026_password
 ```
 
 ## Configuration
@@ -48,18 +50,12 @@ resource "am_application" "account_portal" {
   settings = {
     oauth = {
       redirect_uris = ["https://accounts.example.com/callback"]
+      # The longest of these validities is how long to keep the old certificate after the switch.
+      access_token_validity_seconds  = 3600
+      id_token_validity_seconds      = 3600
+      refresh_token_validity_seconds = 86400
     }
   }
-}
-
-variable "keystore_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "key_password" {
-  type      = string
-  sensitive = true
 }
 
 ```
@@ -67,7 +63,7 @@ variable "key_password" {
 The current certificate, in `signing-2026.tf`:
 
 ```terraform
-# The current signing certificate, from keystore-2026.jks.
+# The current signing certificate, from keystore-2026.jks, with its own passwords.
 resource "am_certificate" "signing_2026" {
   domain_key = am_domain.accounts.key
   key        = "signing-2026"
@@ -78,14 +74,24 @@ resource "am_certificate" "signing_2026" {
       name    = "keystore-2026.jks"
       content = filebase64("${path.module}/keystore-2026.jks")
     })
-    storepass = var.keystore_password
+    storepass = var.keystore_2026_password
     alias     = "signing"
-    keypass   = var.key_password
+    keypass   = var.key_2026_password
   })
 }
 
 output "signing_2026_expires_at" {
   value = am_certificate.signing_2026.expires_at
+}
+
+variable "keystore_2026_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "key_2026_password" {
+  type      = string
+  sensitive = true
 }
 
 ```
@@ -102,11 +108,19 @@ locals {
 
 ## Rotate the certificate
 
-1. Create `keystore-2027.jks` as above, add the next certificate in a new file, for example `signing-2027.tf`,
-   and apply. Nothing signs with it yet.
+1. Create the next keystore with its own passwords, in `TF_VAR_keystore_2027_password` and
+   `TF_VAR_key_2027_password`:
+
+```shell
+keytool -genkeypair -alias signing -keyalg RSA -keysize 2048 -validity 365 -dname CN=acme-accounts \
+  -storetype JKS -keystore keystore-2027.jks \
+  -storepass:env TF_VAR_keystore_2027_password -keypass:env TF_VAR_key_2027_password
+```
+
+   Add the next certificate in a new file, for example `signing-2027.tf`, and apply. Nothing signs with it yet.
 
 ```terraform
-# The next signing certificate, from a new keystore.
+# The next signing certificate, from keystore-2027.jks, with its own passwords.
 resource "am_certificate" "signing_2027" {
   domain_key = am_domain.accounts.key
   key        = "signing-2027"
@@ -117,14 +131,24 @@ resource "am_certificate" "signing_2027" {
       name    = "keystore-2027.jks"
       content = filebase64("${path.module}/keystore-2027.jks")
     })
-    storepass = var.keystore_password
+    storepass = var.keystore_2027_password
     alias     = "signing"
-    keypass   = var.key_password
+    keypass   = var.key_2027_password
   })
 }
 
 output "signing_2027_expires_at" {
   value = am_certificate.signing_2027.expires_at
+}
+
+variable "keystore_2027_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "key_2027_password" {
+  type      = string
+  sensitive = true
 }
 
 ```
@@ -139,11 +163,13 @@ locals {
 
 ```
 
-3. Once the tokens signed by the old key have expired, delete `signing-2026.tf` and `keystore-2026.jks`, and
-   apply.
+3. Wait for the tokens signed by the old key to expire: the longest token validity of the applications that used
+   it, here `refresh_token_validity_seconds`, one day. Then delete `signing-2026.tf` and `keystore-2026.jks`, unset
+   the 2026 passwords, and apply.
 
-Between step 1 and step 3, the domain's JWKS (`<gateway URL>/acme-accounts/oidc/.well-known/jwks.json`) publishes
-both public keys, so the resource servers verify the tokens signed by either.
+Until step 3, the old certificate stays in the domain: AM still accepts the access and refresh tokens it signed,
+and the domain's JWKS (`<gateway URL>/acme-accounts/oidc/.well-known/jwks.json`) publishes both public keys, so the
+resource servers verify the tokens signed by either.
 
 ## How it differs from the console
 

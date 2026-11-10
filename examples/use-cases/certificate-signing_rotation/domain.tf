@@ -23,16 +23,10 @@ resource "am_application" "account_portal" {
   settings = {
     oauth = {
       redirect_uris = ["https://accounts.example.com/callback"]
+      # The longest of these validities is how long to keep the old certificate after the switch.
+      access_token_validity_seconds  = 3600
+      id_token_validity_seconds      = 3600
+      refresh_token_validity_seconds = 86400
     }
   }
-}
-
-variable "keystore_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "key_password" {
-  type      = string
-  sensitive = true
 }

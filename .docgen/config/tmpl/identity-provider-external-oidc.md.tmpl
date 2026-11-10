@@ -29,7 +29,9 @@ Connect provider: AM is a client of that provider, and the application only talk
   apply sends the configured secrets again.
 * `configuration` is the JSON of the `oauth2-generic-am-idp` plugin, with the field names of the plugin, not the
   labels of the console form.
-* `mappers` maps an AM user profile attribute (the key) to a claim of the provider (the value).
+* `mappers` maps an AM user profile attribute (the key) to a claim of the provider, or to an expression on its
+  claims such as `{#profile['org']['cost_center']}` (the value). Once `mappers` is set, AM keeps only the
+  mapped attributes, not the default mapping of the plugin: map `email` and the names too, as here.
 * `role_mapper` and `group_mapper` name AM roles and groups by their ID: Terraform does not manage roles and
   groups, so read their IDs in the console.
 * `type` cannot change once created: AM rejects the apply.

@@ -21,6 +21,8 @@ keytool -genkeypair -alias signing -keyalg RSA -keysize 2048 -validity 365 -dnam
 
 ## Configuration
 
+The service application, in `service-app.tf`:
+
 ```terraform
 # A backend service calling APIs on its own behalf (client credentials flow), with an expiring client secret.
 

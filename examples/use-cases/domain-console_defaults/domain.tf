@@ -1,5 +1,6 @@
 # A domain with what the AM console creates along with a new domain: a certificate, an identity provider
-# holding the users, and a reporter feeding the console's audit log. Through Terraform a new domain gets none.
+# holding the users, and a reporter feeding the console's audit log and dashboard. Through Terraform a new domain
+# gets none. Any certificate or identity provider can replace the system ones.
 
 resource "am_domain" "partners" {
   key           = "acme-partners"

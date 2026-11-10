@@ -6,7 +6,7 @@ subcategory: "Domains"
 # Domain with the console defaults
 
 Creating a domain in the AM console also creates its default certificate, identity provider and reporter. A
-domain created by Terraform gets none of them. This guide declares them.
+domain created by Terraform gets none of them. This guide declares them, built from AM's defaults.
 
 ## Before you start
 
@@ -16,7 +16,8 @@ domain created by Terraform gets none of them. This guide declares them.
 
 ```terraform
 # A domain with what the AM console creates along with a new domain: a certificate, an identity provider
-# holding the users, and a reporter feeding the console's audit log. Through Terraform a new domain gets none.
+# holding the users, and a reporter feeding the console's audit log and dashboard. Through Terraform a new domain
+# gets none. Any certificate or identity provider can replace the system ones.
 
 resource "am_domain" "partners" {
   key           = "acme-partners"
@@ -78,8 +79,12 @@ resource "am_application" "portal" {
 
 ## How it differs from the console
 
-* Without these resources, the domain has no certificate to sign tokens with, no identity provider to sign in
-  with or register in, and an empty audit log in the console, which reads the system reporter.
+* The certificate and the identity provider can be of any type: the system ones are only the console's
+  defaults. A domain needs at least one certificate to sign tokens with, and one identity provider to sign in with
+  or register in.
+* The console's audit log and dashboard read a reporter that stores the events in a database, such as the system
+  reporter: without one, they stay empty. A reporter that only sends the events elsewhere (Kafka, file, TCP) does
+  not fill them.
 * An application does not pick the domain's certificate or identity providers by itself: name them in its
   `certificate` (required) and `identity_providers`, as `am_application.portal` does.
 * `system = true` builds the resource from AM's domain defaults, the `domains.certificates.default`,

@@ -1,4 +1,5 @@
-# The audit events of a domain sent to Kafka, for the security team's SIEM, on top of the console's audit log.
+# The audit events of a domain sent to Kafka, for the security team's SIEM, on top of the console's audit log
+# and dashboard.
 
 resource "am_domain" "payments" {
   key           = "acme-payments"
@@ -7,7 +8,8 @@ resource "am_domain" "payments" {
   data_plane_id = "default"
 }
 
-# The console's audit log reads the system reporter, which a domain created by Terraform does not get.
+# The console's audit log and dashboard read a reporter storing the events in a database, not the Kafka one.
+# A domain created by Terraform gets none: this is the system one, built from AM's defaults.
 resource "am_reporter" "console" {
   domain_key = am_domain.payments.key
   key        = "default"

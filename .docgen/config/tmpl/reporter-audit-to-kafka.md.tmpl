@@ -21,8 +21,9 @@ console.
 
 ## How it differs from the console
 
-* The audit log of the console reads the domain's system reporter, which a domain created by Terraform does not
-  get: `am_reporter.console` declares it, with `system = true` and its key only.
+* The console's audit log and dashboard read a reporter that stores the events in a database, not the Kafka one.
+  A domain created by Terraform gets none: `am_reporter.console` declares the system reporter, with
+  `system = true` and its key only.
 * AM returns the secrets of a plugin configuration as `********`. The provider compares the configuration
   with that masking taken into account and keeps the configured values in the state: a secret changed in the
   console does not show in the plan. Change the variable instead, and apply.

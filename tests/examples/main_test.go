@@ -64,15 +64,33 @@ func exampleVariables() config.Variables {
 		"key_password":      config.StringVariable("keypass123"),
 		"alice_password":    config.StringVariable("Alice-Example-1"),
 		"client_secret":     config.StringVariable(acctest.RandString(64)),
+		// The MongoDB AM reaches, as for the acceptance tests.
+		"mongodb_host":            config.StringVariable(envOr("AM_TEST_MONGODB_HOST", "mongodb")),
+		"mongodb_port":            config.StringVariable(envOr("AM_TEST_MONGODB_PORT", "27017")),
+		"corporate_client_secret": config.StringVariable(acctest.RandString(32)),
+		"kafka_password":          config.StringVariable(acctest.RandString(32)),
 	}
 }
 
-// configDir returns a new directory holding the given files, named by the map keys, and the test keystore
-// the certificate examples read from ${path.module}/keystore.jks.
+func envOr(name, fallback string) string {
+	if value := os.Getenv(name); value != "" {
+		return value
+	}
+	return fallback
+}
+
+// keystores are the files the certificate examples read from ${path.module}, all copies of the test keystore.
+var keystores = map[string]string{
+	"keystore.jks":      filepath.Join("testdata", "keystore.jks"),
+	"keystore-2026.jks": filepath.Join("testdata", "keystore.jks"),
+	"keystore-2027.jks": filepath.Join("testdata", "keystore.jks"),
+}
+
+// configDir returns a new directory holding the given files, named by the map keys, and the keystores.
 func configDir(t *testing.T, files map[string]string) string {
 	t.Helper()
 	dir := t.TempDir()
-	for name, source := range with(files, map[string]string{"keystore.jks": filepath.Join("testdata", "keystore.jks")}) {
+	for name, source := range with(files, keystores) {
 		content, err := os.ReadFile(source)
 		if err != nil {
 			t.Fatal(err)

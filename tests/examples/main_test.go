@@ -53,10 +53,12 @@ func testProviders() map[string]func() (tfprotov6.ProviderServer, error) {
 }
 
 // exampleVariables holds a value for every variable an example declares; an example ignores the others.
-// The keystore passwords match testdata/keystore.jks, a key pair generated with:
+// The keystore passwords match the testdata keystores, each a key pair generated with:
 //
 //	keytool -genkeypair -alias signing -keyalg RSA -keysize 2048 -validity 3650 -dname CN=example \
 //	  -storetype JKS -keystore keystore.jks -storepass storepass123 -keypass keypass123
+//
+// keystore-2026.jks and keystore-2027.jks hold the aliases signing-2026 and signing-2027 the rotation guide names.
 func exampleVariables() config.Variables {
 	return config.Variables{
 		"keystore_password":      config.StringVariable("storepass123"),
@@ -83,11 +85,11 @@ func envOr(name, fallback string) string {
 	return fallback
 }
 
-// keystores are the files the certificate examples read from ${path.module}, all copies of the test keystore.
+// keystores are the files the certificate examples read from ${path.module}.
 var keystores = map[string]string{
 	"keystore.jks":      filepath.Join("testdata", "keystore.jks"),
-	"keystore-2026.jks": filepath.Join("testdata", "keystore.jks"),
-	"keystore-2027.jks": filepath.Join("testdata", "keystore.jks"),
+	"keystore-2026.jks": filepath.Join("testdata", "keystore-2026.jks"),
+	"keystore-2027.jks": filepath.Join("testdata", "keystore-2027.jks"),
 }
 
 // configDir returns a new directory holding the given files, named by the map keys, and the keystores.

@@ -16,7 +16,8 @@ console.
 ## Configuration
 
 ```terraform
-# The audit events of a domain sent to Kafka, for the security team's SIEM, on top of the console's audit log.
+# The audit events of a domain sent to Kafka, for the security team's SIEM, on top of the console's audit log
+# and dashboard.
 
 resource "am_domain" "payments" {
   key           = "acme-payments"
@@ -25,7 +26,8 @@ resource "am_domain" "payments" {
   data_plane_id = "default"
 }
 
-# The console's audit log reads the system reporter, which a domain created by Terraform does not get.
+# The console's audit log and dashboard read a reporter storing the events in a database, not the Kafka one.
+# A domain created by Terraform gets none: this is the system one, built from AM's defaults.
 resource "am_reporter" "console" {
   domain_key = am_domain.payments.key
   key        = "default"
@@ -64,8 +66,9 @@ variable "kafka_password" {
 
 ## How it differs from the console
 
-* The audit log of the console reads the domain's system reporter, which a domain created by Terraform does not
-  get: `am_reporter.console` declares it, with `system = true` and its key only.
+* The console's audit log and dashboard read a reporter that stores the events in a database, not the Kafka one.
+  A domain created by Terraform gets none: `am_reporter.console` declares the system reporter, with
+  `system = true` and its key only.
 * AM returns the secrets of a plugin configuration as `********`. The provider compares the configuration
   with that masking taken into account and keeps the configured values in the state: a secret changed in the
   console does not show in the plan. Change the variable instead, and apply.

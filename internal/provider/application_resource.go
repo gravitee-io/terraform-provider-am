@@ -959,12 +959,14 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 										"default_scope": schema.BoolAttribute{
 											Computed:    true,
 											Optional:    true,
-											Description: `Whether the scope is granted when the authorization request carries no scope parameter.`,
+											Default:     booldefault.StaticBool(false),
+											Description: `Whether the scope is granted when the authorization request carries no scope parameter. Default: false`,
 										},
 										"required_scope": schema.BoolAttribute{
 											Computed:    true,
 											Optional:    true,
-											Description: `Whether the user cannot deselect this scope on the consent page.`,
+											Default:     booldefault.StaticBool(false),
+											Description: `Whether the user cannot deselect this scope on the consent page. Default: false`,
 										},
 										"scope": schema.StringAttribute{
 											Computed:    true,

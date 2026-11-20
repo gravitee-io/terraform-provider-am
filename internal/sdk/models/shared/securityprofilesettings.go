@@ -3,27 +3,12 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // SecurityProfileSettings - Financial-grade API (FAPI) security profile configuration for the domain.
 type SecurityProfileSettings struct {
 	// Whether the Open Banking Brasil Financial-grade API security profile (version 1.0) is applied.
-	EnableFapiBrazil *bool `default:"false" json:"enableFapiBrazil"`
+	EnableFapiBrazil *bool `json:"enableFapiBrazil,omitempty"`
 	// Whether the standard Financial-grade API security profile (version 1.0) is applied.
-	EnablePlainFapi *bool `default:"false" json:"enablePlainFapi"`
-}
-
-func (s SecurityProfileSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
-}
-
-func (s *SecurityProfileSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	EnablePlainFapi *bool `json:"enablePlainFapi,omitempty"`
 }
 
 func (s *SecurityProfileSettings) GetEnableFapiBrazil() *bool {

@@ -1,16 +1,16 @@
 lockVersion: ""
 id: ""
 management:
-  docChecksum: ecfa31681d85bdd2b6aa790be789e840
+  docChecksum: e84c7728cc885782b1a5f3c8cf9c6155
   docVersion: 4.14.0
   speakeasyVersion: 1.806.0
   generationVersion: 2.956.1
   releaseVersion: 0.0.1
   configChecksum: 424490c479d549d0423227d7d1be8c5c
 persistentEdits:
-  generation_id: 639923ba-90af-466e-8594-36eff69e2202
-  pristine_commit_hash: e1c597e3f463d1ef8ace16b65321ac242843a13b
-  pristine_tree_hash: 7642e10786673c91c813a06c54438a1dd886ae73
+  generation_id: 56c5e57b-7487-4a12-91cd-f763c7129bdf
+  pristine_commit_hash: 3d390b2fc6eb3fe5ede1e6fe933fa9f4c6225070
+  pristine_tree_hash: 5de1488adb95351bc9cb5e486e2076201e9ac5b7
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -189,8 +189,8 @@ trackedFiles:
     pristine_git_object: fd7ad5b054b96f8e296f9d7f4a7d1e25923863bc
   internal/provider/application_resource.go:
     id: 7f6eb7925aae
-    last_write_checksum: sha1:3640673977d43bd7c8ecd2994b840a088d2fe12c
-    pristine_git_object: 682e56bbdd264c32f3a02fd38dd672383738acc1
+    last_write_checksum: sha1:7db62c7684ee19a1b9a0f6e54ddb17aafdde7055
+    pristine_git_object: c3c8077418a1ae67f6bf16104c8d079b4f423e51
   internal/provider/application_resource_sdk.go:
     id: e222f1f0cfa7
     last_write_checksum: sha1:e29add61fc708d86e79c61762485063f35175c28
@@ -245,8 +245,8 @@ trackedFiles:
     pristine_git_object: 06cec506b8e9ef8cbe67e2c990d8593e8fc1a8bc
   internal/provider/domain_resource.go:
     id: 5a818b70c107
-    last_write_checksum: sha1:8e432601f93e3502d3708aa5d77441fdf8531d09
-    pristine_git_object: ced051097e741d22557b2d849e290acdbbb2b1f4
+    last_write_checksum: sha1:179870217434e06e349575c077580cc6120cce6f
+    pristine_git_object: 6a42cc94d67202b28f417ac1040b8df55fde0667
   internal/provider/domain_resource_sdk.go:
     id: 4942f28340ad
     last_write_checksum: sha1:93d69a1ec87775207d54f0e11cab779716e390c0
@@ -809,16 +809,16 @@ trackedFiles:
     pristine_git_object: f7ca82a853190d8128328038a3be46b8b5330f22
   internal/sdk/models/shared/applicationlightweightjwtsettings.go:
     id: add431d6fd6e
-    last_write_checksum: sha1:cb525a4133f952c015077f6bad27f7ff687fcd15
-    pristine_git_object: 1caf0e7f9c12951f37d4609f29d16e85afe409b9
+    last_write_checksum: sha1:facc34fadb57f89e6c00cfc576153e789dfc3c04
+    pristine_git_object: 42edd562a2baf2f62479e23c40750e4708fb836f
   internal/sdk/models/shared/automationaccountsettings.go:
     id: 0c5730d31fae
-    last_write_checksum: sha1:7643001121b15f0aaa59140344fbcd31abcb0fa3
-    pristine_git_object: 24b8b1ac8c09c7e9735e60736f8f8e95f4aff44b
+    last_write_checksum: sha1:74be9bc100795635f5e3877bf049788601dc8af3
+    pristine_git_object: 6596845700003f616d62392b79de2ad28d9452a9
   internal/sdk/models/shared/automationadvancedsettings.go:
     id: 0e559089b99d
-    last_write_checksum: sha1:345e813a4d0f94f68a97d5ba27aeb1bc40739a31
-    pristine_git_object: bbff92edd6e4cf123157b0fd9bf792973b5dd8ac
+    last_write_checksum: sha1:26d01c0d3d4c3aedf537a9b6da4e2df6fd98f078
+    pristine_git_object: bcfc090b0754bf04218ea18738e7c55eeb4ed085
   internal/sdk/models/shared/automationapplication.go:
     id: 3263ff3c45b0
     last_write_checksum: sha1:f45cc9263e00f616c5eb58ac14dfeda0c0b6f48d
@@ -833,16 +833,16 @@ trackedFiles:
     pristine_git_object: 4de81d60e6ffcc02a751c8a4f6e32e6335b45cfc
   internal/sdk/models/shared/automationapplicationoauthsettings.go:
     id: 73257a0a7576
-    last_write_checksum: sha1:8bfcf0f3b2979d98ad9ce182d407432c7d5c9111
-    pristine_git_object: 204108de8c3c6eb5e94730ee4195067fc91ea1ab
+    last_write_checksum: sha1:4ec63d2fe4885ceb9fe811443f83b82a4bda80a8
+    pristine_git_object: c6c47aed6daabfb134ca4d81b9a58b1180772962
   internal/sdk/models/shared/automationapplicationoauthsettingsinput.go:
     id: 9570a3f0a3a2
-    last_write_checksum: sha1:2cff6f81eddfa083da40befba54fe8d01631a341
-    pristine_git_object: d52caf8f0ceba2d83735170c3ce66bfebab9087f
+    last_write_checksum: sha1:837caa560990f0f7b8cf57ee6473563b49679cb2
+    pristine_git_object: aff5085a4083979f91f06cd392be7022b38c1f89
   internal/sdk/models/shared/automationapplicationsamlsettings.go:
     id: eb6665d31c62
-    last_write_checksum: sha1:12d84cbf4f9937d4dcf838ccfe05e8399364812a
-    pristine_git_object: 94c555280849aaaaf4a082b1848a67eb5dedec7f
+    last_write_checksum: sha1:6789e156c522d88d83e26c6263f59a4396518a5b
+    pristine_git_object: ba07893338d70657a339d5cb741c580df4f50d09
   internal/sdk/models/shared/automationapplicationsettings.go:
     id: cb29ad4f0561
     last_write_checksum: sha1:f11872fa0eec4959d45343974f736144b1147ffd
@@ -853,8 +853,8 @@ trackedFiles:
     pristine_git_object: bea0c93a96bcf7c78ebc9c78ec69c13709661270
   internal/sdk/models/shared/automationassessmentsettings.go:
     id: 6ad2dac4f980
-    last_write_checksum: sha1:9ebf20594cb016e52c664f71bea92aa24c3a8699
-    pristine_git_object: ee417afbe519b6cf80efcd903f9e0cfbf020ee59
+    last_write_checksum: sha1:dc22b197b7b0a9ca354a410a3e2e600f95345c43
+    pristine_git_object: 8737b7b8ace43468461c0eda796b90ad68eda6d5
   internal/sdk/models/shared/automationcertificate.go:
     id: 0d5bf1f72801
     last_write_checksum: sha1:9688789105e24d7ab87719ac59c231e77bf240fc
@@ -869,16 +869,16 @@ trackedFiles:
     pristine_git_object: 63e117bc4a2e4c52a2856239f6e754fcaaddf102
   internal/sdk/models/shared/automationchallengesettings.go:
     id: 3cc9f013324b
-    last_write_checksum: sha1:28de2c039b8b47c132de67169582162e025a894b
-    pristine_git_object: 95bf4f4ab96b3e6a87649db80bb0df8ada79d238
+    last_write_checksum: sha1:94f82fa224aeedf82ab2fd23143e0f4d2454cf13
+    pristine_git_object: 40874cbce4ba2669a283639a7b2f3f77c438ca91
   internal/sdk/models/shared/automationcibasettings.go:
     id: f590f07038fe
-    last_write_checksum: sha1:0c1911a6345ad030b6d7768c24b55edecf0f600c
-    pristine_git_object: 11888bea24bbd5a6886fc1b32ce5f084b2d753c7
+    last_write_checksum: sha1:259828523b194dcb4b6ac36dd66fe4e957b60d2e
+    pristine_git_object: ea40c98f1c627c66bce7b01abeb37cf1f3de7a9c
   internal/sdk/models/shared/automationclientregistrationsettings.go:
     id: eac811c36090
-    last_write_checksum: sha1:22b0aa2578c7609b57ad85b4e9c9c3f5745db405
-    pristine_git_object: 67ad341cd5118a1f0ac9c0aaa4a71ce633e729e8
+    last_write_checksum: sha1:b7d44dda85c68cc72016f27ddb83e3bb1b915ec6
+    pristine_git_object: 6b19254f460026f98084782f1dd86d1343c889eb
   internal/sdk/models/shared/automationclientsecretinput.go:
     id: 1e3dc3a0ac6c
     last_write_checksum: sha1:56df5281ddff46ed000c37221adf54a7b67018f2
@@ -889,16 +889,16 @@ trackedFiles:
     pristine_git_object: ede42ab537efcb7d2d9f2534111cad907a18d9d3
   internal/sdk/models/shared/automationcookiesettings.go:
     id: 4340463e1d4f
-    last_write_checksum: sha1:9dc7ccc71c4ff8e5427d74330844ea57ff5915e1
-    pristine_git_object: ed36713727b6fe1423ec5e987c51b9e1f7588f28
+    last_write_checksum: sha1:89d6f7a28d65ec9c889aebc10299ff2cf5711172
+    pristine_git_object: 6a98b20d318dbc5d844282801fdcb5c610a2675e
   internal/sdk/models/shared/automationcrossappaccessresourceserver.go:
     id: 672503fb2ae5
     last_write_checksum: sha1:f7dff5daa98c2c02f5c7d125fe9e24cadbe7500d
     pristine_git_object: e82b7a828267278bf82723a39ce7e310d7593979
   internal/sdk/models/shared/automationcrossappaccesssettings.go:
     id: 633068d471b6
-    last_write_checksum: sha1:5b44499476e8666627630f76372beba2ad51d435
-    pristine_git_object: bbe6bfae5274523c7b304994604d03477d0ed2fe
+    last_write_checksum: sha1:b9b29b7d81e1a95717c03b3a8d5eeb15793b3e6b
+    pristine_git_object: 90d39d3482920febb183a6ed1076467a1d5f0c5e
   internal/sdk/models/shared/automationdataplaneinput.go:
     id: 0f1df3a78b3f
     last_write_checksum: sha1:5347424750016914d391dc719b21a8adee3988e2
@@ -921,8 +921,8 @@ trackedFiles:
     pristine_git_object: e6666ce193f5b15025777db1549eb4a9bb927dd8
   internal/sdk/models/shared/automationenrollsettings.go:
     id: 168d9314c1d3
-    last_write_checksum: sha1:1cc9c66b47d83f97d047b2a2d3f21a4a87fb4f79
-    pristine_git_object: ce7e52d57b2162efe02864de9bd4b562868490f9
+    last_write_checksum: sha1:444144d8053d60c641090043d9dd94f9547818ca
+    pristine_git_object: 5f2686a2979fad34f4fca396d554b2d918eb4229
   internal/sdk/models/shared/automationfactorsettings.go:
     id: 43aa3c6f6499
     last_write_checksum: sha1:2d293504aebc8db9492dda2eb400503043fa40ca
@@ -941,12 +941,12 @@ trackedFiles:
     pristine_git_object: ca4a831dc851ba2b691084f011fd370b44dcf93c
   internal/sdk/models/shared/automationoidcsettings.go:
     id: 5f62505f1197
-    last_write_checksum: sha1:dedd3d19f3f3a1b53773791817d7914260e3ee41
-    pristine_git_object: 7893f48c11f5b5e2af115423bedcbe73e2fc56ce
+    last_write_checksum: sha1:a5e4783884543e9e84a67d0ee1b499b39d89cbed
+    pristine_git_object: bd953db8aa0228a4008940c1256d7a6a57878820
   internal/sdk/models/shared/automationrememberdevicesettings.go:
     id: 85ff135b9351
-    last_write_checksum: sha1:3c2f0033f6d580e6d2087a24d401b2fad7e4817a
-    pristine_git_object: ea10c6ceff132c227d9e8bb95887d07ca40ebcac
+    last_write_checksum: sha1:778bb3b3aafea88d71f571cdba4aaa55efd57bf8
+    pristine_git_object: e1d4eef781fe5ac1abd7b268687d6b905332320b
   internal/sdk/models/shared/automationreporter.go:
     id: 068380aea7dd
     last_write_checksum: sha1:e05fc4bc8277ec9c51b73c19e9fb933dca614ff7
@@ -957,28 +957,28 @@ trackedFiles:
     pristine_git_object: 1a6e607d551680d4d401fccb24f696e5e2f21b0e
   internal/sdk/models/shared/automationriskassessmentsettings.go:
     id: 44aeec81beea
-    last_write_checksum: sha1:5a31915289e29f8e14ba25dfdb25b93f73bf0a1a
-    pristine_git_object: 3902c842d173d036e5a7d9936c84156cc9a132a4
+    last_write_checksum: sha1:a17c79dfa2b6fda05efb36bf780eb19a9fcbf617
+    pristine_git_object: f6c941369aa82d022da2d1aa9bdb0ecdf937aa80
   internal/sdk/models/shared/automationsamlassertionattribute.go:
     id: 18befad6913b
     last_write_checksum: sha1:6d593cadc7617432d3a0a2743179adb8bf2f33b3
     pristine_git_object: 5bca987c389eb7a11a6122ef0688b56b7523b8e2
   internal/sdk/models/shared/automationsamlsettings.go:
     id: dc2d2f7e9cea
-    last_write_checksum: sha1:99e05949b4c6f2ad51cb424f5ddf0d4a99e98574
-    pristine_git_object: 7607bb40236b3accf5a8c1cea20ac965ed0fb945
+    last_write_checksum: sha1:9394bd48783dacce1074d1b0ba1854a54affa751
+    pristine_git_object: 7c6975e5b2848d353f0b860f4397be9ffd271c9b
   internal/sdk/models/shared/automationscopesettings.go:
     id: b9c504b56f05
     last_write_checksum: sha1:85b6a944a9aa824b41899051ae942a2c878ecdc2
     pristine_git_object: e5a86a33cd53764df55e81dacb1ec0388dea370d
   internal/sdk/models/shared/automationsessionsettings.go:
     id: 9979a2de8185
-    last_write_checksum: sha1:989385d78bf49eae3f9de1a18d2fcc8512be8323
-    pristine_git_object: 2fc72bde2e60e3b5f646c54724209e9993d14085
+    last_write_checksum: sha1:5deefaf5580418e5d3a45adda616c5bab3df93cd
+    pristine_git_object: 513ba6b4293b2272cc13a3810c9851cd6565e4bc
   internal/sdk/models/shared/automationstepupauthenticationsettings.go:
     id: 54cbbb3afa78
-    last_write_checksum: sha1:cab76ffc8c3fa6db7edb480745880dda3e5b4bf2
-    pristine_git_object: 2703cdd38d9a9d636801f29c9a35aea2e521fd45
+    last_write_checksum: sha1:1d9150b34947362cce06882045ef58f855b10b1e
+    pristine_git_object: f63eb4cfe3d567c602bab2689563b38ba77fcca9
   internal/sdk/models/shared/automationtokenclaim.go:
     id: a8d58181cbe4
     last_write_checksum: sha1:5a992114fea3c774f9d3bcc89b4a59594ead2408
@@ -989,16 +989,16 @@ trackedFiles:
     pristine_git_object: 6acdd8becf58437d7e5b012828bc0e54985d2adc
   internal/sdk/models/shared/automationworkloadidentitysettings.go:
     id: 6ef8b61ae88e
-    last_write_checksum: sha1:140a65ce12ed8131753fa077351a0afe00c38545
-    pristine_git_object: 8ed4d9fc7d14540f685f3b6789ef6b774cccfe03
+    last_write_checksum: sha1:b8ee06fa60c193145b0b3f5b2193470df4090908
+    pristine_git_object: 4fbf4727ea9ee744745af5acbffdd177ac27a056
   internal/sdk/models/shared/corssettings.go:
     id: b3dd5116ab76
-    last_write_checksum: sha1:793e9b8e2e4130d391aff06376cb5a00bc6a39f4
-    pristine_git_object: 53c871a3b34bfc3b18adfd842f64f8cd6af7ad53
+    last_write_checksum: sha1:66ca21836809b4e7bc565bd7bc1d8a50bb913715
+    pristine_git_object: 46271204b17344cfc370c39ab5a705ec97ca9ed2
   internal/sdk/models/shared/cspsettings.go:
     id: d25ea68011dc
-    last_write_checksum: sha1:4924fcbe1bb0b4b67d2bca698e5865c8cb7c1b12
-    pristine_git_object: 8a9a7a6e75d7fea5f52be791345568f86fd67697
+    last_write_checksum: sha1:a627fa04a8fc5ab522f100ba8b2c57f4822dfb96
+    pristine_git_object: da673f0720c0738524b92dd3b4e9d874dbd865d3
   internal/sdk/models/shared/dryrunerror.go:
     id: 7504b734de35
     last_write_checksum: sha1:406093682af0663a7b4ce39585604e65207f14f0
@@ -1013,32 +1013,32 @@ trackedFiles:
     pristine_git_object: 9fe814eda6a78b999632eb651f5f6e79723d9335
   internal/sdk/models/shared/idjagsettings.go:
     id: d025018b6d0c
-    last_write_checksum: sha1:18f59297706dc093fcd0ea30ce28e0e8491963c8
-    pristine_git_object: 658ed4aafac38367f42fed6e7f2e756ffa91c995
+    last_write_checksum: sha1:7c0bfbb244cc8ee88e3e99dc9202d37bf40d4c46
+    pristine_git_object: 85919ee49a180dd847924d3c8a812784ae2a06ab
   internal/sdk/models/shared/keyretrievalsettings.go:
     id: b492665c4117
-    last_write_checksum: sha1:7e37b142edfd883887fe2e60761289fd19032ea1
-    pristine_git_object: fdf4bd7811479dc1c780d3afbc8892c02290ca7b
+    last_write_checksum: sha1:bf0d4c0374156505a441a19b55f81c49ad223a33
+    pristine_git_object: 0de80676da9ee1d6c3e5d46f8ec15f83b5863ccb
   internal/sdk/models/shared/loginsettings.go:
     id: e6c02318e24a
-    last_write_checksum: sha1:aef2212bbc6f15d0e859486610881b1262a82ac5
-    pristine_git_object: 4894ca7542c7bd0ed12f264c7c357c904882635c
+    last_write_checksum: sha1:5019263638b28fe3afe031dc6771050d33a9ee8b
+    pristine_git_object: 2d62903180676e76d5c963fc487a807f6aa89852
   internal/sdk/models/shared/passwordsettings.go:
     id: 28cdd0f19d56
-    last_write_checksum: sha1:54bb125eab9646399f3340d48432840014d605da
-    pristine_git_object: cccc6e507510c1309e158503f03396266cc03697
+    last_write_checksum: sha1:d6bdf9a617b9926f0456b499baaf509548f2bd15
+    pristine_git_object: b8f9d7e70ede6e4d915b3d75615189427f3704dc
   internal/sdk/models/shared/reporterattributemapping.go:
     id: d87742e208b6
     last_write_checksum: sha1:93969bbe207103486e49a2456426f2708d15d81a
     pristine_git_object: 1e7b726f71b63b9f61adf750ca1054287bdb3e7e
   internal/sdk/models/shared/resetpasswordsettings.go:
     id: 97ba717b0693
-    last_write_checksum: sha1:2cfc765a6ec0a40b4e771defb8ab3110944365b0
-    pristine_git_object: 3c6ee28c8c0f22ade51d69deeb7ab26c5b02cdf9
+    last_write_checksum: sha1:c843e17ee7c65acc7fd698930969656112d85f4a
+    pristine_git_object: f584cd199c354dcdd2676e2cefcb0ce6ecbba7aa
   internal/sdk/models/shared/scimsettings.go:
     id: ab427a25e228
-    last_write_checksum: sha1:f5de9f4b756c0fb8ec93431058bf93ce84ffe8ac
-    pristine_git_object: 158fba2263e62236e59e4183249aaf103097086e
+    last_write_checksum: sha1:a433c2233cbf2dea9e91e7679976298ad0e1ce9d
+    pristine_git_object: e98fed91fe8b21e3ea9186bf87e8b970a514e638
   internal/sdk/models/shared/secretexpirationsettings.go:
     id: 9faaab379ff2
     last_write_checksum: sha1:fb8578128c264979b21983712713c5daee8482d9
@@ -1049,36 +1049,36 @@ trackedFiles:
     pristine_git_object: f46c675dacff212f74acfd9b4fb646a9921b7870
   internal/sdk/models/shared/securityprofilesettings.go:
     id: b0322598792f
-    last_write_checksum: sha1:66c056282a6e2aa5dd603120c01a16db4ceddc34
-    pristine_git_object: 06a5ce11170edef600a8cf4176e45da2e18557ce
+    last_write_checksum: sha1:4f0b87592db704afe6b56cbd33a711b3953d15df
+    pristine_git_object: cd03a646317f52015ff51d2abfaa47cc8cdb3e46
   internal/sdk/models/shared/selfserviceaccountmanagementsettings.go:
     id: a64e733c45f9
-    last_write_checksum: sha1:2ed66aed1ad61d0802408c47f3d1bfb1c3969955
-    pristine_git_object: fed549d7aa7f621841613b3a4610dc51335df722
+    last_write_checksum: sha1:ed699359dff199e7078479014d59c1eeda023822
+    pristine_git_object: ecf0345fb1b8a3b9380b0dcaec7ff7db71a31db0
   internal/sdk/models/shared/severity.go:
     id: 3aae0a5727e9
     last_write_checksum: sha1:02d9bc6bf01197432fa8f49beb8f0ba3c83b5d34
     pristine_git_object: a282519dbbe65344f1428f6391d56cc56d56db1e
   internal/sdk/models/shared/spiffedomainsettings.go:
     id: ef93140c5a39
-    last_write_checksum: sha1:04574385c3d7383761be3ea9c4de016bc558ee76
-    pristine_git_object: 1ec8260f2e75bd491bb589d35a6016d9875f3f68
+    last_write_checksum: sha1:3e3a5d8039abd8d66ac8bdd1271d5dbb0d68ee78
+    pristine_git_object: 49eabe676a5f3ac0f71b1c66197ed436e725711c
   internal/sdk/models/shared/tokenexchangeoauthsettings.go:
     id: 80d0cbfeb686
-    last_write_checksum: sha1:a90cb06e65562024c9b3b9ed69bfcadc31382b2e
-    pristine_git_object: 05ec97ee66a3232cc5fffb818a522e39d1e01825
+    last_write_checksum: sha1:5caa48e6919895d65b8ae1a5f48144c54621512e
+    pristine_git_object: 4cf5cf0dcbdb19de6dd67fcaac9bbcfdcd7c0011
   internal/sdk/models/shared/tokenexchangesettings.go:
     id: a7c90aa91207
-    last_write_checksum: sha1:5ff0b2c1ee9cbfcd1a68c370108b3f9645545461
-    pristine_git_object: b7299396727b47c1e620b84e0e553964dd278db2
+    last_write_checksum: sha1:b76e22a2d6388ecb7545b0c23e01de376ec5b2b8
+    pristine_git_object: 4aad1a4fde3c6795ccef55a787bdaeae366a22ab
   internal/sdk/models/shared/trustedissuer.go:
     id: a95f72893ad7
     last_write_checksum: sha1:231c369bf35f515c42769ec050be0fb7ff06840a
     pristine_git_object: 577db7c349647dfa67880cdd67187f3d0c951708
   internal/sdk/models/shared/umasettings.go:
     id: 8d7a09e99b91
-    last_write_checksum: sha1:6b8cc7d316a35e2eec5b722c3c40b0ee82e6872b
-    pristine_git_object: 4b753507e3a34ea5e2d6d378cc02f31319e2de90
+    last_write_checksum: sha1:83d61c92313dc8bda7d7dd8cd17797a73f44d0c7
+    pristine_git_object: 875a81bd6952dd4f7f2614c0ffc1095aecb0ecc2
   internal/sdk/models/shared/userbindingcriterion.go:
     id: f8c794e87a3b
     last_write_checksum: sha1:8414561d3ee3c092889c9bfdf992475d813fab79
@@ -1089,20 +1089,20 @@ trackedFiles:
     pristine_git_object: f2db375a6ced51fcf7a0875b4e1019030ed12856
   internal/sdk/models/shared/webauthnsettings.go:
     id: 2c374dd9657b
-    last_write_checksum: sha1:065f7e1856beb86391cbee17fb6bebada304412e
-    pristine_git_object: 28f4caac68b27d89f83fc27eb612c585d1b45ffd
+    last_write_checksum: sha1:1fe015f257c5414ec12a05c03772932adf6ce698
+    pristine_git_object: e5904e853c0e5bab983f5a409358c2a1be4fb05c
   internal/sdk/models/shared/webprotectionsettings.go:
     id: e88dc42840f7
     last_write_checksum: sha1:d26333c0b8da684d5065bf0ba59033da34088018
     pristine_git_object: 355655e47998125dbc98149a59fb958984faa421
   internal/sdk/models/shared/xframesettings.go:
     id: ab87b1edf9dc
-    last_write_checksum: sha1:9f570130f30cf352c74aac383d83c7b6b2426fa6
-    pristine_git_object: 0a74588895ee5d701822ea0c01ce53466ec9954c
+    last_write_checksum: sha1:2402bb10ec146f470b1d5a1981e73ce533a0ad06
+    pristine_git_object: c49269ba4461a6bbd84b0eb0bb46861eee4eea39
   internal/sdk/models/shared/xssprotectionsettings.go:
     id: 1f120880c625
-    last_write_checksum: sha1:e5b61c9515992d9ab42da05e09627ce1616a1a83
-    pristine_git_object: 048e06c4771607bc1f8e664c2c2fc184ecda22e2
+    last_write_checksum: sha1:b2240c77c5bf4952d71e0eab6dd9ee04be90a5bf
+    pristine_git_object: 0b03a119c6f155365126217cf8277a09b6a400e7
   internal/sdk/optionalnullable/optionalnullable.go:
     id: 4b83aa3f3df3
     last_write_checksum: sha1:35ac10956c16852cc4dcbec54e30be1fe828794e
@@ -1220,7 +1220,7 @@ examples:
           envId: "DEFAULT"
       responses:
         "200":
-          application/json: [{"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}]
+          application/json: [{"accountSettings": {"accountBlockedDuration": 7200, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}]
     error:
       parameters:
         path:
@@ -1240,10 +1240,10 @@ examples:
         query:
           dryRun: false
       requestBody:
-        application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
+        application/json: {"accountSettings": {"accountBlockedDuration": 7200, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
       responses:
         "200":
-          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
+          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
     error:
       parameters:
         path:
@@ -1252,7 +1252,7 @@ examples:
         query:
           dryRun: false
       requestBody:
-        application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "certificateSettings": {"fallbackCertificate": "default"}, "corsSettings": {"allowCredentials": false, "allowedHeaders": ["Authorization", "Content-Type"], "allowedMethods": ["GET", "POST", "PUT", "DELETE"], "allowedOrigins": ["https://app.example.com"], "enabled": false, "inherited": true, "maxAge": 86400}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "path": "/example-domain", "saml": {"certificate": "signing-cert", "enabled": false, "entityId": "https://auth.example.com/saml2/idp/entity"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "tags": ["eu", "production"], "tokenExchangeSettings": {"allowDelegation": false, "allowImpersonation": true, "allowedActorTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedRequestedTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedSubjectTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "enabled": false, "maxDelegationDepth": 25}, "vhostMode": false, "vhosts": [], "webAuthnSettings": {"attestationConveyancePreference": "none", "enforceAuthenticatorIntegrity": false, "forceRegistration": false, "origin": "https://auth.example.com", "relyingPartyId": "auth.example.com", "relyingPartyName": "Example Inc.", "requireResidentKey": false, "userVerification": "preferred"}, "webProtectionSettings": {"csp": {"directives": ["default-src 'self'", "script-src 'self'", "upgrade-insecure-requests"], "enabled": false, "inherited": true, "reportOnly": false, "scriptInlineNonce": true}, "xframe": {"action": "DENY", "enabled": false, "inherited": true}, "xss": {"action": "1; mode=block", "enabled": false, "inherited": true}}}
+        application/json: {"accountSettings": {"accountBlockedDuration": 7200, "defaultIdentityProviderForRegistration": "users-idp", "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMeDuration": 604800, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}]}, "alertEnabled": false, "certificateSettings": {"fallbackCertificate": "default"}, "corsSettings": {"allowedHeaders": ["Authorization", "Content-Type"], "allowedMethods": ["GET", "POST", "PUT", "DELETE"], "allowedOrigins": ["https://app.example.com"]}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "path": "/example-domain", "saml": {"certificate": "signing-cert", "entityId": "https://auth.example.com/saml2/idp/entity"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "tags": ["eu", "production"], "tokenExchangeSettings": {"allowedActorTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedRequestedTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedSubjectTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"]}, "vhostMode": false, "vhosts": [], "webAuthnSettings": {"origin": "https://auth.example.com", "relyingPartyId": "auth.example.com", "relyingPartyName": "Example Inc."}, "webProtectionSettings": {"csp": {"directives": ["default-src 'self'", "script-src 'self'", "upgrade-insecure-requests"]}, "xframe": {"action": "DENY"}, "xss": {"action": "1; mode=block"}}}
       responses:
         "400":
           application/json: {"http_status": 400, "message": "A human-readable description of the error"}
@@ -1288,7 +1288,7 @@ examples:
           domainKey: "example-domain"
       responses:
         "200":
-          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "certificateSettings": {"fallbackCertificate": "default"}, "corsSettings": {"allowCredentials": false, "allowedHeaders": ["Authorization", "Content-Type"], "allowedMethods": ["GET", "POST", "PUT", "DELETE"], "allowedOrigins": ["https://app.example.com"], "enabled": false, "inherited": true, "maxAge": 86400}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "path": "/example-domain", "saml": {"certificate": "signing-cert", "enabled": false, "entityId": "https://auth.example.com/saml2/idp/entity"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "tags": ["eu", "production"], "tokenExchangeSettings": {"allowDelegation": false, "allowImpersonation": true, "allowedActorTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedRequestedTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedSubjectTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "enabled": false, "maxDelegationDepth": 25}, "vhostMode": false, "vhosts": [], "webAuthnSettings": {"attestationConveyancePreference": "none", "enforceAuthenticatorIntegrity": false, "forceRegistration": false, "origin": "https://auth.example.com", "relyingPartyId": "auth.example.com", "relyingPartyName": "Example Inc.", "requireResidentKey": false, "userVerification": "preferred"}, "webProtectionSettings": {"csp": {"directives": ["default-src 'self'", "script-src 'self'", "upgrade-insecure-requests"], "enabled": false, "inherited": true, "reportOnly": false, "scriptInlineNonce": true}, "xframe": {"action": "DENY", "enabled": false, "inherited": true}, "xss": {"action": "1; mode=block", "enabled": false, "inherited": true}}}
+          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "defaultIdentityProviderForRegistration": "users-idp", "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMeDuration": 604800, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}]}, "alertEnabled": false, "certificateSettings": {"fallbackCertificate": "default"}, "corsSettings": {"allowedHeaders": ["Authorization", "Content-Type"], "allowedMethods": ["GET", "POST", "PUT", "DELETE"], "allowedOrigins": ["https://app.example.com"]}, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "path": "/example-domain", "saml": {"certificate": "signing-cert", "entityId": "https://auth.example.com/saml2/idp/entity"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "tags": ["eu", "production"], "tokenExchangeSettings": {"allowedActorTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedRequestedTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"], "allowedSubjectTokenTypes": ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:id_token"]}, "vhostMode": false, "vhosts": [], "webAuthnSettings": {"origin": "https://auth.example.com", "relyingPartyId": "auth.example.com", "relyingPartyName": "Example Inc."}, "webProtectionSettings": {"csp": {"directives": ["default-src 'self'", "script-src 'self'", "upgrade-insecure-requests"]}, "xframe": {"action": "DENY"}, "xss": {"action": "1; mode=block"}}}
         "403":
           application/json: {"http_status": 400}
     Domain:
@@ -1299,7 +1299,7 @@ examples:
           domainKey: "example-domain"
       responses:
         "200":
-          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeSendVerifyAlertEmail": false, "rememberMe": false, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
+          application/json: {"accountSettings": {"accountBlockedDuration": 7200, "inherited": false, "loginAttemptsDetectionEnabled": true, "maxLoginAttempts": 10}, "alertEnabled": false, "dataPlaneId": "default", "description": "An example authentication domain", "enabled": true, "key": "example-domain", "master": false, "name": "Example domain", "oidc": {"redirectUriStrictMatching": true}, "path": "/example-domain", "tags": ["eu", "production"], "vhostMode": false}
     error:
       parameters:
         path:
@@ -1877,7 +1877,7 @@ examples:
           domainKey: "example-domain"
       responses:
         "200":
-          application/json: [{"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"accessTokenValiditySeconds": 7200, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "optInScopeSelection": true, "redirectUris": ["com.example.app:/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "silentReAuthentication": false, "singleSignOut": false, "tlsClientCertificateBoundAccessTokens": false, "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}]
+          application/json: [{"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "redirectUris": ["com.example.app:/callback"], "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}]
     error:
       parameters:
         path:
@@ -1897,10 +1897,10 @@ examples:
         query:
           dryRun: false
       requestBody:
-        application/json: {"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"accessTokenValiditySeconds": 7200, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "optInScopeSelection": true, "redirectUris": ["com.example.app:/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "silentReAuthentication": false, "singleSignOut": false, "tlsClientCertificateBoundAccessTokens": false, "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}
+        application/json: {"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "redirectUris": ["com.example.app:/callback"], "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}
       responses:
         "200":
-          application/json: {"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"accessTokenValiditySeconds": 7200, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "optInScopeSelection": true, "redirectUris": ["com.example.app:/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "silentReAuthentication": false, "singleSignOut": false, "tlsClientCertificateBoundAccessTokens": false, "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}
+          application/json: {"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "redirectUris": ["com.example.app:/callback"], "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}
     speakeasy-default-automation-create-or-update-application:
       parameters:
         path:
@@ -1910,10 +1910,10 @@ examples:
         query:
           dryRun: false
       requestBody:
-        application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "mfa": {"challenge": {"active": false, "challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"active": false, "enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "enrollmentSkipActive": false, "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"active": false, "deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000, "skipRememberDevice": false}, "stepUpAuthentication": {"active": false, "stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"accessTokenValiditySeconds": 7200, "contacts": ["ops@example.com"], "crossAppAccessSettings": {"enabled": false, "resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "optInScopeSelection": true, "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "silentReAuthentication": false, "singleSignOut": false, "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tlsClientCertificateBoundAccessTokens": false, "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "enabled": false, "geoVelocityAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "includeAssertionConditions": false, "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "responseBinding": "urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request", "singleLogoutServiceUrl": "https://app.example.com/saml/logout", "wantAssertionsEncrypted": false, "wantAssertionsSigned": false, "wantResponseSigned": true}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "subjectMatchMode": "exact", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
+        application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "defaultIdentityProviderForRegistration": "users-idp", "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMeDuration": 604800, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}]}, "mfa": {"challenge": {"challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000}, "stepUpAuthentication": {"stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"contacts": ["ops@example.com"], "crossAppAccessSettings": {"resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "grantTypes": ["authorization_code", "refresh_token"], "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"thresholds": {"HIGH": 1}}, "geoVelocityAssessment": {"thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "singleLogoutServiceUrl": "https://app.example.com/saml/logout"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
       responses:
         "200":
-          application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "mfa": {"challenge": {"active": false, "challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"active": false, "enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "enrollmentSkipActive": false, "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"active": false, "deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000, "skipRememberDevice": false}, "stepUpAuthentication": {"active": false, "stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"accessTokenValiditySeconds": 7200, "contacts": ["ops@example.com"], "crossAppAccessSettings": {"enabled": false, "resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "optInScopeSelection": true, "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "silentReAuthentication": false, "singleSignOut": false, "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tlsClientCertificateBoundAccessTokens": false, "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "enabled": false, "geoVelocityAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "includeAssertionConditions": false, "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "responseBinding": "urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request", "singleLogoutServiceUrl": "https://app.example.com/saml/logout", "wantAssertionsEncrypted": false, "wantAssertionsSigned": false, "wantResponseSigned": true}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "subjectMatchMode": "exact", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
+          application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "defaultIdentityProviderForRegistration": "users-idp", "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMeDuration": 604800, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}]}, "mfa": {"challenge": {"challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000}, "stepUpAuthentication": {"stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"contacts": ["ops@example.com"], "crossAppAccessSettings": {"resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "grantTypes": ["authorization_code", "refresh_token"], "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"thresholds": {"HIGH": 1}}, "geoVelocityAssessment": {"thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "singleLogoutServiceUrl": "https://app.example.com/saml/logout"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
         "400":
           application/json: {"http_status": 400}
     error:
@@ -1925,7 +1925,7 @@ examples:
         query:
           dryRun: false
       requestBody:
-        application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "mfa": {"challenge": {"active": false, "challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"active": false, "enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "enrollmentSkipActive": false, "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"active": false, "deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000, "skipRememberDevice": false}, "stepUpAuthentication": {"active": false, "stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"accessTokenValiditySeconds": 7200, "contacts": ["ops@example.com"], "crossAppAccessSettings": {"enabled": false, "resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "optInScopeSelection": true, "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "silentReAuthentication": false, "singleSignOut": false, "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tlsClientCertificateBoundAccessTokens": false, "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "enabled": false, "geoVelocityAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "includeAssertionConditions": false, "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "responseBinding": "urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request", "singleLogoutServiceUrl": "https://app.example.com/saml/logout", "wantAssertionsEncrypted": false, "wantAssertionsSigned": false, "wantResponseSigned": true}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "subjectMatchMode": "exact", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
+        application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "defaultIdentityProviderForRegistration": "users-idp", "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMeDuration": 604800, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}]}, "mfa": {"challenge": {"challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000}, "stepUpAuthentication": {"stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"contacts": ["ops@example.com"], "crossAppAccessSettings": {"resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "grantTypes": ["authorization_code", "refresh_token"], "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"thresholds": {"HIGH": 1}}, "geoVelocityAssessment": {"thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "singleLogoutServiceUrl": "https://app.example.com/saml/logout"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
       responses:
         "400":
           application/json: {"http_status": 400, "message": "A human-readable description of the error"}
@@ -1964,7 +1964,7 @@ examples:
           applicationKey: "mobile-app"
       responses:
         "200":
-          application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "autoLoginAfterRegistration": false, "autoLoginAfterResetPassword": false, "completeRegistrationWhenResetPassword": false, "defaultIdentityProviderForRegistration": "users-idp", "deletePasswordlessDevicesAfterResetPassword": false, "dynamicUserRegistration": false, "inherited": true, "loginAttemptsDetectionEnabled": false, "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsDetectionEnabled": false, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "mfaChallengeSendVerifyAlertEmail": false, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMe": false, "rememberMeDuration": 604800, "resetPasswordConfirmIdentity": false, "resetPasswordCustomForm": false, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}], "resetPasswordInvalidateTokens": false, "sendRecoverAccountEmail": false, "sendVerifyRegistrationAccountEmail": false}, "mfa": {"challenge": {"active": false, "challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"active": false, "enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "enrollmentSkipActive": false, "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"active": false, "deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000, "skipRememberDevice": false}, "stepUpAuthentication": {"active": false, "stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"accessTokenValiditySeconds": 7200, "contacts": ["ops@example.com"], "crossAppAccessSettings": {"enabled": false, "resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "optInScopeSelection": true, "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "silentReAuthentication": false, "singleSignOut": false, "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tlsClientCertificateBoundAccessTokens": false, "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "enabled": false, "geoVelocityAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"enabled": false, "thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "includeAssertionConditions": false, "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "responseBinding": "urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request", "singleLogoutServiceUrl": "https://app.example.com/saml/logout", "wantAssertionsEncrypted": false, "wantAssertionsSigned": false, "wantResponseSigned": true}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "subjectMatchMode": "exact", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
+          application/json: {"certificate": "signing-cert", "clientId": "mobile-app-client", "description": "Customer mobile application", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0, "selectionRule": "{#request.params['idp'][0] == 'customers'}"}], "key": "mobile-app", "metadata": {"team": "mobile"}, "name": "Mobile app", "settings": {"account": {"accountBlockedDuration": 7200, "defaultIdentityProviderForRegistration": "users-idp", "loginAttemptsResetTime": 600, "maxLoginAttempts": 10, "mfaChallengeAttemptsResetTime": 600, "mfaChallengeMaxAttempts": 3, "redirectUriAfterRegistration": "https://app.example.com/welcome", "redirectUriAfterResetPassword": "https://app.example.com/signin", "rememberMeDuration": 604800, "resetPasswordCustomFormFields": [{"key": "email", "label": "Email", "type": "email"}]}, "mfa": {"challenge": {"challengeRule": "{#context.attributes['geoip']['country_iso_code'] == 'FR'}", "type": "required"}, "enroll": {"enrollmentRule": "{#context.attributes['user'].roles.contains('guest')}", "skipTimeSeconds": 36000, "type": "required"}, "factor": {"applicationFactors": [{"id": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "selectionRule": "{#context.attributes['user'].roles.contains('admin')}"}], "defaultFactorId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}, "rememberDevice": {"deviceIdentifierId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b", "expirationTimeSeconds": 36000}, "stepUpAuthentication": {"stepUpAuthenticationRule": "{#request.params['scope'][0].contains('write')}"}}, "oauth": {"contacts": ["ops@example.com"], "crossAppAccessSettings": {"resourceServers": [{"clientId": "acme-calendar-client", "resourceServerId": "id:7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d", "trustDomainId": "id:5e8f1c0a-2b3d-4f5e-8a9b-0c1d2e3f4a5b"}]}, "defaultMaxAge": 3600, "grantTypes": ["authorization_code", "refresh_token"], "initiateLoginUri": "https://app.example.com/login", "jwks": {"keys": [{"e": "AQAB", "kid": "app-key", "kty": "RSA", "n": "0vx7...", "use": "sig"}]}, "jwksUri": "https://app.example.com/.well-known/jwks.json", "postLogoutRedirectUris": ["https://app.example.com/logged-out"], "redirectUris": ["https://app.example.com/callback"], "responseTypes": ["code"], "scopeSettings": [{"defaultScope": false, "requiredScope": false, "scope": "openid", "scopeApproval": 86400}], "subjectType": "public", "tlsClientAuthSubjectDn": "CN=app.example.com", "tokenCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}", "tokenType": "access_token"}], "tokenEndpointAuthMethod": "client_secret_basic", "tokenEndpointAuthSigningAlg": "RS256", "userinfoCustomClaims": [{"claimName": "department", "claimValue": "{#context.attributes['user']['additionalInformation']['department']}"}]}, "riskAssessment": {"deviceAssessment": {"thresholds": {"HIGH": 1}}, "geoVelocityAssessment": {"thresholds": {"HIGH": 1}}, "ipReputationAssessment": {"thresholds": {"HIGH": 1}}}, "saml": {"assertionAttributes": [{"name": "email", "value": "{#context.attributes['user'].email}"}], "assertionValiditySeconds": 300, "attributeConsumeServiceUrl": "https://app.example.com/saml/acs", "dataEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#aes256-gcm", "entityId": "https://app.example.com", "keyTransportEncryptionAlgorithm": "http://www.w3.org/2009/xmlenc11#rsa-oaep", "nameIdMapping": "{#context.attributes['user'].username}", "notBeforeTimeSkewSeconds": 30, "notOnOrAfterTimeSkewSeconds": 30, "singleLogoutServiceUrl": "https://app.example.com/saml/logout"}, "secretExpirationSettings": {"expiryTimeSeconds": 7776000}, "workloadIdentitySettings": {"subject": "spiffe://prod.example.org/ns/payments/sa/api", "trustDomain": "prod.example.org"}}, "template": false, "type": "native"}
         "403":
           application/json: {"http_status": 400}
     Mobile application:
@@ -1976,7 +1976,7 @@ examples:
           applicationKey: "mobile-app"
       responses:
         "200":
-          application/json: {"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"accessTokenValiditySeconds": 7200, "disableRefreshTokenRotation": false, "dpopBoundAccessTokens": false, "enhanceScopesWithUserPermissions": false, "forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "idJagValiditySeconds": 300, "idTokenValiditySeconds": 14400, "optInScopeSelection": true, "redirectUris": ["com.example.app:/callback"], "refreshTokenValiditySeconds": 14400, "requireAuthTime": false, "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "silentReAuthentication": false, "singleSignOut": false, "tlsClientCertificateBoundAccessTokens": false, "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}
+          application/json: {"certificate": "signing-cert", "enabled": true, "identityProviders": [{"identity": "customer-users", "priority": 0}], "key": "mobile-app", "name": "Mobile app", "settings": {"oauth": {"forcePKCE": true, "grantTypes": ["authorization_code", "refresh_token"], "redirectUris": ["com.example.app:/callback"], "scopeSettings": [{"defaultScope": true, "requiredScope": false, "scope": "openid"}, {"defaultScope": false, "requiredScope": false, "scope": "profile"}], "tokenEndpointAuthMethod": "none"}}, "template": false, "type": "native"}
     error:
       parameters:
         path:

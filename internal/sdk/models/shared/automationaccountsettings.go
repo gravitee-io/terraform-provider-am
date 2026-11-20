@@ -3,73 +3,58 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationAccountSettings - User account settings for the domain: brute-force protection, registration, password reset, remember-me, and MFA challenge behavior.
 type AutomationAccountSettings struct {
 	// Duration, in seconds, for which the account remains blocked after too many failed login attempts.
 	AccountBlockedDuration *int `json:"accountBlockedDuration,omitempty"`
 	// Whether the user is automatically logged in after completing registration.
-	AutoLoginAfterRegistration *bool `default:"false" json:"autoLoginAfterRegistration"`
+	AutoLoginAfterRegistration *bool `json:"autoLoginAfterRegistration,omitempty"`
 	// Whether the user is automatically logged in after a password reset.
-	AutoLoginAfterResetPassword *bool `default:"false" json:"autoLoginAfterResetPassword"`
+	AutoLoginAfterResetPassword *bool `json:"autoLoginAfterResetPassword,omitempty"`
 	// Whether resetting a password also completes a pending registration.
-	CompleteRegistrationWhenResetPassword *bool `default:"false" json:"completeRegistrationWhenResetPassword"`
+	CompleteRegistrationWhenResetPassword *bool `json:"completeRegistrationWhenResetPassword,omitempty"`
 	// Default identity provider for user registration: the key of an identity provider of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever that identity provider exists.
 	DefaultIdentityProviderForRegistration *string `json:"defaultIdentityProviderForRegistration,omitempty"`
 	// Whether passwordless (WebAuthn) devices are deleted when the password is reset.
-	DeletePasswordlessDevicesAfterResetPassword *bool `default:"false" json:"deletePasswordlessDevicesAfterResetPassword"`
+	DeletePasswordlessDevicesAfterResetPassword *bool `json:"deletePasswordlessDevicesAfterResetPassword,omitempty"`
 	// Whether dynamic (self-service) user registration is enabled.
-	DynamicUserRegistration *bool `default:"false" json:"dynamicUserRegistration"`
+	DynamicUserRegistration *bool `json:"dynamicUserRegistration,omitempty"`
 	// Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains.
-	Inherited *bool `default:"true" json:"inherited"`
+	Inherited *bool `json:"inherited,omitempty"`
 	// Whether brute-force authentication attempts are detected and blocked.
-	LoginAttemptsDetectionEnabled *bool `default:"false" json:"loginAttemptsDetectionEnabled"`
+	LoginAttemptsDetectionEnabled *bool `json:"loginAttemptsDetectionEnabled,omitempty"`
 	// Time, in seconds, after which the login attempt counter is reset when the maximum has not been reached.
 	LoginAttemptsResetTime *int `json:"loginAttemptsResetTime,omitempty"`
 	// Maximum number of failed login attempts before the account is blocked.
 	MaxLoginAttempts *int `json:"maxLoginAttempts,omitempty"`
 	// Whether failed MFA challenge attempts are detected and blocked.
-	MfaChallengeAttemptsDetectionEnabled *bool `default:"false" json:"mfaChallengeAttemptsDetectionEnabled"`
+	MfaChallengeAttemptsDetectionEnabled *bool `json:"mfaChallengeAttemptsDetectionEnabled,omitempty"`
 	// Time, in seconds, after which the MFA challenge attempt counter is reset.
 	MfaChallengeAttemptsResetTime *int `json:"mfaChallengeAttemptsResetTime,omitempty"`
 	// Maximum number of failed MFA challenge attempts before the user is blocked.
 	MfaChallengeMaxAttempts *int `json:"mfaChallengeMaxAttempts,omitempty"`
 	// Whether to send an alert email after too many failed MFA challenge attempts.
-	MfaChallengeSendVerifyAlertEmail *bool `default:"false" json:"mfaChallengeSendVerifyAlertEmail"`
+	MfaChallengeSendVerifyAlertEmail *bool `json:"mfaChallengeSendVerifyAlertEmail,omitempty"`
 	// URL the user is redirected to after registration.
 	RedirectURIAfterRegistration *string `json:"redirectUriAfterRegistration,omitempty"`
 	// URL the user is redirected to after a password reset.
 	RedirectURIAfterResetPassword *string `json:"redirectUriAfterResetPassword,omitempty"`
 	// Whether users can remain logged in for a fixed duration (remember-me).
-	RememberMe *bool `default:"false" json:"rememberMe"`
+	RememberMe *bool `json:"rememberMe,omitempty"`
 	// Duration, in seconds, for which a remembered session stays valid.
 	RememberMeDuration *int `json:"rememberMeDuration,omitempty"`
 	// Whether the user must confirm their identity before resetting a password.
-	ResetPasswordConfirmIdentity *bool `default:"false" json:"resetPasswordConfirmIdentity"`
+	ResetPasswordConfirmIdentity *bool `json:"resetPasswordConfirmIdentity,omitempty"`
 	// Whether a custom form is used for the password-reset step.
-	ResetPasswordCustomForm *bool `default:"false" json:"resetPasswordCustomForm"`
+	ResetPasswordCustomForm *bool `json:"resetPasswordCustomForm,omitempty"`
 	// Custom fields rendered on the password-reset form.
 	ResetPasswordCustomFormFields []FormField `json:"resetPasswordCustomFormFields,omitempty"`
 	// Whether existing tokens are invalidated when the password is reset.
-	ResetPasswordInvalidateTokens *bool `default:"false" json:"resetPasswordInvalidateTokens"`
+	ResetPasswordInvalidateTokens *bool `json:"resetPasswordInvalidateTokens,omitempty"`
 	// Whether to send an account-recovery email.
-	SendRecoverAccountEmail *bool `default:"false" json:"sendRecoverAccountEmail"`
+	SendRecoverAccountEmail *bool `json:"sendRecoverAccountEmail,omitempty"`
 	// Whether to send a registration-verification email.
-	SendVerifyRegistrationAccountEmail *bool `default:"false" json:"sendVerifyRegistrationAccountEmail"`
-}
-
-func (a AutomationAccountSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationAccountSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	SendVerifyRegistrationAccountEmail *bool `json:"sendVerifyRegistrationAccountEmail,omitempty"`
 }
 
 func (a *AutomationAccountSettings) GetAccountBlockedDuration() *int {

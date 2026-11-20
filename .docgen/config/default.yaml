@@ -29,6 +29,8 @@ outputs:
    target: templates/guides/docgen_reporter-audit-to-kafka.md
  - template: {{ .RootDir }}/tmpl/certificate-signing-rotation.md.tmpl
    target: templates/guides/docgen_certificate-signing-rotation.md
+ - template: {{ .RootDir }}/tmpl/application-apim-gateway.md.tmpl
+   target: templates/guides/docgen_application-apim-gateway.md
 chunks:
   - template: examples/use-cases/application-web_login/provider.tf
     exportedAs: Provider
@@ -74,4 +76,13 @@ chunks:
     required: true
   - template: examples/use-cases/certificate-signing_rotation/rotation/current-certificate.tf
     exportedAs: CertificateRotationNextKey
+    required: true
+  - template: examples/use-cases/application-apim_gateway/am.tf
+    exportedAs: APIMGatewayAM
+    required: true
+  - template: examples/use-cases/application-apim_gateway/apim/apim.tf
+    exportedAs: APIMGatewayAPIM
+    required: true
+  - template: examples/use-cases/application-apim_gateway/apim/jwt-plan.tf
+    exportedAs: APIMGatewayJWTPlan
     required: true

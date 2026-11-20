@@ -3,10 +3,6 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // SpiffeDomainSettings - Workload identity (SPIFFE) settings for the domain.
 type SpiffeDomainSettings struct {
 	// Deprecated: moved to keyRetrievalSettings.allowPrivateIpAddress.
@@ -26,32 +22,21 @@ type SpiffeDomainSettings struct {
 	// Deprecated: Use key_retrieval_settings.cache_ttl_seconds instead..
 	CacheTTLSeconds *int `json:"cacheTtlSeconds,omitempty"`
 	// Allowed clock skew, in seconds, when validating JWT temporal claims.
-	ClockSkewSeconds *int `default:"30" json:"clockSkewSeconds"`
+	ClockSkewSeconds *int `json:"clockSkewSeconds,omitempty"`
 	// Default allowlist of signature algorithms accepted for SPIFFE JWT validation.
 	DefaultAllowedAlgorithms []string `json:"defaultAllowedAlgorithms,omitempty"`
 	// Whether SPIFFE workload identity support is enabled for the domain.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Deprecated: moved to keyRetrievalSettings.fetchTimeoutMs.
 	//
 	// Deprecated: Use key_retrieval_settings.fetch_timeout_ms instead..
 	FetchTimeoutMs *int `json:"fetchTimeoutMs,omitempty"`
 	// Maximum accepted JWT lifetime, in seconds, computed as exp minus iat.
-	MaxJwtLifetimeSeconds *int `default:"300" json:"maxJwtLifetimeSeconds"`
+	MaxJwtLifetimeSeconds *int `json:"maxJwtLifetimeSeconds,omitempty"`
 	// Deprecated: moved to keyRetrievalSettings.maxResponseSizeKb.
 	//
 	// Deprecated: Use key_retrieval_settings.max_response_size_kb instead..
 	MaxResponseSizeKb *int `json:"maxResponseSizeKb,omitempty"`
-}
-
-func (s SpiffeDomainSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
-}
-
-func (s *SpiffeDomainSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (s *SpiffeDomainSettings) GetAllowPrivateIPAddress() *bool {

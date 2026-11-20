@@ -3,27 +3,12 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationCrossAppAccessSettings - Resource servers this application may request an ID-JAG for.
 type AutomationCrossAppAccessSettings struct {
 	// Whether this application participates in Cross App Access.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Resource servers this application may reach, one entry per resource server.
 	ResourceServers []AutomationCrossAppAccessResourceServer `json:"resourceServers,omitempty"`
-}
-
-func (a AutomationCrossAppAccessSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationCrossAppAccessSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationCrossAppAccessSettings) GetEnabled() *bool {

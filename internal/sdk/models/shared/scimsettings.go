@@ -3,29 +3,14 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // SCIMSettings - Configuration of the domain's SCIM 2.0 provisioning endpoints.
 type SCIMSettings struct {
 	// Whether the SCIM provisioning API is enabled for the domain.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Whether an identity provider is selected for SCIM-provisioned users using a selection rule.
-	IdpSelectionEnabled *bool `default:"false" json:"idpSelectionEnabled"`
+	IdpSelectionEnabled *bool `json:"idpSelectionEnabled,omitempty"`
 	// Expression that selects the identity provider for a SCIM-provisioned user.
 	IdpSelectionRule *string `json:"idpSelectionRule,omitempty"`
-}
-
-func (s SCIMSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
-}
-
-func (s *SCIMSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (s *SCIMSettings) GetEnabled() *bool {

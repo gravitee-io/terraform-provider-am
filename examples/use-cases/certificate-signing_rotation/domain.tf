@@ -9,7 +9,7 @@ resource "am_domain" "accounts" {
 
   # Signs the tokens of the applications that name no certificate.
   certificate_settings = {
-    fallback_certificate = local.signing_certificate
+    fallback_certificate = local.signing_certificate_key
   }
 }
 

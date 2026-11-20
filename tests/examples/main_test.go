@@ -61,15 +61,17 @@ func testProviders() map[string]func() (tfprotov6.ProviderServer, error) {
 // keystore-2026.jks and keystore-2027.jks hold the aliases signing-2026 and signing-2027 the rotation guide names.
 func exampleVariables() config.Variables {
 	return config.Variables{
-		"keystore_password":      config.StringVariable("storepass123"),
-		"key_password":           config.StringVariable("keypass123"),
-		"keystore_2026_password": config.StringVariable("storepass123"),
-		"key_2026_password":      config.StringVariable("keypass123"),
-		"keystore_2027_password": config.StringVariable("storepass123"),
-		"key_2027_password":      config.StringVariable("keypass123"),
-		"alice_password":         config.StringVariable("Alice-Example-1"),
-		"client_secret":          config.StringVariable(acctest.RandString(64)),
-		"next_client_secret":     config.StringVariable(acctest.RandString(64)),
+		"keystore_password":          config.StringVariable("storepass123"),
+		"key_password":               config.StringVariable("keypass123"),
+		"keystore_2026_password":     config.StringVariable("storepass123"),
+		"key_2026_password":          config.StringVariable("keypass123"),
+		"keystore_2027_password":     config.StringVariable("storepass123"),
+		"key_2027_password":          config.StringVariable("keypass123"),
+		"alice_password":             config.StringVariable("Alice-Example-1"),
+		"client_secret":              config.StringVariable(acctest.RandString(64)),
+		"next_client_secret":         config.StringVariable(acctest.RandString(64)),
+		"billing_client_secret":      config.StringVariable(acctest.RandString(64)),
+		"apim_gateway_client_secret": config.StringVariable(acctest.RandString(64)),
 		// The MongoDB AM reaches, as for the acceptance tests.
 		"mongodb_host":            config.StringVariable(envOr("AM_TEST_MONGODB_HOST", "mongodb")),
 		"mongodb_port":            config.StringVariable(envOr("AM_TEST_MONGODB_PORT", "27017")),

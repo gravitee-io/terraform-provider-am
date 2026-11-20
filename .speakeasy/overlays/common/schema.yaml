@@ -13,6 +13,52 @@ actions:
     update:
       x-speakeasy-param-computed: true
 
+  ## A nested setting left unset keeps AM's value. With a static default, Terraform would plan the
+  ## default over the value set in the console, and the update would send the state back for the
+  ## unset block: the plan would never converge. The resources and the list items (scope_settings,
+  ## virtual hosts...) keep theirs: a list is sent whole from the configuration.
+  - target: >-
+      $.components.schemas[
+      "ApplicationLightweightJwtSettings",
+      "AutomationAccountSettings",
+      "AutomationAdvancedSettings",
+      "AutomationApplicationOAuthSettings",
+      "AutomationApplicationSAMLSettings",
+      "AutomationAssessmentSettings",
+      "AutomationCIBASettings",
+      "AutomationChallengeSettings",
+      "AutomationClientRegistrationSettings",
+      "AutomationCookieSettings",
+      "AutomationCrossAppAccessSettings",
+      "AutomationEnrollSettings",
+      "AutomationOidcSettings",
+      "AutomationRememberDeviceSettings",
+      "AutomationRiskAssessmentSettings",
+      "AutomationSamlSettings",
+      "AutomationSessionSettings",
+      "AutomationStepUpAuthenticationSettings",
+      "AutomationWorkloadIdentitySettings",
+      "CorsSettings",
+      "CspSettings",
+      "IdJagSettings",
+      "KeyRetrievalSettings",
+      "LoginSettings",
+      "PasswordSettings",
+      "ResetPasswordSettings",
+      "SCIMSettings",
+      "SecurityProfileSettings",
+      "SelfServiceAccountManagementSettings",
+      "SpiffeDomainSettings",
+      "TokenExchangeOAuthSettings",
+      "TokenExchangeSettings",
+      "UMASettings",
+      "WebAuthnSettings",
+      "XFrameSettings",
+      "XssProtectionSettings"
+      ].properties.*.default
+    description: Keep AM's values for unconfigured nested settings
+    remove: true
+
   ## Drop the Error schema from generated Terraform state shape.
   - target: $.components.schemas.Error
     description: Intentionally ignored for Terraform state

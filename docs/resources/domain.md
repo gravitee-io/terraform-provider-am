@@ -91,30 +91,30 @@ resource "am_domain" "example" {
 Optional:
 
 - `account_blocked_duration` (Number) Duration, in seconds, for which the account remains blocked after too many failed login attempts.
-- `auto_login_after_registration` (Boolean) Whether the user is automatically logged in after completing registration. Default: false
-- `auto_login_after_reset_password` (Boolean) Whether the user is automatically logged in after a password reset. Default: false
-- `complete_registration_when_reset_password` (Boolean) Whether resetting a password also completes a pending registration. Default: false
+- `auto_login_after_registration` (Boolean) Whether the user is automatically logged in after completing registration.
+- `auto_login_after_reset_password` (Boolean) Whether the user is automatically logged in after a password reset.
+- `complete_registration_when_reset_password` (Boolean) Whether resetting a password also completes a pending registration.
 - `default_identity_provider_for_registration` (String) Default identity provider for user registration: the key of an identity provider of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever that identity provider exists.
-- `delete_passwordless_devices_after_reset_password` (Boolean) Whether passwordless (WebAuthn) devices are deleted when the password is reset. Default: false
-- `dynamic_user_registration` (Boolean) Whether dynamic (self-service) user registration is enabled. Default: false
-- `inherited` (Boolean) Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains. Default: true
-- `login_attempts_detection_enabled` (Boolean) Whether brute-force authentication attempts are detected and blocked. Default: false
+- `delete_passwordless_devices_after_reset_password` (Boolean) Whether passwordless (WebAuthn) devices are deleted when the password is reset.
+- `dynamic_user_registration` (Boolean) Whether dynamic (self-service) user registration is enabled.
+- `inherited` (Boolean) Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains.
+- `login_attempts_detection_enabled` (Boolean) Whether brute-force authentication attempts are detected and blocked.
 - `login_attempts_reset_time` (Number) Time, in seconds, after which the login attempt counter is reset when the maximum has not been reached.
 - `max_login_attempts` (Number) Maximum number of failed login attempts before the account is blocked.
-- `mfa_challenge_attempts_detection_enabled` (Boolean) Whether failed MFA challenge attempts are detected and blocked. Default: false
+- `mfa_challenge_attempts_detection_enabled` (Boolean) Whether failed MFA challenge attempts are detected and blocked.
 - `mfa_challenge_attempts_reset_time` (Number) Time, in seconds, after which the MFA challenge attempt counter is reset.
 - `mfa_challenge_max_attempts` (Number) Maximum number of failed MFA challenge attempts before the user is blocked.
-- `mfa_challenge_send_verify_alert_email` (Boolean) Whether to send an alert email after too many failed MFA challenge attempts. Default: false
+- `mfa_challenge_send_verify_alert_email` (Boolean) Whether to send an alert email after too many failed MFA challenge attempts.
 - `redirect_uri_after_registration` (String) URL the user is redirected to after registration.
 - `redirect_uri_after_reset_password` (String) URL the user is redirected to after a password reset.
-- `remember_me` (Boolean) Whether users can remain logged in for a fixed duration (remember-me). Default: false
+- `remember_me` (Boolean) Whether users can remain logged in for a fixed duration (remember-me).
 - `remember_me_duration` (Number) Duration, in seconds, for which a remembered session stays valid.
-- `reset_password_confirm_identity` (Boolean) Whether the user must confirm their identity before resetting a password. Default: false
-- `reset_password_custom_form` (Boolean) Whether a custom form is used for the password-reset step. Default: false
+- `reset_password_confirm_identity` (Boolean) Whether the user must confirm their identity before resetting a password.
+- `reset_password_custom_form` (Boolean) Whether a custom form is used for the password-reset step.
 - `reset_password_custom_form_fields` (Attributes List) Custom fields rendered on the password-reset form. (see [below for nested schema](#nestedatt--account_settings--reset_password_custom_form_fields))
-- `reset_password_invalidate_tokens` (Boolean) Whether existing tokens are invalidated when the password is reset. Default: false
-- `send_recover_account_email` (Boolean) Whether to send an account-recovery email. Default: false
-- `send_verify_registration_account_email` (Boolean) Whether to send a registration-verification email. Default: false
+- `reset_password_invalidate_tokens` (Boolean) Whether existing tokens are invalidated when the password is reset.
+- `send_recover_account_email` (Boolean) Whether to send an account-recovery email.
+- `send_verify_registration_account_email` (Boolean) Whether to send a registration-verification email.
 
 <a id="nestedatt--account_settings--reset_password_custom_form_fields"></a>
 ### Nested Schema for `account_settings.reset_password_custom_form_fields`
@@ -140,13 +140,13 @@ Optional:
 
 Optional:
 
-- `allow_credentials` (Boolean) Whether the browser may send credentials (cookies, authorization headers) with cross-origin requests. Default: false
+- `allow_credentials` (Boolean) Whether the browser may send credentials (cookies, authorization headers) with cross-origin requests.
 - `allowed_headers` (Set of String) Request headers permitted on cross-origin requests.
 - `allowed_methods` (Set of String) HTTP methods permitted on cross-origin requests.
 - `allowed_origins` (Set of String) Origins permitted to make cross-origin requests. Use "*" to allow any origin.
-- `enabled` (Boolean) Whether CORS handling is enabled for the domain when not inherited. Default: false
-- `inherited` (Boolean) Whether CORS settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits. Default: true
-- `max_age` (Number) How long, in seconds, a browser may cache the result of a preflight request. Default: 86400
+- `enabled` (Boolean) Whether CORS handling is enabled for the domain when not inherited.
+- `inherited` (Boolean) Whether CORS settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
+- `max_age` (Number) How long, in seconds, a browser may cache the result of a preflight request.
 
 
 <a id="nestedatt--key_retrieval_settings"></a>
@@ -154,12 +154,12 @@ Optional:
 
 Optional:
 
-- `allow_private_ip_address` (Boolean) Whether key material can be fetched from private IP addresses. Default: false
-- `allow_unsecured_http_uri` (Boolean) Whether key material can be fetched over unsecured HTTP URIs. Default: false
-- `cache_max_entries` (Number) Maximum number of key material entries retained in the cache. Default: 50
-- `cache_ttl_seconds` (Number) Time-to-live, in seconds, for cached key material. Default: 300
-- `fetch_timeout_ms` (Number) Timeout, in milliseconds, for fetching key material. Default: 5000
-- `max_response_size_kb` (Number) Maximum key material response size, in kilobytes. Default: 32
+- `allow_private_ip_address` (Boolean) Whether key material can be fetched from private IP addresses.
+- `allow_unsecured_http_uri` (Boolean) Whether key material can be fetched over unsecured HTTP URIs.
+- `cache_max_entries` (Number) Maximum number of key material entries retained in the cache.
+- `cache_ttl_seconds` (Number) Time-to-live, in seconds, for cached key material.
+- `fetch_timeout_ms` (Number) Timeout, in milliseconds, for fetching key material.
+- `max_response_size_kb` (Number) Maximum key material response size, in kilobytes.
 
 
 <a id="nestedatt--login_settings"></a>
@@ -167,20 +167,20 @@ Optional:
 
 Optional:
 
-- `certificate_based_auth_enabled` (Boolean) Whether certificate-based authentication is offered. Default: false
+- `certificate_based_auth_enabled` (Boolean) Whether certificate-based authentication is offered.
 - `certificate_based_auth_url` (String) URL used for certificate-based authentication.
-- `forgot_password_enabled` (Boolean) Whether users can initiate a forgot-password flow from the login page. Default: false
-- `hide_form` (Boolean) Whether the login form is hidden (for example when only social or identifier-first login is offered). Default: false
-- `identifier_first_enabled` (Boolean) Whether identifier-first login is enabled, prompting for the username before the password. Default: false
-- `inherited` (Boolean) Whether these login settings are inherited from a parent scope rather than defined here. When true, the other fields are ignored. Default: true
-- `magic_link_auth_enabled` (Boolean) Whether magic-link authentication is offered. Default: false
-- `passwordless_device_naming_enabled` (Boolean) Whether users can name their passwordless devices. Default: false
-- `passwordless_enabled` (Boolean) Whether passwordless (WebAuthn) authentication is offered. Default: false
-- `passwordless_enforce_password_enabled` (Boolean) Whether a password is still required alongside passwordless authentication. Default: false
+- `forgot_password_enabled` (Boolean) Whether users can initiate a forgot-password flow from the login page.
+- `hide_form` (Boolean) Whether the login form is hidden (for example when only social or identifier-first login is offered).
+- `identifier_first_enabled` (Boolean) Whether identifier-first login is enabled, prompting for the username before the password.
+- `inherited` (Boolean) Whether these login settings are inherited from a parent scope rather than defined here. When true, the other fields are ignored.
+- `magic_link_auth_enabled` (Boolean) Whether magic-link authentication is offered.
+- `passwordless_device_naming_enabled` (Boolean) Whether users can name their passwordless devices.
+- `passwordless_enabled` (Boolean) Whether passwordless (WebAuthn) authentication is offered.
+- `passwordless_enforce_password_enabled` (Boolean) Whether a password is still required alongside passwordless authentication.
 - `passwordless_enforce_password_max_age` (Number) Period, in seconds, after which the user's credentials must be re-entered to keep using passwordless authentication.
-- `passwordless_remember_device_enabled` (Boolean) Whether a passwordless device can be remembered to skip future challenges. Default: false
-- `register_enabled` (Boolean) Whether users can self-register from the login page. Default: false
-- `remember_me_enabled` (Boolean) Whether the login page offers a remember-me option. Default: false
+- `passwordless_remember_device_enabled` (Boolean) Whether a passwordless device can be remembered to skip future challenges.
+- `register_enabled` (Boolean) Whether users can self-register from the login page.
+- `remember_me_enabled` (Boolean) Whether the login page offers a remember-me option.
 - `reset_password_on_expiration` (Boolean) Whether the user is forced to reset their password once it expires.
 
 
@@ -192,7 +192,7 @@ Optional:
 - `ciba_settings` (Attributes) Client-Initiated Backchannel Authentication (CIBA) settings for the domain. CIBA lets a relying party initiate end-user authentication from a separate consumption device, without redirecting the user through the browser. Authentication device notifiers are not managed by the Automation API and are not exposed here. (see [below for nested schema](#nestedatt--oidc--ciba_settings))
 - `client_registration_settings` (Attributes) OpenID Connect Dynamic Client Registration configuration for the domain. (see [below for nested schema](#nestedatt--oidc--client_registration_settings))
 - `post_logout_redirect_uris` (List of String) URLs the user may be redirected to after sign-out (post_logout_redirect_uri).
-- `redirect_uri_strict_matching` (Boolean) Whether redirect_uri and post_logout_redirect_uri values are matched strictly during OpenID Connect flows. Default: false
+- `redirect_uri_strict_matching` (Boolean) Whether redirect_uri and post_logout_redirect_uri values are matched strictly during OpenID Connect flows.
 - `request_uris` (List of String) Allowed request_uri values for passing OpenID Connect request objects by reference.
 - `security_profile_settings` (Attributes) Financial-grade API (FAPI) security profile configuration for the domain. (see [below for nested schema](#nestedatt--oidc--security_profile_settings))
 - `workload_identity_settings` (Attributes) Workload identity (SPIFFE) settings for the domain. (see [below for nested schema](#nestedatt--oidc--workload_identity_settings))
@@ -202,10 +202,10 @@ Optional:
 
 Optional:
 
-- `auth_req_expiry` (Number) Default validity period, in seconds, of the issued auth_req_id. Default: 600
-- `binding_message_length` (Number) Maximum number of characters accepted for the binding_message parameter. Default: 256
-- `enabled` (Boolean) Whether Client-Initiated Backchannel Authentication is enabled for the domain. Default: false
-- `token_req_interval` (Number) Minimum delay, in seconds, that a client must wait between two polls of the token endpoint for the same auth_req_id (POLL or PING delivery mode). Default: 5
+- `auth_req_expiry` (Number) Default validity period, in seconds, of the issued auth_req_id.
+- `binding_message_length` (Number) Maximum number of characters accepted for the binding_message parameter.
+- `enabled` (Boolean) Whether Client-Initiated Backchannel Authentication is enabled for the domain.
+- `token_req_interval` (Number) Minimum delay, in seconds, that a client must wait between two polls of the token endpoint for the same auth_req_id (POLL or PING delivery mode).
 
 
 <a id="nestedatt--oidc--client_registration_settings"></a>
@@ -213,16 +213,16 @@ Optional:
 
 Optional:
 
-- `allow_http_scheme_redirect_uri` (Boolean) Whether the unsecured http scheme is permitted in redirect URIs. Default: false
-- `allow_localhost_redirect_uri` (Boolean) Whether localhost is permitted as a redirect URI host. Default: false
-- `allow_redirect_uri_params_expression_language` (Boolean) Whether expression language is permitted in redirect URI parameters. Default: false
-- `allow_wild_card_redirect_uri` (Boolean) Whether wildcards are permitted in redirect URIs. Default: false
+- `allow_http_scheme_redirect_uri` (Boolean) Whether the unsecured http scheme is permitted in redirect URIs.
+- `allow_localhost_redirect_uri` (Boolean) Whether localhost is permitted as a redirect URI host.
+- `allow_redirect_uri_params_expression_language` (Boolean) Whether expression language is permitted in redirect URI parameters.
+- `allow_wild_card_redirect_uri` (Boolean) Whether wildcards are permitted in redirect URIs.
 - `allowed_scopes` (List of String) Scopes permitted on client registration requests when the allowed list is enabled.
-- `allowed_scopes_enabled` (Boolean) Whether registered client scopes are restricted to an allowed list. Default: false
-- `client_template_enabled` (Boolean) Whether a client may be used as a template for dynamic client registration. Default: false
+- `allowed_scopes_enabled` (Boolean) Whether registered client scopes are restricted to an allowed list.
+- `client_template_enabled` (Boolean) Whether a client may be used as a template for dynamic client registration.
 - `default_scopes` (List of String) Default scopes added to every client registration request.
-- `dynamic_client_registration_enabled` (Boolean) Whether Dynamic Client Registration is enabled for the domain. Default: false
-- `open_dynamic_client_registration_enabled` (Boolean) Whether open (unauthenticated) Dynamic Client Registration is enabled for the domain. Default: false
+- `dynamic_client_registration_enabled` (Boolean) Whether Dynamic Client Registration is enabled for the domain.
+- `open_dynamic_client_registration_enabled` (Boolean) Whether open (unauthenticated) Dynamic Client Registration is enabled for the domain.
 
 
 <a id="nestedatt--oidc--security_profile_settings"></a>
@@ -230,8 +230,8 @@ Optional:
 
 Optional:
 
-- `enable_fapi_brazil` (Boolean) Whether the Open Banking Brasil Financial-grade API security profile (version 1.0) is applied. Default: false
-- `enable_plain_fapi` (Boolean) Whether the standard Financial-grade API security profile (version 1.0) is applied. Default: false
+- `enable_fapi_brazil` (Boolean) Whether the Open Banking Brasil Financial-grade API security profile (version 1.0) is applied.
+- `enable_plain_fapi` (Boolean) Whether the standard Financial-grade API security profile (version 1.0) is applied.
 
 
 <a id="nestedatt--oidc--workload_identity_settings"></a>
@@ -243,11 +243,11 @@ Optional:
 - `allow_unsecured_http_uri` (Boolean, Deprecated) Deprecated: moved to keyRetrievalSettings.allowUnsecuredHttpUri.
 - `cache_max_entries` (Number, Deprecated) Deprecated: moved to keyRetrievalSettings.cacheMaxEntries.
 - `cache_ttl_seconds` (Number, Deprecated) Deprecated: moved to keyRetrievalSettings.cacheTtlSeconds.
-- `clock_skew_seconds` (Number) Allowed clock skew, in seconds, when validating JWT temporal claims. Default: 30
-- `default_allowed_algorithms` (List of String) Default allowlist of signature algorithms accepted for SPIFFE JWT validation. Default: ["RS256","RS384","RS512","ES256","ES384","ES512","EdDSA"]
-- `enabled` (Boolean) Whether SPIFFE workload identity support is enabled for the domain. Default: false
+- `clock_skew_seconds` (Number) Allowed clock skew, in seconds, when validating JWT temporal claims.
+- `default_allowed_algorithms` (List of String) Default allowlist of signature algorithms accepted for SPIFFE JWT validation.
+- `enabled` (Boolean) Whether SPIFFE workload identity support is enabled for the domain.
 - `fetch_timeout_ms` (Number, Deprecated) Deprecated: moved to keyRetrievalSettings.fetchTimeoutMs.
-- `max_jwt_lifetime_seconds` (Number) Maximum accepted JWT lifetime, in seconds, computed as exp minus iat. Default: 300
+- `max_jwt_lifetime_seconds` (Number) Maximum accepted JWT lifetime, in seconds, computed as exp minus iat.
 - `max_response_size_kb` (Number, Deprecated) Deprecated: moved to keyRetrievalSettings.maxResponseSizeKb.
 
 
@@ -262,13 +262,13 @@ Optional:
 - `expiry_duration` (Number) Number of days after which a password expires and must be changed.
 - `include_numbers` (Boolean) Whether a password must contain at least one number.
 - `include_special_characters` (Boolean) Whether a password must contain at least one special character.
-- `inherited` (Boolean) Whether these password settings are inherited from a parent scope rather than defined here. When true, the other fields are ignored. Default: true
+- `inherited` (Boolean) Whether these password settings are inherited from a parent scope rather than defined here. When true, the other fields are ignored.
 - `letters_in_mixed_case` (Boolean) Whether a password must contain both uppercase and lowercase letters.
 - `max_consecutive_letters` (Number) Maximum number of identical consecutive characters allowed in a password.
-- `max_length` (Number) Maximum number of characters a password may contain. Default: 128
-- `min_length` (Number) Minimum number of characters a password must contain. Default: 8
+- `max_length` (Number) Maximum number of characters a password may contain.
+- `min_length` (Number) Minimum number of characters a password must contain.
 - `old_passwords` (Number) Number of previous passwords retained in history and barred from reuse.
-- `password_history_enabled` (Boolean) Whether password history is enforced to prevent reuse of recent passwords. Default: false
+- `password_history_enabled` (Boolean) Whether password history is enforced to prevent reuse of recent passwords.
 
 
 <a id="nestedatt--saml"></a>
@@ -277,7 +277,7 @@ Optional:
 Optional:
 
 - `certificate` (String) Certificate signing SAML responses: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.
-- `enabled` (Boolean) Whether the domain exposes the SAML 2.0 IdP protocol. Default: false
+- `enabled` (Boolean) Whether the domain exposes the SAML 2.0 IdP protocol.
 - `entity_id` (String) URL or URN that uniquely identifies this IdP (the SAML entity ID).
 
 
@@ -286,8 +286,8 @@ Optional:
 
 Optional:
 
-- `enabled` (Boolean) Whether the SCIM provisioning API is enabled for the domain. Default: false
-- `idp_selection_enabled` (Boolean) Whether an identity provider is selected for SCIM-provisioned users using a selection rule. Default: false
+- `enabled` (Boolean) Whether the SCIM provisioning API is enabled for the domain.
+- `idp_selection_enabled` (Boolean) Whether an identity provider is selected for SCIM-provisioned users using a selection rule.
 - `idp_selection_rule` (String) Expression that selects the identity provider for a SCIM-provisioned user.
 
 
@@ -305,7 +305,7 @@ Optional:
 
 Optional:
 
-- `enabled` (Boolean) Whether self-service account management is enabled for end users. Default: false
+- `enabled` (Boolean) Whether self-service account management is enabled for end users.
 - `reset_password` (Attributes) Rules applied to a self-service password reset. (see [below for nested schema](#nestedatt--self_service_account_management_settings--reset_password))
 
 <a id="nestedatt--self_service_account_management_settings--reset_password"></a>
@@ -313,7 +313,7 @@ Optional:
 
 Optional:
 
-- `old_password_required` (Boolean) Whether the user must supply their current password to set a new one. Default: false
+- `old_password_required` (Boolean) Whether the user must supply their current password to set a new one.
 - `token_age` (Number) Lifetime, in seconds, of the password-reset token.
 
 
@@ -323,14 +323,14 @@ Optional:
 
 Optional:
 
-- `allow_delegation` (Boolean) Whether delegation is allowed, where an actor acts on behalf of the subject and an "act" claim is added to the issued token. At least one of allowImpersonation or allowDelegation must be enabled. Default: false
-- `allow_impersonation` (Boolean) Whether impersonation is allowed, where the issued token represents the subject directly. At least one of allowImpersonation or allowDelegation must be enabled. Default: true
+- `allow_delegation` (Boolean) Whether delegation is allowed, where an actor acts on behalf of the subject and an "act" claim is added to the issued token. At least one of allowImpersonation or allowDelegation must be enabled.
+- `allow_impersonation` (Boolean) Whether impersonation is allowed, where the issued token represents the subject directly. At least one of allowImpersonation or allowDelegation must be enabled.
 - `allowed_actor_token_types` (List of String) Token types accepted as the actor token when delegating.
 - `allowed_requested_token_types` (List of String) Token types that may be requested as the result of an exchange.
 - `allowed_subject_token_types` (List of String) Token types accepted as the subject token in an exchange.
-- `enabled` (Boolean) Whether token exchange is enabled for the domain. Default: false
+- `enabled` (Boolean) Whether token exchange is enabled for the domain.
 - `id_jag_settings` (Attributes) ID-JAG issuance behavior of token exchange. (see [below for nested schema](#nestedatt--token_exchange_settings--id_jag_settings))
-- `max_delegation_depth` (Number) Maximum depth of the delegation chain (nested "act" claims). Range 1–100. Default: 25
+- `max_delegation_depth` (Number) Maximum depth of the delegation chain (nested "act" claims). Range 1–100.
 - `token_exchange_o_auth_settings` (Attributes) OAuth-specific token-exchange behavior, such as how scopes are handled, with optional inheritance from domain defaults. (see [below for nested schema](#nestedatt--token_exchange_settings--token_exchange_o_auth_settings))
 - `trusted_issuers` (Attributes List, Deprecated) Deprecated: use the trusted-domains API instead. External issuers whose JWTs may be accepted as subject or actor tokens. A projection over the security domain's token-exchange trusted domains; a write replaces the list, so an omitted issuer is no longer trusted. (see [below for nested schema](#nestedatt--token_exchange_settings--trusted_issuers))
 
@@ -339,7 +339,7 @@ Optional:
 
 Optional:
 
-- `lax_validation` (Boolean) Lax validation: also accept an access token as the subject token. By default only an ID token is accepted. The access token must be issued to the requesting client or, when an MCP server requests, have that MCP server as audience. Default: false
+- `lax_validation` (Boolean) Lax validation: also accept an access token as the subject token. By default only an ID token is accepted. The access token must be issued to the requesting client or, when an MCP server requests, have that MCP server as audience.
 
 
 <a id="nestedatt--token_exchange_settings--token_exchange_o_auth_settings"></a>
@@ -347,8 +347,8 @@ Optional:
 
 Optional:
 
-- `inherited` (Boolean) Whether these settings are inherited from the domain defaults rather than defined here. Default: true
-- `scope_handling` (String) How scopes are handled when issuing the exchanged token. DOWNSCOPING restricts the issued token to a subset of the original scopes. Default: "downscoping"; must be one of ["downscoping", "permissive"]
+- `inherited` (Boolean) Whether these settings are inherited from the domain defaults rather than defined here.
+- `scope_handling` (String) How scopes are handled when issuing the exchanged token. DOWNSCOPING restricts the issued token to a subset of the original scopes. must be one of ["downscoping", "permissive"]
 
 
 <a id="nestedatt--token_exchange_settings--trusted_issuers"></a>
@@ -380,7 +380,7 @@ Optional:
 
 Optional:
 
-- `enabled` (Boolean) Whether User-Managed Access is enabled for the domain. Default: false
+- `enabled` (Boolean) Whether User-Managed Access is enabled for the domain.
 
 
 <a id="nestedatt--vhosts"></a>
@@ -398,17 +398,17 @@ Optional:
 
 Optional:
 
-- `attestation_conveyance_preference` (String) Relying-party preference for attestation conveyance during credential creation. NONE requests no attestation, INDIRECT allows anonymized attestation, and DIRECT requests the authenticator's attestation statement. Default: "none"; must be one of ["none", "indirect", "direct"]
+- `attestation_conveyance_preference` (String) Relying-party preference for attestation conveyance during credential creation. NONE requests no attestation, INDIRECT allows anonymized attestation, and DIRECT requests the authenticator's attestation statement. must be one of ["none", "indirect", "direct"]
 - `authenticator_attachment` (String) Preferred authenticator attachment. PLATFORM selects authenticators bound to the device (such as a fingerprint reader); CROSS_PLATFORM selects roaming authenticators (such as a security key). must be one of ["cross_platform", "platform"]
 - `certificates` (Map of String) Trusted device-attestation X.509 certificates, keyed by name.
-- `enforce_authenticator_integrity` (Boolean) Whether to periodically re-verify that registered authenticators remain valid against the FIDO2 Metadata Service. Default: false
+- `enforce_authenticator_integrity` (Boolean) Whether to periodically re-verify that registered authenticators remain valid against the FIDO2 Metadata Service.
 - `enforce_authenticator_integrity_max_age` (Number) Maximum elapsed time, in seconds, since an authenticator was last verified before it is re-checked on the next passwordless login.
-- `force_registration` (Boolean) Whether to reject registration of a credential already registered to a different user. Default: false
+- `force_registration` (Boolean) Whether to reject registration of a credential already registered to a different user.
 - `origin` (String) Relying-party origin; must match the browser's window.location.origin during registration and authentication ceremonies.
 - `relying_party_id` (String) Relying-party identifier: a domain string that scopes credentials to this entity. A credential can only be used with the relying party it was registered against.
 - `relying_party_name` (String) Human-readable relying-party name shown to users during ceremonies.
-- `require_resident_key` (Boolean) Whether the authenticator must create a client-side resident (discoverable) credential. Default: false
-- `user_verification` (String) Relying-party requirement regarding user verification during a ceremony. REQUIRED enforces verification, PREFERRED requests it when available, and DISCOURAGED avoids it. Default: "preferred"; must be one of ["required", "preferred", "discouraged"]
+- `require_resident_key` (Boolean) Whether the authenticator must create a client-side resident (discoverable) credential.
+- `user_verification` (String) Relying-party requirement regarding user verification during a ceremony. REQUIRED enforces verification, PREFERRED requests it when available, and DISCOURAGED avoids it. must be one of ["required", "preferred", "discouraged"]
 
 
 <a id="nestedatt--web_protection_settings"></a>
@@ -426,10 +426,10 @@ Optional:
 Optional:
 
 - `directives` (List of String) CSP directives, one per entry, in the form "directive-name value". A trailing semicolon is optional. Directive names must be valid CSP tokens and must not repeat; values are not interpreted. Directives that take no value, such as "upgrade-insecure-requests", may be supplied on their own. When reportOnly is enabled, a "report-uri" or "report-to" directive is required.
-- `enabled` (Boolean) Whether CSP is enabled for the domain when not inherited. Default: false
-- `inherited` (Boolean) Whether CSP settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits. Default: true
-- `report_only` (Boolean) When true, the policy is delivered as Content-Security-Policy-Report-Only. Default: false
-- `script_inline_nonce` (Boolean) Whether inline scripts are allowed via a per-request nonce. Default: true
+- `enabled` (Boolean) Whether CSP is enabled for the domain when not inherited.
+- `inherited` (Boolean) Whether CSP settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
+- `report_only` (Boolean) When true, the policy is delivered as Content-Security-Policy-Report-Only.
+- `script_inline_nonce` (Boolean) Whether inline scripts are allowed via a per-request nonce.
 
 
 <a id="nestedatt--web_protection_settings--xframe"></a>
@@ -438,8 +438,8 @@ Optional:
 Optional:
 
 - `action` (String) X-Frame-Options action. Omit to leave the header out. must be one of ["DENY", "SAMEORIGIN"]
-- `enabled` (Boolean) Whether X-Frame-Options is enabled for the domain when not inherited. Default: false
-- `inherited` (Boolean) Whether X-Frame-Options settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits. Default: true
+- `enabled` (Boolean) Whether X-Frame-Options is enabled for the domain when not inherited.
+- `inherited` (Boolean) Whether X-Frame-Options settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
 
 
 <a id="nestedatt--web_protection_settings--xss"></a>
@@ -448,8 +448,8 @@ Optional:
 Optional:
 
 - `action` (String) Value of the X-XSS-Protection header.
-- `enabled` (Boolean) Whether X-XSS-Protection is enabled for the domain when not inherited. Default: false
-- `inherited` (Boolean) Whether X-XSS-Protection settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits. Default: true
+- `enabled` (Boolean) Whether X-XSS-Protection is enabled for the domain when not inherited.
+- `inherited` (Boolean) Whether X-XSS-Protection settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
 
 ## Import
 

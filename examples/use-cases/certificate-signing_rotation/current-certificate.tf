@@ -1,4 +1,7 @@
-# The certificate signing the tokens, named by its key: the domain and the applications follow it.
+# The certificate signing the tokens: the domain and the applications follow it.
 locals {
-  signing_certificate = "signing-2026"
+  # The domain names it by key: the certificate lives in the domain, so the domain cannot wait for it.
+  signing_certificate_key = "signing-2026"
+  # The applications reference it, so Terraform deletes them before the certificate.
+  signing_certificate = am_certificate.signing_2026.key
 }

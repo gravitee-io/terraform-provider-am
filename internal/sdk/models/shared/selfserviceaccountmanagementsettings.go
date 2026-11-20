@@ -3,27 +3,12 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // SelfServiceAccountManagementSettings - Controls whether end users can manage their own account (for example, reset their password) and the rules that apply.
 type SelfServiceAccountManagementSettings struct {
 	// Whether self-service account management is enabled for end users.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Rules applied to a self-service password reset.
 	ResetPassword *ResetPasswordSettings `json:"resetPassword,omitempty"`
-}
-
-func (s SelfServiceAccountManagementSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
-}
-
-func (s *SelfServiceAccountManagementSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (s *SelfServiceAccountManagementSettings) GetEnabled() *bool {

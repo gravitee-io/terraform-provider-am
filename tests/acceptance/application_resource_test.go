@@ -246,6 +246,55 @@ func TestApplicationResource_inheritedBlocks(t *testing.T) {
 	})
 }
 
+// A setting changed outside Terraform keeps its value when the configuration leaves it out, whether the
+// block is left out or declared without it: no plan. Before, the plan reset forgot_password_enabled to its
+// documented default, and the update sent the state back, so the same diff came back after every apply.
+func TestApplicationResource_consoleChangedSetting(t *testing.T) {
+	domainKey := uniqueKey("tf-acc-app")
+	key := uniqueKey("console")
+	path := applicationPath(domainKey, key)
+	variables := applicationVariables(domainKey, key, nil)
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: []resource.TestStep{
+			{
+				ConfigDirectory: config.TestStepDirectory(),
+				ConfigVariables: variables,
+			},
+			{
+				PreConfig: func() {
+					application, err := automationGet(path)
+					if err != nil {
+						t.Fatal(err)
+					}
+					settings := application["settings"].(map[string]any)
+					settings["login"] = map[string]any{"inherited": false, "forgotPasswordEnabled": true}
+					if err := automationPut(fmt.Sprintf("/domains/%s/applications", domainKey), application); err != nil {
+						t.Fatal(err)
+					}
+				},
+				ConfigDirectory: config.TestStepDirectory(),
+				ConfigVariables: variables,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
+				},
+				Check: checkAMNested(path, true, "settings", "login", "forgotPasswordEnabled"),
+			},
+			{
+				ConfigDirectory: config.TestStepDirectory(),
+				ConfigVariables: variables,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
+				},
+				Check: checkAMNested(path, true, "settings", "login", "forgotPasswordEnabled"),
+			},
+		},
+	})
+}
+
 // AM rejects a scope that does not exist in the domain; the mock does not check scopes.
 func TestApplicationResource_unknownScope(t *testing.T) {
 	requiresLiveAM(t)

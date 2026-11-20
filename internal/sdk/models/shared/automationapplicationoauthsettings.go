@@ -3,14 +3,10 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationApplicationOAuthSettings - OAuth 2.0 and OpenID Connect settings of the application. Fields described as computed are filled in by AM when omitted. tokenExchangeOAuthSettings, when omitted, is inherited from the domain.
 type AutomationApplicationOAuthSettings struct {
 	// Access token validity, in seconds. Computed (7200) when omitted.
-	AccessTokenValiditySeconds *int `default:"7200" json:"accessTokenValiditySeconds"`
+	AccessTokenValiditySeconds *int `json:"accessTokenValiditySeconds,omitempty"`
 	// OIDC application type, computed from the application type: native for native applications, web for web, browser and service applications. Read-only.
 	ApplicationType *string `json:"applicationType,omitempty"`
 	// JWE alg algorithm encrypting the authorization responses (JARM).
@@ -34,11 +30,11 @@ type AutomationApplicationOAuthSettings struct {
 	// Default maximum authentication age, in seconds.
 	DefaultMaxAge *int `json:"defaultMaxAge,omitempty"`
 	// Whether a refresh token stays valid when used, instead of being replaced by a new one.
-	DisableRefreshTokenRotation *bool `default:"false" json:"disableRefreshTokenRotation"`
+	DisableRefreshTokenRotation *bool `json:"disableRefreshTokenRotation,omitempty"`
 	// Whether access tokens must be bound to a DPoP proof (RFC 9449).
-	DpopBoundAccessTokens *bool `default:"false" json:"dpopBoundAccessTokens"`
+	DpopBoundAccessTokens *bool `json:"dpopBoundAccessTokens,omitempty"`
 	// Whether the permissions of the user roles are added to the scopes of the issued tokens.
-	EnhanceScopesWithUserPermissions *bool `default:"false" json:"enhanceScopesWithUserPermissions"`
+	EnhanceScopesWithUserPermissions *bool `json:"enhanceScopesWithUserPermissions,omitempty"`
 	// Whether the authorization code flow requires PKCE. Computed (true) for browser and native applications created without grantTypes, and for user_embedded agents.
 	ForcePKCE *bool `json:"forcePKCE,omitempty"`
 	// Whether PKCE requires the S256 code challenge method. Computed (true) for browser and native applications created without grantTypes, and for user_embedded agents.
@@ -46,7 +42,7 @@ type AutomationApplicationOAuthSettings struct {
 	// OAuth 2.0 grant types the application may use. Computed when omitted, from the application type: web authorization_code and password; browser and native authorization_code; service client_credentials; resource_server adds client_credentials; agent per kind (user_embedded authorization_code; hosted_delegated authorization_code, client_credentials and token exchange; autonomous client_credentials and token exchange).
 	GrantTypes []string `json:"grantTypes,omitempty"`
 	// Validity, in seconds, of the identity assertion authorization grants (ID-JAG) issued to the application. Computed (300) when omitted.
-	IDJagValiditySeconds *int `default:"300" json:"idJagValiditySeconds"`
+	IDJagValiditySeconds *int `json:"idJagValiditySeconds,omitempty"`
 	// JWE alg algorithm encrypting the ID tokens issued to the application.
 	IDTokenEncryptedResponseAlg *string `json:"idTokenEncryptedResponseAlg,omitempty"`
 	// JWE enc algorithm encrypting the ID tokens issued to the application.
@@ -54,7 +50,7 @@ type AutomationApplicationOAuthSettings struct {
 	// JWS algorithm signing the ID tokens issued to the application.
 	IDTokenSignedResponseAlg *string `json:"idTokenSignedResponseAlg,omitempty"`
 	// ID token validity, in seconds. Computed (14400) when omitted.
-	IDTokenValiditySeconds *int `default:"14400" json:"idTokenValiditySeconds"`
+	IDTokenValiditySeconds *int `json:"idTokenValiditySeconds,omitempty"`
 	// URI, using the https scheme, a third party can use to initiate a login by the application.
 	InitiateLoginURI *string `json:"initiateLoginUri,omitempty"`
 	// JSON Web Key Set of the application passed by value (RFC 7517 section 5): an object with a keys array of JWKs. Same use as jwksUri, which it excludes.
@@ -66,7 +62,7 @@ type AutomationApplicationOAuthSettings struct {
 	// URL of the application logo, displayed to users.
 	LogoURI *string `json:"logoUri,omitempty"`
 	// When true, users must explicitly select each scope on the consent page; when false, all requested scopes are preselected and users can deselect them. Computed (true) when omitted.
-	OptInScopeSelection *bool `default:"true" json:"optInScopeSelection"`
+	OptInScopeSelection *bool `json:"optInScopeSelection,omitempty"`
 	// URL of the application policy on the use of profile data.
 	PolicyURI *string `json:"policyUri,omitempty"`
 	// URLs the user may be redirected to after logout (post_logout_redirect_uri).
@@ -74,7 +70,7 @@ type AutomationApplicationOAuthSettings struct {
 	// Redirection URIs. The redirect_uri of an authorization request must match one of them. At least one is required for the authorization_code and implicit grants.
 	RedirectUris []string `json:"redirectUris,omitempty"`
 	// Refresh token validity, in seconds. Computed (14400) when omitted.
-	RefreshTokenValiditySeconds *int `default:"14400" json:"refreshTokenValiditySeconds"`
+	RefreshTokenValiditySeconds *int `json:"refreshTokenValiditySeconds,omitempty"`
 	// JWE alg algorithm the application may encrypt its request objects with.
 	RequestObjectEncryptionAlg *string `json:"requestObjectEncryptionAlg,omitempty"`
 	// JWE enc algorithm the application may encrypt its request objects with.
@@ -84,7 +80,7 @@ type AutomationApplicationOAuthSettings struct {
 	// request_uri values pre-registered by the application.
 	RequestUris []string `json:"requestUris,omitempty"`
 	// Whether the auth_time claim is required in the ID token.
-	RequireAuthTime *bool `default:"false" json:"requireAuthTime"`
+	RequireAuthTime *bool `json:"requireAuthTime,omitempty"`
 	// OAuth 2.0 / OIDC response types the application may use. Computed from grantTypes when omitted: authorization_code adds code, implicit adds token and id_token.
 	ResponseTypes []string `json:"responseTypes,omitempty"`
 	// Scopes the application can request. Each scope must exist in the domain, otherwise the request is rejected with 400. Resource server applications always get the uma_protection scope.
@@ -92,9 +88,9 @@ type AutomationApplicationOAuthSettings struct {
 	// URL, using the https scheme, used to compute pairwise subject identifiers.
 	SectorIdentifierURI *string `json:"sectorIdentifierUri,omitempty"`
 	// Whether the id_token_hint parameter can be used to re-authenticate the user silently.
-	SilentReAuthentication *bool `default:"false" json:"silentReAuthentication"`
+	SilentReAuthentication *bool `json:"silentReAuthentication,omitempty"`
 	// Whether logout also calls the end_session_endpoint of the external OIDC provider the user authenticated with.
-	SingleSignOut *bool `default:"false" json:"singleSignOut"`
+	SingleSignOut *bool `json:"singleSignOut,omitempty"`
 	// Subject identifier type of the responses: public or pairwise.
 	SubjectType *string `json:"subjectType,omitempty"`
 	// Expected dNSName subject alternative name of the client certificate, for the tls_client_auth method.
@@ -108,7 +104,7 @@ type AutomationApplicationOAuthSettings struct {
 	// Expected subject distinguished name of the client certificate, for the tls_client_auth method.
 	TLSClientAuthSubjectDn *string `json:"tlsClientAuthSubjectDn,omitempty"`
 	// Whether access tokens are bound to the client certificate (RFC 8705).
-	TLSClientCertificateBoundAccessTokens *bool `default:"false" json:"tlsClientCertificateBoundAccessTokens"`
+	TLSClientCertificateBoundAccessTokens *bool `json:"tlsClientCertificateBoundAccessTokens,omitempty"`
 	// Custom claims added to the issued tokens.
 	TokenCustomClaims []AutomationTokenClaim `json:"tokenCustomClaims,omitempty"`
 	// Client authentication method at the token endpoint: client_secret_basic, client_secret_post, client_secret_jwt, private_key_jwt, tls_client_auth, self_signed_tls_client_auth or none. Computed when omitted: client_secret_basic on creation, none for browser and native applications created without grantTypes, per kind for agents (user_embedded none; hosted_delegated and autonomous private_key_jwt).
@@ -127,17 +123,6 @@ type AutomationApplicationOAuthSettings struct {
 	UserinfoEncryptedResponseEnc *string `json:"userinfoEncryptedResponseEnc,omitempty"`
 	// JWS algorithm signing the UserInfo responses.
 	UserinfoSignedResponseAlg *string `json:"userinfoSignedResponseAlg,omitempty"`
-}
-
-func (a AutomationApplicationOAuthSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationApplicationOAuthSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationApplicationOAuthSettings) GetAccessTokenValiditySeconds() *int {

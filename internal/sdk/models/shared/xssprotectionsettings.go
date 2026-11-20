@@ -3,29 +3,14 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // XSSProtectionSettings - Controls the legacy X-XSS-Protection response header.
 type XSSProtectionSettings struct {
 	// Value of the X-XSS-Protection header.
 	Action *string `json:"action,omitempty"`
 	// Whether X-XSS-Protection is enabled for the domain when not inherited.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Whether X-XSS-Protection settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
-	Inherited *bool `default:"true" json:"inherited"`
-}
-
-func (x XSSProtectionSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(x, "", false)
-}
-
-func (x *XSSProtectionSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &x, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	Inherited *bool `json:"inherited,omitempty"`
 }
 
 func (x *XSSProtectionSettings) GetAction() *string {

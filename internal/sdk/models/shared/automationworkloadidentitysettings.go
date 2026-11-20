@@ -6,7 +6,6 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 )
 
 // SubjectMatchMode - How subject is matched against the SVID sub claim. exact (default) requires equality. prefix is only allowed for hosted_delegated or autonomous agent applications: subject must end with / and the SVID sub is accepted when it starts with subject; the full SVID SPIFFE ID then becomes the per-instance act.sub in minted tokens.
@@ -41,20 +40,9 @@ type AutomationWorkloadIdentitySettings struct {
 	// SPIFFE ID expected in the SVID sub claim, interpreted per subjectMatchMode.
 	Subject *string `json:"subject,omitempty"`
 	// How subject is matched against the SVID sub claim. exact (default) requires equality. prefix is only allowed for hosted_delegated or autonomous agent applications: subject must end with / and the SVID sub is accepted when it starts with subject; the full SVID SPIFFE ID then becomes the per-instance act.sub in minted tokens.
-	SubjectMatchMode *SubjectMatchMode `default:"exact" json:"subjectMatchMode"`
+	SubjectMatchMode *SubjectMatchMode `json:"subjectMatchMode,omitempty"`
 	// Name of the trusted domain this application authenticates against.
 	TrustDomain *string `json:"trustDomain,omitempty"`
-}
-
-func (a AutomationWorkloadIdentitySettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationWorkloadIdentitySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationWorkloadIdentitySettings) GetSubject() *string {

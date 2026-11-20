@@ -3,14 +3,10 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // CorsSettings - Cross-Origin Resource Sharing configuration controlling which web origins may call the domain's endpoints from a browser.
 type CorsSettings struct {
 	// Whether the browser may send credentials (cookies, authorization headers) with cross-origin requests.
-	AllowCredentials *bool `default:"false" json:"allowCredentials"`
+	AllowCredentials *bool `json:"allowCredentials,omitempty"`
 	// Request headers permitted on cross-origin requests.
 	AllowedHeaders []string `json:"allowedHeaders,omitempty"`
 	// HTTP methods permitted on cross-origin requests.
@@ -18,22 +14,11 @@ type CorsSettings struct {
 	// Origins permitted to make cross-origin requests. Use "*" to allow any origin.
 	AllowedOrigins []string `json:"allowedOrigins,omitempty"`
 	// Whether CORS handling is enabled for the domain when not inherited.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Whether CORS settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
-	Inherited *bool `default:"true" json:"inherited"`
+	Inherited *bool `json:"inherited,omitempty"`
 	// How long, in seconds, a browser may cache the result of a preflight request.
-	MaxAge *int `default:"86400" json:"maxAge"`
-}
-
-func (c CorsSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
-}
-
-func (c *CorsSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	MaxAge *int `json:"maxAge,omitempty"`
 }
 
 func (c *CorsSettings) GetAllowCredentials() *bool {

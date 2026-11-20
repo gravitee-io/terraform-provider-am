@@ -129,30 +129,30 @@ Optional:
 Optional:
 
 - `account_blocked_duration` (Number) Duration, in seconds, for which the account remains blocked after too many failed login attempts.
-- `auto_login_after_registration` (Boolean) Whether the user is automatically logged in after completing registration. Default: false
-- `auto_login_after_reset_password` (Boolean) Whether the user is automatically logged in after a password reset. Default: false
-- `complete_registration_when_reset_password` (Boolean) Whether resetting a password also completes a pending registration. Default: false
+- `auto_login_after_registration` (Boolean) Whether the user is automatically logged in after completing registration.
+- `auto_login_after_reset_password` (Boolean) Whether the user is automatically logged in after a password reset.
+- `complete_registration_when_reset_password` (Boolean) Whether resetting a password also completes a pending registration.
 - `default_identity_provider_for_registration` (String) Default identity provider for user registration: the key of an identity provider of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing identity providers: it can name one created after the domain or since deleted, and resolves whenever that identity provider exists.
-- `delete_passwordless_devices_after_reset_password` (Boolean) Whether passwordless (WebAuthn) devices are deleted when the password is reset. Default: false
-- `dynamic_user_registration` (Boolean) Whether dynamic (self-service) user registration is enabled. Default: false
-- `inherited` (Boolean) Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains. Default: true
-- `login_attempts_detection_enabled` (Boolean) Whether brute-force authentication attempts are detected and blocked. Default: false
+- `delete_passwordless_devices_after_reset_password` (Boolean) Whether passwordless (WebAuthn) devices are deleted when the password is reset.
+- `dynamic_user_registration` (Boolean) Whether dynamic (self-service) user registration is enabled.
+- `inherited` (Boolean) Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains.
+- `login_attempts_detection_enabled` (Boolean) Whether brute-force authentication attempts are detected and blocked.
 - `login_attempts_reset_time` (Number) Time, in seconds, after which the login attempt counter is reset when the maximum has not been reached.
 - `max_login_attempts` (Number) Maximum number of failed login attempts before the account is blocked.
-- `mfa_challenge_attempts_detection_enabled` (Boolean) Whether failed MFA challenge attempts are detected and blocked. Default: false
+- `mfa_challenge_attempts_detection_enabled` (Boolean) Whether failed MFA challenge attempts are detected and blocked.
 - `mfa_challenge_attempts_reset_time` (Number) Time, in seconds, after which the MFA challenge attempt counter is reset.
 - `mfa_challenge_max_attempts` (Number) Maximum number of failed MFA challenge attempts before the user is blocked.
-- `mfa_challenge_send_verify_alert_email` (Boolean) Whether to send an alert email after too many failed MFA challenge attempts. Default: false
+- `mfa_challenge_send_verify_alert_email` (Boolean) Whether to send an alert email after too many failed MFA challenge attempts.
 - `redirect_uri_after_registration` (String) URL the user is redirected to after registration.
 - `redirect_uri_after_reset_password` (String) URL the user is redirected to after a password reset.
-- `remember_me` (Boolean) Whether users can remain logged in for a fixed duration (remember-me). Default: false
+- `remember_me` (Boolean) Whether users can remain logged in for a fixed duration (remember-me).
 - `remember_me_duration` (Number) Duration, in seconds, for which a remembered session stays valid.
-- `reset_password_confirm_identity` (Boolean) Whether the user must confirm their identity before resetting a password. Default: false
-- `reset_password_custom_form` (Boolean) Whether a custom form is used for the password-reset step. Default: false
+- `reset_password_confirm_identity` (Boolean) Whether the user must confirm their identity before resetting a password.
+- `reset_password_custom_form` (Boolean) Whether a custom form is used for the password-reset step.
 - `reset_password_custom_form_fields` (Attributes List) Custom fields rendered on the password-reset form. (see [below for nested schema](#nestedatt--settings--account--reset_password_custom_form_fields))
-- `reset_password_invalidate_tokens` (Boolean) Whether existing tokens are invalidated when the password is reset. Default: false
-- `send_recover_account_email` (Boolean) Whether to send an account-recovery email. Default: false
-- `send_verify_registration_account_email` (Boolean) Whether to send a registration-verification email. Default: false
+- `reset_password_invalidate_tokens` (Boolean) Whether existing tokens are invalidated when the password is reset.
+- `send_recover_account_email` (Boolean) Whether to send an account-recovery email.
+- `send_verify_registration_account_email` (Boolean) Whether to send a registration-verification email.
 
 <a id="nestedatt--settings--account--reset_password_custom_form_fields"></a>
 ### Nested Schema for `settings.account.reset_password_custom_form_fields`
@@ -170,8 +170,8 @@ Optional:
 
 Optional:
 
-- `flows_inherited` (Boolean) Whether the domain flows are executed for this application in addition to its own flows. Default: true
-- `skip_consent` (Boolean) Whether the user consent page is skipped: requested scopes are granted without asking the user. Default: false
+- `flows_inherited` (Boolean) Whether the domain flows are executed for this application in addition to its own flows.
+- `skip_consent` (Boolean) Whether the user consent page is skipped: requested scopes are granted without asking the user.
 
 
 <a id="nestedatt--settings--cookie_settings"></a>
@@ -179,7 +179,7 @@ Optional:
 
 Optional:
 
-- `inherited` (Boolean) Whether the cookie settings are inherited from the domain. When true, the other fields are ignored. Default: true
+- `inherited` (Boolean) Whether the cookie settings are inherited from the domain. When true, the other fields are ignored.
 - `session` (Attributes) Session cookie settings. (see [below for nested schema](#nestedatt--settings--cookie_settings--session))
 
 <a id="nestedatt--settings--cookie_settings--session"></a>
@@ -187,7 +187,7 @@ Optional:
 
 Optional:
 
-- `persistent` (Boolean) Whether the session cookie is persistent (kept after the browser is closed) rather than a session cookie. Default: false
+- `persistent` (Boolean) Whether the session cookie is persistent (kept after the browser is closed) rather than a session cookie.
 
 
 
@@ -196,20 +196,20 @@ Optional:
 
 Optional:
 
-- `certificate_based_auth_enabled` (Boolean) Whether certificate-based authentication is offered. Default: false
+- `certificate_based_auth_enabled` (Boolean) Whether certificate-based authentication is offered.
 - `certificate_based_auth_url` (String) URL used for certificate-based authentication.
-- `forgot_password_enabled` (Boolean) Whether users can initiate a forgot-password flow from the login page. Default: false
-- `hide_form` (Boolean) Whether the login form is hidden (for example when only social or identifier-first login is offered). Default: false
-- `identifier_first_enabled` (Boolean) Whether identifier-first login is enabled, prompting for the username before the password. Default: false
-- `inherited` (Boolean) Whether these login settings are inherited from a parent scope rather than defined here. When true, the other fields are ignored. Default: true
-- `magic_link_auth_enabled` (Boolean) Whether magic-link authentication is offered. Default: false
-- `passwordless_device_naming_enabled` (Boolean) Whether users can name their passwordless devices. Default: false
-- `passwordless_enabled` (Boolean) Whether passwordless (WebAuthn) authentication is offered. Default: false
-- `passwordless_enforce_password_enabled` (Boolean) Whether a password is still required alongside passwordless authentication. Default: false
+- `forgot_password_enabled` (Boolean) Whether users can initiate a forgot-password flow from the login page.
+- `hide_form` (Boolean) Whether the login form is hidden (for example when only social or identifier-first login is offered).
+- `identifier_first_enabled` (Boolean) Whether identifier-first login is enabled, prompting for the username before the password.
+- `inherited` (Boolean) Whether these login settings are inherited from a parent scope rather than defined here. When true, the other fields are ignored.
+- `magic_link_auth_enabled` (Boolean) Whether magic-link authentication is offered.
+- `passwordless_device_naming_enabled` (Boolean) Whether users can name their passwordless devices.
+- `passwordless_enabled` (Boolean) Whether passwordless (WebAuthn) authentication is offered.
+- `passwordless_enforce_password_enabled` (Boolean) Whether a password is still required alongside passwordless authentication.
 - `passwordless_enforce_password_max_age` (Number) Period, in seconds, after which the user's credentials must be re-entered to keep using passwordless authentication.
-- `passwordless_remember_device_enabled` (Boolean) Whether a passwordless device can be remembered to skip future challenges. Default: false
-- `register_enabled` (Boolean) Whether users can self-register from the login page. Default: false
-- `remember_me_enabled` (Boolean) Whether the login page offers a remember-me option. Default: false
+- `passwordless_remember_device_enabled` (Boolean) Whether a passwordless device can be remembered to skip future challenges.
+- `register_enabled` (Boolean) Whether users can self-register from the login page.
+- `remember_me_enabled` (Boolean) Whether the login page offers a remember-me option.
 - `reset_password_on_expiration` (Boolean) Whether the user is forced to reset their password once it expires.
 
 
@@ -233,7 +233,7 @@ Optional:
 
 Optional:
 
-- `active` (Boolean) Whether users are challenged for a second factor. Default: false
+- `active` (Boolean) Whether users are challenged for a second factor.
 - `challenge_rule` (String) Expression Language rule of a conditional challenge: when it evaluates to true, the challenge is skipped.
 - `type` (String) required: always challenge. conditional: challenge unless challengeRule evaluates to true. risk_based: challenge according to the risk assessment. must be one of ["required", "conditional", "risk_based"]
 
@@ -243,9 +243,9 @@ Optional:
 
 Optional:
 
-- `active` (Boolean) Whether users are asked to enroll a factor. Default: false
+- `active` (Boolean) Whether users are asked to enroll a factor.
 - `enrollment_rule` (String) Expression Language rule of a conditional enrollment: when it evaluates to true, the enrollment is skipped.
-- `enrollment_skip_active` (Boolean) Whether users can skip the enrollment. Default: false
+- `enrollment_skip_active` (Boolean) Whether users can skip the enrollment.
 - `enrollment_skip_rule` (String) Expression Language rule: when it evaluates to true, users can skip the enrollment.
 - `force_enrollment` (Boolean) Whether users must enroll a factor.
 - `skip_time_seconds` (Number) Duration, in seconds, during which a skipped enrollment is not asked again.
@@ -284,10 +284,10 @@ Optional:
 
 Optional:
 
-- `active` (Boolean) Whether remember device is enabled. Default: false
+- `active` (Boolean) Whether remember device is enabled.
 - `device_identifier_id` (String) Device identifier used to recognize devices, as id:<uuid> (device identifiers have no Automation API endpoint).
 - `expiration_time_seconds` (Number) Duration, in seconds, for which a device is remembered.
-- `skip_remember_device` (Boolean) Only used with a conditional MFA challenge: when true, remember device is not applied when the MFA condition evaluates to no risk. Default: false
+- `skip_remember_device` (Boolean) Only used with a conditional MFA challenge: when true, remember device is not applied when the MFA condition evaluates to no risk.
 
 
 <a id="nestedatt--settings--mfa--step_up_authentication"></a>
@@ -295,7 +295,7 @@ Optional:
 
 Optional:
 
-- `active` (Boolean) Whether step-up authentication is enabled. Default: false
+- `active` (Boolean) Whether step-up authentication is enabled.
 - `step_up_authentication_rule` (String) Expression Language rule: when it evaluates to true, the user is challenged again.
 
 
@@ -305,7 +305,7 @@ Optional:
 
 Optional:
 
-- `access_token_validity_seconds` (Number) Access token validity, in seconds. Computed (7200) when omitted. Default: 7200
+- `access_token_validity_seconds` (Number) Access token validity, in seconds. Computed (7200) when omitted.
 - `authorization_encrypted_response_alg` (String) JWE alg algorithm encrypting the authorization responses (JARM).
 - `authorization_encrypted_response_enc` (String) JWE enc algorithm encrypting the authorization responses (JARM).
 - `authorization_signed_response_alg` (String) JWS algorithm signing the authorization responses (JARM).
@@ -314,44 +314,44 @@ Optional:
 - `cross_app_access_settings` (Attributes) Resource servers this application may request an ID-JAG for. (see [below for nested schema](#nestedatt--settings--oauth--cross_app_access_settings))
 - `default_ac_rvalues` (List of String) Default requested Authentication Context Class Reference values.
 - `default_max_age` (Number) Default maximum authentication age, in seconds.
-- `disable_refresh_token_rotation` (Boolean) Whether a refresh token stays valid when used, instead of being replaced by a new one. Default: false
-- `dpop_bound_access_tokens` (Boolean) Whether access tokens must be bound to a DPoP proof (RFC 9449). Default: false
-- `enhance_scopes_with_user_permissions` (Boolean) Whether the permissions of the user roles are added to the scopes of the issued tokens. Default: false
+- `disable_refresh_token_rotation` (Boolean) Whether a refresh token stays valid when used, instead of being replaced by a new one.
+- `dpop_bound_access_tokens` (Boolean) Whether access tokens must be bound to a DPoP proof (RFC 9449).
+- `enhance_scopes_with_user_permissions` (Boolean) Whether the permissions of the user roles are added to the scopes of the issued tokens.
 - `force_pkce` (Boolean) Whether the authorization code flow requires PKCE. Computed (true) for browser and native applications created without grantTypes, and for user_embedded agents.
 - `force_s256_code_challenge_method` (Boolean) Whether PKCE requires the S256 code challenge method. Computed (true) for browser and native applications created without grantTypes, and for user_embedded agents.
 - `grant_types` (List of String) OAuth 2.0 grant types the application may use. Computed when omitted, from the application type: web authorization_code and password; browser and native authorization_code; service client_credentials; resource_server adds client_credentials; agent per kind (user_embedded authorization_code; hosted_delegated authorization_code, client_credentials and token exchange; autonomous client_credentials and token exchange).
-- `id_jag_validity_seconds` (Number) Validity, in seconds, of the identity assertion authorization grants (ID-JAG) issued to the application. Computed (300) when omitted. Default: 300
+- `id_jag_validity_seconds` (Number) Validity, in seconds, of the identity assertion authorization grants (ID-JAG) issued to the application. Computed (300) when omitted.
 - `id_token_encrypted_response_alg` (String) JWE alg algorithm encrypting the ID tokens issued to the application.
 - `id_token_encrypted_response_enc` (String) JWE enc algorithm encrypting the ID tokens issued to the application.
 - `id_token_signed_response_alg` (String) JWS algorithm signing the ID tokens issued to the application.
-- `id_token_validity_seconds` (Number) ID token validity, in seconds. Computed (14400) when omitted. Default: 14400
+- `id_token_validity_seconds` (Number) ID token validity, in seconds. Computed (14400) when omitted.
 - `initiate_login_uri` (String) URI, using the https scheme, a third party can use to initiate a login by the application.
 - `jwks` (Map of String) JSON Web Key Set of the application passed by value (RFC 7517 section 5): an object with a keys array of JWKs. Same use as jwksUri, which it excludes.
 - `jwks_uri` (String) URL of the application JSON Web Key Set, holding the keys used to verify its signatures. Mutually exclusive with jwks.
 - `lightweight_jwt_settings` (Attributes) Restricts the JWT access token and the ID token returned to the client to the reserved protocol claims and the allowlisted claims. (see [below for nested schema](#nestedatt--settings--oauth--lightweight_jwt_settings))
 - `logo_uri` (String) URL of the application logo, displayed to users.
-- `opt_in_scope_selection` (Boolean) When true, users must explicitly select each scope on the consent page; when false, all requested scopes are preselected and users can deselect them. Computed (true) when omitted. Default: true
+- `opt_in_scope_selection` (Boolean) When true, users must explicitly select each scope on the consent page; when false, all requested scopes are preselected and users can deselect them. Computed (true) when omitted.
 - `policy_uri` (String) URL of the application policy on the use of profile data.
 - `post_logout_redirect_uris` (List of String) URLs the user may be redirected to after logout (post_logout_redirect_uri).
 - `redirect_uris` (List of String) Redirection URIs. The redirect_uri of an authorization request must match one of them. At least one is required for the authorization_code and implicit grants.
-- `refresh_token_validity_seconds` (Number) Refresh token validity, in seconds. Computed (14400) when omitted. Default: 14400
+- `refresh_token_validity_seconds` (Number) Refresh token validity, in seconds. Computed (14400) when omitted.
 - `request_object_encryption_alg` (String) JWE alg algorithm the application may encrypt its request objects with.
 - `request_object_encryption_enc` (String) JWE enc algorithm the application may encrypt its request objects with.
 - `request_object_signing_alg` (String) JWS algorithm the application signs its request objects with.
 - `request_uris` (List of String) request_uri values pre-registered by the application.
-- `require_auth_time` (Boolean) Whether the auth_time claim is required in the ID token. Default: false
+- `require_auth_time` (Boolean) Whether the auth_time claim is required in the ID token.
 - `response_types` (List of String) OAuth 2.0 / OIDC response types the application may use. Computed from grantTypes when omitted: authorization_code adds code, implicit adds token and id_token.
 - `scope_settings` (Attributes List) Scopes the application can request. Each scope must exist in the domain, otherwise the request is rejected with 400. Resource server applications always get the uma_protection scope. (see [below for nested schema](#nestedatt--settings--oauth--scope_settings))
 - `sector_identifier_uri` (String) URL, using the https scheme, used to compute pairwise subject identifiers.
-- `silent_re_authentication` (Boolean) Whether the id_token_hint parameter can be used to re-authenticate the user silently. Default: false
-- `single_sign_out` (Boolean) Whether logout also calls the end_session_endpoint of the external OIDC provider the user authenticated with. Default: false
+- `silent_re_authentication` (Boolean) Whether the id_token_hint parameter can be used to re-authenticate the user silently.
+- `single_sign_out` (Boolean) Whether logout also calls the end_session_endpoint of the external OIDC provider the user authenticated with.
 - `subject_type` (String) Subject identifier type of the responses: public or pairwise.
 - `tls_client_auth_san_dns` (String) Expected dNSName subject alternative name of the client certificate, for the tls_client_auth method.
 - `tls_client_auth_san_email` (String) Expected rfc822Name subject alternative name of the client certificate, for the tls_client_auth method.
 - `tls_client_auth_san_ip` (String) Expected iPAddress subject alternative name of the client certificate, for the tls_client_auth method.
 - `tls_client_auth_san_uri` (String) Expected uniformResourceIdentifier subject alternative name of the client certificate, for the tls_client_auth method.
 - `tls_client_auth_subject_dn` (String) Expected subject distinguished name of the client certificate, for the tls_client_auth method.
-- `tls_client_certificate_bound_access_tokens` (Boolean) Whether access tokens are bound to the client certificate (RFC 8705). Default: false
+- `tls_client_certificate_bound_access_tokens` (Boolean) Whether access tokens are bound to the client certificate (RFC 8705).
 - `token_custom_claims` (Attributes List) Custom claims added to the issued tokens. (see [below for nested schema](#nestedatt--settings--oauth--token_custom_claims))
 - `token_endpoint_auth_method` (String) Client authentication method at the token endpoint: client_secret_basic, client_secret_post, client_secret_jwt, private_key_jwt, tls_client_auth, self_signed_tls_client_auth or none. Computed when omitted: client_secret_basic on creation, none for browser and native applications created without grantTypes, per kind for agents (user_embedded none; hosted_delegated and autonomous private_key_jwt).
 - `token_endpoint_auth_signing_alg` (String) JWS algorithm the application signs its authentication JWT with, for the private_key_jwt and client_secret_jwt methods.
@@ -373,7 +373,7 @@ Read-Only:
 
 Optional:
 
-- `enabled` (Boolean) Whether this application participates in Cross App Access. Default: false
+- `enabled` (Boolean) Whether this application participates in Cross App Access.
 - `resource_servers` (Attributes List) Resource servers this application may reach, one entry per resource server. (see [below for nested schema](#nestedatt--settings--oauth--cross_app_access_settings--resource_servers))
 
 <a id="nestedatt--settings--oauth--cross_app_access_settings--resource_servers"></a>
@@ -394,7 +394,7 @@ Optional:
 
 - `allowed_access_token_claims` (List of String) Claim names kept in the access and refresh tokens in addition to the reserved claims. A listed claim is kept only if AM issues it. Names must be unique, must not have leading or trailing whitespace and must not contain control characters.
 - `allowed_id_token_claims` (List of String) Claim names kept in the ID token in addition to the reserved claims. A listed claim is kept only if AM issues it. Names must be unique, must not have leading or trailing whitespace and must not contain control characters.
-- `enabled` (Boolean) Whether Lightweight JWT is enabled. Default: false
+- `enabled` (Boolean) Whether Lightweight JWT is enabled.
 
 
 <a id="nestedatt--settings--oauth--scope_settings"></a>
@@ -423,8 +423,8 @@ Optional:
 
 Optional:
 
-- `inherited` (Boolean) Whether these settings are inherited from the domain defaults rather than defined here. Default: true
-- `scope_handling` (String) How scopes are handled when issuing the exchanged token. DOWNSCOPING restricts the issued token to a subset of the original scopes. Default: "downscoping"; must be one of ["downscoping", "permissive"]
+- `inherited` (Boolean) Whether these settings are inherited from the domain defaults rather than defined here.
+- `scope_handling` (String) How scopes are handled when issuing the exchanged token. DOWNSCOPING restricts the issued token to a subset of the original scopes. must be one of ["downscoping", "permissive"]
 
 
 <a id="nestedatt--settings--oauth--userinfo_custom_claims"></a>
@@ -443,7 +443,7 @@ Optional:
 Optional:
 
 - `device_assessment` (Attributes) Settings of one risk assessment. (see [below for nested schema](#nestedatt--settings--risk_assessment--device_assessment))
-- `enabled` (Boolean) Whether risk assessment is enabled. Default: false
+- `enabled` (Boolean) Whether risk assessment is enabled.
 - `geo_velocity_assessment` (Attributes) Settings of one risk assessment. (see [below for nested schema](#nestedatt--settings--risk_assessment--geo_velocity_assessment))
 - `ip_reputation_assessment` (Attributes) Settings of one risk assessment. (see [below for nested schema](#nestedatt--settings--risk_assessment--ip_reputation_assessment))
 
@@ -452,7 +452,7 @@ Optional:
 
 Optional:
 
-- `enabled` (Boolean) Whether this assessment is enabled. Default: false
+- `enabled` (Boolean) Whether this assessment is enabled.
 - `thresholds` (Map of Number) Score threshold of each risk level: an assessment scoring at or above a threshold reaches that level.
 
 
@@ -461,7 +461,7 @@ Optional:
 
 Optional:
 
-- `enabled` (Boolean) Whether this assessment is enabled. Default: false
+- `enabled` (Boolean) Whether this assessment is enabled.
 - `thresholds` (Map of Number) Score threshold of each risk level: an assessment scoring at or above a threshold reaches that level.
 
 
@@ -470,7 +470,7 @@ Optional:
 
 Optional:
 
-- `enabled` (Boolean) Whether this assessment is enabled. Default: false
+- `enabled` (Boolean) Whether this assessment is enabled.
 - `thresholds` (Map of Number) Score threshold of each risk level: an assessment scoring at or above a threshold reaches that level.
 
 
@@ -487,16 +487,16 @@ Optional:
 - `certificate` (String) The SP's PEM-encoded public key certificate, used by the IdP to verify SAML requests and, when assertions are encrypted, to wrap the symmetric key. Required when wantAssertionsEncrypted is true.
 - `data_encryption_algorithm` (String) Data encryption algorithm URI of encrypted assertions (XML Encryption EncryptedData).
 - `entity_id` (String) URL or URN that uniquely identifies the SP (the SAML entity ID).
-- `include_assertion_conditions` (Boolean) Whether assertions carry Conditions (validity time bounds and audience restriction), configured by the fields below. Default: false
+- `include_assertion_conditions` (Boolean) Whether assertions carry Conditions (validity time bounds and audience restriction), configured by the fields below.
 - `key_transport_encryption_algorithm` (String) Key transport algorithm URI of encrypted assertions (XML Encryption EncryptedKey).
 - `name_id_mapping` (String) Expression Language expression producing the NameID of the SAML response. When empty, the internal user id is used, or the user's email when the SP requests the email format.
 - `not_before_time_skew_seconds` (Number) Clock skew, in seconds, subtracted from NotBefore.
 - `not_on_or_after_time_skew_seconds` (Number) Clock skew, in seconds, added to NotOnOrAfter.
-- `response_binding` (String) Binding used to send SAML responses to the SP. The default answers with the binding of the initial request. Default: "urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request"
+- `response_binding` (String) Binding used to send SAML responses to the SP. The default answers with the binding of the initial request.
 - `single_logout_service_url` (String) SP endpoint the IdP redirects to after a single logout.
-- `want_assertions_encrypted` (Boolean) Whether the SP requires encrypted SAML assertions. Default: false
-- `want_assertions_signed` (Boolean) Whether the SP requires signed SAML assertions. Default: false
-- `want_response_signed` (Boolean) Whether the SP requires signed SAML responses. Default: true
+- `want_assertions_encrypted` (Boolean) Whether the SP requires encrypted SAML assertions.
+- `want_assertions_signed` (Boolean) Whether the SP requires signed SAML assertions.
+- `want_response_signed` (Boolean) Whether the SP requires signed SAML responses.
 
 <a id="nestedatt--settings--saml--assertion_attributes"></a>
 ### Nested Schema for `settings.saml.assertion_attributes`
@@ -523,7 +523,7 @@ Optional:
 Optional:
 
 - `subject` (String) SPIFFE ID expected in the SVID sub claim, interpreted per subjectMatchMode.
-- `subject_match_mode` (String) How subject is matched against the SVID sub claim. exact (default) requires equality. prefix is only allowed for hosted_delegated or autonomous agent applications: subject must end with / and the SVID sub is accepted when it starts with subject; the full SVID SPIFFE ID then becomes the per-instance act.sub in minted tokens. Default: "exact"; must be one of ["exact", "prefix"]
+- `subject_match_mode` (String) How subject is matched against the SVID sub claim. exact (default) requires equality. prefix is only allowed for hosted_delegated or autonomous agent applications: subject must end with / and the SVID sub is accepted when it starts with subject; the full SVID SPIFFE ID then becomes the per-instance act.sub in minted tokens. must be one of ["exact", "prefix"]
 - `trust_domain` (String) Name of the trusted domain this application authenticates against.
 
 ## Import

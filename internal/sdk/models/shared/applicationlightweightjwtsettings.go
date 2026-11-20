@@ -3,10 +3,6 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // ApplicationLightweightJwtSettings - Restricts the JWT access token and the ID token returned to the client to the reserved protocol claims and the allowlisted claims.
 type ApplicationLightweightJwtSettings struct {
 	// Claim names kept in the access and refresh tokens in addition to the reserved claims. A listed claim is kept only if AM issues it. Names must be unique, must not have leading or trailing whitespace and must not contain control characters.
@@ -14,18 +10,7 @@ type ApplicationLightweightJwtSettings struct {
 	// Claim names kept in the ID token in addition to the reserved claims. A listed claim is kept only if AM issues it. Names must be unique, must not have leading or trailing whitespace and must not contain control characters.
 	AllowedIDTokenClaims []string `json:"allowedIdTokenClaims,omitempty"`
 	// Whether Lightweight JWT is enabled.
-	Enabled *bool `default:"false" json:"enabled"`
-}
-
-func (a ApplicationLightweightJwtSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *ApplicationLightweightJwtSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	Enabled *bool `json:"enabled,omitempty"`
 }
 
 func (a *ApplicationLightweightJwtSettings) GetAllowedAccessTokenClaims() []string {

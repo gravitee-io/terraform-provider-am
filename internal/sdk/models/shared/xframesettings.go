@@ -6,7 +6,6 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 )
 
 // Action - X-Frame-Options action. Omit to leave the header out.
@@ -41,20 +40,9 @@ type XFrameSettings struct {
 	// X-Frame-Options action. Omit to leave the header out.
 	Action *Action `json:"action,omitempty"`
 	// Whether X-Frame-Options is enabled for the domain when not inherited.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Whether X-Frame-Options settings are inherited from the gateway defaults (gravitee.yml). When null, legacy behaviour applies: enabled=true overrides and enabled=false inherits.
-	Inherited *bool `default:"true" json:"inherited"`
-}
-
-func (x XFrameSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(x, "", false)
-}
-
-func (x *XFrameSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &x, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	Inherited *bool `json:"inherited,omitempty"`
 }
 
 func (x *XFrameSettings) GetAction() *Action {

@@ -6,7 +6,6 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 )
 
 // AutomationChallengeSettingsType - required: always challenge. conditional: challenge unless challengeRule evaluates to true. risk_based: challenge according to the risk assessment.
@@ -42,22 +41,11 @@ func (e *AutomationChallengeSettingsType) UnmarshalJSON(data []byte) error {
 // AutomationChallengeSettings - When users are challenged for a second factor.
 type AutomationChallengeSettings struct {
 	// Whether users are challenged for a second factor.
-	Active *bool `default:"false" json:"active"`
+	Active *bool `json:"active,omitempty"`
 	// Expression Language rule of a conditional challenge: when it evaluates to true, the challenge is skipped.
 	ChallengeRule *string `json:"challengeRule,omitempty"`
 	// required: always challenge. conditional: challenge unless challengeRule evaluates to true. risk_based: challenge according to the risk assessment.
 	Type *AutomationChallengeSettingsType `json:"type,omitempty"`
-}
-
-func (a AutomationChallengeSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationChallengeSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationChallengeSettings) GetActive() *bool {

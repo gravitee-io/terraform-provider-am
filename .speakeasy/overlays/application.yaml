@@ -105,13 +105,11 @@ actions:
   - target: $.paths["/organizations/{orgId}/environments/{envId}/domains/{domainKey}/applications"].put.responses["409"]
     remove: true
 
-  # AM computes these from type and kind when omitted: a static default would send false and override it.
-  # Server-derived settings stay plain computed (no suppress-diff). On a type or kind change, the update
-  # omits the undeclared ones (omitUndeclaredDerivedOAuthSettings, internal/provider/application_type_change.go)
+  # AM computes forcePKCE and forceS256CodeChallengeMethod from type and kind when omitted (their defaults
+  # go with the other nested settings', in common/schema.yaml). Server-derived settings stay plain computed
+  # (no suppress-diff). On a type or kind change, the update omits the undeclared ones
+  # (omitUndeclaredDerivedOAuthSettings, internal/provider/application_type_change.go)
   # so AM recomputes them instead of receiving the previous type's values from the state.
-  - target: $.components.schemas.AutomationApplicationOAuthSettings.properties["forcePKCE","forceS256CodeChallengeMethod"].default
-    remove: true
-
   # The OAS says browser only; AM master computes it for native applications too.
   - target: $.components.schemas.AutomationApplicationOAuthSettings.properties.forceS256CodeChallengeMethod
     update:

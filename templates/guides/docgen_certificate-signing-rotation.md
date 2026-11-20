@@ -36,7 +36,7 @@ resource "am_domain" "accounts" {
 
   # Signs the tokens of the applications that name no certificate.
   certificate_settings = {
-    fallback_certificate = local.signing_certificate
+    fallback_certificate = local.signing_certificate_key
   }
 }
 
@@ -99,9 +99,12 @@ variable "key_2026_password" {
 The certificate in use, in `current-certificate.tf`:
 
 ```terraform
-# The certificate signing the tokens, named by its key: the domain and the applications follow it.
+# The certificate signing the tokens: the domain and the applications follow it.
 locals {
-  signing_certificate = "signing-2026"
+  # The domain names it by key: the certificate lives in the domain, so the domain cannot wait for it.
+  signing_certificate_key = "signing-2026"
+  # The applications reference it, so Terraform deletes them before the certificate.
+  signing_certificate = am_certificate.signing_2026.key
 }
 
 ```
@@ -156,9 +159,12 @@ variable "key_2027_password" {
 2. Name it in `current-certificate.tf`, and apply: the domain and the application sign with it.
 
 ```terraform
-# The certificate signing the tokens, named by its key: the domain and the applications follow it.
+# The certificate signing the tokens: the domain and the applications follow it.
 locals {
-  signing_certificate = "signing-2027"
+  # The domain names it by key: the certificate lives in the domain, so the domain cannot wait for it.
+  signing_certificate_key = "signing-2027"
+  # The applications reference it, so Terraform deletes them before the certificate.
+  signing_certificate = am_certificate.signing_2027.key
 }
 
 ```
@@ -173,10 +179,12 @@ resource servers verify the tokens signed by either.
 
 ## How it differs from the console
 
-* The domain and the applications name a certificate by its key, as a plain string here so that one local value
-  switches them all. AM does not check the reference: it resolves whenever a certificate with that key exists.
-* AM does not stop you from deleting a certificate that the domain or an application still names: their
-  reference stays, and resolves again once a certificate with that key exists. Switch them first, as in step 2.
+* The domain and the applications name a certificate by its key, and `current-certificate.tf` switches them all.
+  The domain names it with a plain string: the certificate lives in the domain, so the domain cannot wait for it.
+  AM does not check the domain's reference: it resolves whenever a certificate with that key exists.
+* The applications reference the certificate resource, so Terraform creates the certificate before them and
+  deletes them before it. AM refuses to delete a certificate that an application still uses: switch the
+  applications first, as in step 2.
 * Give each keystore its own alias: AM uses the alias as the `kid` of the tokens and of the keys in the JWKS.
   With both keystores under `signing`, the JWKS publishes two keys under one `kid` until step 3, and a resource
   server that picks the key by `kid` can verify a token against the wrong key and reject it.

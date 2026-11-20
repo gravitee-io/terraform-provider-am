@@ -6,7 +6,6 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 )
 
 // ScopeHandling - How scopes are handled when issuing the exchanged token. DOWNSCOPING restricts the issued token to a subset of the original scopes.
@@ -39,20 +38,9 @@ func (e *ScopeHandling) UnmarshalJSON(data []byte) error {
 // TokenExchangeOAuthSettings - OAuth-specific token-exchange behavior, such as how scopes are handled, with optional inheritance from domain defaults.
 type TokenExchangeOAuthSettings struct {
 	// Whether these settings are inherited from the domain defaults rather than defined here.
-	Inherited *bool `default:"true" json:"inherited"`
+	Inherited *bool `json:"inherited,omitempty"`
 	// How scopes are handled when issuing the exchanged token. DOWNSCOPING restricts the issued token to a subset of the original scopes.
-	ScopeHandling *ScopeHandling `default:"downscoping" json:"scopeHandling"`
-}
-
-func (t TokenExchangeOAuthSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(t, "", false)
-}
-
-func (t *TokenExchangeOAuthSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	ScopeHandling *ScopeHandling `json:"scopeHandling,omitempty"`
 }
 
 func (t *TokenExchangeOAuthSettings) GetInherited() *bool {

@@ -3,10 +3,6 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationOidcSettings - OpenID Connect settings for the domain. CIMD (client identity metadata document) settings are not exposed by the Automation API and are reset on update.
 type AutomationOidcSettings struct {
 	// Client-Initiated Backchannel Authentication (CIBA) settings for the domain. CIBA lets a relying party initiate end-user authentication from a separate consumption device, without redirecting the user through the browser. Authentication device notifiers are not managed by the Automation API and are not exposed here.
@@ -16,24 +12,13 @@ type AutomationOidcSettings struct {
 	// URLs the user may be redirected to after sign-out (post_logout_redirect_uri).
 	PostLogoutRedirectUris []string `json:"postLogoutRedirectUris,omitempty"`
 	// Whether redirect_uri and post_logout_redirect_uri values are matched strictly during OpenID Connect flows.
-	RedirectURIStrictMatching *bool `default:"false" json:"redirectUriStrictMatching"`
+	RedirectURIStrictMatching *bool `json:"redirectUriStrictMatching,omitempty"`
 	// Allowed request_uri values for passing OpenID Connect request objects by reference.
 	RequestUris []string `json:"requestUris,omitempty"`
 	// Financial-grade API (FAPI) security profile configuration for the domain.
 	SecurityProfileSettings *SecurityProfileSettings `json:"securityProfileSettings,omitempty"`
 	// Workload identity (SPIFFE) settings for the domain.
 	WorkloadIdentitySettings *SpiffeDomainSettings `json:"workloadIdentitySettings,omitempty"`
-}
-
-func (a AutomationOidcSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationOidcSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationOidcSettings) GetCibaSettings() *AutomationCIBASettings {

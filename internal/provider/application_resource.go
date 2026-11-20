@@ -25,7 +25,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -214,20 +213,17 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"auto_login_after_registration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether the user is automatically logged in after completing registration. Default: false`,
+								Description: `Whether the user is automatically logged in after completing registration.`,
 							},
 							"auto_login_after_reset_password": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether the user is automatically logged in after a password reset. Default: false`,
+								Description: `Whether the user is automatically logged in after a password reset.`,
 							},
 							"complete_registration_when_reset_password": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether resetting a password also completes a pending registration. Default: false`,
+								Description: `Whether resetting a password also completes a pending registration.`,
 							},
 							"default_identity_provider_for_registration": schema.StringAttribute{
 								Computed:    true,
@@ -237,26 +233,22 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"delete_passwordless_devices_after_reset_password": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether passwordless (WebAuthn) devices are deleted when the password is reset. Default: false`,
+								Description: `Whether passwordless (WebAuthn) devices are deleted when the password is reset.`,
 							},
 							"dynamic_user_registration": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether dynamic (self-service) user registration is enabled. Default: false`,
+								Description: `Whether dynamic (self-service) user registration is enabled.`,
 							},
 							"inherited": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains. Default: true`,
+								Description: `Whether account settings are inherited from the parent (domain). When true, the other fields are ignored. Has no effect when applied to domains.`,
 							},
 							"login_attempts_detection_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether brute-force authentication attempts are detected and blocked. Default: false`,
+								Description: `Whether brute-force authentication attempts are detected and blocked.`,
 							},
 							"login_attempts_reset_time": schema.Int32Attribute{
 								Computed:    true,
@@ -271,8 +263,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"mfa_challenge_attempts_detection_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether failed MFA challenge attempts are detected and blocked. Default: false`,
+								Description: `Whether failed MFA challenge attempts are detected and blocked.`,
 							},
 							"mfa_challenge_attempts_reset_time": schema.Int32Attribute{
 								Computed:    true,
@@ -287,8 +278,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"mfa_challenge_send_verify_alert_email": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether to send an alert email after too many failed MFA challenge attempts. Default: false`,
+								Description: `Whether to send an alert email after too many failed MFA challenge attempts.`,
 							},
 							"redirect_uri_after_registration": schema.StringAttribute{
 								Computed:    true,
@@ -303,8 +293,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"remember_me": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether users can remain logged in for a fixed duration (remember-me). Default: false`,
+								Description: `Whether users can remain logged in for a fixed duration (remember-me).`,
 							},
 							"remember_me_duration": schema.Int32Attribute{
 								Computed:    true,
@@ -314,14 +303,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"reset_password_confirm_identity": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether the user must confirm their identity before resetting a password. Default: false`,
+								Description: `Whether the user must confirm their identity before resetting a password.`,
 							},
 							"reset_password_custom_form": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether a custom form is used for the password-reset step. Default: false`,
+								Description: `Whether a custom form is used for the password-reset step.`,
 							},
 							"reset_password_custom_form_fields": schema.ListNestedAttribute{
 								Computed: true,
@@ -353,20 +340,17 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"reset_password_invalidate_tokens": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether existing tokens are invalidated when the password is reset. Default: false`,
+								Description: `Whether existing tokens are invalidated when the password is reset.`,
 							},
 							"send_recover_account_email": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether to send an account-recovery email. Default: false`,
+								Description: `Whether to send an account-recovery email.`,
 							},
 							"send_verify_registration_account_email": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether to send a registration-verification email. Default: false`,
+								Description: `Whether to send a registration-verification email.`,
 							},
 						},
 						Description: `User account settings for the domain: brute-force protection, registration, password reset, remember-me, and MFA challenge behavior.`,
@@ -378,14 +362,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"flows_inherited": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Whether the domain flows are executed for this application in addition to its own flows. Default: true`,
+								Description: `Whether the domain flows are executed for this application in addition to its own flows.`,
 							},
 							"skip_consent": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether the user consent page is skipped: requested scopes are granted without asking the user. Default: false`,
+								Description: `Whether the user consent page is skipped: requested scopes are granted without asking the user.`,
 							},
 						},
 						Description: `Advanced application settings.`,
@@ -397,8 +379,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"inherited": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Whether the cookie settings are inherited from the domain. When true, the other fields are ignored. Default: true`,
+								Description: `Whether the cookie settings are inherited from the domain. When true, the other fields are ignored.`,
 							},
 							"session": schema.SingleNestedAttribute{
 								Computed: true,
@@ -407,8 +388,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"persistent": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Whether the session cookie is persistent (kept after the browser is closed) rather than a session cookie. Default: false`,
+										Description: `Whether the session cookie is persistent (kept after the browser is closed) rather than a session cookie.`,
 									},
 								},
 								Description: `Session cookie settings.`,
@@ -423,8 +403,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"certificate_based_auth_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether certificate-based authentication is offered. Default: false`,
+								Description: `Whether certificate-based authentication is offered.`,
 							},
 							"certificate_based_auth_url": schema.StringAttribute{
 								Computed:    true,
@@ -434,50 +413,42 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"forgot_password_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether users can initiate a forgot-password flow from the login page. Default: false`,
+								Description: `Whether users can initiate a forgot-password flow from the login page.`,
 							},
 							"hide_form": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether the login form is hidden (for example when only social or identifier-first login is offered). Default: false`,
+								Description: `Whether the login form is hidden (for example when only social or identifier-first login is offered).`,
 							},
 							"identifier_first_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether identifier-first login is enabled, prompting for the username before the password. Default: false`,
+								Description: `Whether identifier-first login is enabled, prompting for the username before the password.`,
 							},
 							"inherited": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Whether these login settings are inherited from a parent scope rather than defined here. When true, the other fields are ignored. Default: true`,
+								Description: `Whether these login settings are inherited from a parent scope rather than defined here. When true, the other fields are ignored.`,
 							},
 							"magic_link_auth_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether magic-link authentication is offered. Default: false`,
+								Description: `Whether magic-link authentication is offered.`,
 							},
 							"passwordless_device_naming_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether users can name their passwordless devices. Default: false`,
+								Description: `Whether users can name their passwordless devices.`,
 							},
 							"passwordless_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether passwordless (WebAuthn) authentication is offered. Default: false`,
+								Description: `Whether passwordless (WebAuthn) authentication is offered.`,
 							},
 							"passwordless_enforce_password_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether a password is still required alongside passwordless authentication. Default: false`,
+								Description: `Whether a password is still required alongside passwordless authentication.`,
 							},
 							"passwordless_enforce_password_max_age": schema.Int32Attribute{
 								Computed:    true,
@@ -487,20 +458,17 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"passwordless_remember_device_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether a passwordless device can be remembered to skip future challenges. Default: false`,
+								Description: `Whether a passwordless device can be remembered to skip future challenges.`,
 							},
 							"register_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether users can self-register from the login page. Default: false`,
+								Description: `Whether users can self-register from the login page.`,
 							},
 							"remember_me_enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether the login page offers a remember-me option. Default: false`,
+								Description: `Whether the login page offers a remember-me option.`,
 							},
 							"reset_password_on_expiration": schema.BoolAttribute{
 								Computed:    true,
@@ -527,8 +495,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"active": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Whether users are challenged for a second factor. Default: false`,
+										Description: `Whether users are challenged for a second factor.`,
 									},
 									"challenge_rule": schema.StringAttribute{
 										Computed:    true,
@@ -557,8 +524,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"active": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Whether users are asked to enroll a factor. Default: false`,
+										Description: `Whether users are asked to enroll a factor.`,
 									},
 									"enrollment_rule": schema.StringAttribute{
 										Computed:    true,
@@ -568,8 +534,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"enrollment_skip_active": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Whether users can skip the enrollment. Default: false`,
+										Description: `Whether users can skip the enrollment.`,
 									},
 									"enrollment_skip_rule": schema.StringAttribute{
 										Computed:    true,
@@ -668,8 +633,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"active": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Whether remember device is enabled. Default: false`,
+										Description: `Whether remember device is enabled.`,
 									},
 									"device_identifier_id": schema.StringAttribute{
 										Computed:    true,
@@ -684,8 +648,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"skip_remember_device": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Only used with a conditional MFA challenge: when true, remember device is not applied when the MFA condition evaluates to no risk. Default: false`,
+										Description: `Only used with a conditional MFA challenge: when true, remember device is not applied when the MFA condition evaluates to no risk.`,
 									},
 								},
 								Description: `Remember device: skips the MFA challenge on a device already used to authenticate.`,
@@ -697,8 +660,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"active": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Whether step-up authentication is enabled. Default: false`,
+										Description: `Whether step-up authentication is enabled.`,
 									},
 									"step_up_authentication_rule": schema.StringAttribute{
 										Computed:    true,
@@ -724,8 +686,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"access_token_validity_seconds": schema.Int32Attribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     int32default.StaticInt32(7200),
-								Description: `Access token validity, in seconds. Computed (7200) when omitted. Default: 7200`,
+								Description: `Access token validity, in seconds. Computed (7200) when omitted.`,
 							},
 							"application_type": schema.StringAttribute{
 								Computed:    true,
@@ -772,8 +733,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Whether this application participates in Cross App Access. Default: false`,
+										Description: `Whether this application participates in Cross App Access.`,
 									},
 									"resource_servers": schema.ListNestedAttribute{
 										Computed: true,
@@ -822,20 +782,17 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"disable_refresh_token_rotation": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether a refresh token stays valid when used, instead of being replaced by a new one. Default: false`,
+								Description: `Whether a refresh token stays valid when used, instead of being replaced by a new one.`,
 							},
 							"dpop_bound_access_tokens": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether access tokens must be bound to a DPoP proof (RFC 9449). Default: false`,
+								Description: `Whether access tokens must be bound to a DPoP proof (RFC 9449).`,
 							},
 							"enhance_scopes_with_user_permissions": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether the permissions of the user roles are added to the scopes of the issued tokens. Default: false`,
+								Description: `Whether the permissions of the user roles are added to the scopes of the issued tokens.`,
 							},
 							"force_pkce": schema.BoolAttribute{
 								Computed:    true,
@@ -856,8 +813,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"id_jag_validity_seconds": schema.Int32Attribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     int32default.StaticInt32(300),
-								Description: `Validity, in seconds, of the identity assertion authorization grants (ID-JAG) issued to the application. Computed (300) when omitted. Default: 300`,
+								Description: `Validity, in seconds, of the identity assertion authorization grants (ID-JAG) issued to the application. Computed (300) when omitted.`,
 							},
 							"id_token_encrypted_response_alg": schema.StringAttribute{
 								Computed:    true,
@@ -877,8 +833,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"id_token_validity_seconds": schema.Int32Attribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     int32default.StaticInt32(14400),
-								Description: `ID token validity, in seconds. Computed (14400) when omitted. Default: 14400`,
+								Description: `ID token validity, in seconds. Computed (14400) when omitted.`,
 							},
 							"initiate_login_uri": schema.StringAttribute{
 								Computed:    true,
@@ -924,8 +879,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Whether Lightweight JWT is enabled. Default: false`,
+										Description: `Whether Lightweight JWT is enabled.`,
 									},
 								},
 								Description: `Restricts the JWT access token and the ID token returned to the client to the reserved protocol claims and the allowlisted claims.`,
@@ -938,8 +892,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"opt_in_scope_selection": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `When true, users must explicitly select each scope on the consent page; when false, all requested scopes are preselected and users can deselect them. Computed (true) when omitted. Default: true`,
+								Description: `When true, users must explicitly select each scope on the consent page; when false, all requested scopes are preselected and users can deselect them. Computed (true) when omitted.`,
 							},
 							"policy_uri": schema.StringAttribute{
 								Computed:    true,
@@ -961,8 +914,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"refresh_token_validity_seconds": schema.Int32Attribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     int32default.StaticInt32(14400),
-								Description: `Refresh token validity, in seconds. Computed (14400) when omitted. Default: 14400`,
+								Description: `Refresh token validity, in seconds. Computed (14400) when omitted.`,
 							},
 							"request_object_encryption_alg": schema.StringAttribute{
 								Computed:    true,
@@ -988,8 +940,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"require_auth_time": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether the auth_time claim is required in the ID token. Default: false`,
+								Description: `Whether the auth_time claim is required in the ID token.`,
 							},
 							"response_types": schema.ListAttribute{
 								Computed:    true,
@@ -1008,14 +959,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 										"default_scope": schema.BoolAttribute{
 											Computed:    true,
 											Optional:    true,
-											Default:     booldefault.StaticBool(false),
-											Description: `Whether the scope is granted when the authorization request carries no scope parameter. Default: false`,
+											Description: `Whether the scope is granted when the authorization request carries no scope parameter.`,
 										},
 										"required_scope": schema.BoolAttribute{
 											Computed:    true,
 											Optional:    true,
-											Default:     booldefault.StaticBool(false),
-											Description: `Whether the user cannot deselect this scope on the consent page. Default: false`,
+											Description: `Whether the user cannot deselect this scope on the consent page.`,
 										},
 										"scope": schema.StringAttribute{
 											Computed:    true,
@@ -1042,14 +991,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"silent_re_authentication": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether the id_token_hint parameter can be used to re-authenticate the user silently. Default: false`,
+								Description: `Whether the id_token_hint parameter can be used to re-authenticate the user silently.`,
 							},
 							"single_sign_out": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether logout also calls the end_session_endpoint of the external OIDC provider the user authenticated with. Default: false`,
+								Description: `Whether logout also calls the end_session_endpoint of the external OIDC provider the user authenticated with.`,
 							},
 							"subject_type": schema.StringAttribute{
 								Computed:    true,
@@ -1084,8 +1031,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"tls_client_certificate_bound_access_tokens": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether access tokens are bound to the client certificate (RFC 8705). Default: false`,
+								Description: `Whether access tokens are bound to the client certificate (RFC 8705).`,
 							},
 							"token_custom_claims": schema.ListNestedAttribute{
 								Computed: true,
@@ -1146,14 +1092,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"inherited": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(true),
-										Description: `Whether these settings are inherited from the domain defaults rather than defined here. Default: true`,
+										Description: `Whether these settings are inherited from the domain defaults rather than defined here.`,
 									},
 									"scope_handling": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     stringdefault.StaticString(`downscoping`),
-										Description: `How scopes are handled when issuing the exchanged token. DOWNSCOPING restricts the issued token to a subset of the original scopes. Default: "downscoping"; must be one of ["downscoping", "permissive"]`,
+										Description: `How scopes are handled when issuing the exchanged token. DOWNSCOPING restricts the issued token to a subset of the original scopes. must be one of ["downscoping", "permissive"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"downscoping",
@@ -1226,8 +1170,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Whether this assessment is enabled. Default: false`,
+										Description: `Whether this assessment is enabled.`,
 									},
 									"thresholds": schema.MapAttribute{
 										Computed:    true,
@@ -1241,8 +1184,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"enabled": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether risk assessment is enabled. Default: false`,
+								Description: `Whether risk assessment is enabled.`,
 							},
 							"geo_velocity_assessment": schema.SingleNestedAttribute{
 								Computed: true,
@@ -1251,8 +1193,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Whether this assessment is enabled. Default: false`,
+										Description: `Whether this assessment is enabled.`,
 									},
 									"thresholds": schema.MapAttribute{
 										Computed:    true,
@@ -1270,8 +1211,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Whether this assessment is enabled. Default: false`,
+										Description: `Whether this assessment is enabled.`,
 									},
 									"thresholds": schema.MapAttribute{
 										Computed:    true,
@@ -1351,8 +1291,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"include_assertion_conditions": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether assertions carry Conditions (validity time bounds and audience restriction), configured by the fields below. Default: false`,
+								Description: `Whether assertions carry Conditions (validity time bounds and audience restriction), configured by the fields below.`,
 							},
 							"key_transport_encryption_algorithm": schema.StringAttribute{
 								Computed:    true,
@@ -1377,8 +1316,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"response_binding": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     stringdefault.StaticString(`urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request`),
-								Description: `Binding used to send SAML responses to the SP. The default answers with the binding of the initial request. Default: "urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request"`,
+								Description: `Binding used to send SAML responses to the SP. The default answers with the binding of the initial request.`,
 							},
 							"single_logout_service_url": schema.StringAttribute{
 								Computed:    true,
@@ -1388,20 +1326,17 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"want_assertions_encrypted": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether the SP requires encrypted SAML assertions. Default: false`,
+								Description: `Whether the SP requires encrypted SAML assertions.`,
 							},
 							"want_assertions_signed": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `Whether the SP requires signed SAML assertions. Default: false`,
+								Description: `Whether the SP requires signed SAML assertions.`,
 							},
 							"want_response_signed": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(true),
-								Description: `Whether the SP requires signed SAML responses. Default: true`,
+								Description: `Whether the SP requires signed SAML responses.`,
 							},
 						},
 						Description: `Settings of the application acting as a SAML 2.0 service provider (SP).`,
@@ -1435,8 +1370,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"subject_match_mode": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Default:     stringdefault.StaticString(`exact`),
-								Description: `How subject is matched against the SVID sub claim. exact (default) requires equality. prefix is only allowed for hosted_delegated or autonomous agent applications: subject must end with / and the SVID sub is accepted when it starts with subject; the full SVID SPIFFE ID then becomes the per-instance act.sub in minted tokens. Default: "exact"; must be one of ["exact", "prefix"]`,
+								Description: `How subject is matched against the SVID sub claim. exact (default) requires equality. prefix is only allowed for hosted_delegated or autonomous agent applications: subject must end with / and the SVID sub is accepted when it starts with subject; the full SVID SPIFFE ID then becomes the per-instance act.sub in minted tokens. must be one of ["exact", "prefix"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
 										"exact",

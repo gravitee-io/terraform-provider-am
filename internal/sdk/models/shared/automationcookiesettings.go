@@ -3,27 +3,12 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationCookieSettings - Session cookie settings of the application.
 type AutomationCookieSettings struct {
 	// Whether the cookie settings are inherited from the domain. When true, the other fields are ignored.
-	Inherited *bool `default:"true" json:"inherited"`
+	Inherited *bool `json:"inherited,omitempty"`
 	// Session cookie settings.
 	Session *AutomationSessionSettings `json:"session,omitempty"`
-}
-
-func (a AutomationCookieSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationCookieSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationCookieSettings) GetInherited() *bool {

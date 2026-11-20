@@ -3,35 +3,20 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // KeyRetrievalSettings - Fetch, SSRF and cache limits applied to every trusted domain in the security domain.
 type KeyRetrievalSettings struct {
 	// Whether key material can be fetched from private IP addresses.
-	AllowPrivateIPAddress *bool `default:"false" json:"allowPrivateIpAddress"`
+	AllowPrivateIPAddress *bool `json:"allowPrivateIpAddress,omitempty"`
 	// Whether key material can be fetched over unsecured HTTP URIs.
-	AllowUnsecuredHTTPURI *bool `default:"false" json:"allowUnsecuredHttpUri"`
+	AllowUnsecuredHTTPURI *bool `json:"allowUnsecuredHttpUri,omitempty"`
 	// Maximum number of key material entries retained in the cache.
-	CacheMaxEntries *int `default:"50" json:"cacheMaxEntries"`
+	CacheMaxEntries *int `json:"cacheMaxEntries,omitempty"`
 	// Time-to-live, in seconds, for cached key material.
-	CacheTTLSeconds *int `default:"300" json:"cacheTtlSeconds"`
+	CacheTTLSeconds *int `json:"cacheTtlSeconds,omitempty"`
 	// Timeout, in milliseconds, for fetching key material.
-	FetchTimeoutMs *int `default:"5000" json:"fetchTimeoutMs"`
+	FetchTimeoutMs *int `json:"fetchTimeoutMs,omitempty"`
 	// Maximum key material response size, in kilobytes.
-	MaxResponseSizeKb *int `default:"32" json:"maxResponseSizeKb"`
-}
-
-func (k KeyRetrievalSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(k, "", false)
-}
-
-func (k *KeyRetrievalSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	MaxResponseSizeKb *int `json:"maxResponseSizeKb,omitempty"`
 }
 
 func (k *KeyRetrievalSettings) GetAllowPrivateIPAddress() *bool {

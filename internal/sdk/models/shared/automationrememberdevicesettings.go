@@ -3,31 +3,16 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationRememberDeviceSettings - Remember device: skips the MFA challenge on a device already used to authenticate.
 type AutomationRememberDeviceSettings struct {
 	// Whether remember device is enabled.
-	Active *bool `default:"false" json:"active"`
+	Active *bool `json:"active,omitempty"`
 	// Device identifier used to recognize devices, as id:<uuid> (device identifiers have no Automation API endpoint).
 	DeviceIdentifierID *string `json:"deviceIdentifierId,omitempty"`
 	// Duration, in seconds, for which a device is remembered.
 	ExpirationTimeSeconds *int64 `json:"expirationTimeSeconds,omitempty"`
 	// Only used with a conditional MFA challenge: when true, remember device is not applied when the MFA condition evaluates to no risk.
-	SkipRememberDevice *bool `default:"false" json:"skipRememberDevice"`
-}
-
-func (a AutomationRememberDeviceSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationRememberDeviceSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	SkipRememberDevice *bool `json:"skipRememberDevice,omitempty"`
 }
 
 func (a *AutomationRememberDeviceSettings) GetActive() *bool {

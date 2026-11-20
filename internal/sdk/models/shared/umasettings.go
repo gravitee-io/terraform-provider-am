@@ -3,25 +3,10 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // UMASettings - Configuration of the domain's User-Managed Access (UMA 2.0) authorization features.
 type UMASettings struct {
 	// Whether User-Managed Access is enabled for the domain.
-	Enabled *bool `default:"false" json:"enabled"`
-}
-
-func (u UMASettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(u, "", false)
-}
-
-func (u *UMASettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	Enabled *bool `json:"enabled,omitempty"`
 }
 
 func (u *UMASettings) GetEnabled() *bool {

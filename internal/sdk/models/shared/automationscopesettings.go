@@ -3,31 +3,16 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationScopeSettings - A scope the application can request, with its settings.
 type AutomationScopeSettings struct {
 	// Whether the scope is granted when the authorization request carries no scope parameter.
-	DefaultScope *bool `default:"false" json:"defaultScope"`
+	DefaultScope *bool `json:"defaultScope,omitempty"`
 	// Whether the user cannot deselect this scope on the consent page.
-	RequiredScope *bool `default:"false" json:"requiredScope"`
+	RequiredScope *bool `json:"requiredScope,omitempty"`
 	// Key of a scope of the domain. The scope must exist, otherwise the request is rejected with 400.
 	Scope string `json:"scope"`
 	// Duration, in seconds, of the user consent to this scope. When absent, the domain scope setting applies.
 	ScopeApproval *int `json:"scopeApproval,omitempty"`
-}
-
-func (a AutomationScopeSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationScopeSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationScopeSettings) GetDefaultScope() *bool {

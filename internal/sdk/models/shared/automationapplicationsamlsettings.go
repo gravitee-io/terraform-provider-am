@@ -3,10 +3,6 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationApplicationSAMLSettings - Settings of the application acting as a SAML 2.0 service provider (SP).
 type AutomationApplicationSAMLSettings struct {
 	// Custom attributes of the SAML assertion. When not empty, they replace the default attribute set.
@@ -24,7 +20,7 @@ type AutomationApplicationSAMLSettings struct {
 	// URL or URN that uniquely identifies the SP (the SAML entity ID).
 	EntityID *string `json:"entityId,omitempty"`
 	// Whether assertions carry Conditions (validity time bounds and audience restriction), configured by the fields below.
-	IncludeAssertionConditions *bool `default:"false" json:"includeAssertionConditions"`
+	IncludeAssertionConditions *bool `json:"includeAssertionConditions,omitempty"`
 	// Key transport algorithm URI of encrypted assertions (XML Encryption EncryptedKey).
 	KeyTransportEncryptionAlgorithm *string `json:"keyTransportEncryptionAlgorithm,omitempty"`
 	// Expression Language expression producing the NameID of the SAML response. When empty, the internal user id is used, or the user's email when the SP requests the email format.
@@ -34,26 +30,15 @@ type AutomationApplicationSAMLSettings struct {
 	// Clock skew, in seconds, added to NotOnOrAfter.
 	NotOnOrAfterTimeSkewSeconds *int `json:"notOnOrAfterTimeSkewSeconds,omitempty"`
 	// Binding used to send SAML responses to the SP. The default answers with the binding of the initial request.
-	ResponseBinding *string `default:"urn:oasis:names:tc:SAML:2.0:bindings:custom:Initial-Request" json:"responseBinding"`
+	ResponseBinding *string `json:"responseBinding,omitempty"`
 	// SP endpoint the IdP redirects to after a single logout.
 	SingleLogoutServiceURL *string `json:"singleLogoutServiceUrl,omitempty"`
 	// Whether the SP requires encrypted SAML assertions.
-	WantAssertionsEncrypted *bool `default:"false" json:"wantAssertionsEncrypted"`
+	WantAssertionsEncrypted *bool `json:"wantAssertionsEncrypted,omitempty"`
 	// Whether the SP requires signed SAML assertions.
-	WantAssertionsSigned *bool `default:"false" json:"wantAssertionsSigned"`
+	WantAssertionsSigned *bool `json:"wantAssertionsSigned,omitempty"`
 	// Whether the SP requires signed SAML responses.
-	WantResponseSigned *bool `default:"true" json:"wantResponseSigned"`
-}
-
-func (a AutomationApplicationSAMLSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationApplicationSAMLSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	WantResponseSigned *bool `json:"wantResponseSigned,omitempty"`
 }
 
 func (a *AutomationApplicationSAMLSettings) GetAssertionAttributes() []AutomationSamlAssertionAttribute {

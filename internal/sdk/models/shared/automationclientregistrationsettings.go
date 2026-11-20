@@ -3,43 +3,28 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationClientRegistrationSettings - OpenID Connect Dynamic Client Registration configuration for the domain.
 type AutomationClientRegistrationSettings struct {
 	// Whether the unsecured http scheme is permitted in redirect URIs.
-	AllowHTTPSchemeRedirectURI *bool `default:"false" json:"allowHttpSchemeRedirectUri"`
+	AllowHTTPSchemeRedirectURI *bool `json:"allowHttpSchemeRedirectUri,omitempty"`
 	// Whether localhost is permitted as a redirect URI host.
-	AllowLocalhostRedirectURI *bool `default:"false" json:"allowLocalhostRedirectUri"`
+	AllowLocalhostRedirectURI *bool `json:"allowLocalhostRedirectUri,omitempty"`
 	// Whether expression language is permitted in redirect URI parameters.
-	AllowRedirectURIParamsExpressionLanguage *bool `default:"false" json:"allowRedirectUriParamsExpressionLanguage"`
+	AllowRedirectURIParamsExpressionLanguage *bool `json:"allowRedirectUriParamsExpressionLanguage,omitempty"`
 	// Whether wildcards are permitted in redirect URIs.
-	AllowWildCardRedirectURI *bool `default:"false" json:"allowWildCardRedirectUri"`
+	AllowWildCardRedirectURI *bool `json:"allowWildCardRedirectUri,omitempty"`
 	// Scopes permitted on client registration requests when the allowed list is enabled.
 	AllowedScopes []string `json:"allowedScopes,omitempty"`
 	// Whether registered client scopes are restricted to an allowed list.
-	AllowedScopesEnabled *bool `default:"false" json:"allowedScopesEnabled"`
+	AllowedScopesEnabled *bool `json:"allowedScopesEnabled,omitempty"`
 	// Whether a client may be used as a template for dynamic client registration.
-	ClientTemplateEnabled *bool `default:"false" json:"clientTemplateEnabled"`
+	ClientTemplateEnabled *bool `json:"clientTemplateEnabled,omitempty"`
 	// Default scopes added to every client registration request.
 	DefaultScopes []string `json:"defaultScopes,omitempty"`
 	// Whether Dynamic Client Registration is enabled for the domain.
-	DynamicClientRegistrationEnabled *bool `default:"false" json:"dynamicClientRegistrationEnabled"`
+	DynamicClientRegistrationEnabled *bool `json:"dynamicClientRegistrationEnabled,omitempty"`
 	// Whether open (unauthenticated) Dynamic Client Registration is enabled for the domain.
-	OpenDynamicClientRegistrationEnabled *bool `default:"false" json:"openDynamicClientRegistrationEnabled"`
-}
-
-func (a AutomationClientRegistrationSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationClientRegistrationSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	OpenDynamicClientRegistrationEnabled *bool `json:"openDynamicClientRegistrationEnabled,omitempty"`
 }
 
 func (a *AutomationClientRegistrationSettings) GetAllowHTTPSchemeRedirectURI() *bool {

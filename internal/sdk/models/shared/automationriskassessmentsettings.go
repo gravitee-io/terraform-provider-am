@@ -3,31 +3,16 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationRiskAssessmentSettings - Risk assessment of the authentication attempts, used by risk-based MFA. Effective only with the Enterprise Edition risk assessment plugin.
 type AutomationRiskAssessmentSettings struct {
 	// Settings of one risk assessment.
 	DeviceAssessment *AutomationAssessmentSettings `json:"deviceAssessment,omitempty"`
 	// Whether risk assessment is enabled.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Settings of one risk assessment.
 	GeoVelocityAssessment *AutomationAssessmentSettings `json:"geoVelocityAssessment,omitempty"`
 	// Settings of one risk assessment.
 	IPReputationAssessment *AutomationAssessmentSettings `json:"ipReputationAssessment,omitempty"`
-}
-
-func (a AutomationRiskAssessmentSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationRiskAssessmentSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationRiskAssessmentSettings) GetDeviceAssessment() *AutomationAssessmentSettings {

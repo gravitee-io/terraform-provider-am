@@ -3,27 +3,12 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationStepUpAuthenticationSettings - Step-up authentication: asks for MFA again during a session when its rule matches.
 type AutomationStepUpAuthenticationSettings struct {
 	// Whether step-up authentication is enabled.
-	Active *bool `default:"false" json:"active"`
+	Active *bool `json:"active,omitempty"`
 	// Expression Language rule: when it evaluates to true, the user is challenged again.
 	StepUpAuthenticationRule *string `json:"stepUpAuthenticationRule,omitempty"`
-}
-
-func (a AutomationStepUpAuthenticationSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationStepUpAuthenticationSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationStepUpAuthenticationSettings) GetActive() *bool {

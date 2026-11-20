@@ -6,7 +6,6 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 )
 
 // AttestationConveyancePreference - Relying-party preference for attestation conveyance during credential creation. NONE requests no attestation, INDIRECT allows anonymized attestation, and DIRECT requests the authenticator's attestation statement.
@@ -99,17 +98,17 @@ func (e *UserVerification) UnmarshalJSON(data []byte) error {
 // WebAuthnSettings - WebAuthn (FIDO2) relying-party configuration governing passwordless and multi-factor authentication for the domain.
 type WebAuthnSettings struct {
 	// Relying-party preference for attestation conveyance during credential creation. NONE requests no attestation, INDIRECT allows anonymized attestation, and DIRECT requests the authenticator's attestation statement.
-	AttestationConveyancePreference *AttestationConveyancePreference `default:"none" json:"attestationConveyancePreference"`
+	AttestationConveyancePreference *AttestationConveyancePreference `json:"attestationConveyancePreference,omitempty"`
 	// Preferred authenticator attachment. PLATFORM selects authenticators bound to the device (such as a fingerprint reader); CROSS_PLATFORM selects roaming authenticators (such as a security key).
 	AuthenticatorAttachment *AuthenticatorAttachment `json:"authenticatorAttachment,omitempty"`
 	// Trusted device-attestation X.509 certificates, keyed by name.
 	Certificates map[string]string `json:"certificates,omitempty"`
 	// Whether to periodically re-verify that registered authenticators remain valid against the FIDO2 Metadata Service.
-	EnforceAuthenticatorIntegrity *bool `default:"false" json:"enforceAuthenticatorIntegrity"`
+	EnforceAuthenticatorIntegrity *bool `json:"enforceAuthenticatorIntegrity,omitempty"`
 	// Maximum elapsed time, in seconds, since an authenticator was last verified before it is re-checked on the next passwordless login.
 	EnforceAuthenticatorIntegrityMaxAge *int `json:"enforceAuthenticatorIntegrityMaxAge,omitempty"`
 	// Whether to reject registration of a credential already registered to a different user.
-	ForceRegistration *bool `default:"false" json:"forceRegistration"`
+	ForceRegistration *bool `json:"forceRegistration,omitempty"`
 	// Relying-party origin; must match the browser's window.location.origin during registration and authentication ceremonies.
 	Origin *string `json:"origin,omitempty"`
 	// Relying-party identifier: a domain string that scopes credentials to this entity. A credential can only be used with the relying party it was registered against.
@@ -117,20 +116,9 @@ type WebAuthnSettings struct {
 	// Human-readable relying-party name shown to users during ceremonies.
 	RelyingPartyName *string `json:"relyingPartyName,omitempty"`
 	// Whether the authenticator must create a client-side resident (discoverable) credential.
-	RequireResidentKey *bool `default:"false" json:"requireResidentKey"`
+	RequireResidentKey *bool `json:"requireResidentKey,omitempty"`
 	// Relying-party requirement regarding user verification during a ceremony. REQUIRED enforces verification, PREFERRED requests it when available, and DISCOURAGED avoids it.
-	UserVerification *UserVerification `default:"preferred" json:"userVerification"`
-}
-
-func (w WebAuthnSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(w, "", false)
-}
-
-func (w *WebAuthnSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	UserVerification *UserVerification `json:"userVerification,omitempty"`
 }
 
 func (w *WebAuthnSettings) GetAttestationConveyancePreference() *AttestationConveyancePreference {

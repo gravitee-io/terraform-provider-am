@@ -3,53 +3,38 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // LoginSettings - Configuration of the domain's login flow and the features offered on the sign-in page.
 type LoginSettings struct {
 	// Whether certificate-based authentication is offered.
-	CertificateBasedAuthEnabled *bool `default:"false" json:"certificateBasedAuthEnabled"`
+	CertificateBasedAuthEnabled *bool `json:"certificateBasedAuthEnabled,omitempty"`
 	// URL used for certificate-based authentication.
 	CertificateBasedAuthURL *string `json:"certificateBasedAuthUrl,omitempty"`
 	// Whether users can initiate a forgot-password flow from the login page.
-	ForgotPasswordEnabled *bool `default:"false" json:"forgotPasswordEnabled"`
+	ForgotPasswordEnabled *bool `json:"forgotPasswordEnabled,omitempty"`
 	// Whether the login form is hidden (for example when only social or identifier-first login is offered).
-	HideForm *bool `default:"false" json:"hideForm"`
+	HideForm *bool `json:"hideForm,omitempty"`
 	// Whether identifier-first login is enabled, prompting for the username before the password.
-	IdentifierFirstEnabled *bool `default:"false" json:"identifierFirstEnabled"`
+	IdentifierFirstEnabled *bool `json:"identifierFirstEnabled,omitempty"`
 	// Whether these login settings are inherited from a parent scope rather than defined here. When true, the other fields are ignored.
-	Inherited *bool `default:"true" json:"inherited"`
+	Inherited *bool `json:"inherited,omitempty"`
 	// Whether magic-link authentication is offered.
-	MagicLinkAuthEnabled *bool `default:"false" json:"magicLinkAuthEnabled"`
+	MagicLinkAuthEnabled *bool `json:"magicLinkAuthEnabled,omitempty"`
 	// Whether users can name their passwordless devices.
-	PasswordlessDeviceNamingEnabled *bool `default:"false" json:"passwordlessDeviceNamingEnabled"`
+	PasswordlessDeviceNamingEnabled *bool `json:"passwordlessDeviceNamingEnabled,omitempty"`
 	// Whether passwordless (WebAuthn) authentication is offered.
-	PasswordlessEnabled *bool `default:"false" json:"passwordlessEnabled"`
+	PasswordlessEnabled *bool `json:"passwordlessEnabled,omitempty"`
 	// Whether a password is still required alongside passwordless authentication.
-	PasswordlessEnforcePasswordEnabled *bool `default:"false" json:"passwordlessEnforcePasswordEnabled"`
+	PasswordlessEnforcePasswordEnabled *bool `json:"passwordlessEnforcePasswordEnabled,omitempty"`
 	// Period, in seconds, after which the user's credentials must be re-entered to keep using passwordless authentication.
 	PasswordlessEnforcePasswordMaxAge *int `json:"passwordlessEnforcePasswordMaxAge,omitempty"`
 	// Whether a passwordless device can be remembered to skip future challenges.
-	PasswordlessRememberDeviceEnabled *bool `default:"false" json:"passwordlessRememberDeviceEnabled"`
+	PasswordlessRememberDeviceEnabled *bool `json:"passwordlessRememberDeviceEnabled,omitempty"`
 	// Whether users can self-register from the login page.
-	RegisterEnabled *bool `default:"false" json:"registerEnabled"`
+	RegisterEnabled *bool `json:"registerEnabled,omitempty"`
 	// Whether the login page offers a remember-me option.
-	RememberMeEnabled *bool `default:"false" json:"rememberMeEnabled"`
+	RememberMeEnabled *bool `json:"rememberMeEnabled,omitempty"`
 	// Whether the user is forced to reset their password once it expires.
 	ResetPasswordOnExpiration *bool `json:"resetPasswordOnExpiration,omitempty"`
-}
-
-func (l LoginSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(l, "", false)
-}
-
-func (l *LoginSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (l *LoginSettings) GetCertificateBasedAuthEnabled() *bool {

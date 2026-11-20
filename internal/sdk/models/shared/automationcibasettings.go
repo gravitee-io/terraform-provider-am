@@ -3,31 +3,16 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationCIBASettings - Client-Initiated Backchannel Authentication (CIBA) settings for the domain. CIBA lets a relying party initiate end-user authentication from a separate consumption device, without redirecting the user through the browser. Authentication device notifiers are not managed by the Automation API and are not exposed here.
 type AutomationCIBASettings struct {
 	// Default validity period, in seconds, of the issued auth_req_id.
-	AuthReqExpiry *int `default:"600" json:"authReqExpiry"`
+	AuthReqExpiry *int `json:"authReqExpiry,omitempty"`
 	// Maximum number of characters accepted for the binding_message parameter.
-	BindingMessageLength *int `default:"256" json:"bindingMessageLength"`
+	BindingMessageLength *int `json:"bindingMessageLength,omitempty"`
 	// Whether Client-Initiated Backchannel Authentication is enabled for the domain.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Minimum delay, in seconds, that a client must wait between two polls of the token endpoint for the same auth_req_id (POLL or PING delivery mode).
-	TokenReqInterval *int `default:"5" json:"tokenReqInterval"`
-}
-
-func (a AutomationCIBASettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationCIBASettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	TokenReqInterval *int `json:"tokenReqInterval,omitempty"`
 }
 
 func (a *AutomationCIBASettings) GetAuthReqExpiry() *int {

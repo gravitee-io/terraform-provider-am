@@ -3,16 +3,12 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // TokenExchangeSettings - OAuth 2.0 Token Exchange (RFC 8693) configuration for the domain, covering impersonation and delegation.
 type TokenExchangeSettings struct {
 	// Whether delegation is allowed, where an actor acts on behalf of the subject and an "act" claim is added to the issued token. At least one of allowImpersonation or allowDelegation must be enabled.
-	AllowDelegation *bool `default:"false" json:"allowDelegation"`
+	AllowDelegation *bool `json:"allowDelegation,omitempty"`
 	// Whether impersonation is allowed, where the issued token represents the subject directly. At least one of allowImpersonation or allowDelegation must be enabled.
-	AllowImpersonation *bool `default:"true" json:"allowImpersonation"`
+	AllowImpersonation *bool `json:"allowImpersonation,omitempty"`
 	// Token types accepted as the actor token when delegating.
 	AllowedActorTokenTypes []string `json:"allowedActorTokenTypes,omitempty"`
 	// Token types that may be requested as the result of an exchange.
@@ -20,28 +16,17 @@ type TokenExchangeSettings struct {
 	// Token types accepted as the subject token in an exchange.
 	AllowedSubjectTokenTypes []string `json:"allowedSubjectTokenTypes,omitempty"`
 	// Whether token exchange is enabled for the domain.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// ID-JAG issuance behavior of token exchange.
 	IDJagSettings *IDJagSettings `json:"idJagSettings,omitempty"`
 	// Maximum depth of the delegation chain (nested "act" claims). Range 1–100.
-	MaxDelegationDepth *int `default:"25" json:"maxDelegationDepth"`
+	MaxDelegationDepth *int `json:"maxDelegationDepth,omitempty"`
 	// OAuth-specific token-exchange behavior, such as how scopes are handled, with optional inheritance from domain defaults.
 	TokenExchangeOAuthSettings *TokenExchangeOAuthSettings `json:"tokenExchangeOAuthSettings,omitempty"`
 	// Deprecated: use the trusted-domains API instead. External issuers whose JWTs may be accepted as subject or actor tokens. A projection over the security domain's token-exchange trusted domains; a write replaces the list, so an omitted issuer is no longer trusted.
 	//
 	// Deprecated: Manage trusted issuers as trusted domains in AM instead..
 	TrustedIssuers []TrustedIssuer `json:"trustedIssuers,omitempty"`
-}
-
-func (t TokenExchangeSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(t, "", false)
-}
-
-func (t *TokenExchangeSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (t *TokenExchangeSettings) GetAllowDelegation() *bool {

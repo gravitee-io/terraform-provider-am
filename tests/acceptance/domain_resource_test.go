@@ -71,6 +71,43 @@ func TestDomainResource_crud(t *testing.T) {
 	})
 }
 
+// A setting changed outside Terraform in a block the configuration leaves out keeps its value: no plan.
+func TestDomainResource_consoleChangedSetting(t *testing.T) {
+	key := uniqueKey("tf-acc-domain")
+	path := "/domains/" + key
+	variables := domainVariables(key, config.Variables{"name": config.StringVariable("Terraform acceptance")})
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: []resource.TestStep{
+			{
+				ConfigDirectory: config.StaticDirectory("testdata/TestDomainResource_crud"),
+				ConfigVariables: variables,
+			},
+			{
+				PreConfig: func() {
+					domain, err := automationGet(path)
+					if err != nil {
+						t.Fatal(err)
+					}
+					domain["scim"] = map[string]any{"enabled": true}
+					if err := automationPut("/domains", domain); err != nil {
+						t.Fatal(err)
+					}
+				},
+				ConfigDirectory: config.StaticDirectory("testdata/TestDomainResource_crud"),
+				ConfigVariables: variables,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
+				},
+				Check: checkAMNested(path, true, "scim", "enabled"),
+			},
+		},
+	})
+}
+
 func checkDomainsDestroyed(s *terraform.State) error {
 	for _, rs := range s.RootModule().Resources {
 		if rs.Type != "am_domain" {

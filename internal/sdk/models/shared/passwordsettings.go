@@ -3,10 +3,6 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // PasswordSettings - Password policy applied to users of the domain: complexity requirements, expiry, and history.
 type PasswordSettings struct {
 	// Whether passwords found in a common-password dictionary are rejected.
@@ -20,30 +16,19 @@ type PasswordSettings struct {
 	// Whether a password must contain at least one special character.
 	IncludeSpecialCharacters *bool `json:"includeSpecialCharacters,omitempty"`
 	// Whether these password settings are inherited from a parent scope rather than defined here. When true, the other fields are ignored.
-	Inherited *bool `default:"true" json:"inherited"`
+	Inherited *bool `json:"inherited,omitempty"`
 	// Whether a password must contain both uppercase and lowercase letters.
 	LettersInMixedCase *bool `json:"lettersInMixedCase,omitempty"`
 	// Maximum number of identical consecutive characters allowed in a password.
 	MaxConsecutiveLetters *int `json:"maxConsecutiveLetters,omitempty"`
 	// Maximum number of characters a password may contain.
-	MaxLength *int `default:"128" json:"maxLength"`
+	MaxLength *int `json:"maxLength,omitempty"`
 	// Minimum number of characters a password must contain.
-	MinLength *int `default:"8" json:"minLength"`
+	MinLength *int `json:"minLength,omitempty"`
 	// Number of previous passwords retained in history and barred from reuse.
 	OldPasswords *int `json:"oldPasswords,omitempty"`
 	// Whether password history is enforced to prevent reuse of recent passwords.
-	PasswordHistoryEnabled *bool `default:"false" json:"passwordHistoryEnabled"`
-}
-
-func (p PasswordSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(p, "", false)
-}
-
-func (p *PasswordSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	PasswordHistoryEnabled *bool `json:"passwordHistoryEnabled,omitempty"`
 }
 
 func (p *PasswordSettings) GetExcludePasswordsInDictionary() *bool {

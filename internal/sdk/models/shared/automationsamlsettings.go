@@ -3,29 +3,14 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationSamlSettings - Settings for the domain acting as a SAML 2.0 identity provider (IdP).
 type AutomationSamlSettings struct {
 	// Certificate signing SAML responses: the key of a certificate of the domain, or id:<uuid> when the reference was not set by the Automation API. The reference is not checked against existing certificates: it can name one created after the domain or since deleted, and resolves whenever that certificate exists.
 	Certificate *string `json:"certificate,omitempty"`
 	// Whether the domain exposes the SAML 2.0 IdP protocol.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// URL or URN that uniquely identifies this IdP (the SAML entity ID).
 	EntityID *string `json:"entityId,omitempty"`
-}
-
-func (a AutomationSamlSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationSamlSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationSamlSettings) GetCertificate() *string {

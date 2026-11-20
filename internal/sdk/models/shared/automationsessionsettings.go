@@ -3,25 +3,10 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationSessionSettings - Session cookie settings.
 type AutomationSessionSettings struct {
 	// Whether the session cookie is persistent (kept after the browser is closed) rather than a session cookie.
-	Persistent *bool `default:"false" json:"persistent"`
-}
-
-func (a AutomationSessionSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationSessionSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	Persistent *bool `json:"persistent,omitempty"`
 }
 
 func (a *AutomationSessionSettings) GetPersistent() *bool {

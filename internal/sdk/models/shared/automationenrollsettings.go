@@ -6,7 +6,6 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
 )
 
 // AutomationEnrollSettingsType - optional: users can skip the enrollment. required: users must enroll. conditional: enrollment required unless enrollmentRule evaluates to true.
@@ -42,11 +41,11 @@ func (e *AutomationEnrollSettingsType) UnmarshalJSON(data []byte) error {
 // AutomationEnrollSettings - When users are asked to enroll a factor.
 type AutomationEnrollSettings struct {
 	// Whether users are asked to enroll a factor.
-	Active *bool `default:"false" json:"active"`
+	Active *bool `json:"active,omitempty"`
 	// Expression Language rule of a conditional enrollment: when it evaluates to true, the enrollment is skipped.
 	EnrollmentRule *string `json:"enrollmentRule,omitempty"`
 	// Whether users can skip the enrollment.
-	EnrollmentSkipActive *bool `default:"false" json:"enrollmentSkipActive"`
+	EnrollmentSkipActive *bool `json:"enrollmentSkipActive,omitempty"`
 	// Expression Language rule: when it evaluates to true, users can skip the enrollment.
 	EnrollmentSkipRule *string `json:"enrollmentSkipRule,omitempty"`
 	// Whether users must enroll a factor.
@@ -55,17 +54,6 @@ type AutomationEnrollSettings struct {
 	SkipTimeSeconds *int64 `json:"skipTimeSeconds,omitempty"`
 	// optional: users can skip the enrollment. required: users must enroll. conditional: enrollment required unless enrollmentRule evaluates to true.
 	Type *AutomationEnrollSettingsType `json:"type,omitempty"`
-}
-
-func (a AutomationEnrollSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationEnrollSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationEnrollSettings) GetActive() *bool {

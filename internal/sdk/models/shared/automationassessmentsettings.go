@@ -3,27 +3,12 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationAssessmentSettings - Settings of one risk assessment.
 type AutomationAssessmentSettings struct {
 	// Whether this assessment is enabled.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Score threshold of each risk level: an assessment scoring at or above a threshold reaches that level.
 	Thresholds map[string]float64 `json:"thresholds,omitempty"`
-}
-
-func (a AutomationAssessmentSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationAssessmentSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *AutomationAssessmentSettings) GetEnabled() *bool {

@@ -3,27 +3,12 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // AutomationAdvancedSettings - Advanced application settings.
 type AutomationAdvancedSettings struct {
 	// Whether the domain flows are executed for this application in addition to its own flows.
-	FlowsInherited *bool `default:"true" json:"flowsInherited"`
+	FlowsInherited *bool `json:"flowsInherited,omitempty"`
 	// Whether the user consent page is skipped: requested scopes are granted without asking the user.
-	SkipConsent *bool `default:"false" json:"skipConsent"`
-}
-
-func (a AutomationAdvancedSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AutomationAdvancedSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	SkipConsent *bool `json:"skipConsent,omitempty"`
 }
 
 func (a *AutomationAdvancedSettings) GetFlowsInherited() *bool {

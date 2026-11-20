@@ -3,25 +3,10 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-am/internal/sdk/internal/utils"
-)
-
 // IDJagSettings - ID-JAG issuance behavior of token exchange.
 type IDJagSettings struct {
 	// Lax validation: also accept an access token as the subject token. By default only an ID token is accepted. The access token must be issued to the requesting client or, when an MCP server requests, have that MCP server as audience.
-	LaxValidation *bool `default:"false" json:"laxValidation"`
-}
-
-func (i IDJagSettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *IDJagSettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	LaxValidation *bool `json:"laxValidation,omitempty"`
 }
 
 func (i *IDJagSettings) GetLaxValidation() *bool {

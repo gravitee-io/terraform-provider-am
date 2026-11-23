@@ -15,7 +15,8 @@ on every call. One Terraform configuration holds both sides: AM with this provid
 * The AM provider reaches the AM Automation API with `AM_SERVER_URL` and a service-account token in
   `AM_SA_TOKEN`; the APIM provider reaches the APIM Automation API with `APIM_SERVER_URL` and `APIM_SA_TOKEN`.
 * Terraform 1.11 or later: the client secret values are write-only attributes.
-* The APIM gateway reaches the AM gateway.
+* The APIM gateway reaches the AM gateway. The configuration reads its URL from the `gateway_url` of the domain's
+  data plane.
 
 Both providers, in `provider.tf`:
 
@@ -120,9 +121,15 @@ The API, its OAuth2 plan and the consumer's subscription, in `apim.tf`. The API 
 # The APIM side: an API whose OAuth2 plan has the APIM gateway introspect each access token at AM, and the
 # consumer's APIM application, which carries the client ID of its AM application.
 
+# The data plane serving the domain, which knows the AM gateway URL.
+data "am_data_plane" "invoices" {
+  id = am_domain.invoices.data_plane_id
+}
+
 locals {
-  # The AM gateway URL, as the APIM gateway reaches it.
-  am_gateway_url = "https://am-gateway.example.com"
+  # The AM gateway URL, as the APIM gateway reaches it. Write it here instead when the APIM gateway reaches
+  # AM at another address, or when the data plane has no gateway_url.
+  am_gateway_url = data.am_data_plane.invoices.gateway_url
 }
 
 resource "apim_apiv4" "invoices" {

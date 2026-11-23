@@ -15,7 +15,8 @@ on every call. One Terraform configuration holds both sides: AM with this provid
 * The AM provider reaches the AM Automation API with `AM_SERVER_URL` and a service-account token in
   `AM_SA_TOKEN`; the APIM provider reaches the APIM Automation API with `APIM_SERVER_URL` and `APIM_SA_TOKEN`.
 * Terraform 1.11 or later: the client secret values are write-only attributes.
-* The APIM gateway reaches the AM gateway.
+* The APIM gateway reaches the AM gateway. The configuration reads its URL from the `gateway_url` of the domain's
+  data plane.
 
 Both providers, in `provider.tf`:
 

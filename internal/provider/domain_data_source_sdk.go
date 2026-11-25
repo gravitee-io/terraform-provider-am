@@ -268,6 +268,7 @@ func (r *DomainDataSourceModel) RefreshFromSharedAutomationDomain(ctx context.Co
 				r.TokenExchangeSettings.AllowedSubjectTokenTypes = append(r.TokenExchangeSettings.AllowedSubjectTokenTypes, types.StringValue(v))
 			}
 			r.TokenExchangeSettings.AllowImpersonation = types.BoolPointerValue(resp.TokenExchangeSettings.AllowImpersonation)
+			r.TokenExchangeSettings.AllowRefreshTokensFromOtherClients = types.BoolPointerValue(resp.TokenExchangeSettings.AllowRefreshTokensFromOtherClients)
 			r.TokenExchangeSettings.Enabled = types.BoolPointerValue(resp.TokenExchangeSettings.Enabled)
 			if resp.TokenExchangeSettings.IDJagSettings == nil {
 				r.TokenExchangeSettings.IDJagSettings = nil

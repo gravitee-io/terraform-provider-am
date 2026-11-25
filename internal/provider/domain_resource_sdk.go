@@ -268,6 +268,7 @@ func (r *DomainResourceModel) RefreshFromSharedAutomationDomain(ctx context.Cont
 				r.TokenExchangeSettings.AllowedSubjectTokenTypes = append(r.TokenExchangeSettings.AllowedSubjectTokenTypes, types.StringValue(v))
 			}
 			r.TokenExchangeSettings.AllowImpersonation = types.BoolPointerValue(resp.TokenExchangeSettings.AllowImpersonation)
+			r.TokenExchangeSettings.AllowRefreshTokensFromOtherClients = types.BoolPointerValue(resp.TokenExchangeSettings.AllowRefreshTokensFromOtherClients)
 			r.TokenExchangeSettings.Enabled = types.BoolPointerValue(resp.TokenExchangeSettings.Enabled)
 			if resp.TokenExchangeSettings.IDJagSettings == nil {
 				r.TokenExchangeSettings.IDJagSettings = nil
@@ -1392,6 +1393,12 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 		} else {
 			allowImpersonation = nil
 		}
+		allowRefreshTokensFromOtherClients := new(bool)
+		if !r.TokenExchangeSettings.AllowRefreshTokensFromOtherClients.IsUnknown() && !r.TokenExchangeSettings.AllowRefreshTokensFromOtherClients.IsNull() {
+			*allowRefreshTokensFromOtherClients = r.TokenExchangeSettings.AllowRefreshTokensFromOtherClients.ValueBool()
+		} else {
+			allowRefreshTokensFromOtherClients = nil
+		}
 		allowedActorTokenTypes := make([]string, 0, len(r.TokenExchangeSettings.AllowedActorTokenTypes))
 		for allowedActorTokenTypesIndex := range r.TokenExchangeSettings.AllowedActorTokenTypes {
 			allowedActorTokenTypes = append(allowedActorTokenTypes, r.TokenExchangeSettings.AllowedActorTokenTypes[allowedActorTokenTypesIndex].ValueString())
@@ -1516,16 +1523,17 @@ func (r *DomainResourceModel) ToSharedAutomationDomainInput(ctx context.Context)
 			})
 		}
 		tokenExchangeSettings = &shared.TokenExchangeSettings{
-			AllowDelegation:            allowDelegation,
-			AllowImpersonation:         allowImpersonation,
-			AllowedActorTokenTypes:     allowedActorTokenTypes,
-			AllowedRequestedTokenTypes: allowedRequestedTokenTypes,
-			AllowedSubjectTokenTypes:   allowedSubjectTokenTypes,
-			Enabled:                    enabled8,
-			IDJagSettings:              idJagSettings,
-			MaxDelegationDepth:         maxDelegationDepth,
-			TokenExchangeOAuthSettings: tokenExchangeOAuthSettings,
-			TrustedIssuers:             trustedIssuers,
+			AllowDelegation:                    allowDelegation,
+			AllowImpersonation:                 allowImpersonation,
+			AllowRefreshTokensFromOtherClients: allowRefreshTokensFromOtherClients,
+			AllowedActorTokenTypes:             allowedActorTokenTypes,
+			AllowedRequestedTokenTypes:         allowedRequestedTokenTypes,
+			AllowedSubjectTokenTypes:           allowedSubjectTokenTypes,
+			Enabled:                            enabled8,
+			IDJagSettings:                      idJagSettings,
+			MaxDelegationDepth:                 maxDelegationDepth,
+			TokenExchangeOAuthSettings:         tokenExchangeOAuthSettings,
+			TrustedIssuers:                     trustedIssuers,
 		}
 	}
 	var uma *shared.UMASettings

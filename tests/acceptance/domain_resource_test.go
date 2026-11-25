@@ -108,6 +108,51 @@ func TestDomainResource_consoleChangedSetting(t *testing.T) {
 	})
 }
 
+// AM's upgrade sets allowRefreshTokensFromOtherClients on a domain that already had token exchange settings.
+// An update of a configuration that leaves the setting out keeps that value instead of resetting it.
+// The mock does not know the setting yet.
+func TestDomainResource_tokenExchangeUpgrade(t *testing.T) {
+	requiresLiveAM(t)
+	key := uniqueKey("tf-acc-domain")
+	path := "/domains/" + key
+	refreshTokensFromOtherClients := []string{"tokenExchangeSettings", "allowRefreshTokensFromOtherClients"}
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { preCheck(t) },
+		ProtoV6ProviderFactories: testProviders(),
+		CheckDestroy:             checkDomainsDestroyed,
+		Steps: []resource.TestStep{
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: domainVariables(key, config.Variables{"name": config.StringVariable("Terraform acceptance")}),
+			},
+			{
+				PreConfig: func() {
+					domain, err := automationGet(path)
+					if err != nil {
+						t.Fatal(err)
+					}
+					domain["tokenExchangeSettings"].(map[string]any)["allowRefreshTokensFromOtherClients"] = true
+					if err := automationPut("/domains", domain); err != nil {
+						t.Fatal(err)
+					}
+				},
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: domainVariables(key, config.Variables{"name": config.StringVariable("Terraform acceptance renamed")}),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("am_domain.test", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeAggregateTestCheckFunc(
+					checkAMNested(path, true, refreshTokensFromOtherClients...),
+					resource.TestCheckResourceAttr("am_domain.test", "token_exchange_settings.allow_refresh_tokens_from_other_clients", "true"),
+				),
+			},
+		},
+	})
+}
+
 func checkDomainsDestroyed(s *terraform.State) error {
 	for _, rs := range s.RootModule().Resources {
 		if rs.Type != "am_domain" {

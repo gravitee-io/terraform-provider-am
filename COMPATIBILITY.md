@@ -2,7 +2,7 @@
 
 | Provider version  | Gravitee AM version |
 |-------------------|---------------------|
-| `< 1.0.0` (alpha) | 4.13.0              |
+| `0.1.x` (alpha)   | 4.14.0              |
 
 Provider releases are versioned independently of Gravitee Access Management.
 Each published version also declares its compatible AM version on its

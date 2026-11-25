@@ -302,6 +302,7 @@ Read-Only:
 
 - `allow_delegation` (Boolean) Whether delegation is allowed, where an actor acts on behalf of the subject and an "act" claim is added to the issued token. At least one of allowImpersonation or allowDelegation must be enabled.
 - `allow_impersonation` (Boolean) Whether impersonation is allowed, where the issued token represents the subject directly. At least one of allowImpersonation or allowDelegation must be enabled.
+- `allow_refresh_tokens_from_other_clients` (Boolean) Whether a refresh token issued to another client of the domain is accepted as the subject or actor token. When disabled, a refresh token is only accepted from the client it was issued to. When enabled, the DPoP binding of a refresh token issued to another client is not enforced, since that client cannot hold the key, and any client of the domain with the token-exchange grant can redeem a refresh token it obtains.
 - `allowed_actor_token_types` (List of String) Token types accepted as the actor token when delegating.
 - `allowed_requested_token_types` (List of String) Token types that may be requested as the result of an exchange.
 - `allowed_subject_token_types` (List of String) Token types accepted as the subject token in an exchange.

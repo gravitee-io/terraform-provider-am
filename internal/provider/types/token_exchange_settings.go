@@ -8,14 +8,15 @@ import (
 )
 
 type TokenExchangeSettings struct {
-	AllowDelegation            types.Bool                  `tfsdk:"allow_delegation"`
-	AllowImpersonation         types.Bool                  `tfsdk:"allow_impersonation"`
-	AllowedActorTokenTypes     []types.String              `tfsdk:"allowed_actor_token_types"`
-	AllowedRequestedTokenTypes []types.String              `tfsdk:"allowed_requested_token_types"`
-	AllowedSubjectTokenTypes   []types.String              `tfsdk:"allowed_subject_token_types"`
-	Enabled                    types.Bool                  `tfsdk:"enabled"`
-	IDJagSettings              *IDJagSettings              `tfsdk:"id_jag_settings"`
-	MaxDelegationDepth         types.Int32                 `tfsdk:"max_delegation_depth"`
-	TokenExchangeOAuthSettings *TokenExchangeOAuthSettings `tfsdk:"token_exchange_o_auth_settings"`
-	TrustedIssuers             []TrustedIssuer             `tfsdk:"trusted_issuers"`
+	AllowDelegation                    types.Bool                  `tfsdk:"allow_delegation"`
+	AllowImpersonation                 types.Bool                  `tfsdk:"allow_impersonation"`
+	AllowRefreshTokensFromOtherClients types.Bool                  `tfsdk:"allow_refresh_tokens_from_other_clients"`
+	AllowedActorTokenTypes             []types.String              `tfsdk:"allowed_actor_token_types"`
+	AllowedRequestedTokenTypes         []types.String              `tfsdk:"allowed_requested_token_types"`
+	AllowedSubjectTokenTypes           []types.String              `tfsdk:"allowed_subject_token_types"`
+	Enabled                            types.Bool                  `tfsdk:"enabled"`
+	IDJagSettings                      *IDJagSettings              `tfsdk:"id_jag_settings"`
+	MaxDelegationDepth                 types.Int32                 `tfsdk:"max_delegation_depth"`
+	TokenExchangeOAuthSettings         *TokenExchangeOAuthSettings `tfsdk:"token_exchange_o_auth_settings"`
+	TrustedIssuers                     []TrustedIssuer             `tfsdk:"trusted_issuers"`
 }

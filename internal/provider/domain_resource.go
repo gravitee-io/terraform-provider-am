@@ -865,6 +865,11 @@ func (r *DomainResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Description: `Whether impersonation is allowed, where the issued token represents the subject directly. At least one of allowImpersonation or allowDelegation must be enabled.`,
 					},
+					"allow_refresh_tokens_from_other_clients": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Whether a refresh token issued to another client of the domain is accepted as the subject or actor token. When disabled, a refresh token is only accepted from the client it was issued to. When enabled, the DPoP binding of a refresh token issued to another client is not enforced, since that client cannot hold the key, and any client of the domain with the token-exchange grant can redeem a refresh token it obtains.`,
+					},
 					"allowed_actor_token_types": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,

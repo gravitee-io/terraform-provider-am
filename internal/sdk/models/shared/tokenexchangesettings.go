@@ -9,6 +9,8 @@ type TokenExchangeSettings struct {
 	AllowDelegation *bool `json:"allowDelegation,omitempty"`
 	// Whether impersonation is allowed, where the issued token represents the subject directly. At least one of allowImpersonation or allowDelegation must be enabled.
 	AllowImpersonation *bool `json:"allowImpersonation,omitempty"`
+	// Whether a refresh token issued to another client of the domain is accepted as the subject or actor token. When disabled, a refresh token is only accepted from the client it was issued to. When enabled, the DPoP binding of a refresh token issued to another client is not enforced, since that client cannot hold the key, and any client of the domain with the token-exchange grant can redeem a refresh token it obtains.
+	AllowRefreshTokensFromOtherClients *bool `json:"allowRefreshTokensFromOtherClients,omitempty"`
 	// Token types accepted as the actor token when delegating.
 	AllowedActorTokenTypes []string `json:"allowedActorTokenTypes,omitempty"`
 	// Token types that may be requested as the result of an exchange.
@@ -41,6 +43,13 @@ func (t *TokenExchangeSettings) GetAllowImpersonation() *bool {
 		return nil
 	}
 	return t.AllowImpersonation
+}
+
+func (t *TokenExchangeSettings) GetAllowRefreshTokensFromOtherClients() *bool {
+	if t == nil {
+		return nil
+	}
+	return t.AllowRefreshTokensFromOtherClients
 }
 
 func (t *TokenExchangeSettings) GetAllowedActorTokenTypes() []string {

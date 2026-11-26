@@ -30,6 +30,16 @@ jobs:
         run: |
           TAG=$(yq '.management.releaseVersion' .speakeasy/gen.lock)
 
+          if git rev-parse -q --verify "refs/tags/v$TAG" > /dev/null; then
+            echo "::error::Tag v$TAG already exists: bump the version first"
+            exit 1
+          fi
+
+          if [[ "${{ inputs.dry_run }}" != "true" && "${{ github.ref }}" != "refs/heads/main" ]]; then
+            echo "::error::Releases run from main only, not ${{ github.ref_name }}"
+            exit 1
+          fi
+
           git config --global user.email "teamam@graviteesource.com"
           git config --global user.name "Team AM"
 
@@ -52,7 +62,7 @@ jobs:
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@286f3b13b1b49da4ac219696163fb8c1c93e1200 # v6.0.0
         with:
-          args: ${{ inputs.dry_run && 'release --skip-publish --snapshot --clean' || 'release --clean' }}
+          args: ${{ inputs.dry_run && 'release --snapshot --skip=publish --clean' || 'release --clean' }}
         env:
           # GitHub sets the GITHUB_TOKEN secret automatically.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

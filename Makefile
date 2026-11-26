@@ -13,8 +13,9 @@
 AM_OAS_BRANCH ?= 4.13.x
 
 .PHONY: sync-oas
-sync-oas: ## Download the AM Automation OAS from upstream into automation-api-oas.yaml
-	curl -fsSL "https://raw.githubusercontent.com/gravitee-io/gravitee-access-management/refs/heads/$(AM_OAS_BRANCH)/docs/automation/openapi.yaml" -o automation-api-oas.yaml
+# Read through the GitHub API with the gh token: gravitee-access-management is private.
+sync-oas: ## Download the AM Automation OAS from upstream into automation-api-oas.yaml (needs a gh login)
+	gh api -H "Accept: application/vnd.github.raw" "repos/gravitee-io/gravitee-access-management/contents/docs/automation/openapi.yaml?ref=$(AM_OAS_BRANCH)" > automation-api-oas.yaml
 
 .PHONY: speakeasy
 speakeasy: ## Generate the provider from automation-api-oas.yaml
